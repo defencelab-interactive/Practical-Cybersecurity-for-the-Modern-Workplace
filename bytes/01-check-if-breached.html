@@ -19,15 +19,13 @@ body{font-family:var(--body);background:radial-gradient(120% 90% at 25% 12%,#efe
 .bg-orbit{animation:bgorbit 20s linear infinite;transform-origin:center}
 @keyframes bgorbit{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 .byte{width:100%;max-width:500px;background:var(--paper);border-radius:18px;overflow:hidden;box-shadow:0 24px 60px rgba(20,25,22,.22),0 6px 16px rgba(0,0,0,.1);display:flex;position:relative;z-index:1}
-.byte:fullscreen,.byte:-webkit-full-screen{max-width:620px}
-.byte.is-fs{max-width:620px}
-.byte.is-fs .spine{width:10px}
-.byte.is-fs h1{font-size:32px}.byte.is-fs .lede{font-size:16.5px}
-.byte.is-fs .step .st{font-size:15.5px}.byte.is-fs .step .n{width:28px;height:28px;font-size:14px}
-.byte.is-fs .slbl{font-size:11.5px}.byte.is-fs .l2{font-size:12.5px}
-.byte.is-fs .field{font-size:15px;padding:13px 15px}.byte.is-fs .go-btn{font-size:14.5px;padding:13px}
-.byte.is-fs .result{font-size:14.5px}.byte.is-fs .done-wrap h2{font-size:26px}.byte.is-fs .done-wrap p{font-size:15px}
-.byte.is-fs .nav button{font-size:14px;padding:10px 18px}.byte.is-fs .pair b{font-size:16.5px}
+/* fullscreen targets the document — ground stays, card stays a centered card, just slightly bigger */
+:fullscreen body,:-webkit-full-screen body{background:radial-gradient(120% 90% at 25% 12%,#efece4,#d9d6cf 64%)}
+:fullscreen .byte,:-webkit-full-screen .byte{max-width:600px}
+:fullscreen .byte h1{font-size:30px}
+:fullscreen .byte .lede{font-size:16px}
+:fullscreen .byte .step .st{font-size:15px}
+:fullscreen .byte .done-wrap h2{font-size:25px}
 .spine{width:8px;flex:none;background:linear-gradient(180deg,var(--ac),var(--acd))}
 .body{flex:1;padding:24px 26px 22px;display:flex;flex-direction:column;min-height:520px}
 .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
@@ -146,9 +144,9 @@ function checkIt(){const v=document.getElementById('email').value.trim();const r
 const byteEl=document.querySelector('.byte'),fsbtn=document.getElementById('fsbtn');
 const eIco='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>';
 const sIco='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/></svg>';
-function toggleFS(){if(!document.fullscreenElement&&!document.webkitFullscreenElement){(byteEl.requestFullscreen||byteEl.webkitRequestFullscreen).call(byteEl);}else{(document.exitFullscreen||document.webkitExitFullscreen).call(document);}}
+function toggleFS(){const el=document.documentElement;if(!document.fullscreenElement&&!document.webkitFullscreenElement){(el.requestFullscreen||el.webkitRequestFullscreen).call(el);}else{(document.exitFullscreen||document.webkitExitFullscreen).call(document);}}
 document.addEventListener('fullscreenchange',syncFS);document.addEventListener('webkitfullscreenchange',syncFS);
-function syncFS(){const on=document.fullscreenElement||document.webkitFullscreenElement;byteEl.classList.toggle('is-fs',!!on);fsbtn.innerHTML=on?sIco:eIco;fsbtn.title=on?'Exit fullscreen':'Fullscreen';}
+function syncFS(){const on=document.fullscreenElement||document.webkitFullscreenElement;fsbtn.innerHTML=on?sIco:eIco;fsbtn.title=on?'Exit fullscreen':'Fullscreen';}
 document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
 (function(){
   const g=document.getElementById('byteGround'); if(!g) return;
