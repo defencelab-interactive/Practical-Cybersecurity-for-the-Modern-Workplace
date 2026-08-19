@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Byte · Check If You've Been Breached</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#34B77D;--acd:#2A9A66;--ac-soft:rgba(52,183,125,.10);--td:#1A1A1A;--tb:#4A4844;--mu:#8a8884;--paper:#F4F2EC;--paper2:#EDEAE1;--line:#e0ddd3;--sh:0 3px 8px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);--hi:inset 0 1.5px 0 rgba(255,255,255,1);--disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);background:#d9d6cf;color:var(--td);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 20px;-webkit-font-smoothing:antialiased}
+.byte{width:100%;max-width:430px;background:var(--paper);border-radius:18px;overflow:hidden;box-shadow:0 24px 60px rgba(20,25,22,.22),0 6px 16px rgba(0,0,0,.1);display:flex;position:relative}
+.byte:fullscreen,.byte:-webkit-full-screen{max-width:none;width:100vw;height:100vh;border-radius:0;box-shadow:none;align-items:stretch}
+.byte.is-fs{max-width:none;width:100vw;height:100vh;border-radius:0;box-shadow:none;align-items:stretch}
+.byte.is-fs .body{max-width:640px;margin:0 auto;justify-content:center;min-height:0}
+.byte.is-fs .spine{width:12px}
+.byte.is-fs h1{font-size:36px}.byte.is-fs .lede{font-size:19px}
+.byte.is-fs .step .st{font-size:18px}.byte.is-fs .step .n{width:30px;height:30px;font-size:15px}
+.byte.is-fs .slbl{font-size:13px}.byte.is-fs .l2{font-size:14px}
+.byte.is-fs .field{font-size:16px;padding:14px 16px}.byte.is-fs .go-btn{font-size:15px;padding:13px}
+.byte.is-fs .result{font-size:16px}.byte.is-fs .done-wrap h2{font-size:30px}.byte.is-fs .done-wrap p{font-size:17px;max-width:400px}
+.byte.is-fs .nav button{font-size:15px;padding:11px 20px}.byte.is-fs .pair b{font-size:18px}
+.spine{width:8px;flex:none;background:linear-gradient(180deg,var(--ac),var(--acd))}
+.body{flex:1;padding:24px 26px 22px;display:flex;flex-direction:column;min-height:520px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.kicker{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--acd)}
+.top-right{display:flex;align-items:center;gap:9px}
+.time{font-family:var(--mono);font-size:11px;color:var(--mu);background:#fff;border:1px solid var(--line);border-radius:20px;padding:4px 11px;box-shadow:var(--hi)}
+.fsbtn{background:#fff;border:1px solid var(--line);border-radius:8px;width:28px;height:28px;cursor:pointer;color:var(--mu);display:flex;align-items:center;justify-content:center;transition:all .15s;box-shadow:var(--hi)}
+.fsbtn:hover{color:var(--td);border-color:var(--ac)}.fsbtn svg{width:14px;height:14px}
+.dots{display:flex;gap:6px;margin-bottom:20px}
+.dots i{width:8px;height:8px;border-radius:50%;background:#d3cfc3;transition:all .25s}
+.dots i.on{background:var(--ac);box-shadow:0 0 0 3px rgba(52,183,125,.16)}.dots i.past{background:var(--acd)}
+.view{flex:1;position:relative}
+.pane{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s cubic-bezier(.22,.68,.36,1);transform:translateX(20px);display:flex;flex-direction:column}
+.pane.on{opacity:1;pointer-events:auto;transform:none}.pane.prev{transform:translateX(-20px)}
+.slbl{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-bottom:12px}
+h1{font-family:var(--disp);font-size:25px;font-weight:600;line-height:1.14;letter-spacing:-.01em;margin-bottom:12px}
+.lede{font-size:14px;line-height:1.55;color:var(--tb)}
+.lede code{font-family:var(--mono);font-size:12.5px;background:#fff;border:1px solid var(--line);border-radius:4px;padding:1px 6px;color:var(--td)}
+.steps{display:flex;flex-direction:column;gap:11px}
+.step{display:flex;gap:13px;align-items:flex-start;background:#fff;border-radius:11px;padding:14px 15px;box-shadow:var(--sh),var(--hi)}
+.step .n{font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--ac);width:24px;height:24px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(42,154,102,.4)}
+.step .st{font-size:13.5px;line-height:1.5;color:var(--td);padding-top:2px}
+.step .st b{font-weight:700}.step .st code{font-family:var(--mono);font-size:12px;background:var(--paper2);border:1px solid var(--line);border-radius:4px;padding:1px 6px;color:var(--acd);font-weight:600;display:inline-block;margin-top:3px}
+.builder{background:#fff;border-radius:12px;padding:16px;box-shadow:var(--sh),var(--hi)}
+.builder .l2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);margin-bottom:11px}
+.field{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:9px;font-family:var(--mono);font-size:13px;background:var(--paper);color:var(--td);margin-bottom:11px}
+.field:focus{outline:none;border-color:var(--ac)}
+.go-btn{width:100%;padding:12px;border:none;border-radius:9px;background:var(--ac);color:#fff;font-family:var(--body);font-size:13.5px;font-weight:700;cursor:pointer;transition:all .15s}
+.go-btn:hover{background:var(--acd)}
+.result{margin-top:12px;font-size:13px;line-height:1.55;color:var(--tb);background:var(--paper);border-left:3px solid var(--ac);border-radius:8px;padding:12px 14px;display:none}
+.result.show{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.result b{color:var(--td)}
+.done-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.done-check{width:56px;height:56px;border-radius:50%;background:var(--ac);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;margin-bottom:18px;box-shadow:0 4px 14px rgba(42,154,102,.4)}
+.done-wrap h2{font-family:var(--disp);font-size:22px;font-weight:600;margin-bottom:10px}
+.done-wrap p{font-size:13.5px;line-height:1.55;color:var(--tb);max-width:300px;margin-bottom:22px}
+.pair{background:#fff;border-radius:11px;padding:14px 16px;box-shadow:var(--sh),var(--hi);width:100%;text-align:left;cursor:pointer;transition:transform .15s;display:flex;align-items:center;gap:12px;text-decoration:none}
+.pair:hover{transform:translateY(-2px)}
+.pair .ico{font-size:20px}.pair .tx{flex:1}
+.pair .tx small{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--mu);font-weight:700;margin-bottom:2px}
+.pair .tx b{font-family:var(--disp);font-size:15px;font-weight:600;color:var(--td)}
+.pair .arw{color:var(--ac);font-size:18px}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:16px;border-top:1px dashed var(--line)}
+.nav .step-count{font-family:var(--mono);font-size:11px;color:var(--mu)}
+.nav .btns{display:flex;gap:8px}
+.nav button{font-family:var(--body);font-size:13px;font-weight:600;border:none;border-radius:9px;padding:9px 16px;cursor:pointer;transition:all .15s}
+.nav .b-back{background:transparent;color:var(--mu)}.nav .b-back:hover{color:var(--td)}.nav .b-back:disabled{opacity:.3;cursor:default}
+.nav .b-next{background:var(--ac);color:#fff;box-shadow:0 2px 6px rgba(42,154,102,.3)}.nav .b-next:hover{background:var(--acd)}
+</style>
+</head>
+<body>
+<div class="byte">
+  <div class="spine"></div>
+  <div class="body">
+    <div class="top">
+      <span class="kicker">General Awareness</span>
+      <div class="top-right">
+        <span class="time">2 min</span>
+        <button class="fsbtn" id="fsbtn" onclick="toggleFS()" title="Fullscreen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
+      </div>
+    </div>
+    <div class="dots" id="dots"></div>
+    <div class="view" id="view">
+
+      <div class="pane on">
+        <div class="slbl">Why this</div>
+        <h1>Check if you've been breached</h1>
+        <p class="lede">Over 12 billion account records have leaked over the years. In two minutes, find out if yours are among them — and what to do if they are.</p>
+      </div>
+
+      <div class="pane">
+        <div class="slbl">How</div>
+        <div class="steps">
+          <div class="step"><span class="n">1</span><span class="st">Go to <b>haveibeenpwned.com</b> — a free, reputable service that tracks known data breaches.</span></div>
+          <div class="step"><span class="n">2</span><span class="st">Type your email address. It checks against billions of leaked records and shows which breaches included your data.</span></div>
+          <div class="step"><span class="n">3</span><span class="st">It's safe to enter your email — the site is run by a well-known security researcher and doesn't store or misuse it.</span></div>
+        </div>
+      </div>
+
+      <div class="pane">
+        <div class="slbl">Try it</div>
+        <div class="builder">
+          <div class="l2">Type an email to see how the check works</div>
+          <input class="field" id="email" type="email" placeholder="you@example.com" oninput="clr()">
+          <button class="go-btn" onclick="checkIt()">Check this email</button>
+          <div class="result" id="result"></div>
+        </div>
+      </div>
+
+      <div class="pane">
+        <div class="done-wrap">
+          <div class="done-check">✓</div>
+          <h2>Now you know what's out there</h2>
+          <p>The fix is always the same: never reuse a leaked password, and turn on MFA where you can.</p>
+          <a class="pair" href="../courses/01-security-basics.html"><span class="ico">📚</span><span class="tx"><small>Full picture</small><b>Security Basics: Why One Setting Matters</b></span><span class="arw">→</span></a>
+        </div>
+      </div>
+
+    </div>
+    <div class="nav">
+      <span class="step-count" id="count">Step 1 of 4</span>
+      <div class="btns"><button class="b-back" id="back" onclick="go(-1)" disabled>Back</button><button class="b-next" id="next" onclick="go(1)">Next →</button></div>
+    </div>
+  </div>
+</div>
+<script>
+const panes=[...document.querySelectorAll('.pane')];const N=panes.length;let cur=0;
+const dotsEl=document.getElementById('dots');for(let i=0;i<N;i++)dotsEl.appendChild(document.createElement('i'));
+const dots=[...dotsEl.children];
+function render(){panes.forEach((p,i)=>{p.classList.toggle('on',i===cur);p.classList.toggle('prev',i<cur);});dots.forEach((d,i)=>{d.className='';if(i<cur)d.classList.add('past');else if(i===cur)d.classList.add('on');});document.getElementById('count').textContent=`Step ${cur+1} of ${N}`;document.getElementById('back').disabled=cur===0;const nx=document.getElementById('next');nx.textContent=cur===N-1?'Done ✓':'Next →';nx.disabled=cur===N-1;}
+function go(d){cur=Math.max(0,Math.min(N-1,cur+d));render();}
+function clr(){document.getElementById('result').classList.remove('show');}
+function checkIt(){const v=document.getElementById('email').value.trim();const r=document.getElementById('result');if(!v||!v.includes('@')){r.innerHTML="Enter a full email address to see how the check works.";r.classList.add('show');return;}r.innerHTML="This is a <b>demo</b> — on the real site, haveibeenpwned.com would now show which breaches this address appeared in. Most people appear in several. For any breach where you still use that password anywhere, change it.";r.classList.add('show');}
+const byteEl=document.querySelector('.byte'),fsbtn=document.getElementById('fsbtn');
+const eIco='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>';
+const sIco='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/></svg>';
+function toggleFS(){if(!document.fullscreenElement&&!document.webkitFullscreenElement){(byteEl.requestFullscreen||byteEl.webkitRequestFullscreen).call(byteEl);}else{(document.exitFullscreen||document.webkitExitFullscreen).call(document);}}
+document.addEventListener('fullscreenchange',syncFS);document.addEventListener('webkitfullscreenchange',syncFS);
+function syncFS(){const on=document.fullscreenElement||document.webkitFullscreenElement;byteEl.classList.toggle('is-fs',!!on);fsbtn.innerHTML=on?sIco:eIco;fsbtn.title=on?'Exit fullscreen':'Fullscreen';}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>

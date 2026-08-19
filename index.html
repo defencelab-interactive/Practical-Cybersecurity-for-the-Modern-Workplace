@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defence Lab · Practical Cybersecurity for the Modern Workplace</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#34B77D;--acd:#2A9A66;--bk:#1A1A1A;--paper:#F4F2EC;--td:#1A1A1A;--mu:#8a8884;--line:#e0ddd3;--disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);background:#e7e5e0;color:var(--td);-webkit-font-smoothing:antialiased;padding:48px 24px 80px}
+.wrap{max-width:820px;margin:0 auto}
+.head{margin-bottom:40px}
+.brand{font-family:var(--disp);font-size:15px;font-weight:600;color:var(--acd);margin-bottom:14px}
+h1{font-family:var(--disp);font-size:34px;font-weight:600;letter-spacing:-.015em;line-height:1.12;margin-bottom:12px}
+.sub{color:#66645f;font-size:15px;line-height:1.6;max-width:560px}
+.group{margin-top:36px}
+.gh{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.row{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.card{flex:1;min-width:260px;background:#fff;border-radius:12px;padding:18px 20px;text-decoration:none;color:var(--td);box-shadow:0 3px 8px rgba(0,0,0,.06);transition:transform .15s,box-shadow .15s;display:block;border-left:3px solid transparent}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.1)}
+.card.course{border-left-color:var(--ac)}
+.card.byte{border-left-color:#C9A227;background:var(--paper)}
+.card .tag{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:6px;display:flex;justify-content:space-between}
+.card.course .tag span:first-child{color:var(--acd)}
+.card.byte .tag span:first-child{color:#B8901F}
+.card h3{font-family:var(--disp);font-size:17px;font-weight:600;line-height:1.25}
+.pending{opacity:.45;pointer-events:none}
+.note{margin-top:40px;font-size:12.5px;color:var(--mu);line-height:1.6;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="brand">Defence Lab</div>
+    <h1>Practical Cybersecurity for the Modern Workplace</h1>
+    <p class="sub">Cybersecurity awareness training for non-technical employees. Two formats: <b>Courses</b> build the why (6–8 min); <b>Security Bytes</b> give the how-to (2–3 min).</p>
+  </div>
+
+  <div class="group">
+    <div class="gh">🟢 General Awareness</div>
+    <div class="row">
+      <a class="card course" href="courses/01-security-basics.html"><div class="tag"><span>Course</span><span>~7 min</span></div><h3>Security Basics: Why One Setting Matters</h3></a>
+      <a class="card byte" href="bytes/01-check-if-breached.html"><div class="tag"><span>Security Byte</span><span>2 min</span></div><h3>Check If You've Been Breached</h3></a>
+    </div>
+  </div>
+
+  <div class="note">
+    More courses and bytes are being added. This is a live preview — content and design are in active development.
+  </div>
+</div>
+</body>
+</html>
