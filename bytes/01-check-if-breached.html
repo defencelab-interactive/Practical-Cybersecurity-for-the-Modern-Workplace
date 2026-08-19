@@ -10,18 +10,24 @@
 <style>
 :root{--ac:#34B77D;--acd:#2A9A66;--ac-soft:rgba(52,183,125,.10);--td:#1A1A1A;--tb:#4A4844;--mu:#8a8884;--paper:#F4F2EC;--paper2:#EDEAE1;--line:#e0ddd3;--sh:0 3px 8px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);--hi:inset 0 1.5px 0 rgba(255,255,255,1);--disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:var(--body);background:#d9d6cf;color:var(--td);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 20px;-webkit-font-smoothing:antialiased}
-.byte{width:100%;max-width:430px;background:var(--paper);border-radius:18px;overflow:hidden;box-shadow:0 24px 60px rgba(20,25,22,.22),0 6px 16px rgba(0,0,0,.1);display:flex;position:relative}
-.byte:fullscreen,.byte:-webkit-full-screen{max-width:none;width:100vw;height:100vh;border-radius:0;box-shadow:none;align-items:stretch}
-.byte.is-fs{max-width:none;width:100vw;height:100vh;border-radius:0;box-shadow:none;align-items:stretch}
-.byte.is-fs .body{max-width:640px;margin:0 auto;justify-content:center;min-height:0}
-.byte.is-fs .spine{width:12px}
-.byte.is-fs h1{font-size:36px}.byte.is-fs .lede{font-size:19px}
-.byte.is-fs .step .st{font-size:18px}.byte.is-fs .step .n{width:30px;height:30px;font-size:15px}
-.byte.is-fs .slbl{font-size:13px}.byte.is-fs .l2{font-size:14px}
-.byte.is-fs .field{font-size:16px;padding:14px 16px}.byte.is-fs .go-btn{font-size:15px;padding:13px}
-.byte.is-fs .result{font-size:16px}.byte.is-fs .done-wrap h2{font-size:30px}.byte.is-fs .done-wrap p{font-size:17px;max-width:400px}
-.byte.is-fs .nav button{font-size:15px;padding:11px 20px}.byte.is-fs .pair b{font-size:18px}
+body{font-family:var(--body);background:radial-gradient(120% 90% at 25% 12%,#efece4,#d9d6cf 64%);color:var(--td);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 20px;-webkit-font-smoothing:antialiased;position:relative;overflow:hidden}
+.byte-ground{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.byte-ground .bg-word{position:absolute;left:4%;bottom:5%;font-family:var(--disp);font-weight:600;font-size:clamp(90px,15vw,240px);line-height:.82;color:rgba(28,110,74,.055);letter-spacing:-.03em;text-transform:lowercase;white-space:nowrap;user-select:none}
+.byte-ground .bg-art{position:absolute;right:5%;top:50%;transform:translateY(-50%);width:clamp(220px,26vw,440px);height:auto}
+.bg-shield{animation:bgpulse 8s ease-in-out infinite;transform-origin:center}
+@keyframes bgpulse{0%,100%{opacity:.85;transform:translateY(0) scale(1)}50%{opacity:1;transform:translateY(-10px) scale(1.02)}}
+.bg-orbit{animation:bgorbit 20s linear infinite;transform-origin:center}
+@keyframes bgorbit{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.byte{width:100%;max-width:500px;background:var(--paper);border-radius:18px;overflow:hidden;box-shadow:0 24px 60px rgba(20,25,22,.22),0 6px 16px rgba(0,0,0,.1);display:flex;position:relative;z-index:1}
+.byte:fullscreen,.byte:-webkit-full-screen{max-width:620px}
+.byte.is-fs{max-width:620px}
+.byte.is-fs .spine{width:10px}
+.byte.is-fs h1{font-size:32px}.byte.is-fs .lede{font-size:16.5px}
+.byte.is-fs .step .st{font-size:15.5px}.byte.is-fs .step .n{width:28px;height:28px;font-size:14px}
+.byte.is-fs .slbl{font-size:11.5px}.byte.is-fs .l2{font-size:12.5px}
+.byte.is-fs .field{font-size:15px;padding:13px 15px}.byte.is-fs .go-btn{font-size:14.5px;padding:13px}
+.byte.is-fs .result{font-size:14.5px}.byte.is-fs .done-wrap h2{font-size:26px}.byte.is-fs .done-wrap p{font-size:15px}
+.byte.is-fs .nav button{font-size:14px;padding:10px 18px}.byte.is-fs .pair b{font-size:16.5px}
 .spine{width:8px;flex:none;background:linear-gradient(180deg,var(--ac),var(--acd))}
 .body{flex:1;padding:24px 26px 22px;display:flex;flex-direction:column;min-height:520px}
 .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
@@ -74,6 +80,7 @@ h1{font-family:var(--disp);font-size:25px;font-weight:600;line-height:1.14;lette
 </style>
 </head>
 <body>
+<div class="byte-ground" id="byteGround"></div>
 <div class="byte">
   <div class="spine"></div>
   <div class="body">
@@ -143,6 +150,12 @@ function toggleFS(){if(!document.fullscreenElement&&!document.webkitFullscreenEl
 document.addEventListener('fullscreenchange',syncFS);document.addEventListener('webkitfullscreenchange',syncFS);
 function syncFS(){const on=document.fullscreenElement||document.webkitFullscreenElement;byteEl.classList.toggle('is-fs',!!on);fsbtn.innerHTML=on?sIco:eIco;fsbtn.title=on?'Exit fullscreen':'Fullscreen';}
 document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+(function(){
+  const g=document.getElementById('byteGround'); if(!g) return;
+  const k=document.querySelector('.kicker'); const word=(k?k.textContent:'').trim().toLowerCase();
+  g.innerHTML=(word?`<div class="bg-word">${word}</div>`:'')+
+    `<svg class="bg-art" viewBox="0 0 120 132" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="bg-orbit" cx="60" cy="62" r="54" stroke="rgba(30,120,80,.10)" stroke-width="1.2" stroke-dasharray="3 8"/><g class="bg-shield"><path d="M60 8 L104 26 L104 66 Q104 104 60 124 Q16 104 16 66 L16 26 Z" stroke="rgba(28,110,74,.16)" stroke-width="2"/><circle cx="60" cy="58" r="9" stroke="rgba(28,110,74,.16)" stroke-width="2"/><path d="M60 66 L60 80" stroke="rgba(28,110,74,.16)" stroke-width="4.5" stroke-linecap="round"/></g></svg>`;
+})();
 render();
 </script>
 </body>
