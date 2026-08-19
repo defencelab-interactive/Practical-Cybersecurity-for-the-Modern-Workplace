@@ -30,7 +30,18 @@ body{font-family:var(--body);background:#0e0e0e;color:var(--td);display:flex;ali
 .deck.is-fs .counter{font-size:15px}.deck.is-fs .nav button{font-size:16px;padding:11px 22px}
 .deck.is-fs .split .left{padding:48px 40px}.deck.is-fs .split .left .lt{font-size:14px;margin-bottom:12px}
 .deck.is-fs .split .left h2{font-size:32px}.deck.is-fs .split .left .accent{width:56px;height:3px;margin-top:22px}
-.deck.is-fs .split .right{padding:0 64px;display:flex;flex-direction:column;justify-content:center}
+.deck.is-fs .split .right{padding:56px 64px;display:flex;flex-direction:column;justify-content:flex-start;gap:8px;position:relative;isolation:isolate}
+.deck.is-fs .split .left{justify-content:center}
+.split .right{position:relative}
+.ambient{position:absolute;left:0;right:0;bottom:0;top:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .5s ease;overflow:hidden}
+.deck.is-fs .ambient{opacity:1}
+.deck.is-fs .split .right::after{content:"";position:absolute;left:0;right:0;bottom:0;height:38%;background:linear-gradient(180deg,transparent,rgba(46,120,150,.10) 60%,rgba(42,154,102,.14));z-index:-2;pointer-events:none}
+.amb-word{position:absolute;left:60px;bottom:38px;font-family:var(--disp);font-weight:600;font-size:clamp(60px,9vw,120px);line-height:.9;letter-spacing:-.02em;color:rgba(26,95,64,.13);text-transform:lowercase;white-space:nowrap;user-select:none}
+.amb-art{position:absolute;right:60px;bottom:44px;width:clamp(150px,17vw,240px);height:auto}
+.amb-shield{animation:ambpulse 7s ease-in-out infinite;transform-origin:center}
+@keyframes ambpulse{0%,100%{opacity:.85;transform:translateY(0) scale(1)}50%{opacity:1;transform:translateY(-8px) scale(1.02)}}
+.amb-orbit{animation:amborbit 16s linear infinite;transform-origin:center}
+@keyframes amborbit{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 .deck.is-fs .split .right>*{max-width:900px;width:100%}
 .deck.is-fs .prose{font-size:21px;line-height:1.7;margin-bottom:26px;max-width:820px}
 .deck.is-fs .acc{border-radius:14px;margin-bottom:14px}.deck.is-fs .acc-h{font-size:19px;padding:18px 22px;gap:14px}
@@ -364,6 +375,14 @@ function toggleFS(){if(!document.fullscreenElement&&!document.webkitFullscreenEl
 document.addEventListener('fullscreenchange',syncFS);document.addEventListener('webkitfullscreenchange',syncFS);
 function syncFS(){const on=document.fullscreenElement||document.webkitFullscreenElement;deck.classList.toggle('is-fs',!!on);fsbtn.innerHTML=on?sIco:eIco;fsbtn.title=on?'Exit fullscreen':'Fullscreen';}
 document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+document.querySelectorAll('.slide.split').forEach(s=>{
+  const right=s.querySelector('.right'); if(!right) return;
+  const lt=s.querySelector('.left .lt'); const word=(lt?lt.textContent:'').trim().toLowerCase();
+  const amb=document.createElement('div'); amb.className='ambient';
+  amb.innerHTML=(word?`<div class="amb-word">${word}</div>`:'')+
+    `<svg class="amb-art" viewBox="0 0 120 132" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="amb-orbit" cx="60" cy="62" r="54" stroke="rgba(30,120,80,.16)" stroke-width="1.2" stroke-dasharray="3 8"/><g class="amb-shield"><path d="M60 8 L104 26 L104 66 Q104 104 60 124 Q16 104 16 66 L16 26 Z" stroke="rgba(28,110,74,.32)" stroke-width="2"/><circle cx="60" cy="58" r="9" stroke="rgba(28,110,74,.32)" stroke-width="2"/><path d="M60 66 L60 80" stroke="rgba(28,110,74,.32)" stroke-width="4.5" stroke-linecap="round"/></g></svg>`;
+  right.appendChild(amb);
+});
 render();
 </script>
 </body>
