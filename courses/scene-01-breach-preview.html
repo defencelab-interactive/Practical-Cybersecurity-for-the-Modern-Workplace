@@ -63,13 +63,17 @@ body{font-family:var(--body);background:var(--bk);color:var(--tw);-webkit-font-s
 .tl-head .htitle{font-size:clamp(28px,3.4vw,44px);margin-bottom:0}
 .tl-sub{font-size:15px;color:var(--ink-f)}
 .timeline{margin-top:22px}
-.tl-track{display:flex;gap:8px;margin-bottom:20px}
-.tl-dot{flex:1;cursor:pointer;text-align:left;padding:0;border:none;background:none;font-family:var(--body);transition:all .2s}
-.tl-dot .bar{width:100%;height:6px;border-radius:4px;background:#cdd3ce;margin-bottom:9px;transition:all .25s}
-.tl-dot .dl{font:700 11px/1.3 var(--mono);color:var(--ink-f);letter-spacing:.02em}
-.tl-dot:hover .bar{background:#aeb6b0}
-.tl-dot.on .bar{background:var(--acd);box-shadow:0 2px 10px rgba(42,154,102,.4)}.tl-dot.on .dl{color:var(--acd)}
-.tl-dot.crit .bar{background:#e88}.tl-dot.crit.on .bar{background:var(--rd);box-shadow:0 2px 10px rgba(224,87,79,.4)}
+.tl-hint{font:600 12px var(--body);color:var(--ink-f);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.tl-hint::before{content:"\261F";font-size:15px}
+.tl-track{display:flex;gap:10px;margin-bottom:22px}
+.tl-dot{flex:1;cursor:pointer;text-align:center;padding:12px 6px 10px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);font-family:var(--body);transition:all .18s;position:relative;box-shadow:0 2px 6px rgba(30,40,34,.06)}
+.tl-dot:hover{border-color:var(--acd);transform:translateY(-3px);box-shadow:0 8px 18px rgba(42,154,102,.18)}
+.tl-dot .tn{width:26px;height:26px;margin:0 auto 7px;border-radius:50%;background:#eef1ee;color:var(--ink-m);display:flex;align-items:center;justify-content:center;font:700 12px var(--mono);transition:all .2s}
+.tl-dot .dl{font:700 10.5px/1.2 var(--mono);color:var(--ink-f);letter-spacing:.01em;display:block}
+.tl-dot.on{border-color:var(--acd);background:rgba(46,173,107,.07)}
+.tl-dot.on .tn{background:var(--acd);color:#fff}.tl-dot.on .dl{color:var(--acd)}
+.tl-dot.crit .tn{background:#f6dcda;color:var(--rd)}
+.tl-dot.crit.on{border-color:var(--rd);background:rgba(224,87,79,.06)}.tl-dot.crit.on .tn{background:var(--rd);color:#fff}.tl-dot.crit.on .dl{color:var(--rd)}
 .tl-card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px 28px;box-shadow:0 10px 30px rgba(30,40,34,.12),0 2px 6px rgba(0,0,0,.05);min-height:130px}
 .tl-card .tc-date{font:700 12px var(--mono);color:var(--acd);letter-spacing:.05em;text-transform:uppercase;margin-bottom:9px}
 .tl-card .tc-what{font-family:var(--disp);font-size:22px;font-weight:600;color:var(--ink);margin-bottom:9px;line-height:1.3}
@@ -77,14 +81,22 @@ body{font-family:var(--body);background:var(--bk);color:var(--tw);-webkit-font-s
 .tl-note{margin-top:16px;border-left:3px solid var(--acd);background:rgba(46,173,107,.09);border-radius:0 12px 12px 0;padding:14px 20px;font-size:16px;color:var(--ink);line-height:1.55}
 
 /* reveal (light cards) inside scene */
-.reveal-steps{margin-top:20px;max-width:720px}
-.rrow{display:flex;gap:16px;align-items:flex-start;padding:15px 0;border-bottom:1px solid var(--line);transition:opacity .3s}
-.rrow.locked{opacity:.32;filter:blur(1.5px)}
-.rnum{flex:none;width:30px;height:30px;border-radius:9px;background:var(--acd);color:#fff;display:flex;align-items:center;justify-content:center;font:700 13px var(--mono)}
-.rrow.locked .rnum{background:#cdd3ce}
-.rt{font-family:var(--disp);font-size:20px;font-weight:600;color:var(--ink);margin-bottom:4px}
-.rp{font-size:16px;line-height:1.6;color:var(--ink-m);max-height:0;overflow:hidden;transition:max-height .4s ease}
-.rrow.open .rp{max-height:180px}
+.md{margin-top:22px;display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:32px;align-items:start;max-width:1040px}
+.md-list{display:flex;flex-direction:column;gap:11px}
+.md-item{display:flex;align-items:center;gap:14px;background:var(--paper);border:1.5px solid var(--line);border-radius:13px;padding:16px 18px;cursor:pointer;transition:all .18s;box-shadow:0 2px 8px rgba(30,40,34,.06);text-align:left;font-family:var(--body)}
+.md-item:hover{border-color:var(--acd);transform:translateX(4px);box-shadow:0 8px 18px rgba(42,154,102,.14)}
+.md-item.sel{border-color:var(--acd);background:rgba(46,173,107,.06)}
+.md-item .mi-n{flex:none;width:30px;height:30px;border-radius:9px;background:#eef1ee;color:var(--ink-m);display:flex;align-items:center;justify-content:center;font:700 13px var(--mono);transition:all .2s}
+.md-item.sel .mi-n{background:var(--acd);color:#fff}
+.md-item .mi-t{font-family:var(--disp);font-size:18px;font-weight:600;color:var(--ink);flex:1}
+.md-item .mi-c{color:var(--ink-f);transition:transform .2s;font-size:18px}
+.md-item.sel .mi-c{transform:translateX(3px);color:var(--acd)}
+.md-detail{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:28px 32px;box-shadow:0 12px 34px rgba(30,40,34,.12);min-height:150px;opacity:0;transform:translateX(12px);transition:all .35s cubic-bezier(.2,.7,.3,1)}
+.md-detail.show{opacity:1;transform:none}
+.md-detail .md-ic{font-size:30px;margin-bottom:12px}
+.md-detail .md-t{font-family:var(--disp);font-size:22px;font-weight:600;color:var(--ink);margin-bottom:12px}
+.md-detail .md-p{font-size:16px;line-height:1.7;color:var(--ink-m)}
+.md-detail.empty{display:flex;align-items:center;justify-content:center;color:var(--ink-f);font-size:15px;text-align:center;font-style:italic}
 
 /* motif — small on content beats, big on story */
 .motif{position:absolute;pointer-events:none;transition:all .6s cubic-bezier(.2,.7,.3,1);z-index:1}
@@ -157,6 +169,7 @@ body{font-family:var(--body);background:var(--bk);color:var(--tw);-webkit-font-s
       <div class="inner">
         <div class="tl-head"><h1 class="htitle">The attack, step by step</h1><span class="tl-sub">Tap each point — watch how one login became a catastrophe</span></div>
         <div class="timeline">
+          <div class="tl-hint">Tap a step to see what happened</div>
           <div class="tl-track" id="tlt"></div>
           <div class="tl-card" id="tlc"></div>
           <div class="tl-note" id="tln" style="display:none"></div>
@@ -171,9 +184,12 @@ body{font-family:var(--body);background:var(--bk);color:var(--tw);-webkit-font-s
         <div class="eyebrow">So what stopped it?</div>
         <h1 class="htitle" style="font-size:clamp(28px,3.4vw,44px)">One step that wasn't turned on</h1>
         <p class="lead">The attacker walked in at Step 2. They had firewalls, encryption, monitoring — none of it mattered, because the one thing that stops a stolen login wasn't on.</p>
-        <div class="reveal-steps" id="rev">
-          <div class="rrow open" onclick="toggleRow(this)"><div class="rnum">1</div><div><div class="rt">🔑 What's MFA?</div><div class="rp">A second step after your password — a code on your phone, or a fingerprint. Even with your password stolen, no one gets in without that second piece. Free, a minute to set up, and it blocks 99% of automated attacks.</div></div></div>
-          <div class="rrow" onclick="toggleRow(this)"><div class="rnum">2</div><div><div class="rt">🤔 Why didn't they have it?</div><div class="rp">They were in the middle of upgrading their systems. The attackers didn't wait. When systems are connected, one skipped step affects everyone downstream — that's why the basics matter even when they feel obvious.</div></div></div>
+        <div class="md">
+          <div class="md-list">
+            <button class="md-item sel" onclick="pickMd(this,0)"><span class="mi-n">1</span><span class="mi-t">🔑 What's MFA?</span><span class="mi-c">→</span></button>
+            <button class="md-item" onclick="pickMd(this,1)"><span class="mi-n">2</span><span class="mi-t">🤔 Why didn't they have it?</span><span class="mi-c">→</span></button>
+          </div>
+          <div class="md-detail" id="mdDetail"></div>
         </div>
       </div>
     </div>
@@ -216,7 +232,7 @@ const TL=[
 ];
 // build timeline track
 const tlt=document.getElementById('tlt');
-TL.forEach((s,i)=>{const b=document.createElement('button');b.className='tl-dot'+(s.crit?' crit':'')+(i===0?' on':'');b.innerHTML=`<div class="bar"></div><div class="dl">${s.date}</div>`;b.onclick=()=>tlPick(i);tlt.appendChild(b);});
+TL.forEach((s,i)=>{const b=document.createElement('button');b.className='tl-dot'+(s.crit?' crit':'')+(i===0?' on':'');b.innerHTML=`<div class="tn">${i+1}</div><div class="dl">${s.date}</div>`;b.onclick=()=>tlPick(i);tlt.appendChild(b);});
 function tlPick(i){[...tlt.children].forEach((d,k)=>d.classList.toggle('on',k===i));const s=TL[i];
   document.getElementById('tlc').innerHTML=`<div class="tc-date">${s.date}</div><div class="tc-what">${s.what}</div><div class="tc-gain">Attacker gained: ${s.gain}</div>`;
   const note=document.getElementById('tln');
@@ -240,8 +256,17 @@ function applyBeat(){
 function nextBeat(){if(cb<beats.length-1){cb++;applyBeat();}else{/* would advance to next scene */}}
 function prevBeat(){if(cb>0){cb--;applyBeat();}}
 document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')nextBeat();if(e.key==='ArrowLeft')prevBeat();});
-function toggleRow(el){el.classList.toggle('open');}
+const MD=[
+ {ic:'🔑',t:"What's MFA?",p:"A second step after your password — a code on your phone, or a fingerprint. Even with your password stolen, no one gets in without that second piece. It's free, takes a minute to set up, and blocks 99% of automated attacks."},
+ {ic:'🤔',t:"Why didn't they have it?",p:"They were in the middle of upgrading their systems. The attackers didn't wait. When systems are connected, one skipped step affects everyone downstream — that's why the basics matter even when they feel obvious."}
+];
+function pickMd(el,i){document.querySelectorAll('.md-item').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');
+  const d=MD[i];const box=document.getElementById('mdDetail');box.classList.remove('empty');
+  box.innerHTML=`<div class="md-ic">${d.ic}</div><div class="md-t">${d.t}</div><div class="md-p">${d.p}</div>`;
+  box.classList.remove('show');void box.offsetWidth;box.classList.add('show');}
 function fs(){const el=document.documentElement;if(!document.fullscreenElement){el.requestFullscreen&&el.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();}}
 applyBeat();
+// preload first detail
+(function(){const f=document.querySelector(".md-item");if(f)pickMd(f,0);})();
 </script>
 </body></html>
