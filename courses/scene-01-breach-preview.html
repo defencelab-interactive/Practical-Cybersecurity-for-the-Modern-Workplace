@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scene 1 · The Breach</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bk:#141a17;--ac:#34B77D;--acd:#2A9A66;--ac-soft:rgba(52,183,125,.12);
+  --gr:#2EAD6B;--gl:rgba(46,173,107,.14);--rd:#E0574F;--rl:rgba(224,87,79,.12);
+  --tw:#EDEFEC;--tm:rgba(237,239,236,.66);--tf:rgba(237,239,236,.36);
+  /* light content zone (original) */
+  --paper:#FCFCFB;--ink:#1A1A1A;--ink-m:#55605A;--ink-f:#8A938E;--line:#E4E7E3;
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--body);background:var(--bk);color:var(--tw);-webkit-font-smoothing:antialiased}
+.stage{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden;transition:background .6s ease}
+.stage.dark{background:radial-gradient(80% 90% at 82% 24%,rgba(46,150,110,.18),transparent 55%),radial-gradient(80% 90% at 8% 92%,rgba(45,115,155,.16),transparent 60%),radial-gradient(130% 130% at 50% 50%,#1a2521,#141a17 68%)}
+.stage.light{background:radial-gradient(ellipse at 0% 0%,rgba(40,160,110,.20),transparent 48%),radial-gradient(ellipse at 100% 100%,rgba(60,120,190,.18),transparent 48%),radial-gradient(ellipse at 50% 42%,rgba(255,255,255,.72),transparent 62%),linear-gradient(135deg,#e9ede8,#dfe7e6)}
+
+/* chrome */
+.top{display:flex;align-items:center;justify-content:space-between;padding:20px 44px;flex:none;z-index:30;position:relative}
+.top.on-light{color:var(--ink)}
+.brand{font-family:var(--disp);font-size:18px;font-weight:600}.brand span{color:var(--ac)}
+.on-light .brand span{color:var(--acd)}
+.top-right{display:flex;align-items:center;gap:10px}
+.chip{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ac);background:var(--ac-soft);border-radius:20px;padding:6px 13px}
+.fs-btn{width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:var(--tm);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .16s}
+.on-light .fs-btn{border-color:var(--line);color:var(--ink-m);background:#fff}
+.fs-btn:hover{border-color:var(--ac);color:var(--ac)}
+.fs-btn svg{width:15px;height:15px;pointer-events:none}
+
+/* ═══ SCENE: one space, beats reveal in place (no slide-turns) ═══ */
+.scene{flex:1;min-height:0;position:relative;overflow:hidden}
+
+.beat{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:2vh 6vw;
+  opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .5s ease,transform .55s cubic-bezier(.2,.7,.3,1),visibility .5s}
+.beat.on{opacity:1;visibility:visible;transform:none}
+.beat.gone{opacity:0;visibility:hidden;transform:translateY(-14px)}
+.inner{width:100%;max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:0}
+
+/* story beat (dark, big) */
+.eyebrow{font:700 13px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ac);margin-bottom:18px}
+.stage.light .eyebrow{color:var(--acd)}
+.htitle{font-family:var(--disp);font-weight:600;font-size:clamp(34px,5vw,64px);line-height:1.04;letter-spacing:-.02em;margin-bottom:22px;max-width:16ch}
+.stage.light .htitle{color:var(--ink)}
+.lead{font-size:clamp(17px,1.6vw,22px);line-height:1.7;color:var(--tm);max-width:56ch;margin-bottom:16px}
+.stage.light .lead{color:var(--ink-m)}
+.lead .k{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);padding:1px 7px;border-radius:5px;color:var(--tw)}
+.stage.light .lead .k{background:rgba(0,0,0,.06);color:var(--ink)}
+.lead strong{color:var(--tw);font-weight:600}.stage.light .lead strong{color:var(--ink)}
+.dim{color:var(--tf);font-style:italic;font-size:clamp(15px,1.3vw,18px)}.stage.light .dim{color:var(--ink-f)}
+.big{font-family:var(--disp);font-weight:600;font-size:clamp(70px,11vw,150px);line-height:.85;letter-spacing:-.03em;color:var(--ac);margin-bottom:6px}
+
+/* continue affordance inside a scene (advance beat) */
+.beat-next{margin-top:26px;justify-self:start;width:max-content;display:inline-flex;align-items:center;gap:10px;background:var(--ac);color:#08130d;border:none;border-radius:12px;padding:13px 24px;font:600 15px var(--body);cursor:pointer;transition:all .16s;align-self:flex-start}
+.beat-next:hover{background:var(--acd);transform:translateX(2px)}
+.stage.light .beat-next{box-shadow:0 6px 18px rgba(42,154,102,.25)}
+
+/* TIMELINE lives inside the scene (light) */
+.tl-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.tl-head .htitle{font-size:clamp(28px,3.4vw,44px);margin-bottom:0}
+.tl-sub{font-size:15px;color:var(--ink-f)}
+.timeline{margin-top:22px}
+.tl-track{display:flex;gap:8px;margin-bottom:20px}
+.tl-dot{flex:1;cursor:pointer;text-align:left;padding:0;border:none;background:none;font-family:var(--body);transition:all .2s}
+.tl-dot .bar{width:100%;height:6px;border-radius:4px;background:#cdd3ce;margin-bottom:9px;transition:all .25s}
+.tl-dot .dl{font:700 11px/1.3 var(--mono);color:var(--ink-f);letter-spacing:.02em}
+.tl-dot:hover .bar{background:#aeb6b0}
+.tl-dot.on .bar{background:var(--acd);box-shadow:0 2px 10px rgba(42,154,102,.4)}.tl-dot.on .dl{color:var(--acd)}
+.tl-dot.crit .bar{background:#e88}.tl-dot.crit.on .bar{background:var(--rd);box-shadow:0 2px 10px rgba(224,87,79,.4)}
+.tl-card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px 28px;box-shadow:0 10px 30px rgba(30,40,34,.12),0 2px 6px rgba(0,0,0,.05);min-height:130px}
+.tl-card .tc-date{font:700 12px var(--mono);color:var(--acd);letter-spacing:.05em;text-transform:uppercase;margin-bottom:9px}
+.tl-card .tc-what{font-family:var(--disp);font-size:22px;font-weight:600;color:var(--ink);margin-bottom:9px;line-height:1.3}
+.tl-card .tc-gain{font-size:16px;color:var(--ink-m);line-height:1.55}.tl-card .tc-gain b{color:var(--acd);font-weight:600}
+.tl-note{margin-top:16px;border-left:3px solid var(--acd);background:rgba(46,173,107,.09);border-radius:0 12px 12px 0;padding:14px 20px;font-size:16px;color:var(--ink);line-height:1.55}
+
+/* reveal (light cards) inside scene */
+.reveal-steps{margin-top:20px;max-width:720px}
+.rrow{display:flex;gap:16px;align-items:flex-start;padding:15px 0;border-bottom:1px solid var(--line);transition:opacity .3s}
+.rrow.locked{opacity:.32;filter:blur(1.5px)}
+.rnum{flex:none;width:30px;height:30px;border-radius:9px;background:var(--acd);color:#fff;display:flex;align-items:center;justify-content:center;font:700 13px var(--mono)}
+.rrow.locked .rnum{background:#cdd3ce}
+.rt{font-family:var(--disp);font-size:20px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.rp{font-size:16px;line-height:1.6;color:var(--ink-m);max-height:0;overflow:hidden;transition:max-height .4s ease}
+.rrow.open .rp{max-height:180px}
+
+/* motif — small on content beats, big on story */
+.motif{position:absolute;pointer-events:none;transition:all .6s cubic-bezier(.2,.7,.3,1);z-index:1}
+.motif.big{top:50%;right:2%;transform:translateY(-50%);width:min(500px,34vw);opacity:.9}
+.motif.small{top:26px;right:180px;width:52px;opacity:.85}
+.motif svg{width:100%;height:100%;overflow:visible}
+.m-orbit{transform-origin:60px 62px;animation:spin 28s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.m-shell{transform-origin:center;animation:breathe 7s ease-in-out infinite}@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+.m-state{opacity:0;transition:opacity .6s}.m-state.on{opacity:1}
+.motif.on-light .m-shell path{stroke:var(--acd)}
+.motif.on-light .m-state [stroke="var(--ac)"]{stroke:var(--acd)}
+
+/* progress — scenes (few) + beat pips within */
+.nav{display:flex;align-items:center;justify-content:center;gap:20px;padding:16px 40px 22px;flex:none;z-index:30;position:relative}
+.nav.on-light{color:var(--ink)}
+.scenes{display:flex;align-items:center;gap:10px}
+.sc-pip{display:flex;align-items:center;gap:8px;cursor:pointer;background:none;border:none;font-family:var(--body);color:var(--tf);font-size:13px;font-weight:600;transition:color .2s;padding:4px 0}
+.nav.on-light .sc-pip{color:var(--ink-f)}
+.sc-pip .num{width:24px;height:24px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font:700 11px var(--mono);transition:all .2s}
+.sc-pip.cur{color:var(--ac)}.nav.on-light .sc-pip.cur{color:var(--acd)}
+.sc-pip.cur .num{background:var(--ac);border-color:var(--ac);color:#08130d}
+.nav.on-light .sc-pip.cur .num{background:var(--acd);border-color:var(--acd);color:#fff}
+.sc-pip.done .num{background:var(--acd);border-color:var(--acd);color:#fff}
+.sc-lbl{white-space:nowrap}
+@media(max-width:900px){.sc-lbl{display:none}}
+.beat-pips{display:flex;gap:6px;align-items:center}
+.bp{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s}
+.nav.on-light .bp{background:rgba(0,0,0,.15)}
+.bp.on{background:var(--ac);transform:scale(1.3)}.nav.on-light .bp.on{background:var(--acd)}
+.bp.done{background:var(--acd)}
+.arrow{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:var(--tw);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .16s}
+.nav.on-light .arrow{border-color:var(--line);background:#fff;color:var(--ink-m)}
+.arrow:hover{border-color:var(--ac);color:var(--ac)}
+.arrow.next{background:var(--ac);border-color:var(--ac);color:#08130d}.arrow.next:hover{background:var(--acd)}
+.arrow svg{width:16px;height:16px}
+</style>
+</head>
+<body>
+<div class="stage dark">
+  <div class="top" id="top"><div class="brand">Defence<span>Lab</span></div>
+    <div class="top-right"><div class="chip" id="xp">0 XP</div>
+      <button class="fs-btn" onclick="fs()"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="1,5 1,1 5,1"/><polyline points="9,1 13,1 13,5"/><polyline points="13,9 13,13 9,13"/><polyline points="5,13 1,13 1,9"/></svg></button>
+    </div>
+  </div>
+
+  <div class="scene dark" id="scene">
+    <div class="motif big" id="motif"><svg viewBox="0 0 120 124">
+      <circle class="m-orbit" cx="60" cy="62" r="56" fill="none" stroke="rgba(52,183,125,.14)" stroke-width="1" stroke-dasharray="2 9"/>
+      <g class="m-shell"><path d="M60 6 L106 24 L106 66 Q106 104 60 120 Q14 104 14 66 L14 24 Z" fill="rgba(52,183,125,.05)" stroke="rgba(52,183,125,.5)" stroke-width="2"/></g>
+      <g class="m-inner">
+        <g class="m-state on" data-s="intact"><circle cx="60" cy="56" r="10" fill="none" stroke="var(--ac)" stroke-width="2.4"/><path d="M60 64 L60 82" stroke="var(--ac)" stroke-width="5" stroke-linecap="round"/></g>
+        <g class="m-state" data-s="crack"><path d="M60 30 L52 54 L66 62 L54 92" fill="none" stroke="var(--rd)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <g class="m-state" data-s="check"><path d="M46 60 L56 71 L76 48" fill="none" stroke="var(--ac)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+      </g></svg></div>
+
+    <!-- BEAT 1: the story (dark) -->
+    <div class="beat on" data-bg="dark" data-motif="intact">
+      <div class="inner">
+        <div class="eyebrow">True Story · The Foundation</div>
+        <h1 class="htitle">The $2.4 Billion Password</h1>
+        <p class="lead">In 2024, an attacker got one employee's login at Change Healthcare — which processes about a third of all U.S. patient records. Multi-factor authentication wasn't turned on, so he just logged in. He spent nine days inside the network. Then deployed ransomware.</p>
+        <p class="lead">Pharmacies couldn't fill prescriptions. Hospitals couldn't verify insurance. Total damage: <span class="k">$2.4 billion</span>.</p>
+        <p class="dim">The setting that would have stopped it is free and takes about a minute.</p>
+        <button class="beat-next" onclick="nextBeat()">See how it happened →</button>
+      </div>
+    </div>
+
+    <!-- BEAT 2: the timeline (light, in-place) -->
+    <div class="beat" data-bg="light" data-motif="crack">
+      <div class="inner">
+        <div class="tl-head"><h1 class="htitle">The attack, step by step</h1><span class="tl-sub">Tap each point — watch how one login became a catastrophe</span></div>
+        <div class="timeline">
+          <div class="tl-track" id="tlt"></div>
+          <div class="tl-card" id="tlc"></div>
+          <div class="tl-note" id="tln" style="display:none"></div>
+        </div>
+        <button class="beat-next" onclick="nextBeat()">What would have stopped it →</button>
+      </div>
+    </div>
+
+    <!-- BEAT 3: what stopped it (light, reveal in-place) -->
+    <div class="beat" data-bg="light" data-motif="check">
+      <div class="inner">
+        <div class="eyebrow">So what stopped it?</div>
+        <h1 class="htitle" style="font-size:clamp(28px,3.4vw,44px)">One step that wasn't turned on</h1>
+        <p class="lead">The attacker walked in at Step 2. They had firewalls, encryption, monitoring — none of it mattered, because the one thing that stops a stolen login wasn't on.</p>
+        <div class="reveal-steps" id="rev">
+          <div class="rrow open" onclick="toggleRow(this)"><div class="rnum">1</div><div><div class="rt">🔑 What's MFA?</div><div class="rp">A second step after your password — a code on your phone, or a fingerprint. Even with your password stolen, no one gets in without that second piece. Free, a minute to set up, and it blocks 99% of automated attacks.</div></div></div>
+          <div class="rrow" onclick="toggleRow(this)"><div class="rnum">2</div><div><div class="rt">🤔 Why didn't they have it?</div><div class="rp">They were in the middle of upgrading their systems. The attackers didn't wait. When systems are connected, one skipped step affects everyone downstream — that's why the basics matter even when they feel obvious.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="nav" id="nav">
+    <button class="arrow" id="back" onclick="prevBeat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="scenes" id="scenes"></div>
+    <div class="beat-pips" id="bpips"></div>
+    <button class="arrow next" id="next" onclick="nextBeat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+  </div>
+</div>
+
+<script>
+/* scenes (for full course there'd be 5; here we show Scene 1's beats) */
+const SCENES=[['1','The Breach'],['2','Four Habits'],['3','Vocabulary'],['4','Daily Practice'],['5','Foundation']];
+let curScene=0;
+const beats=[...document.querySelectorAll('.beat')];
+let cb=0;let xp=0;
+const stage=document.querySelector('.stage'),scene=document.getElementById('scene'),motif=document.getElementById('motif'),topEl=document.getElementById('top'),nav=document.getElementById('nav');
+const states=[...document.querySelectorAll('.m-state')];
+
+// scene pips
+const scEl=document.getElementById('scenes');
+SCENES.forEach((s,i)=>{const b=document.createElement('button');b.className='sc-pip'+(i===0?' cur':'');b.innerHTML=`<span class="num">${s[0]}</span><span class="sc-lbl">${s[1]}</span>`;scEl.appendChild(b);});
+// beat pips
+const bpEl=document.getElementById('bpips');
+beats.forEach((_,i)=>{const d=document.createElement('div');d.className='bp'+(i===0?' on':'');bpEl.appendChild(d);});
+const bps=[...bpEl.children];
+
+const TL=[
+ {date:'Feb 12',crit:0,what:'Employee credentials stolen',gain:'Phishing email → login for remote access'},
+ {date:'Feb 12',crit:1,what:'Attacker logs in — no MFA',gain:'<b>Full network access</b>, instantly'},
+ {date:'Feb 12–21',crit:0,what:'Moves through the network — 9 days',gain:'Copies databases, maps every system'},
+ {date:'Feb 21',crit:1,what:'Deploys ransomware',gain:'Everything encrypted at once'},
+ {date:'Feb 21+',crit:0,what:'Pharmacies stop processing',gain:'Patients can\u2019t get medications'},
+ {date:'March',crit:0,what:'Company pays $22M ransom',gain:'Data decrypted — but already copied'},
+ {date:'Ongoing',crit:1,what:'Total exceeds $2.4B',gain:'Fines, lawsuits, reputation'}
+];
+// build timeline track
+const tlt=document.getElementById('tlt');
+TL.forEach((s,i)=>{const b=document.createElement('button');b.className='tl-dot'+(s.crit?' crit':'')+(i===0?' on':'');b.innerHTML=`<div class="bar"></div><div class="dl">${s.date}</div>`;b.onclick=()=>tlPick(i);tlt.appendChild(b);});
+function tlPick(i){[...tlt.children].forEach((d,k)=>d.classList.toggle('on',k===i));const s=TL[i];
+  document.getElementById('tlc').innerHTML=`<div class="tc-date">${s.date}</div><div class="tc-what">${s.what}</div><div class="tc-gain">Attacker gained: ${s.gain}</div>`;
+  const note=document.getElementById('tln');
+  if(s.crit&&i===1){note.style.display='block';note.innerHTML='<b>This is the moment.</b> MFA here would have stopped everything — one extra verification step.';}
+  else note.style.display='none';}
+tlPick(0);
+
+function setMotif(id){states.forEach(s=>s.classList.toggle('on',s.dataset.s===id));}
+function applyBeat(){
+  beats.forEach((b,i)=>{b.classList.toggle('on',i===cb);b.classList.toggle('gone',i<cb);});
+  const b=beats[cb];const light=b.dataset.bg==='light';
+  stage.classList.toggle('light',light);stage.classList.toggle('dark',!light);
+  topEl.classList.toggle('on-light',light);nav.classList.toggle('on-light',light);
+  // motif: big on story (beat0), small indicator on content beats
+  motif.classList.toggle('big',cb===0);motif.classList.toggle('small',cb!==0);
+  motif.classList.toggle('on-light',light);
+  setMotif(b.dataset.motif);
+  bps.forEach((p,i)=>{p.className='bp'+(i===cb?' on':i<cb?' done':'');});
+  document.getElementById('back').style.visibility=(cb===0&&curScene===0)?'hidden':'visible';
+}
+function nextBeat(){if(cb<beats.length-1){cb++;applyBeat();}else{/* would advance to next scene */}}
+function prevBeat(){if(cb>0){cb--;applyBeat();}}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')nextBeat();if(e.key==='ArrowLeft')prevBeat();});
+function toggleRow(el){el.classList.toggle('open');}
+function fs(){const el=document.documentElement;if(!document.fullscreenElement){el.requestFullscreen&&el.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();}}
+applyBeat();
+</script>
+</body></html>
