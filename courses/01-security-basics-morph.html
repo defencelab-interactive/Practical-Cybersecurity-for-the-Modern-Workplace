@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defence Lab · Security Basics</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bk:#141a17;--ac:#34B77D;--acd:#2A9A66;--ac-soft:rgba(52,183,125,.12);
+  --gr:#2EAD6B;--gl:rgba(46,173,107,.14);--rd:#E0574F;--rl:rgba(224,87,79,.12);
+  --tw:#EDEFEC;--tm:rgba(237,239,236,.66);--tf:rgba(237,239,236,.36);
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--body);background:var(--bk);color:var(--tw);-webkit-font-smoothing:antialiased}
+.stage{position:fixed;inset:0;display:flex;flex-direction:column;perspective:1600px;overflow:hidden;
+  background:
+   radial-gradient(90% 90% at 82% 26%,rgba(46,150,110,.20),transparent 56%),
+   radial-gradient(85% 90% at 8% 92%,rgba(45,115,155,.18),transparent 60%),
+   radial-gradient(70% 80% at 45% 10%,rgba(52,183,125,.08),transparent 55%),
+   radial-gradient(130% 130% at 50% 50%,#1a2521,#141a17 68%)}
+/* chrome */
+.top{display:flex;align-items:center;justify-content:space-between;padding:22px 46px;flex:none;z-index:20}
+.brand{font-family:var(--disp);font-size:18px;font-weight:600}.brand span{color:var(--ac)}
+.chip{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ac);background:var(--ac-soft);border-radius:20px;padding:6px 13px}
+/* motif */
+.motif{position:absolute;top:50%;right:0;transform:translateY(-50%);width:min(580px,38vw);aspect-ratio:1;z-index:2;pointer-events:none;opacity:.92}
+.motif::before{content:"";position:absolute;inset:-12% -18% -12% -8%;background:radial-gradient(circle at 60% 50%,rgba(52,183,125,.12),transparent 60%);z-index:-1}
+.motif svg{width:100%;height:100%;overflow:visible}
+.m-orbit{transform-origin:60px 62px;animation:spin 28s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.m-shell{transform-origin:center;animation:breathe 7s ease-in-out infinite}@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+.m-state{opacity:0;transition:opacity .6s ease}.m-state.on{opacity:1}
+.draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}.m-state.on .draw{stroke-dashoffset:0;transition:stroke-dashoffset .9s ease .1s}
+/* layers */
+.layers{position:relative;flex:1;min-height:0;z-index:5}
+.layer{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  padding:0 40% 0 clamp(48px,7vw,110px);
+  opacity:0;pointer-events:none;transform:translateZ(-120px) scale(.94);filter:blur(6px);
+  transition:opacity .5s ease,transform .55s cubic-bezier(.22,.7,.3,1),filter .5s ease;transform-style:preserve-3d;overflow-y:auto}
+.layer.on{opacity:1;pointer-events:auto;transform:translateZ(0) scale(1);filter:blur(0)}
+.layer.past{transform:translateZ(-200px) scale(.9);filter:blur(8px)}
+.layer::-webkit-scrollbar{width:0}
+.layer.dark{padding-right:40%}
+.wrap{width:100%;max-width:660px}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--ac);margin-bottom:18px}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(32px,4.2vw,52px);line-height:1.07;letter-spacing:-.02em;margin-bottom:22px}
+h1.sm{font-size:clamp(26px,3vw,38px)}
+.big{font-family:var(--disp);font-weight:600;font-size:clamp(64px,9vw,124px);line-height:.9;letter-spacing:-.03em;color:var(--ac);margin-bottom:10px}
+p{font-size:clamp(16px,1.45vw,20px);line-height:1.72;color:var(--tm);margin-bottom:18px}
+p .k{font-family:var(--mono);font-size:.9em;background:rgba(255,255,255,.08);padding:1px 7px;border-radius:5px;color:var(--tw)}
+p strong{color:var(--tw);font-weight:600}
+.dim-note{color:var(--tf);font-style:italic;font-size:clamp(15px,1.3vw,18px)}
+.callout{border-left:3px solid var(--ac);background:var(--ac-soft);border-radius:0 12px 12px 0;padding:16px 22px;font-size:clamp(15px,1.35vw,18px);line-height:1.6;color:var(--tw);margin-top:6px;max-width:660px}
+.callout.red{border-left-color:var(--rd);background:var(--rl)}
+/* reveal steps */
+.reveal-steps{display:flex;flex-direction:column;gap:4px;max-width:660px;margin-top:6px}
+.rstep{display:flex;gap:16px;align-items:flex-start;padding:15px 20px;border-left:2px solid rgba(255,255,255,.1);margin-left:10px;transition:all .35s cubic-bezier(.22,.7,.3,1)}
+.rstep.locked{opacity:.28;filter:blur(2px);pointer-events:none;max-height:62px;overflow:hidden}
+.rstep.active{border-color:var(--ac);background:linear-gradient(90deg,var(--ac-soft),transparent);border-radius:0 12px 12px 0}
+.rstep.done{border-color:var(--acd);opacity:.62}
+.rnum{flex:none;width:30px;height:30px;border-radius:9px;border:1.5px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font:700 13px/1 var(--mono);color:var(--tf);transition:all .35s}
+.rstep.active .rnum{background:var(--ac);border-color:var(--ac);color:#08130d}.rstep.done .rnum{background:var(--acd);border-color:var(--acd);color:#08130d}
+.rt{font-family:var(--disp);font-size:21px;font-weight:600;margin-bottom:5px}
+.rp{font-size:16px;line-height:1.6;color:var(--tm);max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .4s ease .1s}
+.rstep.active .rp,.rstep.done .rp{max-height:220px;opacity:1}
+.reveal-btn{margin-top:16px;background:var(--ac-soft);border:1px solid rgba(52,183,125,.4);color:var(--ac);font:600 15px var(--body);padding:11px 22px;border-radius:11px;cursor:pointer;transition:all .16s}
+.reveal-btn:hover{background:var(--ac);color:#08130d}.reveal-btn.done{opacity:.4;pointer-events:none}
+/* choices */
+.choices{display:flex;flex-direction:column;gap:12px;max-width:620px;margin-top:4px}
+.choice{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:17px 20px;cursor:pointer;text-align:left;transition:all .18s;color:var(--tw);font-family:var(--body)}
+.choice:hover{background:rgba(255,255,255,.07);border-color:rgba(52,183,125,.45);transform:translateY(-2px)}
+.choice.sel{border-color:var(--ac);background:var(--ac-soft)}
+.choice .ch{font-size:17px;font-weight:700;margin-bottom:3px}.choice .cd{font-size:14px;color:var(--tf)}
+.reveal-box{margin-top:16px;max-width:640px;background:var(--ac-soft);border-left:3px solid var(--ac);border-radius:0 10px 10px 0;padding:16px 20px;font-size:16px;line-height:1.6;color:var(--tw);opacity:0;transform:translateY(8px);transition:all .4s}
+.reveal-box.show{opacity:1;transform:none}
+/* quiz */
+.wager{display:flex;gap:9px;margin:2px 0 16px;flex-wrap:wrap;max-width:600px}
+.wager .wl{font-size:11px;color:var(--tf);text-transform:uppercase;letter-spacing:.09em;font-weight:700;width:100%;margin-bottom:2px}
+.wb{flex:1;min-width:120px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px;font:600 13px var(--body);color:var(--tm);cursor:pointer;transition:all .15s}
+.wb:hover{transform:translateY(-1px)}.wb.sel{border-color:var(--ac);background:var(--ac-soft);color:var(--ac)}
+.opts{display:flex;flex-direction:column;gap:10px;max-width:660px}
+.opt{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:15px 19px;font-size:16px;color:var(--tw);cursor:pointer;text-align:left;font-family:var(--body);transition:all .16s;display:flex;gap:13px;align-items:flex-start}
+.opt .k{font:700 13px var(--mono);color:var(--tf);width:16px;flex:none;padding-top:2px}
+.opt:hover{transform:translateY(-1px);border-color:rgba(52,183,125,.4)}
+.opt.correct{border-color:var(--gr);background:var(--gl);animation:pulse .45s}
+.opt.wrong{border-color:var(--rd);background:var(--rl);animation:shake .35s}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.02);box-shadow:0 0 0 4px rgba(46,173,107,.22)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.expl{margin-top:16px;max-width:660px;background:rgba(255,255,255,.05);border-radius:12px;padding:17px 20px;font-size:16px;line-height:1.62;color:var(--tm);display:none}
+.expl.show{display:block;animation:rise .4s}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.expl .xpb{display:inline-block;font:700 11px var(--mono);color:var(--ac);background:var(--ac-soft);border-radius:20px;padding:3px 10px;margin-bottom:9px}
+/* timeline */
+.timeline{max-width:680px;margin-top:8px}
+.tl-track{display:flex;gap:6px;margin-bottom:18px}
+.tl-dot{flex:1;cursor:pointer;text-align:center;padding:0;border:none;background:none;font-family:var(--body);transition:all .2s}
+.tl-dot .d{width:100%;height:5px;border-radius:3px;background:rgba(255,255,255,.14);margin-bottom:8px;transition:all .25s}
+.tl-dot .l{font:700 10px/1.2 var(--mono);color:var(--tf);letter-spacing:.03em}
+.tl-dot:hover .d{background:rgba(255,255,255,.3)}
+.tl-dot.on .d{background:var(--ac);box-shadow:0 0 12px rgba(52,183,125,.5)}.tl-dot.on .l{color:var(--ac)}
+.tl-dot.crit .d{background:var(--rd)}.tl-dot.crit.on .d{background:var(--rd);box-shadow:0 0 12px rgba(224,87,79,.5)}
+.tl-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:20px 24px;min-height:120px}
+.tl-card .tc-date{font:700 11px var(--mono);color:var(--ac);letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
+.tl-card .tc-what{font-size:18px;font-weight:600;color:var(--tw);margin-bottom:8px;line-height:1.4}
+.tl-card .tc-gain{font-size:15px;color:var(--tm);line-height:1.55}.tl-card .tc-gain b{color:var(--ac);font-weight:600}
+/* checklist */
+.checklist{display:flex;flex-direction:column;gap:10px;max-width:640px;margin-top:6px}
+.cl-item{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:15px 18px;cursor:pointer;transition:all .16s;color:var(--tw)}
+.cl-item:hover{border-color:rgba(52,183,125,.4)}
+.cl-box{width:24px;height:24px;border-radius:7px;border:2px solid rgba(255,255,255,.25);flex:none;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:14px;color:transparent}
+.cl-item.on .cl-box{background:var(--ac);border-color:var(--ac);color:#08130d}
+.cl-item.on{border-color:rgba(52,183,125,.4);background:var(--ac-soft)}
+.cl-item .cl-t{font-size:16px}
+.act-zone{font:700 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ac);margin-bottom:6px}
+/* summary */
+.slist{list-style:none;max-width:640px;margin:6px 0 24px;counter-reset:s}
+.slist li{counter-increment:s;padding:11px 0 11px 46px;position:relative;font-size:17px;line-height:1.5;color:var(--tm)}
+.slist li::before{content:counter(s);position:absolute;left:0;top:8px;width:30px;height:30px;background:var(--ac-soft);color:var(--ac);border-radius:9px;font:700 14px var(--mono);display:flex;align-items:center;justify-content:center}
+.nextcards{display:flex;gap:12px;flex-wrap:wrap}
+.nextcards a{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:15px 20px;color:var(--tw);text-decoration:none;font-size:15px;transition:all .16s}
+.nextcards a:hover{border-color:rgba(52,183,125,.4);background:var(--ac-soft)}
+.nextcards a small{display:block;font:700 10.5px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--tf);margin-bottom:4px}
+/* reflection modal */
+.rm{position:fixed;inset:0;background:rgba(8,12,10,.82);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:60;padding:24px}
+.rm.on{display:flex;animation:rise .3s}
+.rm-card{background:linear-gradient(170deg,#1c2620,#161d19);border:1px solid rgba(52,183,125,.35);border-radius:18px;padding:40px 44px 32px;max-width:580px;text-align:center;box-shadow:0 40px 90px rgba(0,0,0,.6)}
+.rm-tag{font:700 11px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ac);margin-bottom:16px}
+.rm-q{font-family:var(--disp);font-size:25px;line-height:1.35;font-weight:500;margin-bottom:14px;color:var(--tw)}
+.rm-sub{font-size:15px;color:var(--tm);line-height:1.6;margin-bottom:24px}
+.rm-btn{background:var(--ac);color:#08130d;border:none;border-radius:11px;padding:12px 26px;font:600 15px var(--body);cursor:pointer}
+/* nav */
+.nav{display:flex;align-items:center;justify-content:center;padding:16px 40px 22px;flex:none;z-index:20;opacity:.8;transition:opacity .25s}.nav:hover{opacity:1}
+.stepper{display:flex;align-items:center;gap:12px}
+.st-arrow{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:var(--tm);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .16s;flex:none}
+.st-arrow svg{width:15px;height:15px}
+.st-arrow:hover{background:var(--ac-soft);border-color:rgba(52,183,125,.45);color:var(--ac)}
+.st-arrow:disabled{opacity:.22;cursor:default}
+.st-arrow.next{background:rgba(52,183,125,.15);border-color:rgba(52,183,125,.4);color:var(--ac)}
+.st-arrow.next:hover{background:var(--ac);color:#08130d}.st-arrow.next:disabled{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.14);color:var(--tm)}
+.st-segs{display:flex;align-items:center;gap:4px;max-width:52vw;overflow:hidden;flex-wrap:nowrap}
+.st-seg{width:16px;height:4px;border-radius:3px;background:rgba(255,255,255,.13);cursor:pointer;transition:all .3s;flex:none;border:none;padding:0}
+.st-seg:hover{background:rgba(255,255,255,.3)}.st-seg.done{background:var(--acd)}.st-seg.now{width:30px;background:var(--ac)}
+.st-count{font:600 11px var(--mono);color:var(--tf);margin-left:6px;min-width:44px}
+@media(max-width:1100px){.layer{padding-right:34%}.motif{width:min(440px,34vw)}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="top"><div class="brand">Defence<span>Lab</span></div><div class="chip" id="xp">0 XP</div></div>
+  <div class="motif"><svg viewBox="0 0 120 124">
+    <circle class="m-orbit" cx="60" cy="62" r="56" fill="none" stroke="rgba(52,183,125,.14)" stroke-width="1" stroke-dasharray="2 9"/>
+    <g class="m-shell"><path d="M60 6 L106 24 L106 66 Q106 104 60 120 Q14 104 14 66 L14 24 Z" fill="rgba(52,183,125,.05)" stroke="rgba(52,183,125,.5)" stroke-width="2"/></g>
+    <g class="m-inner">
+      <g class="m-state on" data-s="intact"><circle cx="60" cy="56" r="10" fill="none" stroke="var(--ac)" stroke-width="2.4"/><path d="M60 64 L60 82" stroke="var(--ac)" stroke-width="5" stroke-linecap="round"/></g>
+      <g class="m-state" data-s="crack"><path class="draw" style="--len:120" d="M60 30 L52 54 L66 62 L54 92" fill="none" stroke="var(--rd)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g class="m-state" data-s="segments"><circle cx="60" cy="60" r="26" fill="none" stroke="rgba(52,183,125,.3)" stroke-width="2"/><path class="draw" style="--len:26" d="M60 60 L60 34" stroke="var(--ac)" stroke-width="3"/><path class="draw" style="--len:26" d="M60 60 L86 60" stroke="var(--ac)" stroke-width="3"/><path class="draw" style="--len:26" d="M60 60 L60 86" stroke="var(--ac)" stroke-width="3"/><path class="draw" style="--len:26" d="M60 60 L34 60" stroke="var(--ac)" stroke-width="3"/></g>
+      <g class="m-state" data-s="pulse"><circle cx="60" cy="60" r="20" fill="none" stroke="var(--ac)" stroke-width="2.4"/><circle cx="60" cy="60" r="7" fill="var(--ac)"/></g>
+      <g class="m-state" data-s="chain"><rect x="40" y="52" width="16" height="16" rx="3" fill="none" stroke="rgba(237,239,236,.4)" stroke-width="2.4"/><rect x="64" y="52" width="16" height="16" rx="3" fill="none" stroke="var(--ac)" stroke-width="2.6"/><path d="M56 60 L64 60" stroke="var(--rd)" stroke-width="2.4" stroke-dasharray="2 3"/></g>
+      <g class="m-state" data-s="check"><path class="draw" style="--len:60" d="M46 60 L56 71 L76 48" fill="none" stroke="var(--ac)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+    </g>
+  </svg></div>
+  <div class="layers" id="layers"></div>
+  <div class="nav"><div class="stepper">
+    <button class="st-arrow" id="back" onclick="go(-1)" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="st-segs" id="segs"></div>
+    <button class="st-arrow next" id="next" onclick="go(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    <span class="st-count" id="count"></span>
+  </div></div>
+</div>
+<div class="rm" id="rm"><div class="rm-card"><div class="rm-tag">⏸ Pause to reflect</div><div class="rm-q" id="rmq"></div><div class="rm-sub" id="rms"></div><button class="rm-btn" onclick="closeRm()">Got it →</button></div></div>
+<script>
+/* ===== COURSE DATA (from storyboard — substantive) ===== */
+const XPW={sure:3,pretty:2,guess:1};
+const STEPS=[
+ {t:'story',motif:'intact',eyebrow:'True Story · Foundation',h:'The $2.4 Billion Password',
+  html:`<p>In 2024, an attacker got one employee's login at Change Healthcare — the company that processes about a third of all U.S. patient records. Multi-factor authentication wasn't turned on, so he just logged in. He spent nine days inside the network. Then deployed ransomware.</p><p>Pharmacies couldn't fill prescriptions. Hospitals couldn't verify insurance. Total damage: <span class="k">$2.4 billion</span>.</p><p class="dim-note">The setting that would have stopped it is free and takes about a minute.</p>`},
+
+ {t:'content',motif:'crack',eyebrow:'Why it matters to you',h:'It\u2019s not just a corporate problem',hsm:1,
+  html:`<p>That was a healthcare company, but the same pattern hits individuals every day. Attackers don't pick targets by hand — they run scripts against millions of accounts at once. Your work email has probably already been tested.</p>`,
+  reveal:[
+   ['\uD83D\uDCB0 The personal cost','Identity-theft cleanup averages <strong>$1,400 and 200+ hours</strong> — calls to banks, frozen cards, new account numbers. That\u2019s your time, not your company\u2019s.'],
+   ['\uD83C\uDFE2 Tools aren\u2019t enough','Your company has firewalls and monitoring. None of that helps when someone hands a password to a convincing email.'],
+   ['\uD83D\uDCCA Daily numbers','About 150 ransomware attacks, 12.5 million phishing emails, and 30,000 website hacks happen every day. Not per year \u2014 per day.']]},
+
+ {t:'content',motif:'segments',eyebrow:'What actually helps',h:'Four habits',hsm:1,
+  html:`<p>Most security incidents come down to a few repeated mistakes. These four habits address the ones that come up most \u2014 the things that keep your bank account, your career, and your personal data from becoming someone else\u2019s payday.</p>`,
+  reveal:[
+   ['\uD83D\uDD0D Don\u2019t fall for fake','Attackers copy the look of real emails and login pages perfectly. What they can\u2019t fake is the sender\u2019s real address and where a link truly goes. Check those two things \u2014 five seconds catches most scams.'],
+   ['\uD83D\uDD11 One password, one account','Same password on several accounts means losing one means losing all of them. When a site is breached, stolen passwords get tried everywhere else. Module 2 covers how to fix this.'],
+   ['\uD83D\uDCE2 Share with care','That team photo on LinkedIn might show a system name on a whiteboard, or mention your boss is traveling. None feels sensitive alone \u2014 together they hand an attacker a way in.'],
+   ['\uD83D\uDEA8 Say something','If something feels off, tell IT \u2014 even if it\u2019s nothing. Most damage happens because someone noticed something wrong and didn\u2019t mention it.']],
+  callout:'These come up throughout the course. Everything else builds on them.'},
+
+ {t:'quiz',motif:'pulse',eyebrow:'Check · Habit 1 in practice',h:'Would you spot this?',hsm:1,
+  q:'Your CEO texts: \u201CI\u2019m in a meeting. Buy 4 gift cards, $200 each, send me the codes. Don\u2019t call.\u201D What\u2019s the red flag?',
+  opts:['The CEO didn\u2019t use company letterhead','The message came after business hours','Urgency + unusual request + \u201Cdon\u2019t verify\u201D','The CEO would normally use Slack'],correct:2,
+  expl:'Three things at once: urgency (\u201CI\u2019m in a meeting\u201D), an unusual request (gift cards aren\u2019t how businesses pay for things), and a block on checking (\u201Cdon\u2019t call\u201D). When all three show up together, verify through a different channel \u2014 a known number, not the one that messaged you.'},
+
+ {t:'breather',motif:'chain',eyebrow:'Pause · Think about this',h:'The domino chain',hsm:1,
+  html:`<p>Leaked password \u2192 email falls \u2192 bank falls \u2192 work falls. Attackers count on the chain. But an account with <strong>MFA</strong> breaks it \u2014 everything behind it stays standing.</p><p class="dim-note">One break-point that refuses to fall. That\u2019s the whole idea.</p>`},
+
+ {t:'reflect',motif:'chain',eyebrow:'Pause',h:'A quick reflection',hsm:1,
+  html:`<p>Before we go on, one honest question \u2014 worth actually answering in your head.</p>`,
+  reflect:['How many of your accounts use the same password? Try to actually count.','Most people are surprised by the number.']},
+
+ {t:'divider',motif:'crack',eyebrow:'Back to the story',h:'How the attack actually worked',
+  html:`<p>You know what happened. Here\u2019s how \u2014 step by step.</p>`},
+
+ {t:'content',motif:'crack',eyebrow:'Deep dive · Change Healthcare',h:'February 2024',hsm:1,
+  html:`<p>We mentioned Change Healthcare earlier. Here\u2019s more context: they process about 15 billion health transactions a year \u2014 roughly one in three U.S. patient records. They connect doctors, pharmacies, and insurance companies.</p>`,
+  callout:'The attacker got in with one stolen login. MFA wasn\u2019t on. Let\u2019s walk through what happened next.'},
+
+ {t:'timeline',motif:'crack',eyebrow:'Deep dive · Click through',h:'The attack, step by step',hsm:1,
+  steps:[
+   {date:'Feb 12',crit:0,what:'Employee credentials stolen (phishing)',gain:'Login for remote access'},
+   {date:'Feb 12',crit:1,what:'Attacker logs in \u2014 no MFA',gain:'<b>Full network access</b>'},
+   {date:'Feb 12\u201321',crit:0,what:'Moves through the network for 9 days',gain:'Copies databases, maps systems'},
+   {date:'Feb 21',crit:1,what:'Deploys ransomware',gain:'Everything encrypted'},
+   {date:'Feb 21+',crit:0,what:'Pharmacies stop processing',gain:'Patients can\u2019t get medications'},
+   {date:'March',crit:0,what:'Company pays $22M ransom',gain:'Data decrypted \u2014 but already copied'},
+   {date:'Ongoing',crit:1,what:'Total exceeds $2.4B',gain:'Fines, lawsuits, reputation'}],
+  callout:'MFA at Step 2 would have stopped the whole thing. One extra verification step.'},
+
+ {t:'content',motif:'segments',eyebrow:'Deep dive · What would have stopped it',h:'So what stopped it?',hsm:1,
+  html:`<p>You saw the timeline \u2014 the attacker walked in at Step 2. Change Healthcare had firewalls, encryption, monitoring. None of it mattered, because the one thing that would have stopped that login wasn\u2019t turned on.</p>`,
+  reveal:[
+   ['\uD83D\uDD11 What\u2019s MFA?','A second step after your password \u2014 a code on your phone, or a fingerprint. Even with your password stolen, no one gets in without that second piece. Free, takes a minute to set up, and blocks 99% of automated attacks.'],
+   ['\uD83E\uDD14 Why didn\u2019t they have it?','They were in the middle of upgrading their systems. The attackers didn\u2019t wait.']],
+  callout:'When systems are connected, one skipped step affects everyone downstream. That\u2019s why the basics matter even when they feel obvious.'},
+
+ {t:'quiz',motif:'pulse',eyebrow:'Check · MFA in real life',h:'What would you do?',hsm:1,
+  q:'You have MFA set up. You get a push notification \u2014 \u201CApprove login\u201D \u2014 but you\u2019re not trying to log in. What do you do?',
+  opts:['Approve it \u2014 probably a glitch','Ignore it and wait','Deny it and change your password','Restart your phone'],correct:2,
+  expl:'Someone has your password and is trying to get in right now. Deny blocks this attempt; changing your password stops them trying again. Approving gives them access. Ignoring just lets them keep trying.'},
+
+ {t:'action',motif:'segments',eyebrow:'Act · While we\u2019re on the topic',h:'A quick check',hsm:1,
+  html:`<p>MFA only helps if your phone itself is secured. Your phone has your email, bank app, and authenticator. If someone picks it up unlocked, they have all of it.</p>`,
+  zone:'\u26A1 Do this now',actTitle:'Check your phone\u2019s lock screen',
+  check:['Lock screen uses PIN, fingerprint, or Face ID','Auto-lock is under 2 minutes','Lock screen doesn\u2019t show message previews'],
+  callout:{red:1,text:'In 2022, a stolen unlocked phone gave a thief access to work VPN, source code, and every account on the authenticator app. $8M in damage. The phone didn\u2019t have a PIN.'}},
+
+ {t:'divider',motif:'intact',eyebrow:'Naming things',h:'The words behind what you\u2019ve seen',
+  html:`<p>We\u2019ve been talking about these \u2014 now let\u2019s name them.</p>`},
+
+ {t:'content',motif:'intact',eyebrow:'Key terms',h:'You\u2019ve already seen most of these',hsm:1,
+  html:`<p>You\u2019ve encountered these in the Change Healthcare story and the quizzes. Here\u2019s what they\u2019re called and why they\u2019ll keep coming up.</p>`,
+  reveal:[
+   ['\uD83E\uDDA0 Malware','Any software designed to do something you didn\u2019t ask for \u2014 viruses, spyware, trojans. If your computer gets slow, shows pop-ups, or has programs you didn\u2019t install, worth checking.'],
+   ['\uD83C\uDFA3 Phishing','Fake messages that look like they\u2019re from someone you trust \u2014 your bank, boss, a delivery service. Goal: get you to click a link or share a password. Module 3 covers this in detail.'],
+   ['\uD83D\uDD12 Ransomware','Locks your files, demands payment to unlock. The Change Healthcare story was ransomware. Usually starts with someone clicking a bad link.'],
+   ['\uD83C\uDFAD Social engineering','Tricking people instead of hacking systems. The gift-card scam earlier was social engineering \u2014 someone pretending to be your CEO.'],
+   ['\uD83D\uDD10 MFA','Second verification after your password \u2014 a code, fingerprint, or physical key. Even with a stolen password, the attacker is stuck. We\u2019ll set this up in Module 2.']]},
+
+ {t:'content',motif:'crack',eyebrow:'Key terms · Why it\u2019s gotten worse',h:'These aren\u2019t hobbyists',hsm:1,
+  html:`<p>Now you know what these attacks are called. Here\u2019s why they\u2019ve gotten so effective \u2014 the people behind them aren\u2019t amateurs. Many are organized groups with employees, budgets, and (seriously) customer-support desks.</p>`,
+  reveal:[
+   ['\uD83D\uDC80 Pranks \u2192 profit','Early viruses were annoying. Ransomware is a business model \u2014 attackers calculate what you\u2019ll pay and price accordingly.'],
+   ['\uD83D\uDC41\uFE0F Patient','They get in quietly and watch for weeks. Change Healthcare: 9 days before anything visible happened.'],
+   ['\uD83D\uDD17 One target, many victims','Hack one service provider, get data on all their clients. That\u2019s the Change Healthcare pattern.']],
+  callout:'You don\u2019t need to understand the technical side. The habits from earlier \u2014 pause, check, speak up \u2014 are what makes someone hard to target.'},
+
+ {t:'breather',motif:'crack',eyebrow:'Pause · Think about this',h:'The invisible intruder',hsm:1,
+  html:`<p>The Change Healthcare attackers spent nine days inside the network. Not breaking things \u2014 just looking around, copying files, mapping the system.</p><p class="dim-note">Nobody checked.</p>`},
+
+ {t:'quiz',motif:'pulse',eyebrow:'Check · A real scenario',h:'What would you do?',hsm:1,
+  q:'You\u2019re at work and you accidentally clicked a link. A file called \u201Cinvoice.zip\u201D just downloaded to your desktop. What\u2019s your first move?',
+  opts:['Open it to check if it\u2019s real','Delete it and empty the recycle bin','Disconnect from the internet','Run antivirus while connected'],correct:2,
+  expl:'Most malware needs to connect to the attacker\u2019s server to work. Cutting your internet breaks that connection. Opening might trigger it; deleting doesn\u2019t help if code is already running; scanning while connected means it can still communicate. Disconnect first, then tell IT, then scan.'},
+
+ {t:'reflect',motif:'chain',eyebrow:'Pause',h:'One more reflection',hsm:1,
+  html:`<p>This one\u2019s worth sitting with for a second.</p>`,
+  reflect:['Has something ever felt \u201Coff\u201D online \u2014 a weird email, an odd request \u2014 and you went along with it anyway?','Most people who get scammed say they had a gut feeling.']},
+
+ {t:'divider',motif:'segments',eyebrow:'Making it stick',h:'Three daily habits',
+  html:`<p>Turning what you\u2019ve learned into something you actually do.</p>`},
+
+ {t:'content',motif:'segments',eyebrow:'Daily · Habit 1',h:'Keep things updated',hsm:1,
+  html:`<p>Everything above \u2014 the Change Healthcare story, the terms, the threat landscape \u2014 comes down to a few practical things you can do every day. Starting with the easiest one: updates.</p>`,
+  reveal:[['\u2699\uFE0F Make it automatic','Turn on auto-updates for your OS, browser, and phone. It happens in the background \u2014 nothing to remember. Updates close the exact holes attackers rely on.']]},
+
+ {t:'content',motif:'segments',eyebrow:'Daily · Habit 2',h:'Think before you click',hsm:1,
+  html:`<p>Updates protect the software. This next habit protects you from the most common way attackers actually get in: getting you to click something.</p>`,
+  reveal:[
+   ['\uD83D\uDD17 Check the URL','Hover (desktop) or long-press (mobile) to see where a link actually goes. Looks wrong? Skip it. The visible text and the real destination are two different things.'],
+   ['\uD83D\uDCCE Unexpected files','Didn\u2019t ask for it? Don\u2019t open it \u2014 even if it looks like it\u2019s from someone you know. Check with them through a different channel first.']]},
+
+ {t:'content',motif:'segments',eyebrow:'Daily · Habit 3',h:'Lock your devices',hsm:1,
+  html:`<p>Updates covered, clicks covered. The last piece: making sure your devices themselves are locked down. Think about what\u2019s on your phone right now \u2014 email, bank, authenticator. Your laptop has work files and network access. Both need to be locked when you\u2019re not using them.</p>`,
+  reveal:[
+   ['\uD83D\uDCF1 Phone','PIN or biometric + auto-lock under 2 minutes. Hide notification previews. Turn on Find My Device.'],
+   ['\uD83D\uDCBB Laptop','Screen lock after 2\u20135 min idle. A strong password, not a 4-digit PIN. Encryption on (BitLocker / FileVault).'],
+   ['\uD83C\uDFE0 At home too','Same habit everywhere. If you only lock at the office, you\u2019ll forget when it matters.']]},
+
+ {t:'action',motif:'check',eyebrow:'Act · Lock it in',h:'Turn on automatic updates',hsm:1,
+  html:`<p>Two quick actions before you go. First one runs in the background and keeps your software patched \u2014 closing the holes attackers count on.</p>`,
+  zone:'\u26A1 Do this tonight',actTitle:'Turn on automatic updates',
+  check:['Turned on OS auto-updates','Turned on browser auto-updates','Turned on phone auto-updates'],
+  callout:{text:'Settings \u2192 Software Update \u2192 Automatic. Two minutes now saves a scramble later.'}},
+
+ {t:'action',motif:'check',eyebrow:'Act · Last one',h:'Save IT\u2019s number',hsm:1,
+  html:`<p>Ten seconds. You don\u2019t want to be searching for this when something\u2019s actually going wrong.</p>`,
+  zone:'\u26A1 Do this now',actTitle:'Save your IT security team\u2019s contact',
+  check:['Saved IT security\u2019s number in my phone','Know how to report something after hours'],
+  callout:{text:'The fastest incident responses start with someone who already knew who to call.'}},
+
+ {t:'summary',motif:'check',eyebrow:'Module 1 complete',h:'The Foundation',
+  takeaways:['Basics matter \u2014 one missing setting, $2.4B in damage.','Four habits: check before clicking, unique passwords, careful sharing, speak up.','Update, verify, lock \u2014 every day.'],
+  next:[['\uD83D\uDCCC Security Byte \u00B7 2 min','Check If You\u2019ve Been Breached'],['\uD83D\uDCDA Next module','Passwords & MFA']]}
+];
+
+/* ===== ENGINE ===== */
+const layersEl=document.getElementById('layers');
+let cur=0,xp=0;const N=STEPS.length;
+
+function esc(s){return s;}
+function buildLayer(s,i){
+  const L=document.createElement('div');L.className='layer'+((s.t==='story'||s.t==='divider'||s.t==='breather'||s.t==='summary'||s.t==='reflect')?' dark':'');
+  L.dataset.motif=s.motif;
+  let h='<div class="wrap">';
+  if(s.eyebrow)h+=`<div class="eyebrow">${s.eyebrow}</div>`;
+  if(s.t==='content'&&s.big)h+=`<div class="big">${s.big}</div>`;
+  if(s.h)h+=`<h1${s.hsm?' class="sm"':''}>${s.h}</h1>`;
+  if(s.html)h+=s.html;
+  // reveal steps
+  if(s.reveal){h+=`<div class="reveal-steps" data-rev="${i}">`;
+    s.reveal.forEach((r,j)=>{h+=`<div class="rstep ${j===0?'active':'locked'}"><div class="rnum">${j+1}</div><div><div class="rt">${r[0]}</div><div class="rp">${r[1]}</div></div></div>`;});
+    h+=`</div><button class="reveal-btn" onclick="advance(${i},this)">Reveal next \u2192</button>`;}
+  // choices (opening) — none here but supported
+  // timeline
+  if(s.steps){h+=`<div class="timeline" data-tl="${i}"><div class="tl-track">`;
+    s.steps.forEach((st,j)=>{h+=`<button class="tl-dot ${st.crit?'crit':''} ${j===0?'on':''}" onclick="tlPick(${i},${j})"><div class="d"></div><div class="l">${st.date}</div></button>`;});
+    h+=`</div><div class="tl-card" id="tlc-${i}"></div></div>`;}
+  // quiz
+  if(s.t==='quiz'){h+=`<p style="font-size:clamp(18px,1.7vw,23px);color:var(--tw);font-weight:500;margin-bottom:16px">${s.q}</p>`;
+    h+=`<div class="wager" data-wg="${i}"><span class="wl">How sure are you?</span><button class="wb" onclick="setW(${i},this,'sure')">Sure \u00D73</button><button class="wb" onclick="setW(${i},this,'pretty')">Pretty sure \u00D72</button><button class="wb" onclick="setW(${i},this,'guess')">Guessing \u00D71</button></div>`;
+    h+=`<div class="opts">`;const K='ABCD';
+    s.opts.forEach((o,j)=>{h+=`<button class="opt" onclick="answer(${i},${j})"><span class="k">${K[j]}</span>${o}</button>`;});
+    h+=`</div><div class="expl" id="exp-${i}"><span class="xpb" id="xpb-${i}"></span><div>${s.expl}</div></div>`;}
+  // action checklist
+  if(s.check){if(s.zone)h+=`<div class="act-zone">${s.zone}</div>`;if(s.actTitle)h+=`<h1 class="sm" style="margin-bottom:16px">${s.actTitle}</h1>`;
+    h+=`<div class="checklist">`;
+    s.check.forEach((c,j)=>{h+=`<div class="cl-item" onclick="checkIt(this)"><div class="cl-box">\u2713</div><div class="cl-t">${c}</div></div>`;});
+    h+=`</div>`;}
+  // callout
+  if(s.callout){const c=typeof s.callout==='string'?{text:s.callout}:s.callout;h+=`<div class="callout${c.red?' red':''}">${c.text}</div>`;}
+  // reflect trigger
+  if(s.reflect){h+=`<button class="reveal-btn" style="margin-top:20px" onclick="openRm('${encodeURIComponent(s.reflect[0])}','${encodeURIComponent(s.reflect[1])}',this)">\u23F8 Reflect (+2 XP)</button>`;}
+  // summary
+  if(s.takeaways){h+=`<ol class="slist">`;s.takeaways.forEach(t=>h+=`<li>${t}</li>`);h+=`</ol>`;
+    if(s.next){h+=`<div class="nextcards">`;s.next.forEach(n=>h+=`<a href="#"><small>${n[0]}</small>${n[1]}</a>`);h+=`</div>`;}}
+  h+='</div>';L.innerHTML=h;return L;
+}
+STEPS.forEach((s,i)=>{const L=buildLayer(s,i);if(i===0)L.classList.add('on');layersEl.appendChild(L);});
+const layers=[...document.querySelectorAll('.layer')];
+
+// segments
+const segWrap=document.getElementById('segs');
+for(let i=0;i<N;i++){const b=document.createElement('button');b.className='st-seg';b.onclick=()=>jump(i);segWrap.appendChild(b);}
+const segs=[...segWrap.children];
+const states=[...document.querySelectorAll('.m-state')];
+function setMotif(id){states.forEach(s=>s.classList.toggle('on',s.dataset.s===id));}
+function addXP(n){xp+=n;document.getElementById('xp').textContent=xp+' XP';}
+function render(){
+  layers.forEach((l,i)=>{l.classList.toggle('on',i===cur);l.classList.toggle('past',i<cur);if(i===cur)l.scrollTop=0;});
+  segs.forEach((b,i)=>{b.className='st-seg';if(i<cur)b.classList.add('done');else if(i===cur)b.classList.add('now');});
+  document.getElementById('count').textContent=`${cur+1} / ${N}`;
+  document.getElementById('back').disabled=cur===0;document.getElementById('next').disabled=cur===N-1;
+  setMotif(layers[cur].dataset.motif);
+}
+function go(d){cur=Math.max(0,Math.min(N-1,cur+d));render();}
+function jump(i){cur=i;render();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
+
+/* reveal */
+function advance(i,btn){const g=document.querySelector(`[data-rev="${i}"]`);const st=[...g.querySelectorAll('.rstep')];
+  let c=st.findIndex(s=>s.classList.contains('active'));if(c<0)return;
+  st[c].classList.remove('active');st[c].classList.add('done');
+  if(c+1<st.length){st[c+1].classList.remove('locked');st[c+1].classList.add('active');addXP(1);}
+  if(c+1>=st.length-1){btn.classList.add('done');btn.textContent='All revealed \u2713';}}
+/* timeline */
+function tlPick(i,j){const tl=document.querySelector(`[data-tl="${i}"]`);tl.querySelectorAll('.tl-dot').forEach((d,k)=>d.classList.toggle('on',k===j));
+  const s=STEPS[i].steps[j];document.getElementById('tlc-'+i).innerHTML=`<div class="tc-date">${s.date}</div><div class="tc-what">${s.what}</div><div class="tc-gain">Attacker gained: ${s.gain}</div>`;}
+/* quiz */
+const wsel={};
+function setW(i,el,w){document.querySelectorAll(`[data-wg="${i}"] .wb`).forEach(b=>b.classList.remove('sel'));el.classList.add('sel');wsel[i]=w;}
+function answer(i,j){const exp=document.getElementById('exp-'+i);if(exp.classList.contains('show'))return;
+  if(!wsel[i]){const wg=document.querySelector(`[data-wg="${i}"]`);wg.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:340});return;}
+  const opts=layers[i].querySelectorAll('.opt');const k=STEPS[i].correct;const ok=j===k;const mult=XPW[wsel[i]];
+  opts.forEach((o,m)=>{o.style.pointerEvents='none';if(m===k)o.classList.add('correct');else if(m===j)o.classList.add('wrong');});
+  let g=ok?mult*3:(wsel[i]==='sure'?0:1);addXP(g);
+  document.getElementById('xpb-'+i).textContent=(g>0?'+':'')+g+' XP';exp.classList.add('show');}
+/* checklist */
+function checkIt(el){el.classList.toggle('on');if(el.classList.contains('on')&&!el.dataset.c){el.dataset.c=1;addXP(1);}}
+/* reflection */
+function openRm(q,s,btn){document.getElementById('rmq').textContent=decodeURIComponent(q);document.getElementById('rms').textContent=decodeURIComponent(s);document.getElementById('rm').classList.add('on');
+  if(btn&&!btn.dataset.c){btn.dataset.c=1;addXP(2);btn.classList.add('done');btn.textContent='Reflected \u2713';}}
+function closeRm(){document.getElementById('rm').classList.remove('on');}
+document.getElementById('rm').addEventListener('click',e=>{if(e.target.id==='rm')closeRm();});
+
+render();
+</script>
+</body></html>
