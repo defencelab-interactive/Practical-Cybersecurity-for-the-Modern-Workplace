@@ -23,6 +23,10 @@ body{font-family:var(--body);background:var(--bk);color:var(--tw);-webkit-font-s
 .top{display:flex;align-items:center;justify-content:space-between;padding:22px 46px;flex:none;z-index:20}
 .brand{font-family:var(--disp);font-size:18px;font-weight:600}.brand span{color:var(--ac)}
 .chip{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ac);background:var(--ac-soft);border-radius:20px;padding:6px 13px}
+.fs-btn{width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:var(--tm);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .16s;flex:none}
+.fs-btn:hover{background:var(--ac-soft);border-color:rgba(52,183,125,.45);color:var(--ac)}
+.fs-btn svg{width:15px;height:15px;pointer-events:none}
+.top-right{display:flex;align-items:center;gap:10px}
 /* motif */
 .motif{position:absolute;top:50%;right:0;transform:translateY(-50%);width:min(580px,38vw);aspect-ratio:1;z-index:2;pointer-events:none;opacity:.92}
 .motif::before{content:"";position:absolute;inset:-12% -18% -12% -8%;background:radial-gradient(circle at 60% 50%,rgba(52,183,125,.12),transparent 60%);z-index:-1}
@@ -145,7 +149,7 @@ p strong{color:var(--tw);font-weight:600}
 </head>
 <body>
 <div class="stage">
-  <div class="top"><div class="brand">Defence<span>Lab</span></div><div class="chip" id="xp">0 XP</div></div>
+  <div class="top"><div class="brand">Defence<span>Lab</span></div><div class="top-right"><div class="chip" id="xp">0 XP</div><button class="fs-btn" id="fsBtn" title="Fullscreen" onclick="toggleFS()"><svg class="fx" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,5 1,1 5,1"/><polyline points="9,1 13,1 13,5"/><polyline points="13,9 13,13 9,13"/><polyline points="5,13 1,13 1,9"/></svg><svg class="fc" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polyline points="5,1 5,5 1,5"/><polyline points="9,5 13,5 9,1"/><polyline points="9,13 9,9 13,9"/><polyline points="1,9 5,9 5,13"/></svg></button></div></div>
   <div class="motif"><svg viewBox="0 0 120 124">
     <circle class="m-orbit" cx="60" cy="62" r="56" fill="none" stroke="rgba(52,183,125,.14)" stroke-width="1" stroke-dasharray="2 9"/>
     <g class="m-shell"><path d="M60 6 L106 24 L106 66 Q106 104 60 120 Q14 104 14 66 L14 24 Z" fill="rgba(52,183,125,.05)" stroke="rgba(52,183,125,.5)" stroke-width="2"/></g>
@@ -396,6 +400,9 @@ function openRm(q,s,btn){document.getElementById('rmq').textContent=decodeURICom
 function closeRm(){document.getElementById('rm').classList.remove('on');}
 document.getElementById('rm').addEventListener('click',e=>{if(e.target.id==='rm')closeRm();});
 
+function toggleFS(){const el=document.documentElement;if(!document.fullscreenElement&&!document.webkitFullscreenElement){(el.requestFullscreen||el.webkitRequestFullscreen).call(el);}else{(document.exitFullscreen||document.webkitExitFullscreen).call(document);}}
+function syncFS(){const on=document.fullscreenElement||document.webkitFullscreenElement;const b=document.getElementById('fsBtn');b.querySelector('.fx').style.display=on?'none':'';b.querySelector('.fc').style.display=on?'':'none';b.title=on?'Exit fullscreen':'Fullscreen';}
+document.addEventListener('fullscreenchange',syncFS);document.addEventListener('webkitfullscreenchange',syncFS);
 render();
 </script>
 </body></html>
