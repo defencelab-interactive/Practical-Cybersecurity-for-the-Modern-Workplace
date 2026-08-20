@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defence Lab · Security Basics</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ac:#34B77D;--acd:#2A9A66;--ac-soft:rgba(52,183,125,.12);
+  --gr:#2EAD6B;--gl:rgba(46,173,107,.14);--rd:#E0574F;--rl:rgba(224,87,79,.12);
+  --tw:#EDEFEC;--tm:rgba(237,239,236,.66);--tf:rgba(237,239,236,.36);
+  --paper:#FCFCFB;--ink:#1A1A1A;--ink-m:#55605A;--ink-f:#8A938E;--line:#E4E7E3;
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smoothing:antialiased}
+.stage{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden;transition:background .6s ease}
+.stage.dark{background:radial-gradient(80% 90% at 82% 24%,rgba(46,150,110,.18),transparent 55%),radial-gradient(80% 90% at 8% 92%,rgba(45,115,155,.16),transparent 60%),radial-gradient(130% 130% at 50% 50%,#1a2521,#141a17 68%)}
+.stage.light{background:radial-gradient(ellipse at 0% 0%,rgba(40,160,110,.20),transparent 48%),radial-gradient(ellipse at 100% 100%,rgba(60,120,190,.18),transparent 48%),radial-gradient(ellipse at 50% 42%,rgba(255,255,255,.72),transparent 62%),linear-gradient(135deg,#e9ede8,#dfe7e6)}
+/* chrome */
+.top{display:flex;align-items:center;justify-content:space-between;padding:20px 44px;flex:none;z-index:30}
+.top.on-light{color:var(--ink)}
+.brand{font-family:var(--disp);font-size:18px;font-weight:600}.brand span{color:var(--ac)}.on-light .brand span{color:var(--acd)}
+.top-right{display:flex;align-items:center;gap:10px}
+.chip{font:700 12px var(--mono);color:var(--ac);background:var(--ac-soft);border-radius:20px;padding:6px 13px}
+.on-light .chip{color:var(--acd);background:rgba(46,173,107,.12)}
+.fs-btn{width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:var(--tm);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .16s}
+.on-light .fs-btn{border-color:var(--line);color:var(--ink-m);background:#fff}
+.fs-btn:hover{border-color:var(--ac);color:var(--ac)}.fs-btn svg{width:15px;height:15px;pointer-events:none}
+/* scene + beats */
+.scene{flex:1;min-height:0;position:relative;overflow:hidden}
+.beat{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:2vh 6vw;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .5s,transform .55s cubic-bezier(.2,.7,.3,1),visibility .5s;overflow-y:auto}
+.beat::-webkit-scrollbar{width:0}
+.beat.on{opacity:1;visibility:visible;transform:none}
+.beat.gone{opacity:0;visibility:hidden;transform:translateY(-14px)}
+.inner{width:100%;max-width:1180px;margin:auto;display:flex;flex-direction:column;align-items:flex-start}
+.eyebrow{font:700 13px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ac);margin-bottom:18px}
+.stage.light .eyebrow{color:var(--acd)}
+.htitle{font-family:var(--disp);font-weight:600;font-size:clamp(32px,4.6vw,60px);line-height:1.05;letter-spacing:-.02em;margin-bottom:22px;max-width:16ch}
+.htitle.sm{font-size:clamp(27px,3.3vw,42px)}
+.stage.light .htitle{color:var(--ink)}
+.lead{font-size:clamp(17px,1.55vw,21px);line-height:1.7;color:var(--tm);max-width:56ch;margin-bottom:16px}
+.stage.light .lead{color:var(--ink-m)}
+.lead .k{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);padding:1px 7px;border-radius:5px;color:var(--tw)}
+.stage.light .lead .k{background:rgba(0,0,0,.06);color:var(--ink)}
+.lead strong{color:var(--tw);font-weight:600}.stage.light .lead strong{color:var(--ink)}
+.dim{color:var(--tf);font-style:italic;font-size:clamp(15px,1.3vw,18px)}.stage.light .dim{color:var(--ink-f)}
+.big{font-family:var(--disp);font-weight:600;font-size:clamp(66px,10vw,140px);line-height:.85;letter-spacing:-.03em;color:var(--ac);margin-bottom:6px}
+.beat-next{margin-top:26px;justify-self:start;width:max-content;display:inline-flex;align-items:center;gap:10px;background:var(--ac);color:#08130d;border:none;border-radius:12px;padding:13px 24px;font:600 15px var(--body);cursor:pointer;transition:all .16s}
+.beat-next:hover{background:var(--acd);transform:translateX(2px)}
+.callout{border-left:3px solid var(--ac);background:var(--ac-soft);border-radius:0 12px 12px 0;padding:15px 20px;font-size:clamp(15px,1.3vw,17px);line-height:1.55;color:var(--tw);margin-top:18px;max-width:60ch}
+.stage.light .callout{color:var(--ink);background:rgba(46,173,107,.09);border-left-color:var(--acd)}
+.callout.red{border-left-color:var(--rd);background:var(--rl)}
+/* timeline */
+.tl-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:4px}
+.tl-head .htitle{margin-bottom:0;font-size:clamp(27px,3.3vw,42px)}
+.tl-sub{font-size:15px;color:var(--ink-f)}
+.tl-hint{font:600 12px var(--body);color:var(--ink-f);margin:14px 0;display:flex;align-items:center;gap:7px}
+.tl-hint::before{content:"\261F";font-size:15px}
+.timeline{margin-top:6px;width:100%;max-width:1040px}
+.tl-track{display:flex;gap:10px;margin-bottom:22px}
+.tl-dot{flex:1;cursor:pointer;text-align:center;padding:12px 6px 10px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);transition:all .18s;box-shadow:0 2px 6px rgba(30,40,34,.06)}
+.tl-dot:hover{border-color:var(--acd);transform:translateY(-3px);box-shadow:0 8px 18px rgba(42,154,102,.18)}
+.tl-dot .tn{width:26px;height:26px;margin:0 auto 7px;border-radius:50%;background:#eef1ee;color:var(--ink-m);display:flex;align-items:center;justify-content:center;font:700 12px var(--mono);transition:all .2s}
+.tl-dot .dl{font:700 10.5px/1.2 var(--mono);color:var(--ink-f)}
+.tl-dot.on{border-color:var(--acd);background:rgba(46,173,107,.07)}
+.tl-dot.on .tn{background:var(--acd);color:#fff}.tl-dot.on .dl{color:var(--acd)}
+.tl-dot.crit .tn{background:#f6dcda;color:var(--rd)}
+.tl-dot.crit.on{border-color:var(--rd);background:rgba(224,87,79,.06)}.tl-dot.crit.on .tn{background:var(--rd);color:#fff}.tl-dot.crit.on .dl{color:var(--rd)}
+.tl-card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px 28px;box-shadow:0 10px 30px rgba(30,40,34,.12);min-height:128px}
+.tl-card .tc-date{font:700 12px var(--mono);color:var(--acd);letter-spacing:.05em;text-transform:uppercase;margin-bottom:9px}
+.tl-card .tc-what{font-family:var(--disp);font-size:22px;font-weight:600;color:var(--ink);margin-bottom:9px}
+.tl-card .tc-gain{font-size:16px;color:var(--ink-m);line-height:1.55}.tl-card .tc-gain b{color:var(--acd);font-weight:600}
+.tl-note{margin-top:16px;border-left:3px solid var(--acd);background:rgba(46,173,107,.09);border-radius:0 12px 12px 0;padding:14px 20px;font-size:16px;color:var(--ink);line-height:1.55}
+/* master-detail */
+.md{margin-top:22px;display:grid;grid-template-columns:minmax(300px,400px) 1fr;gap:32px;align-items:start;width:100%;max-width:1060px}
+.md-list{display:flex;flex-direction:column;gap:11px}
+.md-item{display:flex;align-items:center;gap:14px;background:var(--paper);border:1.5px solid var(--line);border-radius:13px;padding:16px 18px;cursor:pointer;transition:all .18s;box-shadow:0 2px 8px rgba(30,40,34,.06);text-align:left;font-family:var(--body)}
+.md-item:hover{border-color:var(--acd);transform:translateX(4px);box-shadow:0 8px 18px rgba(42,154,102,.14)}
+.md-item.sel{border-color:var(--acd);background:rgba(46,173,107,.06)}
+.md-item .mi-n{flex:none;width:30px;height:30px;border-radius:9px;background:#eef1ee;color:var(--ink-m);display:flex;align-items:center;justify-content:center;font:700 13px var(--mono);transition:all .2s}
+.md-item.sel .mi-n{background:var(--acd);color:#fff}
+.md-item .mi-t{font-family:var(--disp);font-size:17px;font-weight:600;color:var(--ink);flex:1;line-height:1.25}
+.md-item .mi-c{color:var(--ink-f);transition:transform .2s;font-size:18px}.md-item.sel .mi-c{transform:translateX(3px);color:var(--acd)}
+.md-detail{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:28px 32px;box-shadow:0 12px 34px rgba(30,40,34,.12);min-height:180px;opacity:0;transform:translateX(12px);transition:all .35s cubic-bezier(.2,.7,.3,1)}
+.md-detail.show{opacity:1;transform:none}
+.md-detail .md-ic{font-size:30px;margin-bottom:12px}
+.md-detail .md-t{font-family:var(--disp);font-size:22px;font-weight:600;color:var(--ink);margin-bottom:12px}
+.md-detail .md-p{font-size:16px;line-height:1.7;color:var(--ink-m)}
+/* quiz */
+.q-txt{font-family:var(--disp);font-size:clamp(22px,2.4vw,32px);font-weight:600;line-height:1.25;margin-bottom:18px;max-width:20ch}
+.stage.light .q-txt{color:var(--ink)}
+.wager{display:flex;gap:9px;margin:0 0 16px;flex-wrap:wrap;max-width:560px}
+.wager .wl{font:700 11px var(--mono);color:var(--ink-f);text-transform:uppercase;letter-spacing:.09em;width:100%;margin-bottom:2px}
+.wb{flex:1;min-width:120px;background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:11px;font:600 13px var(--body);color:var(--ink-m);cursor:pointer;transition:all .15s}
+.wb:hover{transform:translateY(-1px);border-color:var(--acd)}.wb.sel{border-color:var(--acd);background:rgba(46,173,107,.08);color:var(--acd)}
+.opts{display:flex;flex-direction:column;gap:11px;max-width:660px;width:100%}
+.opt{background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:16px 20px;font-size:16px;color:var(--ink);cursor:pointer;text-align:left;font-family:var(--body);transition:all .16s;display:flex;gap:14px;align-items:flex-start;box-shadow:0 2px 6px rgba(30,40,34,.05)}
+.opt .k{font:700 13px var(--mono);color:var(--ink-f);width:16px;flex:none;padding-top:2px}
+.opt:hover{transform:translateY(-1px);border-color:var(--acd)}
+.opt.correct{border-color:var(--gr);background:var(--gl);animation:pulse .45s}
+.opt.wrong{border-color:var(--rd);background:var(--rl);animation:shake .35s}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.02);box-shadow:0 0 0 4px rgba(46,173,107,.22)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.expl{margin-top:16px;max-width:660px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:17px 20px;font-size:16px;line-height:1.6;color:var(--ink-m);display:none;box-shadow:0 6px 18px rgba(30,40,34,.08)}
+.expl.show{display:block;animation:rise .4s}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.expl .xpb{display:inline-block;font:700 11px var(--mono);color:var(--acd);background:rgba(46,173,107,.12);border-radius:20px;padding:3px 10px;margin-bottom:9px}
+/* checklist */
+.act-zone{font:700 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acd);margin-bottom:8px}
+.checklist{display:flex;flex-direction:column;gap:11px;max-width:640px;width:100%;margin-top:6px}
+.cl-item{display:flex;align-items:center;gap:14px;background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:15px 18px;cursor:pointer;transition:all .16s;box-shadow:0 2px 6px rgba(30,40,34,.05)}
+.cl-item:hover{border-color:var(--acd)}
+.cl-box{width:24px;height:24px;border-radius:7px;border:2px solid #cdd3ce;flex:none;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:14px;color:transparent}
+.cl-item.on .cl-box{background:var(--acd);border-color:var(--acd);color:#fff}
+.cl-item.on{border-color:var(--acd);background:rgba(46,173,107,.06)}
+.cl-item .cl-t{font-size:16px;color:var(--ink)}
+/* summary */
+.slist{list-style:none;max-width:640px;margin:6px 0 24px;counter-reset:s}
+.slist li{counter-increment:s;padding:11px 0 11px 46px;position:relative;font-size:17px;line-height:1.5;color:var(--tm)}
+.slist li::before{content:counter(s);position:absolute;left:0;top:7px;width:30px;height:30px;background:var(--ac-soft);color:var(--ac);border-radius:9px;font:700 14px var(--mono);display:flex;align-items:center;justify-content:center}
+.nextcards{display:flex;gap:12px;flex-wrap:wrap}
+.nextcards a{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:15px 20px;color:var(--tw);text-decoration:none;font-size:15px;transition:all .16s}
+.nextcards a:hover{border-color:rgba(52,183,125,.4);background:var(--ac-soft)}
+.nextcards a small{display:block;font:700 10.5px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--tf);margin-bottom:4px}
+/* reflection modal */
+.rm{position:fixed;inset:0;background:rgba(8,12,10,.82);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:60;padding:24px}
+.rm.on{display:flex;animation:rise .3s}
+.rm-card{background:linear-gradient(170deg,#1c2620,#161d19);border:1px solid rgba(52,183,125,.35);border-radius:18px;padding:40px 44px 32px;max-width:580px;text-align:center;box-shadow:0 40px 90px rgba(0,0,0,.6)}
+.rm-tag{font:700 11px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ac);margin-bottom:16px}
+.rm-q{font-family:var(--disp);font-size:25px;line-height:1.35;font-weight:500;margin-bottom:14px;color:var(--tw)}
+.rm-sub{font-size:15px;color:var(--tm);line-height:1.6;margin-bottom:24px}
+.rm-btn{background:var(--ac);color:#08130d;border:none;border-radius:11px;padding:12px 26px;font:600 15px var(--body);cursor:pointer}
+/* motif */
+.motif{position:absolute;pointer-events:none;transition:all .6s cubic-bezier(.2,.7,.3,1);z-index:1}
+.motif.big{top:50%;right:2%;transform:translateY(-50%);width:min(480px,32vw);opacity:.9}
+.motif.small{top:24px;right:180px;width:50px;opacity:.85}
+.motif svg{width:100%;height:100%;overflow:visible}
+.m-orbit{transform-origin:60px 62px;animation:spin 28s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.m-shell{transform-origin:center;animation:breathe 7s ease-in-out infinite}@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+.m-state{opacity:0;transition:opacity .6s}.m-state.on{opacity:1}
+.motif.on-light .m-shell path{stroke:var(--acd)}.motif.on-light [stroke="var(--ac)"]{stroke:var(--acd)}
+/* nav */
+.nav{display:flex;align-items:center;justify-content:center;gap:20px;padding:16px 40px 22px;flex:none;z-index:30}
+.nav.on-light{color:var(--ink)}
+.scenes{display:flex;align-items:center;gap:10px}
+.sc-pip{display:flex;align-items:center;gap:8px;cursor:pointer;background:none;border:none;font:600 13px var(--body);color:var(--tf);transition:color .2s;padding:4px 0}
+.nav.on-light .sc-pip{color:var(--ink-f)}
+.sc-pip .num{width:24px;height:24px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font:700 11px var(--mono);transition:all .2s}
+.sc-pip.cur{color:var(--ac)}.nav.on-light .sc-pip.cur{color:var(--acd)}
+.sc-pip.cur .num{background:var(--ac);border-color:var(--ac);color:#08130d}
+.nav.on-light .sc-pip.cur .num{background:var(--acd);border-color:var(--acd);color:#fff}
+.sc-pip.done .num{background:var(--acd);border-color:var(--acd);color:#fff}
+.sc-lbl{white-space:nowrap}@media(max-width:960px){.sc-lbl{display:none}}
+.beat-pips{display:flex;gap:6px;align-items:center}
+.bp{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s}
+.nav.on-light .bp{background:rgba(0,0,0,.15)}
+.bp.on{background:var(--ac);transform:scale(1.3)}.nav.on-light .bp.on{background:var(--acd)}.bp.done{background:var(--acd)}
+.arrow{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:var(--tw);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .16s}
+.nav.on-light .arrow{border-color:var(--line);background:#fff;color:var(--ink-m)}
+.arrow:hover{border-color:var(--ac);color:var(--ac)}
+.arrow.next{background:var(--ac);border-color:var(--ac);color:#08130d}.arrow.next:hover{background:var(--acd)}
+.arrow svg{width:16px;height:16px}.arrow:disabled{opacity:.25;cursor:default}
+</style>
+</head>
+<body>
+<div class="stage dark" id="stage">
+  <div class="top" id="top"><div class="brand">Defence<span>Lab</span></div>
+    <div class="top-right"><div class="chip" id="xp">0 XP</div>
+      <button class="fs-btn" onclick="fsTggl()"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="1,5 1,1 5,1"/><polyline points="9,1 13,1 13,5"/><polyline points="13,9 13,13 9,13"/><polyline points="5,13 1,13 1,9"/></svg></button>
+    </div>
+  </div>
+  <div class="scene" id="scene">
+    <div class="motif big on-dark" id="motif"><svg viewBox="0 0 120 124">
+      <circle class="m-orbit" cx="60" cy="62" r="56" fill="none" stroke="rgba(52,183,125,.14)" stroke-width="1" stroke-dasharray="2 9"/>
+      <g class="m-shell"><path d="M60 6 L106 24 L106 66 Q106 104 60 120 Q14 104 14 66 L14 24 Z" fill="rgba(52,183,125,.05)" stroke="rgba(52,183,125,.5)" stroke-width="2"/></g>
+      <g class="m-inner">
+        <g class="m-state on" data-s="intact"><circle cx="60" cy="56" r="10" fill="none" stroke="var(--ac)" stroke-width="2.4"/><path d="M60 64 L60 82" stroke="var(--ac)" stroke-width="5" stroke-linecap="round"/></g>
+        <g class="m-state" data-s="crack"><path d="M60 30 L52 54 L66 62 L54 92" fill="none" stroke="var(--rd)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <g class="m-state" data-s="segments"><circle cx="60" cy="60" r="26" fill="none" stroke="rgba(52,183,125,.35)" stroke-width="2"/><path d="M60 60 L60 34" stroke="var(--ac)" stroke-width="3"/><path d="M60 60 L86 60" stroke="var(--ac)" stroke-width="3"/><path d="M60 60 L60 86" stroke="var(--ac)" stroke-width="3"/><path d="M60 60 L34 60" stroke="var(--ac)" stroke-width="3"/></g>
+        <g class="m-state" data-s="chain"><rect x="40" y="52" width="16" height="16" rx="3" fill="none" stroke="rgba(237,239,236,.5)" stroke-width="2.4"/><rect x="64" y="52" width="16" height="16" rx="3" fill="none" stroke="var(--ac)" stroke-width="2.6"/><path d="M56 60 L64 60" stroke="var(--rd)" stroke-width="2.4" stroke-dasharray="2 3"/></g>
+        <g class="m-state" data-s="book"><rect x="38" y="40" width="44" height="44" rx="4" fill="none" stroke="var(--ac)" stroke-width="2.4"/><path d="M60 40 L60 84 M48 52 L72 52" stroke="var(--ac)" stroke-width="2"/></g>
+        <g class="m-state" data-s="check"><path d="M46 60 L56 71 L76 48" fill="none" stroke="var(--ac)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+      </g></svg></div>
+    <div id="beats"></div>
+  </div>
+  <div class="nav" id="nav">
+    <button class="arrow" id="back" onclick="prevBeat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="scenes" id="scenes"></div>
+    <div class="beat-pips" id="bpips"></div>
+    <button class="arrow next" id="next" onclick="nextBeat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+  </div>
+</div>
+<div class="rm" id="rm"><div class="rm-card"><div class="rm-tag">⏸ Pause to reflect</div><div class="rm-q" id="rmq"></div><div class="rm-sub" id="rms"></div><button class="rm-btn" onclick="closeRm()">Got it →</button></div></div>
+<script>
+const XPW={sure:3,pretty:2,guess:1};
+/* ===== 5 SCENES, each with beats ===== */
+const SCENES=[
+{label:'The Breach',beats:[
+  {bg:'dark',motif:'intact',type:'story',eyebrow:'True Story · The Foundation',title:'The $2.4 Billion Password',
+   lead:['In 2024, an attacker got one employee\u2019s login at Change Healthcare — which processes about a third of all U.S. patient records. MFA wasn\u2019t turned on, so he just logged in. He spent nine days inside the network. Then deployed ransomware.',
+     'Pharmacies couldn\u2019t fill prescriptions. Hospitals couldn\u2019t verify insurance. Total damage: <span class="k">$2.4 billion</span>.'],
+   dim:'The setting that would have stopped it is free and takes about a minute.',nextLabel:'See how it happened →'},
+  {bg:'light',motif:'crack',type:'timeline',title:'The attack, step by step',sub:'One login became a catastrophe',
+   steps:[
+    {date:'Feb 12',crit:0,what:'Employee credentials stolen',gain:'Phishing email → login for remote access'},
+    {date:'Feb 12',crit:1,what:'Attacker logs in — no MFA',gain:'<b>Full network access</b>, instantly'},
+    {date:'Feb 12–21',crit:0,what:'Moves through the network — 9 days',gain:'Copies databases, maps every system'},
+    {date:'Feb 21',crit:1,what:'Deploys ransomware',gain:'Everything encrypted at once'},
+    {date:'Feb 21+',crit:0,what:'Pharmacies stop processing',gain:'Patients can\u2019t get medications'},
+    {date:'March',crit:0,what:'Company pays $22M ransom',gain:'Data decrypted — but already copied'},
+    {date:'Ongoing',crit:1,what:'Total exceeds $2.4B',gain:'Fines, lawsuits, reputation'}],
+   critNote:'<b>This is the moment.</b> MFA here would have stopped everything — one extra verification step.',nextLabel:'What would have stopped it →'},
+  {bg:'light',motif:'segments',type:'md',eyebrow:'So what stopped it?',title:'One step that wasn\u2019t turned on',
+   lead:['The attacker walked in at Step 2. They had firewalls, encryption, monitoring — none of it mattered, because the one thing that stops a stolen login wasn\u2019t on.'],
+   items:[
+    ['🔑','What\u2019s MFA?','A second step after your password — a code on your phone, or a fingerprint. Even with your password stolen, no one gets in without that second piece. It\u2019s free, takes a minute to set up, and blocks 99% of automated attacks.'],
+    ['🤔','Why didn\u2019t they have it?','They were in the middle of upgrading their systems. The attackers didn\u2019t wait. When systems are connected, one skipped step affects everyone downstream — that\u2019s why the basics matter even when they feel obvious.']],
+   nextLabel:'Test yourself →'},
+  {bg:'light',motif:'segments',type:'quiz',eyebrow:'Check · Habit in practice',
+   q:'Your CEO texts: \u201CI\u2019m in a meeting. Buy 4 gift cards, $200 each, send me the codes. Don\u2019t call.\u201D What\u2019s the red flag?',
+   opts:['The CEO didn\u2019t use company letterhead','The message came after hours','Urgency + unusual request + \u201Cdon\u2019t verify\u201D','The CEO would normally use Slack'],correct:2,
+   expl:'Three things at once: urgency, an unusual request (gift cards aren\u2019t how businesses pay), and a block on checking (\u201Cdon\u2019t call\u201D). When all three show up together, verify through a channel you trust — a known number, not the one that messaged you.'}
+]},
+{label:'Four Habits',beats:[
+  {bg:'dark',motif:'segments',type:'story',eyebrow:'What actually helps',title:'Four habits that prevent disasters',
+   lead:['Most incidents come down to a few repeated mistakes. These four habits address the ones that come up most — the things that keep your bank account, your career, and your personal data from becoming someone else\u2019s payday.'],
+   nextLabel:'Show me the four →'},
+  {bg:'light',motif:'segments',type:'md',eyebrow:'The four habits',title:'Tap each to see how it works',
+   items:[
+    ['🔍','Don\u2019t fall for fake','Attackers copy the look of real emails and login pages perfectly. What they can\u2019t fake is the sender\u2019s real address and where a link truly goes. Hover a link before clicking, read the true \u201Cfrom\u201D address — five seconds catches most scams.'],
+    ['🔑','One password, one account','When a site is breached, stolen passwords get traded and tried everywhere else. Reuse one and a single old breach hands over everything. A unique password per account keeps a breach contained.'],
+    ['📢','Share with care','Public posts are free reconnaissance — a whiteboard in a photo, \u201Cout until Monday,\u201D a vendor\u2019s name. None feels sensitive alone; together they hand an attacker a way in. A glance before posting is enough.'],
+    ['🚨','Say something','Most breaches have a moment where someone noticed something odd and stayed quiet. Reporting early — even a false alarm — lets IT stop something small before it spreads. You\u2019re never in trouble for flagging.']],
+   nextLabel:'Take a breath →'},
+  {bg:'dark',motif:'chain',type:'story',eyebrow:'Pause · Think about this',title:'One weak link, the whole chain falls',
+   lead:['Leaked password → email falls → bank falls → work falls. Attackers count on the chain. But an account with <strong>MFA</strong> breaks it — everything behind it stays standing.'],
+   dim:'One break-point that refuses to fall. That\u2019s the whole idea.',reflect:['How many of your accounts use the same password? Try to actually count.','Most people are surprised by the number.'],nextLabel:'One quick check →'},
+  {bg:'light',motif:'segments',type:'quiz',eyebrow:'Check · MFA in real life',
+   q:'You have MFA set up. You get a push notification — \u201CApprove login\u201D — but you\u2019re not trying to log in. What do you do?',
+   opts:['Approve it — probably a glitch','Ignore it and wait','Deny it and change your password','Restart your phone'],correct:2,
+   expl:'Someone has your password and is trying to get in right now. Deny blocks this attempt; changing your password stops them trying again. Approving gives them access. Ignoring lets them keep trying.'}
+]},
+{label:'Vocabulary',beats:[
+  {bg:'dark',motif:'book',type:'story',eyebrow:'Naming things',title:'The words behind what you\u2019ve seen',
+   lead:['You\u2019ve already encountered these in the Change Healthcare story and the quizzes. Here\u2019s what they\u2019re called and why they\u2019ll keep coming up.'],nextLabel:'Name them →'},
+  {bg:'light',motif:'book',type:'md',eyebrow:'Key terms',title:'Tap each term',
+   items:[
+    ['🦠','Malware','Any software designed to do something you didn\u2019t ask for — viruses, spyware, trojans. If your computer gets slow, shows pop-ups, or has programs you didn\u2019t install, worth checking.'],
+    ['🎣','Phishing','Fake messages that look like they\u2019re from someone you trust — your bank, boss, a delivery service. Goal: get you to click a link or share a password. Module 3 covers this in detail.'],
+    ['🔒','Ransomware','Locks your files, demands payment to unlock. The Change Healthcare story was ransomware. Usually starts with someone clicking a bad link.'],
+    ['🎭','Social engineering','Tricking people instead of hacking systems. The gift-card scam earlier was social engineering — someone pretending to be your CEO.'],
+    ['🔐','MFA','Second verification after your password — a code, fingerprint, or physical key. Even with a stolen password, the attacker is stuck. We set this up in Module 2.']],
+   nextLabel:'Why it\u2019s gotten worse →'},
+  {bg:'light',motif:'crack',type:'md',eyebrow:'Why it\u2019s gotten worse',title:'These aren\u2019t hobbyists',
+   lead:['The people behind these attacks aren\u2019t amateurs. Many are organized groups with employees, budgets, and (seriously) customer-support desks.'],
+   items:[
+    ['💀','Pranks → profit','Early viruses were annoying. Ransomware is a business model — attackers calculate what you\u2019ll pay and price accordingly.'],
+    ['👁️','Patient','They get in quietly and watch for weeks. Change Healthcare: 9 days before anything visible happened.'],
+    ['🔗','One target, many victims','Hack one service provider, get data on all their clients. That\u2019s the Change Healthcare pattern.']],
+   callout:'You don\u2019t need the technical side. The habits — pause, check, speak up — are what makes someone hard to target.',nextLabel:'A real scenario →'},
+  {bg:'light',motif:'segments',type:'quiz',eyebrow:'Check · A real scenario',
+   q:'You accidentally clicked a link at work. A file called \u201Cinvoice.zip\u201D just downloaded to your desktop. What\u2019s your first move?',
+   opts:['Open it to check if it\u2019s real','Delete it and empty the recycle bin','Disconnect from the internet','Run antivirus while connected'],correct:2,
+   expl:'Most malware needs to connect to the attacker\u2019s server to work. Cutting your internet breaks that connection. Opening might trigger it; deleting doesn\u2019t help if code is already running; scanning while connected means it can still communicate. Disconnect first, then tell IT, then scan.'}
+]},
+{label:'Daily Practice',beats:[
+  {bg:'dark',motif:'segments',type:'story',eyebrow:'Making it stick',title:'Three daily habits',
+   lead:['Everything above — the story, the terms, the threat landscape — comes down to a few practical things you can do every day.'],nextLabel:'Show me →'},
+  {bg:'light',motif:'segments',type:'md',eyebrow:'Daily habits',title:'Tap each habit',
+   items:[
+    ['⚙️','Keep things updated','Turn on auto-updates for your OS, browser, and phone. It happens in the background — nothing to remember. Updates close the exact holes attackers rely on.'],
+    ['🔗','Think before you click','Hover (desktop) or long-press (mobile) to see where a link actually goes. Didn\u2019t ask for that file? Don\u2019t open it — even if it looks like it\u2019s from someone you know. Check through a different channel first.'],
+    ['📱','Lock your devices','Phone: PIN/biometric + auto-lock under 2 min, hide notification previews. Laptop: screen lock after 2–5 min, strong password, encryption on. Same habit at home too — if you only lock at the office, you\u2019ll forget when it matters.']],
+   nextLabel:'Two quick actions →'},
+  {bg:'light',motif:'check',type:'action',eyebrow:'Act · Lock it in',zone:'⚡ Do these before you go',title:'Two quick actions',
+   lead:['Small setups now, saved scrambles later.'],
+   check:['Turn on automatic updates (OS, browser, phone)','Save your IT security team\u2019s number in your phone','Set your phone auto-lock to under 2 minutes'],
+   callout:'The fastest incident responses start with someone who already knew who to call.',nextLabel:'Finish →'}
+]},
+{label:'Foundation',beats:[
+  {bg:'dark',motif:'check',type:'reflectbeat',eyebrow:'Before you finish',title:'One honest question',
+   lead:['This one\u2019s worth sitting with for a second.'],
+   reflect:['Has something ever felt \u201Coff\u201D online — a weird email, an odd request — and you went along with it anyway?','Most people who get scammed say they had a gut feeling.'],nextLabel:'See your takeaways →'},
+  {bg:'dark',motif:'check',type:'summary',eyebrow:'Module 1 complete',title:'The Foundation',
+   takeaways:['Basics matter — one missing setting, $2.4B in damage.','Four habits: check before clicking, unique passwords, careful sharing, speak up.','Update, verify, lock — every day.'],
+   next:[['📌 Security Byte · 2 min','Check If You\u2019ve Been Breached'],['📚 Next module','Passwords & MFA']]}
+]}
+];
+
+/* ===== ENGINE ===== */
+const stage=document.getElementById('stage'),scene=document.getElementById('scene'),motif=document.getElementById('motif'),topEl=document.getElementById('top'),nav=document.getElementById('nav'),beatsEl=document.getElementById('beats');
+const states=[...document.querySelectorAll('.m-state')];
+let sc=0,bi=0,xp=0,wsel={};
+// flatten beats with scene index
+const FLAT=[];SCENES.forEach((s,si)=>s.beats.forEach((b,bj)=>FLAT.push({...b,si,bj})));
+
+// scene pips
+const scEl=document.getElementById('scenes');
+SCENES.forEach((s,i)=>{const b=document.createElement('button');b.className='sc-pip';b.innerHTML=`<span class="num">${i+1}</span><span class="sc-lbl">${s.label}</span>`;b.onclick=()=>jumpScene(i);scEl.appendChild(b);});
+const scPips=[...scEl.children];
+
+function addXP(n){xp+=n;document.getElementById('xp').textContent=xp+' XP';}
+function setMotif(id){states.forEach(s=>s.classList.toggle('on',s.dataset.s===id));}
+
+function buildBeat(b){
+  const L=document.createElement('div');L.className='beat';L.dataset.bg=b.bg;L.dataset.motif=b.motif;
+  let h='<div class="inner">';
+  if(b.eyebrow)h+=`<div class="eyebrow">${b.eyebrow}</div>`;
+  if(b.type==='timeline'){
+    h+=`<div class="tl-head"><h1 class="htitle">${b.title}</h1><span class="tl-sub">${b.sub||''}</span></div>`;
+    h+=`<div class="tl-hint">Tap a step to see what happened</div><div class="timeline"><div class="tl-track"></div><div class="tl-card"></div><div class="tl-note" style="display:none"></div></div>`;
+  } else {
+    if(b.title)h+=`<h1 class="htitle${(b.type==='md'||b.type==='action')?' sm':''}">${b.title}</h1>`;
+    if(b.q)h+=`<div class="q-txt">${b.q}</div>`;
+    if(b.lead)b.lead.forEach(p=>h+=`<p class="lead">${p}</p>`);
+    if(b.dim)h+=`<p class="dim">${b.dim}</p>`;
+    if(b.items){h+=`<div class="md"><div class="md-list">`;
+      b.items.forEach((it,j)=>h+=`<button class="md-item${j===0?' sel':''}"><span class="mi-n">${j+1}</span><span class="mi-t">${it[0]} ${it[1]}</span><span class="mi-c">→</span></button>`);
+      h+=`</div><div class="md-detail"></div></div>`;}
+    if(b.type==='quiz'){h+=`<div class="wager"><span class="wl">How sure are you?</span><button class="wb" data-w="sure">Sure ×3</button><button class="wb" data-w="pretty">Pretty sure ×2</button><button class="wb" data-w="guess">Guessing ×1</button></div><div class="opts">`;
+      const K='ABCD';b.opts.forEach((o,j)=>h+=`<button class="opt"><span class="k">${K[j]}</span>${o}</button>`);
+      h+=`</div><div class="expl"><span class="xpb"></span><div>${b.expl}</div></div>`;}
+    if(b.check){if(b.zone)h+=`<div class="act-zone">${b.zone}</div>`;h+=`<div class="checklist">`;b.check.forEach(c=>h+=`<div class="cl-item"><div class="cl-box">✓</div><div class="cl-t">${c}</div></div>`);h+=`</div>`;}
+    if(b.callout)h+=`<div class="callout${b.calloutRed?' red':''}">${b.callout}</div>`;
+    if(b.takeaways){h+=`<ol class="slist">`;b.takeaways.forEach(t=>h+=`<li>${t}</li>`);h+=`</ol>`;if(b.next){h+=`<div class="nextcards">`;b.next.forEach(n=>h+=`<a href="#"><small>${n[0]}</small>${n[1]}</a>`);h+=`</div>`;}}
+  }
+  if(b.reflect)h+=`<button class="beat-next" data-reflect="1">⏸ Reflect (+2 XP)</button>`;
+  if(b.nextLabel)h+=`<button class="beat-next" data-next="1">${b.nextLabel}</button>`;
+  h+='</div>';L.innerHTML=h;
+  wireBeat(L,b);
+  return L;
+}
+function wireBeat(L,b){
+  // timeline
+  if(b.type==='timeline'){const track=L.querySelector('.tl-track');const card=L.querySelector('.tl-card');const note=L.querySelector('.tl-note');
+    const pick=i=>{[...track.children].forEach((d,k)=>d.classList.toggle('on',k===i));const s=b.steps[i];
+      card.innerHTML=`<div class="tc-date">${s.date}</div><div class="tc-what">${s.what}</div><div class="tc-gain">Attacker gained: ${s.gain}</div>`;
+      if(s.crit&&b.critNote&&i===1){note.style.display='block';note.innerHTML=b.critNote;}else note.style.display='none';};
+    b.steps.forEach((s,i)=>{const d=document.createElement('button');d.className='tl-dot'+(s.crit?' crit':'')+(i===0?' on':'');d.innerHTML=`<div class="tn">${i+1}</div><div class="dl">${s.date}</div>`;d.onclick=()=>pick(i);track.appendChild(d);});
+    pick(0);}
+  // master-detail
+  if(b.items){const list=L.querySelector('.md-list');const det=L.querySelector('.md-detail');
+    const show=j=>{list.querySelectorAll('.md-item').forEach((x,k)=>x.classList.toggle('sel',k===j));const it=b.items[j];
+      det.innerHTML=`<div class="md-ic">${it[0]}</div><div class="md-t">${it[1]}</div><div class="md-p">${it[2]}</div>`;det.classList.remove('show');void det.offsetWidth;det.classList.add('show');};
+    list.querySelectorAll('.md-item').forEach((it,j)=>it.onclick=()=>show(j));show(0);}
+  // quiz
+  if(b.type==='quiz'){const wbs=L.querySelectorAll('.wb');let w=null;
+    wbs.forEach(wb=>wb.onclick=()=>{wbs.forEach(x=>x.classList.remove('sel'));wb.classList.add('sel');w=wb.dataset.w;});
+    const opts=L.querySelectorAll('.opt');const exp=L.querySelector('.expl');const xpb=L.querySelector('.xpb');
+    opts.forEach((o,j)=>o.onclick=()=>{if(exp.classList.contains('show'))return;
+      if(!w){const wg=L.querySelector('.wager');wg.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:340});return;}
+      const ok=j===b.correct;opts.forEach((x,m)=>{x.style.pointerEvents='none';if(m===b.correct)x.classList.add('correct');else if(m===j)x.classList.add('wrong');});
+      const g=ok?XPW[w]*3:(w==='sure'?0:1);addXP(g);xpb.textContent=(g>0?'+':'')+g+' XP';exp.classList.add('show');});}
+  // checklist
+  if(b.check){L.querySelectorAll('.cl-item').forEach(it=>it.onclick=()=>{it.classList.toggle('on');if(it.classList.contains('on')&&!it.dataset.c){it.dataset.c=1;addXP(1);}});}
+  // reflect + next buttons
+  const rb=L.querySelector('[data-reflect]');if(rb)rb.onclick=()=>{openRm(b.reflect[0],b.reflect[1]);if(!rb.dataset.c){rb.dataset.c=1;addXP(2);rb.textContent='Reflected ✓';}};
+  const nb=L.querySelector('[data-next]');if(nb)nb.onclick=()=>nextBeat();
+}
+// build all beats
+const beatEls=FLAT.map(b=>{const el=buildBeat(b);beatsEl.appendChild(el);return el;});
+// beat pips (per current scene)
+const bpEl=document.getElementById('bpips');
+function renderBpips(){bpEl.innerHTML='';const n=SCENES[sc].beats.length;for(let i=0;i<n;i++){const d=document.createElement('div');d.className='bp'+(i===bi?' on':i<bi?' done':'');bpEl.appendChild(d);}}
+
+function curFlatIndex(){let idx=0;for(let s=0;s<sc;s++)idx+=SCENES[s].beats.length;return idx+bi;}
+function apply(){
+  const fi=curFlatIndex();
+  beatEls.forEach((el,i)=>{el.classList.toggle('on',i===fi);el.classList.toggle('gone',i<fi);if(i===fi)el.scrollTop=0;});
+  const b=FLAT[fi];const light=b.bg==='light';
+  stage.classList.toggle('light',light);stage.classList.toggle('dark',!light);
+  topEl.classList.toggle('on-light',light);nav.classList.toggle('on-light',light);
+  motif.classList.toggle('big',b.type==='story'||b.type==='summary'||b.type==='reflectbeat');
+  motif.classList.toggle('small',!(b.type==='story'||b.type==='summary'||b.type==='reflectbeat'));
+  motif.classList.toggle('on-light',light);
+  setMotif(b.motif);
+  scPips.forEach((p,i)=>{p.className='sc-pip'+(i===sc?' cur':i<sc?' done':'')});
+  renderBpips();
+  document.getElementById('back').disabled=(sc===0&&bi===0);
+  document.getElementById('next').disabled=(sc===SCENES.length-1&&bi===SCENES[sc].beats.length-1);
+}
+function nextBeat(){if(bi<SCENES[sc].beats.length-1){bi++;}else if(sc<SCENES.length-1){sc++;bi=0;}apply();}
+function prevBeat(){if(bi>0){bi--;}else if(sc>0){sc--;bi=SCENES[sc].beats.length-1;}apply();}
+function jumpScene(i){sc=i;bi=0;apply();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')nextBeat();if(e.key==='ArrowLeft')prevBeat();});
+function openRm(q,s){document.getElementById('rmq').textContent=q;document.getElementById('rms').textContent=s;document.getElementById('rm').classList.add('on');}
+function closeRm(){document.getElementById('rm').classList.remove('on');}
+document.getElementById('rm').addEventListener('click',e=>{if(e.target.id==='rm')closeRm();});
+function fsTggl(){const el=document.documentElement;if(!document.fullscreenElement){el.requestFullscreen&&el.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();}}
+apply();
+</script>
+</body></html>
