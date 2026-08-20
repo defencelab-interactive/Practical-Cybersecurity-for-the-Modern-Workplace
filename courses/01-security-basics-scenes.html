@@ -88,7 +88,7 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 .md-detail .md-t{font-family:var(--disp);font-size:22px;font-weight:600;color:var(--ink);margin-bottom:12px}
 .md-detail .md-p{font-size:16px;line-height:1.7;color:var(--ink-m)}
 /* quiz */
-.q-txt{font-family:var(--disp);font-size:clamp(22px,2.4vw,32px);font-weight:600;line-height:1.25;margin-bottom:18px;max-width:20ch}
+.q-txt{font-family:var(--disp);font-size:clamp(21px,2.1vw,29px);font-weight:600;line-height:1.22;margin-bottom:16px;max-width:26ch}
 .stage.light .q-txt{color:var(--ink)}
 .wager{display:flex;gap:9px;margin:0 0 16px;flex-wrap:wrap;max-width:560px}
 .wager .wl{font:700 11px var(--mono);color:var(--ink-f);text-transform:uppercase;letter-spacing:.09em;width:100%;margin-bottom:2px}
@@ -102,7 +102,7 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 .opt.wrong{border-color:var(--rd);background:var(--rl);animation:shake .35s}
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.02);box-shadow:0 0 0 4px rgba(46,173,107,.22)}100%{transform:scale(1)}}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.expl{margin-top:16px;max-width:660px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:17px 20px;font-size:16px;line-height:1.6;color:var(--ink-m);display:none;box-shadow:0 6px 18px rgba(30,40,34,.08)}
+.expl{margin-top:14px;max-width:660px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:17px 20px;font-size:16px;line-height:1.6;color:var(--ink-m);display:none;box-shadow:0 6px 18px rgba(30,40,34,.08)}
 .expl.show{display:block;animation:rise .4s}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .expl .xpb{display:inline-block;font:700 11px var(--mono);color:var(--acd);background:rgba(46,173,107,.12);border-radius:20px;padding:3px 10px;margin-bottom:9px}
 /* checklist */
@@ -319,7 +319,7 @@ function buildBeat(b){
       h+=`</div><div class="md-detail"></div></div>`;}
     if(b.type==='quiz'){h+=`<div class="wager"><span class="wl">How sure are you?</span><button class="wb" data-w="sure">Sure ×3</button><button class="wb" data-w="pretty">Pretty sure ×2</button><button class="wb" data-w="guess">Guessing ×1</button></div><div class="opts">`;
       const K='ABCD';b.opts.forEach((o,j)=>h+=`<button class="opt"><span class="k">${K[j]}</span>${o}</button>`);
-      h+=`</div><div class="expl"><span class="xpb"></span><div>${b.expl}</div></div>`;}
+      h+=`</div><div class="expl"><span class="xpb"></span><div>${b.expl}</div></div><button class="beat-next q-continue" style="display:none">Continue →</button>`;}
     if(b.check){if(b.zone)h+=`<div class="act-zone">${b.zone}</div>`;h+=`<div class="checklist">`;b.check.forEach(c=>h+=`<div class="cl-item"><div class="cl-box">✓</div><div class="cl-t">${c}</div></div>`);h+=`</div>`;}
     if(b.callout)h+=`<div class="callout${b.calloutRed?' red':''}">${b.callout}</div>`;
     if(b.takeaways){h+=`<ol class="slist">`;b.takeaways.forEach(t=>h+=`<li>${t}</li>`);h+=`</ol>`;if(b.next){h+=`<div class="nextcards">`;b.next.forEach(n=>h+=`<a href="#"><small>${n[0]}</small>${n[1]}</a>`);h+=`</div>`;}}
@@ -350,7 +350,9 @@ function wireBeat(L,b){
     opts.forEach((o,j)=>o.onclick=()=>{if(exp.classList.contains('show'))return;
       if(!w){const wg=L.querySelector('.wager');wg.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:340});return;}
       const ok=j===b.correct;opts.forEach((x,m)=>{x.style.pointerEvents='none';if(m===b.correct)x.classList.add('correct');else if(m===j)x.classList.add('wrong');});
-      const g=ok?XPW[w]*3:(w==='sure'?0:1);addXP(g);xpb.textContent=(g>0?'+':'')+g+' XP';exp.classList.add('show');});}
+      const g=ok?XPW[w]*3:(w==='sure'?0:1);addXP(g);xpb.textContent=(g>0?'+':'')+g+' XP';exp.classList.add('show');
+      const cont=L.querySelector('.q-continue');if(cont){cont.style.display='inline-flex';cont.scrollIntoView({behavior:'smooth',block:'nearest'});}});
+    const qc=L.querySelector('.q-continue');if(qc)qc.onclick=()=>nextBeat();}
   // checklist
   if(b.check){L.querySelectorAll('.cl-item').forEach(it=>it.onclick=()=>{it.classList.toggle('on');if(it.classList.contains('on')&&!it.dataset.c){it.dataset.c=1;addXP(1);}});}
   // reflect + next buttons
