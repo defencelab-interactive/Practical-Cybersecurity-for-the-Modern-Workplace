@@ -32,19 +32,16 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 .rail h1{font-family:var(--disp);font-weight:600;font-size:clamp(26px,2.4vw,36px);line-height:1.08;letter-spacing:-.02em;margin-bottom:16px}
 .rail .r-sub{font-size:14px;line-height:1.55;color:var(--tm);margin-bottom:26px}
 .rail .sh{width:46px;height:auto;margin-bottom:12px}
-.rail .rprog{font:700 11px var(--mono);color:var(--tf);letter-spacing:.06em}
-.rail .rbar{height:5px;border-radius:3px;background:rgba(255,255,255,.12);margin-top:10px;overflow:hidden}
-.rail .rbar i{display:block;height:100%;background:var(--ac);width:8%;transition:width .4s}
 /* scroll area */
 .scroll{position:relative;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;--mood:0;
   background:
-    radial-gradient(120% 80% at 75% 100%,rgba(224,70,60,calc(0.05 + var(--mood)*0.45)),transparent 60%),
-    radial-gradient(90% 55% at 78% 4%,rgba(46,170,120,calc(0.16 - var(--mood)*0.12)),transparent 55%),
-    radial-gradient(70% 50% at 6% 90%,rgba(78,124,168,calc(0.10 - var(--mood)*0.06)),transparent 60%),
-    linear-gradient(180deg,#121a16,#1a1512 calc(45% + var(--mood)*10%),#2a0f0b);
+    radial-gradient(95% 55% at 80% 3%,rgba(52,183,125,calc(0.18 - var(--mood)*0.12)),transparent 55%),
+    radial-gradient(120% 85% at 72% 100%,rgba(78,124,168,calc(0.06 + var(--mood)*0.30)),transparent 62%),
+    radial-gradient(70% 45% at 4% 88%,rgba(46,154,102,calc(0.10 - var(--mood)*0.04)),transparent 60%),
+    linear-gradient(180deg,#131c17,#141b1c calc(50% + var(--mood)*8%),#101820);
   transition:--mood .25s linear}
 .scroll::-webkit-scrollbar{width:8px}.scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:4px}
-.track{position:relative;max-width:960px;margin:0;padding:10vh 5vw 40vh 3vw}
+.track{position:relative;max-width:1200px;margin:0;padding:10vh 4vw 40vh 3vw}
 /* the vertical spine */
 .spine{position:absolute;left:calc(3vw + 10px);top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.14) 6%,rgba(255,255,255,.14) 94%,transparent)}
 .spine-fill{position:absolute;left:calc(3vw + 10px);top:0;width:2px;background:var(--ac);height:0;transition:height .3s ease;box-shadow:0 0 10px rgba(52,183,125,.5)}
@@ -57,9 +54,9 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 .node .date{font:700 11px var(--mono);letter-spacing:.06em;color:var(--ac);text-transform:uppercase;margin-bottom:6px}
 .node.crit .date{color:var(--rd)}
 .node .beat{font-family:var(--disp);font-size:clamp(19px,1.7vw,24px);font-weight:600;color:var(--tw);line-height:1.3;margin-bottom:8px}
-.node .body{font-size:16px;line-height:1.65;color:var(--tm);max-width:600px}
+.node .body{font-size:16px;line-height:1.65;color:var(--tm);max-width:820px}
 /* SPOT — interactive point that opens a question */
-.spot{margin-top:16px;max-width:600px}
+.spot{margin-top:16px;max-width:820px}
 .spot-trigger{display:inline-flex;align-items:center;gap:10px;background:rgba(52,183,125,.1);border:1px solid rgba(52,183,125,.4);color:var(--ac);
   font:600 14px var(--body);padding:11px 18px;border-radius:12px;cursor:pointer;transition:all .18s}
 .spot-trigger:hover{background:rgba(52,183,125,.18);transform:translateY(-1px)}
@@ -93,7 +90,7 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 .scroll-hint.hide{opacity:0;transition:opacity .4s}
 /* end card */
 .endcard{padding-left:calc(3vw + 46px);margin-top:20px}
-.endcard .ec{background:linear-gradient(170deg,rgba(52,183,125,.12),rgba(52,183,125,.04));border:1px solid rgba(52,183,125,.3);border-radius:16px;padding:24px 28px;max-width:600px}
+.endcard .ec{background:linear-gradient(170deg,rgba(52,183,125,.12),rgba(52,183,125,.04));border:1px solid rgba(52,183,125,.3);border-radius:16px;padding:24px 28px;max-width:820px}
 .endcard .ec h3{font-family:var(--disp);font-size:22px;font-weight:600;margin-bottom:10px}
 .endcard .ec p{font-size:15px;line-height:1.6;color:var(--tm);margin-bottom:16px}
 .endcard .ec .nextbtn{background:var(--ac);color:#08130d;border:none;border-radius:11px;padding:12px 22px;font:600 15px var(--body);cursor:pointer}
@@ -112,8 +109,7 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
       <div class="eyebrow">Scene 1 · True Story</div>
       <h1>The $2.4B Password</h1>
       <div class="r-sub">Scroll down to walk the Change Healthcare breach — moment by moment. Tap the glowing points to make the calls yourself.</div>
-      <div class="rprog" id="rprog">0% explored</div>
-      <div class="rbar"><i id="rbar"></i></div>
+
     </div>
     <div class="scroll" id="scroll">
       <div class="track" id="track">
@@ -202,10 +198,7 @@ function markSeen(i){document.querySelector('.node[data-i="'+i+'"]').classList.a
 
 // scroll progress + reveal + spine fill
 const nodesEls=[...document.querySelectorAll('.node')];
-function updateProgress(){
-  const seen=document.querySelectorAll('.node.seen').length;const pct=Math.round(seen/NODES.length*100);
-  document.getElementById('rbar').style.width=Math.max(8,pct)+'%';document.getElementById('rprog').textContent=pct+'% explored';
-}
+function updateProgress(){}
 scroll.addEventListener('scroll',()=>{
   const st=scroll.scrollTop,vh=scroll.clientHeight;
   const mood=Math.min(1,st/Math.max(1,(scroll.scrollHeight-vh)));scroll.style.setProperty('--mood',mood.toFixed(3));
