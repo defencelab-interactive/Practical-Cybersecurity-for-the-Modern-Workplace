@@ -142,6 +142,16 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 .cl-gate.done{color:var(--ac)}
 
 /* gating: locked nodes are a blurred teaser, unreadable + non-interactive until unlocked */
+
+/* glossary hover terms */
+.gloss{border-bottom:1.5px dotted var(--ac);cursor:help;color:inherit;transition:color .15s}
+.gloss:hover{color:var(--ac)}
+#gloss-tip{position:fixed;z-index:200;max-width:320px;background:#0f1613;color:#EDEFEC;border:1px solid rgba(52,183,125,.4);
+  border-radius:11px;padding:12px 15px;font:400 13.5px/1.55 var(--body);box-shadow:0 12px 34px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(4px);pointer-events:none;transition:opacity .18s,transform .18s}
+#gloss-tip.on{opacity:1;transform:translateY(0)}
+#gloss-tip b{color:var(--ac)}
+
 .node{transition:opacity .55s ease,filter .55s ease,transform .55s ease}
 .node.locked{filter:blur(7px);opacity:.4;pointer-events:none;user-select:none}
 .node.locked .spot-trigger{opacity:.5}
@@ -194,15 +204,15 @@ const NODES=[
  {date:'Day 1 · the way in',crit:1,beat:'He logs in — and this is the moment it all hinged on',
   body:'The attacker types in the stolen username and password on the company\u2019s remote-access portal — the same one real employees use to work from home. It accepts them. No second code, no phone tap, no \u201Cis this really you?\u201D He\u2019s in. And here\u2019s the quiet horror of it: to every system inside, he now looks exactly like a trusted employee doing their job. There\u2019s no alarm, because from the network\u2019s point of view, nothing suspicious happened — someone with the right password simply logged in.',
   spot:{type:'predict',topic:'mfa',q:'One free setting would have turned his stolen password into a dead end right here. Which one?',
-    opts:[['A longer, more complex company-wide password policy',0],['Multi-factor authentication — a second step',1],['Antivirus software on every single company laptop',0]],
+    opts:[['A longer, more complex company-wide password policy',0],['<span class="gloss" data-def="<b>Multi-factor authentication (MFA)</b> — a second proof beyond your password, usually a code or tap on your phone. Even a stolen password isn’t enough on its own.">Multi-factor authentication</span> — a second step',1],['Antivirus software on every single company laptop',0]],
     fb:'Multi-factor authentication takes about a minute to switch on and costs nothing. With it, a stolen password is useless — the attacker would also need the employee\u2019s phone. It simply wasn\u2019t on.'}},
  {date:'Days 1–9 · unseen',crit:0,beat:'Nine quiet days inside',
   body:'Now he takes his time. For nine days he moves carefully through the network — reading files, copying entire databases of patient records, learning how the systems connect and where the valuable data lives. He\u2019s patient because patience pays: the longer he watches unnoticed, the more he can steal and the more damage he can set up. Meanwhile it\u2019s an ordinary week at the company. People answer emails, join meetings, go home. Nobody sees the intruder quietly reading over their shoulder.',
   spot:{type:'experience',q:'Be honest: how quickly do you think you\u2019d notice a quiet intruder in your own accounts?',
     scale:['Right away','Eventually','Probably never'],
     note:'Most intrusions go unnoticed for weeks. That\u2019s why the early settings — MFA, alerts, unique passwords — matter more than spotting the attacker after the fact.'}},
- {date:'Day 9 · the strike',crit:1,beat:'Ransomware. Everything locks at once.',
-  body:'When he\u2019s ready, he pulls the trigger. Ransomware sweeps across the company and locks everything at once — files, systems, the tools that keep claims and prescriptions flowing. And because this one company sits in the middle of so much of U.S. healthcare, the damage doesn\u2019t stay contained. Pharmacies across the country suddenly can\u2019t confirm what a patient\u2019s insurance will cover. Some people walk away from the counter without the medication they came for. A single stolen login has reached all the way to a pharmacy in another state.',
+ {date:'Day 9 · the strike',crit:1,beat:'<span class="gloss" data-def="<b>Ransomware</b> — malware that locks or encrypts an organisation’s files and demands payment to unlock them. Often the final blow after attackers get in.">Ransomware</span>. Everything locks at once.',
+  body:'When he\u2019s ready, he pulls the trigger. <span class="gloss" data-def="&lt;b&gt;Ransomware&lt;/b&gt; — malware that locks or encrypts a company’s files and demands payment to unlock them. Often the final blow after attackers get in.">Ransomware</span> sweeps across the company and locks everything at once — files, systems, the tools that keep claims and prescriptions flowing. And because this one company sits in the middle of so much of U.S. healthcare, the damage doesn\u2019t stay contained. Pharmacies across the country suddenly can\u2019t confirm what a patient\u2019s insurance will cover. Some people walk away from the counter without the medication they came for. A single stolen login has reached all the way to a pharmacy in another state.',
   spot:{type:'quiz',topic:'file',q:'You\u2019re an employee and a file called \u201Cinvoice.zip\u201D you didn\u2019t expect just downloaded. First move?',
     opts:[['Open it to check whether it\u2019s really an invoice',0],['Delete it and then empty the recycle bin',0],['Disconnect from the internet, then tell IT',1],['Run an antivirus scan while staying online',0]],
     fb:'Most malware needs to phone home to its server. Disconnecting breaks that link first; then let IT take over. Opening it may trigger it; deleting doesn\u2019t help if it\u2019s already running.'}},
@@ -392,5 +402,19 @@ lockState();
 // if the very first node has no spot, unlock forward
 if(NODES[0]&&!NODES[0].spot)unlockNext(0);
 function fsT(){const el=document.documentElement;if(!document.fullscreenElement){el.requestFullscreen&&el.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();}}
+
+(function(){
+  const tip=document.createElement('div');tip.id='gloss-tip';document.body.appendChild(tip);
+  let cur=null;
+  function place(el){tip.innerHTML=el.getAttribute('data-def')||'';tip.style.left='0px';tip.style.top='0px';
+    const r=el.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight;
+    let left=r.left;if(left+tw>window.innerWidth-8)left=window.innerWidth-tw-8;if(left<8)left=8;
+    let top=r.top-th-10;if(top<8)top=r.bottom+10;tip.style.left=left+'px';tip.style.top=top+'px';tip.classList.add('on');cur=el;}
+  function hide(){tip.classList.remove('on');cur=null}
+  document.addEventListener('mouseover',e=>{const g=e.target.closest('.gloss');if(g&&g!==cur)place(g)});
+  document.addEventListener('mouseout',e=>{const g=e.target.closest('.gloss');if(g)hide()});
+  document.addEventListener('click',e=>{const g=e.target.closest('.gloss');if(g&&matchMedia('(hover:none)').matches){cur===g?hide():place(g);e.preventDefault();return}if(!g)hide()});
+  document.addEventListener('scroll',hide,true);
+})();
 </script>
 </body></html>
