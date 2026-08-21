@@ -134,10 +134,11 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 .nav.on-light .prog-fill{background:var(--acd)}
 .prog-lbl{font:600 12px var(--mono);color:var(--tf);min-width:140px;white-space:nowrap}
 .nav.on-light .prog-lbl{color:var(--ink-f)}
-.arrow{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:var(--tw);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .16s}
-.nav.on-light .arrow{border-color:var(--line);background:#fff;color:var(--ink-m)}
-.arrow:hover{border-color:var(--ac);color:var(--ac)}.arrow.next{background:var(--ac);border-color:var(--ac);color:#08130d}.arrow.next:hover{background:var(--acd)}
-.arrow svg{width:16px;height:16px}.arrow:disabled{opacity:.25;cursor:default}
+.nav-back{background:none;border:none;color:var(--tf);font:600 12px var(--body);cursor:pointer;padding:6px 4px;transition:color .16s}
+.nav-back:hover{color:var(--ac)}
+.nav.on-light .nav-back{color:var(--ink-f)}
+.nav.on-light .nav-back:hover{color:var(--acd)}
+.nav-back:disabled{opacity:.3;cursor:default}
 @media(max-width:900px){.scene{grid-template-columns:1fr;gap:1vh}.rail{justify-content:flex-start}.rail h1{font-size:26px}}
 </style>
 </head>
@@ -169,10 +170,9 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
     <div class="work"><div id="zones"></div></div>
   </div>
   <div class="nav" id="nav">
-    <button class="arrow" id="back" onclick="prevZone()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>
     <div class="prog"><div class="prog-fill" id="progFill"></div></div>
     <span class="prog-lbl" id="progLbl"></span>
-    <button class="arrow next" id="next" onclick="nextZone()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    <button class="nav-back" id="back" onclick="prevZone()" title="Back">← Back</button>
   </div>
 </div>
 <script>
@@ -223,18 +223,30 @@ const SCENES=[
 /* predict-the-attack data (Scene 1, zone 2) */
 const PA={
   steps:[
-    {node:'1',crit:0,ctx:'Feb 12 — An attacker just bought your colleague\u2019s login on a leak site (reused password).',
-     q:'He has the password. What stops him from getting in?',
-     opts:[['Nothing — MFA wasn\u2019t on, he\u2019s straight in',1],['The firewall blocks the login',0],['IT gets an alert and calls him',0]],
-     reveal:'Right — with no second step, a valid password is a valid login. He\u2019s inside in seconds.'},
-    {node:'2',crit:1,ctx:'He\u2019s in. This is the moment everything hinged on.',
-     q:'What single free setting would have stopped him here?',
-     opts:[['A longer password',0],['MFA — a second step he can\u2019t fake',1],['Antivirus on the laptop',0]],
-     reveal:'This is the point. A one-minute setting — MFA — turns a stolen password into a dead end. It wasn\u2019t on.',isCrit:1},
-    {node:'3',crit:0,ctx:'Nine days pass. He\u2019s copied databases and mapped the network. Now he acts.',
-     q:'What\u2019s his payday move?',
-     opts:[['Politely log out',0],['Deploy ransomware and demand $22M',1],['Email everyone a warning',0]],
-     reveal:'Ransomware locks everything at once. Pharmacies stop. The bill reaches $2.4B — from one login, nine days earlier.'}
+    {node:'1',crit:0,
+     ctx:'February 12, 2024. An employee at Change Healthcare reused their work password on some other website. That website was breached, and the password ended up on a list that attackers buy and sell. One of them now has a valid username and password for the company\u2019s remote-access system.',
+     q:'The attacker has a real, working password. At this point, what actually stops him from logging in?',
+     opts:[
+       ['Nothing stops him — without a second verification step, a valid password is all he needs to get in',1],
+       ['The company firewall notices the new login and automatically blocks it',0],
+       ['The IT team gets an alert about the login and phones him to check it\u2019s really him',0]],
+     reveal:'Correct. A password on its own is a single lock. If that\u2019s the only thing guarding the door, a stolen password opens it — no alarms, no questions. He\u2019s inside within seconds, and to the system he looks exactly like a normal employee.'},
+    {node:'2',crit:1,
+     ctx:'He\u2019s now logged in as a real employee. Everything he does looks legitimate. This single moment is the one where the entire $2.4 billion breach could still have been prevented.',
+     q:'There\u2019s one free setting that would have turned his stolen password into a dead end right here. Which one?',
+     opts:[
+       ['Making everyone use a longer, more complex password',0],
+       ['Multi-factor authentication — a second step (a code or tap on the real employee\u2019s phone) that the attacker can\u2019t provide',1],
+       ['Installing antivirus software on every company laptop',0]],
+     reveal:'This is the moment it all hinged on. Multi-factor authentication takes about a minute to switch on and costs nothing. With it, a stolen password is useless — the attacker would also need the employee\u2019s phone. It simply wasn\u2019t turned on, so he walked right in.',isCrit:1},
+    {node:'3',crit:0,
+     ctx:'Over the next nine days he moves quietly through the network — copying databases, learning how everything connects, and staying out of sight. Nobody notices. Then he\u2019s ready to make his money.',
+     q:'After more than a week inside undetected, what does the attacker do to actually profit?',
+     opts:[
+       ['Quietly logs out and leaves, having seen enough',0],
+       ['Locks the company\u2019s files with ransomware and demands a $22 million payment to unlock them',1],
+       ['Emails the whole company to warn them about the weak password',0]],
+     reveal:'He deploys ransomware, which locks the company\u2019s systems all at once. Pharmacies can no longer process prescriptions and hospitals can\u2019t verify insurance. Between the ransom, the recovery, the fines and the lawsuits, the total cost passes $2.4 billion — all traceable to one reused password and one missing setting, nine days earlier.'}
   ]
 };
 
@@ -305,7 +317,7 @@ function apply(sceneChanged){
   document.getElementById('progFill').style.width=(fi/(FLAT.length-1)*100)+'%';
   document.getElementById('progLbl').textContent=`${sc+1}/${SCENES.length} · ${SCENES[sc].label}`;
   document.getElementById('back').disabled=(sc===0&&zi===0);
-  document.getElementById('next').disabled=(sc===SCENES.length-1&&zi===SCENES[sc].zones.length-1);
+
 }
 function nextZone(){const ps=sc;if(zi<SCENES[sc].zones.length-1){zi++;}else if(sc<SCENES.length-1){sc++;zi=0;}apply(sc!==ps);}
 function prevZone(){const ps=sc;if(zi>0){zi--;}else if(sc>0){sc--;zi=SCENES[sc].zones.length-1;}apply(sc!==ps);}
