@@ -89,6 +89,16 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(5px)}}
 .scroll-hint.hide{opacity:0;transition:opacity .4s}
 /* end card */
+/* gating: locked nodes are a blurred teaser, unreadable + non-interactive until unlocked */
+.node{transition:opacity .55s ease,filter .55s ease,transform .55s ease}
+.node.locked{filter:blur(7px);opacity:.4;pointer-events:none;user-select:none}
+.node.locked .spot-trigger{opacity:.5}
+.node.unlocking{filter:blur(0);opacity:1}
+.lock-hint{display:inline-flex;align-items:center;gap:8px;margin-top:2px;font:600 13px var(--body);color:var(--tf)}
+.lock-hint svg{width:14px;height:14px}
+/* end card also gated */
+.endcard.locked{filter:blur(7px);opacity:.4;pointer-events:none}
+
 .endcard{padding-left:calc(3vw + 46px);margin-top:20px}
 .endcard .ec{background:linear-gradient(170deg,rgba(52,183,125,.12),rgba(52,183,125,.04));border:1px solid rgba(52,183,125,.3);border-radius:16px;padding:24px 28px;max-width:820px}
 .endcard .ec h3{font-family:var(--disp);font-size:22px;font-weight:600;margin-bottom:10px}
@@ -194,24 +204,43 @@ track.addEventListener('click',e=>{
   if(eb){const i=eb.dataset.exp;[...document.querySelectorAll('[data-exp="'+i+'"]')].forEach(x=>x.classList.remove('sel'));eb.classList.add('sel');
     document.getElementById('note-'+i).classList.add('show');if(!eb.dataset.c){eb.dataset.c=1;addXP(2);}markSeen(i);return;}
 });
-function markSeen(i){document.querySelector('.node[data-i="'+i+'"]').classList.add('seen');updateProgress();}
-
-// scroll progress + reveal + spine fill
 const nodesEls=[...document.querySelectorAll('.node')];
-function updateProgress(){}
+const endEl=document.querySelector('.endcard');
+let unlockedUpTo=0; // highest node index currently readable
+
+function lockState(){
+  nodesEls.forEach((n,idx)=>{
+    const locked=idx>unlockedUpTo;
+    n.classList.toggle('locked',locked);
+    n.classList.toggle('seen',!locked);
+  });
+  // end card unlocks only when the last node is unlocked
+  if(endEl)endEl.classList.toggle('locked',unlockedUpTo<nodesEls.length-1);
+}
+function unlockNext(fromIdx){
+  if(fromIdx<unlockedUpTo)return;            // already past
+  unlockedUpTo=Math.max(unlockedUpTo,fromIdx+1);
+  lockState();
+  // auto-scroll to the freshly revealed node
+  const nxt=nodesEls[unlockedUpTo]||endEl;
+  if(nxt)setTimeout(()=>nxt.scrollIntoView({behavior:'smooth',block:'center'}),180);
+  // if the newly unlocked node has NO spot (pure narrative), chain-unlock the one after it
+  const nd=NODES[unlockedUpTo];
+  if(nd&&!nd.spot)setTimeout(()=>unlockNext(unlockedUpTo),700);
+}
+function markSeen(i){ unlockNext(+i); }   // answering spot i unlocks i+1
+
+// spine fill follows scroll (visual only)
 scroll.addEventListener('scroll',()=>{
   const st=scroll.scrollTop,vh=scroll.clientHeight;
   const mood=Math.min(1,st/Math.max(1,(scroll.scrollHeight-vh)));scroll.style.setProperty('--mood',mood.toFixed(3));
   document.getElementById('hint').classList.toggle('hide',st>60);
-  // spine fill to current scroll
-  const trackTop=track.offsetTop;
   spineFill.style.height=Math.min(track.scrollHeight,(st+vh*0.5))+'px';
-  // reveal nodes near viewport
-  nodesEls.forEach(n=>{const r=n.getBoundingClientRect();if(r.top<vh*0.8)n.classList.add('seen');});
-  updateProgress();
 });
-// initial reveal for first node
-nodesEls[0].classList.add('seen');updateProgress();
+// initial: only first node readable
+lockState();
+// if the very first node has no spot, unlock forward
+if(NODES[0]&&!NODES[0].spot)unlockNext(0);
 function fsT(){const el=document.documentElement;if(!document.fullscreenElement){el.requestFullscreen&&el.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();}}
 </script>
 </body></html>
