@@ -224,19 +224,6 @@ const SCENES=[
   {bg:'dark',type:'story',html:`<div class="big">$2.4B</div><p class="lead">In 2024 an attacker got one employee\u2019s login at Change Healthcare — a third of all U.S. patient records flow through it. ${term('MFA','mfa')} wasn\u2019t on, so he just logged in.</p><p class="lead">Nine days later he installed ${term('ransomware','ransomware')}. Pharmacies couldn\u2019t fill prescriptions. Damage: <strong>$2.4 billion</strong>.</p><p class="dim">Next you\u2019ll go through the attack step by step and see where it could have been stopped.</p>`,btn:'Walk the attack →'},
   {bg:'light',type:'predict'}
  ]},
-{label:'Spot It',eyebrow:'Your turn',title:'Spotting scams',intro:'Two everyday work messages. Decide how you\u2019d respond to each.',motif:'eye',cap:'Spot it',bg1:'light',
- zones:[
-  {bg:'light',type:'quiz',
-   q:`Your CEO texts: \u201CIn a meeting. Buy 4 gift cards, $200 each, send the codes. Don\u2019t call.\u201D What\u2019s the red flag?`,
-   opts:['The message has no company letterhead on it','Urgency, an odd request, and pressure not to check','The CEO would normally send this over Slack instead','It happened to arrive after normal office hours'],correct:1,
-   expl:`Urgency + an unusual request (gift cards aren\u2019t how firms pay) + a block on checking = ${term('social engineering','se')}. Verify through a channel you trust — a known number, not the one that messaged you.`,
-   tags:['Don\u2019t fall for fake','Verify through a known channel']},
-  {bg:'light',type:'quiz',
-   q:`You have MFA on. A push notification says \u201CApprove login\u201D — but you\u2019re not logging in. What do you do?`,
-   opts:['Approve it — it\u2019s most likely just a glitch','Ignore the notification and wait to see','Deny it, then change your password','Restart your phone and then try again'],correct:2,
-   expl:`Someone has your password and is trying right now. Deny blocks this attempt; changing your password stops the next. That push is your early warning — it means the password already leaked.`,
-   tags:['One password, one account','Say something']}
- ]},
 {label:'Lock It In',eyebrow:'Make it real',title:'Your settings',intro:'Settings to turn on today. Each closes a common way in.',motif:'check',cap:'Lock in',bg1:'light',
  zones:[
   {bg:'light',type:'action',zone:'\u26A1 Check them off as you go',
