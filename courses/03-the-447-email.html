@@ -288,18 +288,18 @@ const NODES=[
   body:'Both of these arrived this morning. Both look like the sort of notification you get several times a week and barely read. One is a genuine Dropbox share; the other was sent by someone who is counting on you not looking closely. Pick the fake before you scroll on — getting it wrong here costs nothing, which is rather the point of starting this way.',
   spot:{type:'compare',topic:'spot',q:'Which one is the fake?',
     mails:[
-      {from:'Dropbox',addr:'no-reply@dropbox.com',
-       subj:'Anna Kovalenko shared “Q3-budget-draft.xlsx” with you',
-       lines:['Anna Kovalenko (a.kovalenko@yourcompany.com) invited you to view a file.','Q3-budget-draft.xlsx · 84 KB'],
+      {from:'Dropbox',addr:'no-reply@dropboxmail.com',
+       subj:'Priya Raman shared “Q3-budget-draft.xlsx” with you',
+       lines:['Priya Raman (p.raman@yourcompany.com) invited you to view a file.','Q3-budget-draft.xlsx · 84 KB'],
        link:'www.dropbox.com/scl/fi/8k2m…',btn:'View file',fake:0},
-      {from:'Dropbox',addr:'no-reply@dropbox-filesharing.com',
-       subj:'Anna Kovalenko shared “Q3-budget-draft.xlsx” — access expires in 24h',
-       lines:['Anna Kovalenko invited you to view a file.','Sign in to confirm your identity before access expires.'],
-       link:'dropbox-filesharing.com/login',btn:'Confirm and view',fake:1}],
-    fb:'It’s the second one. Three things separate it from the real notification. The sender domain is <b>dropbox-filesharing.com</b>, not dropbox.com — anyone can register a domain with a familiar word in it. It sets a <b>deadline</b>, which Dropbox does not do on a shared file. And it asks you to <b>sign in to confirm your identity</b>, where a real share link simply opens the file. If you picked the first one, that is worth knowing rather than being embarrassed about: the two are close on purpose, and the differences sit in the parts most people skim.'}},
+      {from:'Dropbox',addr:'no-reply@dropbox-notifications.com',
+       subj:'Priya Raman shared “Q3-budget-draft.xlsx” with you',
+       lines:['Priya Raman (p.raman@yourcompany.com) invited you to view a file.','Q3-budget-draft.xlsx · 84 KB'],
+       link:'dbx-secure-files.com/d/8k2m',btn:'View file',fake:1}],
+    fb:'It’s the second one — and if the sender domain is what decided it for you, that reasoning would have failed here. <b>dropboxmail.com</b>, on the first email, looks like a lookalike domain but is genuinely what Dropbox sends notifications from. Plenty of real services mail from a domain that isn’t their main one, which is exactly why “the domain looks a bit odd” can’t be the whole test.<br><br>What actually separates them is the <b>link</b>. The real notification points at dropbox.com. The fake one comes from dropbox-notifications.com but sends you to <b>dbx-secure-files.com</b> — a third domain, unrelated to either. When the sender and the destination don’t belong to the same organisation, that mismatch is the signal, and it survives every redesign of the message.'}},
 
- {date:'What you were looking at',crit:0,beat:'Those three differences aren’t a coincidence',
-  body:'Every phishing message needs the same three parts: a sender you would plausibly hear from, an action it wants out of you, and a reason to do it now rather than later. Swap the brand, change the wording, move it to a text message — the skeleton stays. Most training teaches you to memorise individual scams, which stops working the week the scam changes. Recognising the skeleton keeps working.'},
+ {date:'What you were looking at',crit:0,beat:'Why that one was hard',
+  body:'That pair was deliberately close, because the easy examples are not the ones that reach you. The real notification had an odd-looking domain and was fine; the fake one had a tidy-looking domain and was not. Any rule of the form “if it looks strange, it’s fake” breaks on a pair like that. What held up was a comparison: does the place the link goes belong to the same organisation as the sender? Underneath the branding, every phishing message still needs the same three parts — a sender you would plausibly hear from, an action it wants out of you, and a reason to take it. Change the brand, change the channel, the skeleton stays.'},
 
  {date:'Friday, 4:47pm',crit:1,beat:'The version that gets through',
   body:'Tom is an accountant. At 4:47 on a Friday, an email from his CEO asks him to wire $280,000 to close a deal before the weekend. The name is right, the signature is the usual one, and it refers to a board meeting he presented at three days earlier. Something feels slightly off — but she is travelling in Asia, the timing makes sense, and he would rather not chase her on a Friday evening over what is probably routine. He sends it at 4:52. On Monday she knows nothing about any transfer. The attackers had been reading the company’s email for weeks, which is how they knew about the board meeting, the tone she writes in, and the fact that she was away.',
@@ -308,7 +308,7 @@ const NODES=[
      ['A two-minute call to a number he already had',1],
      ['Replying to the email to ask her to confirm it',0],
      ['Checking that the sender address matched hers',0]],
-    fb:'A call on a number he already had. Replying goes back to whoever is holding that mailbox — here, people who had been reading the thread for weeks and could answer in her voice. Checking the address helps, and it is worth doing, but attackers with access to real correspondence can reply inside a genuine thread where the address is genuine too. The only check that doesn’t depend on the email being honest is one that happens outside the email.'}},
+    fb:'A call on a number he already had. Replying goes back to whoever is holding that mailbox — here, people who had been reading the thread for weeks and could answer in her voice. Checking the address helps, and is worth doing, but attackers replying inside a genuine thread have a genuine address too. The only check that doesn’t depend on the email being honest happens outside the email.<br><br>Which is easy to say and harder to do. Most people don’t have the CEO’s mobile number, and phoning a senior person on a Friday evening to ask whether they really meant it takes a kind of nerve that not everyone has on demand — particularly if they are new, junior, or on a short contract. That is why this shouldn’t rest on personal courage. Verification works when it belongs to the process rather than to the individual: a rule that payments above a threshold get a second approver, a finance lead or executive assistant whose job it is to confirm, a shared channel where “did you send this?” is a normal question. If the only route available to you is calling the CEO directly, the gap is organisational, and it is worth raising before the Friday afternoon when it matters.'}},
 
  {date:'Why it works',crit:0,beat:'Four things it needs you to feel',
   body:'Phishing doesn’t target what you know, it targets the state you are in when the message lands. Four levers do most of the work. <b>Urgency</b> — a deadline that leaves no room to check. <b>Authority</b> — a request that appears to come from someone you don’t question. <b>Fear</b> — a consequence attached to not acting. <b>Curiosity or reward</b> — a package, a bonus, a document with your name on it. Tom got urgency and authority at the end of a Friday, which is not an accident either.',
@@ -382,10 +382,10 @@ const NODES=[
        how:'Most clients show only the display name, which can say anything. Seeing the real address turns the most useful check into a glance.',
        steps:['On desktop, expand the header on any message or look for a “show sender address” setting','On your phone, tap the sender name once so you know where the real address appears','Try it on a few messages you already trust, so a wrong domain stands out when it turns up'],
        itnote:'Many managed mail clients add an external-sender banner as well — ask IT whether yours has one and what it looks like.'},
-      {topic:'verify',t:'Save the real numbers you would need to check something',
-       how:'Verifying only works if you already have a way to reach the person that didn’t come from the suspicious message itself.',
-       steps:['Put your IT help desk number and address in your phone contacts','Save your bank’s number from the back of the card, not from any email','For payment or access requests, agree with your team which channel counts as confirmation'],
-       itnote:'If your organisation has an approval rule for payments or access changes, ask for it in writing — it protects you as much as it protects the money.'},
+      {topic:'verify',t:'Work out who you would actually check with',
+       how:'Verifying only works if you already have a route that didn’t come from the suspicious message — and a realistic one. “Call the CEO” is not a route most people have.',
+       steps:['Name the person you would ask about a payment or access request — finance lead, line manager, an executive assistant, or the help desk','Save the numbers you’d need: IT support, and your bank’s from the back of the card rather than from any email','Ask what the approval rule is for payments and access changes, so the check is the procedure rather than your personal judgement'],
+       itnote:'If there is no rule and no obvious person to ask, that is worth flagging to IT or finance — it is a gap in the process, not a gap in you.'},
       {topic:'report',t:'Find your report-phishing button before you need it',
        how:'Reporting takes one click when you know where the button is, and several minutes of hesitation when you don’t.',
        steps:['Open any message and look for “Report phishing”, “Report junk”, or a phish-alert add-in','If there isn’t one, find your security team’s address and add it to your contacts','Report one genuinely suspicious message this week so the route is familiar'],
@@ -399,7 +399,7 @@ const NODES=[
   body:'You started by choosing between two emails, then went through what actually separates them. Three things worth keeping.',
   spot:{type:'takeaways',items:[
     ['🧭','The skeleton is always the same','A plausible sender, an action it wants, and a reason to hurry. The branding changes constantly; those three parts don’t. Looking for the structure beats memorising individual scams.'],
-    ['🔍','Check the address and the link, not the look','Logos, layout and writing are free to copy, and AI copies the writing better than most people write. The sender domain and the link destination are the parts that can’t be made identical, and both take seconds to see.'],
+    ['🔍','Check the address and the link, not the look','Logos, layout and writing are free to copy, and AI copies the writing better than most people write. A sender domain that looks odd can still be genuine — what gives it away is a link that goes somewhere unrelated to whoever sent it. Both take seconds to check.'],
     ['📞','Verify somewhere the message can’t reach','Anything about money, credentials or access gets confirmed on a channel you chose — a call, a chat, a number you already had. That one habit defeats a well-written email.']
   ]}}
 ];
@@ -500,7 +500,7 @@ track.appendChild(end);
 track.addEventListener('click',e=>{
   const trig=e.target.closest('.spot-trigger');
   if(trig){const i=trig.dataset.spot;const card=document.getElementById('card-'+i);card.classList.toggle('open');
-    if(card.classList.contains('open'))setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'center'}),80);return;}
+    if(card.classList.contains('open'))setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),120);return;}
   const opt=e.target.closest('.spot-opt');
   if(opt){const i=opt.dataset.opt,j=+opt.dataset.j;const s=NODES[i].spot;const fb=document.getElementById('fb-'+i);
     if(fb.classList.contains('show'))return;
@@ -622,16 +622,25 @@ function lockState(){
   });
   if(endEl){const locked=unlockedUpTo<nodesEls.length;endEl.classList.toggle('locked',locked);if(!locked)buildPlan();}
 }
-function unlockNext(fromIdx){
+function softReveal(el){
+  if(!el)return;
+  const sr=scroll.getBoundingClientRect(),vh=scroll.clientHeight;
+  const rel=el.getBoundingClientRect().top-sr.top;   // node top, relative to the scroll area
+  const anchor=vh*0.70;                              // land it low in the view
+  if(rel<anchor)return;                              // already comfortably in view — don't jump
+  scroll.scrollTo({top:scroll.scrollTop+(rel-anchor),behavior:'smooth'});
+}
+function unlockNext(fromIdx,quiet){
   if(fromIdx<unlockedUpTo)return;            // already past
   unlockedUpTo=Math.max(unlockedUpTo,fromIdx+1);
   lockState();
-  // auto-scroll to the freshly revealed node
+  // reveal the next node at the BOTTOM of the view, so the feedback you just
+  // read stays on screen instead of being scrolled away above you
   const nxt=nodesEls[unlockedUpTo]||endEl;
-  if(nxt)setTimeout(()=>nxt.scrollIntoView({behavior:'smooth',block:'center'}),180);
+  if(nxt&&!quiet)setTimeout(()=>softReveal(nxt),520);
   // if the newly unlocked node has NO spot (pure narrative), chain-unlock the one after it
   const nd=NODES[unlockedUpTo];
-  if(nd&&(!nd.spot||nd.spot.type==='takeaways'))setTimeout(()=>unlockNext(unlockedUpTo),700);
+  if(nd&&(!nd.spot||nd.spot.type==='takeaways'))setTimeout(()=>unlockNext(unlockedUpTo,true),700);
 }
 function markSeen(i){ unlockNext(+i); }   // answering spot i unlocks i+1
 
