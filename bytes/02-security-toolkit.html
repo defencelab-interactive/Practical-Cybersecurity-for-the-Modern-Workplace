@@ -111,7 +111,9 @@ const CATS=[
    {n:'Aegis Authenticator',cost:'free',does:'Open-source 2FA app with encrypted backups. Android only.',os:[],br:[],ph:['android'],home:1,url:'https://getaegis.app'},
    {n:'Raivo / 2FAS',cost:'free',does:'Open-source 2FA apps for iPhone with backup options.',os:[],br:[],ph:['ios'],home:1,url:'https://2fas.com'},
    {n:'Authy',cost:'free',does:'2FA app with multi-device sync and cloud backup. Works across phones.',os:['win','mac'],br:[],ph:['ios','android'],home:1,url:'https://authy.com'},
-   {n:'Google / Microsoft Authenticator',cost:'free',does:'Simple, widely supported 2FA apps. Fine choice if you use that ecosystem already.',os:[],br:[],ph:['ios','android'],home:1,url:''}
+   {n:'Google / Microsoft Authenticator',cost:'free',does:'Simple, widely supported 2FA apps. Fine choice if you use that ecosystem already.',os:[],br:[],ph:['ios','android'],home:1,url:''},
+   {n:'YubiKey',cost:'paid',does:'A physical key you tap or plug in as your second factor — the strongest kind of 2FA, and phishing-resistant. Works across most major accounts.',os:['win','mac','linux'],br:['chrome','firefox','safari'],ph:['ios','android'],home:1,url:'https://www.yubico.com'},
+   {n:'Google Titan / built-in passkeys',cost:'freemium',does:'Hardware security keys, or \u201Cpasskeys\u201D now built into phones and browsers — a passwordless second factor that\u2019s hard to phish.',os:['win','mac','linux'],br:['chrome','firefox','safari'],ph:['ios','android'],home:1,url:''}
   ]},
  {ic:'🧹',name:'Browser privacy extensions',sub:'Cut out malicious ads, trackers, and scripts — which also closes a common malware delivery route. Install only from your browser\u2019s official store.',
   tools:[
@@ -129,7 +131,23 @@ const CATS=[
    {n:'BitLocker (Windows) / FileVault (Mac)',cost:'free',does:'Built-in full-disk encryption. If your laptop is lost or stolen, the data stays unreadable. Just turn it on.',os:['win','mac'],br:[],ph:[],home:1,url:''},
    {n:'Quad9 / NextDNS',cost:'freemium',does:'A DNS filter that blocks known malicious sites before they load — works across your whole device or network.',os:['win','mac','linux'],br:[],ph:['ios','android'],home:1,url:'https://quad9.net'},
    {n:'Built-in antivirus',cost:'free',does:'Windows Defender is solid and already on. On Mac, keep the built-in protections and updates on. Extra AV is usually optional for home use.',os:['win','mac'],br:[],ph:[],home:1,url:''}
+  ]} ,
+ {ic:'\uD83D\uDCAC',name:'Private messaging',sub:'End-to-end encrypted chat and calls, so only you and the person you\u2019re talking to can read them \u2014 not the app, not anyone in between.',
+  tools:[
+   {n:'Signal',cost:'free',does:'Open-source, end-to-end encrypted messaging and calls. Widely trusted, collects almost no data about you.',os:['win','mac','linux'],br:[],ph:['ios','android'],home:1,url:'https://signal.org'},
+   {n:'Built-in encrypted chat',cost:'free',does:'iMessage (Apple to Apple) and WhatsApp are end-to-end encrypted by default. Fine for everyday use if the people you talk to already use them.',os:['mac'],br:[],ph:['ios','android'],home:1,url:''}
+  ]},
+ {ic:'\uD83C\uDFAD',name:'Email aliases',sub:'Give each site a throwaway address that forwards to your real inbox. If one leaks or starts spamming, you shut off that alias \u2014 and your real address stays clean.',
+  tools:[
+   {n:'SimpleLogin',cost:'freemium',does:'Open-source alias service. Create unlimited forwarding addresses; disable any one that starts getting spam or shows up in a breach.',os:['win','mac','linux'],br:['chrome','firefox','safari'],ph:['ios','android'],home:1,url:'https://simplelogin.io'},
+   {n:'Firefox Relay',cost:'freemium',does:'Email (and phone-number) masking from Mozilla, built into Firefox. A few free aliases, more on the paid tier.',os:['win','mac','linux'],br:['firefox'],ph:['ios','android'],home:1,url:'https://relay.firefox.com'},
+   {n:'Apple Hide My Email',cost:'freemium',does:'Built into iPhone and Safari for iCloud+ users \u2014 generates a random address that forwards to your inbox. No extra app needed.',os:['mac'],br:['safari'],ph:['ios'],home:1,url:''}
+  ]},
+ {ic:'\uD83D\uDD2C',name:'Check a link or file',sub:'Got something you\u2019re not sure about? Scan it before you open it \u2014 without running it on your own machine.',
+  tools:[
+   {n:'VirusTotal',cost:'free',does:'Paste a link or upload a file and it\u2019s scanned by dozens of antivirus engines at once. Good for that \u201Cis this safe?\u201D moment before you click.',os:['win','mac','linux'],br:['chrome','firefox','safari'],ph:['ios','android'],home:1,url:'https://www.virustotal.com'}
   ]}
+
 ];
 
 const filt={os:'all',br:'all',ph:'all'};
