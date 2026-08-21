@@ -96,6 +96,19 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 .wb{flex:1;min-width:110px;background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:11px;font:600 13px var(--body);color:var(--ink-m);cursor:pointer;transition:all .15s}
 .wb:hover{border-color:var(--acd)}.wb.sel{border-color:var(--acd);background:rgba(46,173,107,.08);color:var(--acd)}
 
+
+/* answered state: rail slides away, work zone takes the full width, feedback drops below */
+.scene .rail{transition:opacity .5s ease,transform .55s cubic-bezier(.4,0,.2,1),max-width .55s cubic-bezier(.4,0,.2,1)}
+.scene.answered{grid-template-columns:0 1fr;gap:0}
+.scene.answered .rail{opacity:0;transform:translateX(-40px);pointer-events:none;overflow:hidden}
+/* in answered mode the quiz/predict grid becomes single column, full width, feedback stacks under */
+.scene.answered .qa-grid{grid-template-columns:1fr}
+.scene.answered .qa-side{margin-top:8px}
+.scene.answered .opt,.scene.answered .pa-opt{max-width:none}
+.scene.answered .q-txt,.scene.answered .pa-q{max-width:none}
+/* feedback full-width and roomy when stacked */
+.scene.answered .expl,.scene.answered .pa-reveal{max-width:none}
+
 /* quiz & predict: question+options left, feedback right (feedback never pushes the question) */
 .qa-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,0.9fr);gap:28px;align-items:start;width:100%}
 .qa-main{min-width:0}
@@ -292,7 +305,7 @@ function wireZone(Z,z){
       const ok=j===z.correct;opts.forEach((x,m)=>{x.style.pointerEvents='none';if(m===z.correct)x.classList.add('correct');else if(m===j)x.classList.add('wrong');});
       const g=ok?XPW[w]*3:(w==='sure'?0:1);addXP(g);xpb.textContent=(g>0?'+':'')+g+' XP';
       const vEl=exp.querySelector('.verdict');if(vEl)vEl.innerHTML=ok?'<b style="color:var(--gr)">\u2713 Correct.</b> ':'<b style="color:var(--rd)">\u2717 Not quite.</b> ';
-      exp.classList.add('show');if(qc){qc.style.display='inline-flex';}});}
+      exp.classList.add('show');if(qc){qc.style.display='inline-flex';}document.getElementById('scene').classList.add('answered');});}
   if(z.type==='action'){Z.querySelectorAll('.cl-item').forEach(it=>it.onclick=()=>{it.classList.toggle('on');if(it.classList.contains('on')&&!it.dataset.c){it.dataset.c=1;addXP(1);}});}
   if(z.type==='predict'){setTimeout(()=>initPA(Z),50);}
 }
@@ -306,9 +319,9 @@ function initPA(Z){
     opts.forEach((o,m)=>{o.style.pointerEvents='none';if(m===ci)o.classList.add('correct');else if(m===j)o.classList.add('wrong');});
     const ok=s.opts[j][1]===1;const g=ok?3:1;addXP(g);paXp.textContent='+'+g+' XP';
     const verdict=ok?'<b style="color:var(--gr)">\u2713 That\u2019s right.</b> ':'<b style="color:var(--rd)">\u2717 Not quite — here\u2019s what actually happens.</b> ';
-    revT.innerHTML=verdict+s.reveal;rev.classList.add('show');if(s.isCrit)rev.classList.add('crit');
+    revT.innerHTML=verdict+s.reveal;rev.classList.add('show');if(s.isCrit)rev.classList.add('crit');document.getElementById('scene').classList.add('answered');
     drawLine();opts.forEach(()=>{});[...line.querySelectorAll('.pa-node')][step].classList.add('done');
-    if(step<PA.steps.length-1){paNext.style.display='inline-flex';paNext.textContent='Next step →';paNext.onclick=()=>{step++;render();};}
+    if(step<PA.steps.length-1){paNext.style.display='inline-flex';paNext.textContent='Next step →';paNext.onclick=()=>{document.getElementById('scene').classList.remove('answered');step++;render();};}
     else{paNext.style.display='inline-flex';paNext.textContent='What this teaches →';paNext.onclick=()=>nextZone();}}
   render();
 }
@@ -323,6 +336,7 @@ function applyRail(){const s=SCENES[sc];
   document.getElementById('rmCap').textContent=s.cap;setMotif(s.motif);
 }
 function apply(sceneChanged){
+  document.getElementById('scene').classList.remove('answered');
   const fi=curFlat();const z=FLAT[fi];
   zoneEls.forEach((el,i)=>{el.classList.toggle('on',i===fi);el.classList.toggle('gone',i<fi);if(i===fi)el.scrollTop=0;});
   const light=z.bg==='light';stage.classList.toggle('light',light);stage.classList.toggle('dark',!light);
