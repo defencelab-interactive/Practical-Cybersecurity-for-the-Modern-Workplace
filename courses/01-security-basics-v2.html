@@ -85,7 +85,7 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 /* centered stage for the question + feedback */
 
 /* static, full-width timeline across the stage */
-.pa-line2{display:flex;align-items:center;width:100%;max-width:none;margin:0 auto 34px;padding:0 2vw}
+.pa-line2{display:flex;align-items:center;width:100%;max-width:none;margin:0 auto 30px;padding:0 2vw}
 .pa-l2node{width:42px;height:42px;border-radius:50%;border:2px solid var(--line);background:var(--paper);color:var(--ink-f);display:flex;align-items:center;justify-content:center;font:700 14px var(--mono);flex:none;transition:all .35s}
 .pa-l2node.done{background:var(--acd);border-color:var(--acd);color:#fff}
 .pa-l2node.crit.done{background:var(--rd);border-color:var(--rd)}
@@ -93,12 +93,20 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 .pa-l2node.cur.crit{border-color:var(--rd);box-shadow:0 0 0 5px rgba(224,87,79,.16)}
 .pa-l2link{flex:1;height:2px;background:var(--line);transition:background .4s}
 .pa-l2link.done{background:var(--acd)}
-.pa-stage{max-width:none;width:100%;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center;padding:0 3vw}
-.pa-stage .pa-ctx{text-align:center;max-width:820px;margin:0 auto 10px}
-.pa-stage .pa-q{text-align:center;max-width:900px}
+.pa-stage{max-width:none;width:100%;margin:0;text-align:center;display:flex;flex-direction:column;align-items:center;padding:0 2vw}
+.pa-stage .pa-ctx{text-align:center;max-width:1000px;margin:0 auto 10px}
+.pa-stage .pa-q{text-align:center;max-width:1100px}
 .pa-stage .pa-opts{max-width:820px;width:100%;text-align:left}
 .pa-stage .pa-opt{text-align:left}
 /* feedback under the question, centered on the same ground */
+
+.pa-answer-row{display:flex;flex-direction:column;align-items:center;width:100%;max-width:1000px;margin:0 auto;gap:0}
+.pa-answer-row .pa-opts{width:100%;max-width:820px}
+/* after answering: opts left, feedback right, question stays put */
+.pa-answered .pa-answer-row{flex-direction:row;align-items:flex-start;gap:26px;max-width:none}
+.pa-answered .pa-answer-row .pa-opts{max-width:none;flex:1;text-align:left}
+.pa-answered .pa-answer-row .pa-reveal{flex:1;margin:0!important;text-align:left}
+.pa-answered .pa-q,.pa-answered .pa-ctx{max-width:1100px}
 .pa-stage .pa-reveal{max-width:820px;width:100%;margin:18px auto 0;text-align:left;border-left:none;border-radius:14px;border:1px solid var(--line);border-top:3px solid var(--acd)}
 .pa-stage .pa-reveal.crit{border-top-color:var(--rd)}
 .pa-stepline{display:flex;align-items:center;gap:6px;margin-bottom:20px}
@@ -312,7 +320,7 @@ function buildZone(z,scObj){
   const Z=document.createElement('div');Z.className='zone';Z.innerHTML='<div class="zone-inner"></div>';const I=Z.querySelector('.zone-inner');
   let h='';
   if(z.type==='story'){h=z.html+(z.btn?`<button class="zbtn" data-next>${z.btn}</button>`:'');}
-  if(z.type==='predict'){h=`<div class="pa-stage"><div class="pa-line2" id="paLine2"></div><div class="pa-ctx" id="paCtx"></div><div class="pa-q" id="paQ"></div><div class="pa-opts" id="paOpts"></div><div class="pa-reveal" id="paRev"><span class="xpb" id="paXp"></span><div id="paRevT"></div><button class="zbtn" id="paNext" style="margin-top:14px;display:none">Next step →</button></div></div>`;}
+  if(z.type==='predict'){h=`<div class="pa-stage"><div class="pa-line2" id="paLine2"></div><div class="pa-ctx" id="paCtx"></div><div class="pa-q" id="paQ"></div><div class="pa-answer-row"><div class="pa-opts" id="paOpts"></div><div class="pa-reveal" id="paRev"><span class="xpb" id="paXp"></span><div id="paRevT"></div><button class="zbtn" id="paNext" style="margin-top:14px;display:none">Next step →</button></div></div></div>`;}
   if(z.type==='quiz'){h=`<div class="qa-grid"><div class="qa-main"><div class="q-txt">${z.q}</div><div class="wager"><span class="wl">How sure are you?</span><button class="wb" data-w="sure">Sure ×3</button><button class="wb" data-w="pretty">Pretty ×2</button><button class="wb" data-w="guess">Guess ×1</button></div><div class="opts">`;
     const K='ABCD';z.opts.forEach((o,j)=>h+=`<button class="opt"><span class="k">${K[j]}</span>${o}</button>`);
     h+=`</div></div><div class="qa-side"><div style="width:100%"><div class="expl"><span class="xpb"></span><div><span class="verdict"></span>${z.expl}</div>${z.tags?`<div class="habit-tags">${z.tags.map(t=>`<span>✓ ${t}</span>`).join('')}</div>`:''}</div><button class="zbtn qc" style="display:none" data-next>Continue →</button></div></div></div>`;}
@@ -346,14 +354,14 @@ function initPA(Z){
   function paint(){[...line.children].forEach(el=>{
     if(el.dataset.node!==undefined){const i=+el.dataset.node;const done=i<step||(i===step&&el.dataset.ans==='1');el.classList.toggle('done',done);el.classList.toggle('cur',i===step);}
     if(el.dataset.link!==undefined){el.classList.toggle('done',+el.dataset.link<=step);}});}
-  function render(){const s=PA.steps[step];ctx.textContent=s.ctx;q.textContent=s.q;optsEl.innerHTML='';rev.classList.remove('show','crit');paNext.style.display='none';
+  function render(){const s=PA.steps[step];Z.querySelector('.pa-stage').classList.remove('pa-answered');ctx.textContent=s.ctx;q.textContent=s.q;optsEl.innerHTML='';rev.classList.remove('show','crit');paNext.style.display='none';
     paint();
     s.opts.forEach((o,j)=>{const b=document.createElement('button');b.className='pa-opt';b.textContent=o[0];b.onclick=()=>answer(j);optsEl.appendChild(b);});}
   function answer(j){const s=PA.steps[step];const opts=[...optsEl.children];const ci=s.opts.findIndex(o=>o[1]===1);
     opts.forEach((o,m)=>{o.style.pointerEvents='none';if(m===ci)o.classList.add('correct');else if(m===j)o.classList.add('wrong');});
     const ok=s.opts[j][1]===1;const g=ok?3:1;addXP(g);paXp.textContent='+'+g+' XP';
     const verdict=ok?'<b style="color:var(--gr)">\u2713 That\u2019s right.</b> ':'<b style="color:var(--rd)">\u2717 Not quite — here\u2019s what actually happens.</b> ';
-    revT.innerHTML=verdict+s.reveal;rev.classList.add('show');if(s.isCrit)rev.classList.add('crit');
+    revT.innerHTML=verdict+s.reveal;rev.classList.add('show');if(s.isCrit)rev.classList.add('crit');Z.querySelector('.pa-stage').classList.add('pa-answered');
     const cur=line.querySelector('.pa-l2node[data-node="'+step+'"]');if(cur)cur.dataset.ans='1';paint();
     if(step<PA.steps.length-1){paNext.style.display='inline-flex';paNext.textContent='Next step →';paNext.onclick=()=>{step++;render();};}
     else{paNext.style.display='inline-flex';paNext.textContent='What this teaches →';paNext.onclick=()=>nextZone();}}
