@@ -89,6 +89,21 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(5px)}}
 .scroll-hint.hide{opacity:0;transition:opacity .4s}
 /* end card */
+/* takeaways */
+.takeaways{max-width:880px}
+.tk-list{display:flex;flex-direction:column;gap:14px}
+.tk{display:flex;gap:16px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 22px;box-shadow:0 6px 18px rgba(0,0,0,.14)}
+.tk-ic{font-size:26px;flex:none;line-height:1}
+.tk-t{font-family:var(--disp);font-size:19px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.tk-b{font-size:15.5px;line-height:1.6;color:var(--ink-m)}
+/* your plan (in end card) */
+.yourplan{margin:4px 0 18px;text-align:left}
+.yp-title{font:700 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ac);margin-bottom:8px}
+.yp-sub{font-size:14px;color:var(--tm);margin-bottom:10px}
+.yp-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:7px}
+.yp-list li{font-size:15px;color:var(--tw);padding-left:26px;position:relative;line-height:1.45}
+.yp-list li::before{content:"\2713";position:absolute;left:0;top:0;color:var(--ac);font-weight:700}
+
 /* Scene 2 checklist + personal feedback */
 .node.s2 .date{color:var(--blue)}
 .node.s2 .dot{border-color:var(--blue)}.node.s2.seen .dot{background:var(--blue);border-color:var(--blue);box-shadow:0 0 0 5px rgba(78,124,168,.15)}
@@ -217,7 +232,15 @@ const NODES=[
        how:'When something looks wrong, the fastest responses come from people who already knew who to call.',
        steps:['Find your IT or security team\u2019s email or number','Save it as a contact in your phone now','Note how to reach them after hours'],
        itnote:'Not sure who that is? Ask a colleague or check your company intranet.'}
-    ]}}
+    ]}},
+ // ── Takeaways (3 conclusions) before the finish ──
+ {scene2:1,date:'What you take away',crit:0,beat:'Three things worth remembering',
+  body:'You didn\u2019t just read about a breach — you walked it, made the calls, and set up the defences. Here\u2019s what it all comes down to.',
+  spot:{type:'takeaways',items:[
+    ['\uD83D\uDD11','One weak link is enough','The whole $2.4B chain started with a single reused password and one setting left off. Security isn\u2019t about doing everything — it\u2019s about not leaving the easy doors open.'],
+    ['\uD83D\uDC41\uFE0F','Attacks look normal','No dramatic hacking — just a valid login and a quiet week inside. The habit that catches this is pausing on the small \u201Cthat\u2019s odd\u201D moments and checking before you act.'],
+    ['\u26A1','A few minutes changes the odds','MFA, updates, verify-before-you-click, and knowing who to call. None of it is hard, and together they break the exact chain you just watched.']
+  ]}}
 ];
 
 const scroll=document.getElementById('scroll'),track=document.getElementById('track'),spineFill=document.getElementById('spineFill');
@@ -240,6 +263,10 @@ NODES.forEach((n,i)=>{
         h+=`<button class="cl-done" data-done="${i}-${j}">I\u2019ll do this \u2713</button></div></div>`;
       });
       h+=`</div><div class="cl-gate" id="gate-${i}">Mark all four to finish this scene.</div></div>`;
+    } else if(s.type==='takeaways'){
+      h+=`<div class="spot takeaways"><div class="tk-list">`;
+      s.items.forEach(t=>h+=`<div class="tk"><div class="tk-ic">${t[0]}</div><div><div class="tk-t">${t[1]}</div><div class="tk-b">${t[2]}</div></div></div>`);
+      h+=`</div></div>`;
     } else {
       h+=`<div class="spot"><button class="spot-trigger${isExp?' q-exp':''}" data-spot="${i}"><span class="pulse"></span>${isExp?'Your experience':(s.type==='quiz'?'Your call':'What happens next?')}</button>
         <div class="spot-card${isExp?' exp':''}" id="card-${i}"><div class="spot-q">${s.q}</div>`;
@@ -260,7 +287,7 @@ function recordAnswer(topic,ok){if(!topic)return;if(!topicResults[topic])topicRe
 
 // end card
 const end=document.createElement('div');end.className='endcard';
-end.innerHTML=`<div class="ec"><h3>You broke the chain.</h3><p>You walked the whole attack and locked down the settings that would have stopped it. That\u2019s the foundation — every other module builds on it.</p><button class="nextbtn">Finish Scene →</button></div>`;
+end.innerHTML=`<div class="ec"><h3>You broke the chain.</h3><p>You walked the whole attack and set up the defences that would have stopped it. That\u2019s the foundation — every other module builds on it.</p><div class="yourplan" id="yourplan"></div><button class="nextbtn">Finish Scene →</button></div>`;
 track.appendChild(end);
 
 // spot open/close
@@ -324,6 +351,12 @@ const nodesEls=[...document.querySelectorAll('.node')];
 const endEl=document.querySelector('.endcard');
 let unlockedUpTo=0; // highest node index currently readable
 
+function buildPlan(){
+  const box=document.getElementById('yourplan');if(!box||box.dataset.built)return;box.dataset.built=1;
+  const committed=[...document.querySelectorAll('.cl-item.on .cl-t')].map(x=>x.textContent);
+  if(!committed.length)return;
+  box.innerHTML='<div class="yp-title">Your plan</div><p class="yp-sub">You said you\u2019ll do these — that\u2019s your commitment coming out of this scene:</p><ul class="yp-list">'+committed.map(t=>`<li>${t}</li>`).join('')+'</ul>';
+}
 function lockState(){
   nodesEls.forEach((n,idx)=>{
     const locked=idx>unlockedUpTo;
@@ -332,7 +365,7 @@ function lockState(){
     // when a checklist node becomes unlocked, build its personalized header
     if(!locked&&NODES[idx].spot&&NODES[idx].spot.type==='checklist')buildPersonal(idx);
   });
-  if(endEl)endEl.classList.toggle('locked',unlockedUpTo<nodesEls.length);
+  if(endEl){const locked=unlockedUpTo<nodesEls.length;endEl.classList.toggle('locked',locked);if(!locked)buildPlan();}
 }
 function unlockNext(fromIdx){
   if(fromIdx<unlockedUpTo)return;            // already past
@@ -343,7 +376,7 @@ function unlockNext(fromIdx){
   if(nxt)setTimeout(()=>nxt.scrollIntoView({behavior:'smooth',block:'center'}),180);
   // if the newly unlocked node has NO spot (pure narrative), chain-unlock the one after it
   const nd=NODES[unlockedUpTo];
-  if(nd&&!nd.spot)setTimeout(()=>unlockNext(unlockedUpTo),700);
+  if(nd&&(!nd.spot||nd.spot.type==='takeaways'))setTimeout(()=>unlockNext(unlockedUpTo),700);
 }
 function markSeen(i){ unlockNext(+i); }   // answering spot i unlocks i+1
 
