@@ -28,17 +28,17 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 .on-light .fs-btn{border-color:var(--line);color:var(--ink-m);background:#fff}
 .fs-btn:hover{border-color:var(--ac);color:var(--ac)}.fs-btn svg{width:15px;height:15px;pointer-events:none}
 /* ═══ FIXED SCENE FRAME: title/motif stay, only .zone changes ═══ */
-.scene{flex:1;min-height:0;position:relative;display:grid;grid-template-columns:minmax(300px,34%) 1fr;gap:2vw;padding:2vh 5vw;overflow:hidden}
+.scene{flex:1;min-height:0;position:relative;display:grid;grid-template-columns:minmax(210px,22%) 1fr;gap:3vw;padding:2vh 4vw 2vh 5vw;overflow:hidden}
 /* left rail: scene anchor (title + eyebrow + motif + caption) — persists across beats */
 .rail{display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
-.rail .eyebrow{font:700 13px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ac);margin-bottom:16px}
+.rail .eyebrow{font:700 11px/1 var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--ac);margin-bottom:12px}
 .stage.light .rail .eyebrow{color:var(--acd)}
-.rail h1{font-family:var(--disp);font-weight:600;font-size:clamp(30px,3.6vw,50px);line-height:1.06;letter-spacing:-.02em;margin-bottom:20px;max-width:14ch;transition:opacity .4s}
+.rail h1{font-family:var(--disp);font-weight:600;font-size:clamp(21px,2.1vw,30px);line-height:1.12;letter-spacing:-.01em;margin-bottom:14px;max-width:16ch;transition:opacity .4s}
 .stage.light .rail h1{color:var(--ink)}
-.rail .r-intro{font-size:clamp(15px,1.3vw,18px);line-height:1.6;color:var(--tm);max-width:34ch}
+.rail .r-intro{font-size:clamp(13px,1vw,15px);line-height:1.55;color:var(--tm);max-width:30ch}
 .stage.light .rail .r-intro{color:var(--ink-m)}
-.rail-motif{margin-top:30px;display:flex;align-items:center;gap:14px}
-.rail-motif svg{width:56px;height:auto;flex:none}
+.rail-motif{margin-top:22px;display:flex;align-items:center;gap:12px}
+.rail-motif svg{width:44px;height:auto;flex:none}
 .rail-motif .rm-cap{font:700 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--tf)}
 .stage.light .rail-motif .rm-cap{color:var(--ink-f)}
 .m-shell{transform-origin:center;animation:breathe 7s ease-in-out infinite}@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
@@ -188,32 +188,32 @@ function term(t,key){const D={
 
 /* ===== 4 SCENES, trimmed to the bone, each beat = a decision or an action ===== */
 const SCENES=[
-{label:'The Breach',eyebrow:'True Story',title:'The $2.4B Password',intro:'A real 2024 breach that began with one password. We\u2019ll look at what happened and what would have prevented it.',motif:'crack',cap:'Breach',bg1:'dark',
+{label:'The Breach',eyebrow:'True Story',title:'The $2.4B Password',intro:'How one reused password led to the 2024 Change Healthcare breach.',motif:'crack',cap:'Breach',bg1:'dark',
  zones:[
   {bg:'dark',type:'story',html:`<div class="big">$2.4B</div><p class="lead">In 2024 an attacker got one employee\u2019s login at Change Healthcare — a third of all U.S. patient records flow through it. ${term('MFA','mfa')} wasn\u2019t on, so he just logged in.</p><p class="lead">Nine days later he installed ${term('ransomware','ransomware')}. Pharmacies couldn\u2019t fill prescriptions. Damage: <strong>$2.4 billion</strong>.</p><p class="dim">Next you\u2019ll go through the attack step by step and see where it could have been stopped.</p>`,btn:'Walk the attack →'},
   {bg:'light',type:'predict'}
  ]},
-{label:'Spot It',eyebrow:'Your turn',title:'Two messages',intro:'Two messages you could realistically get at work. Decide how you\u2019d handle each one.',motif:'eye',cap:'Spot it',bg1:'light',
+{label:'Spot It',eyebrow:'Your turn',title:'Spotting scams',intro:'Two everyday work messages. Decide how you\u2019d respond to each.',motif:'eye',cap:'Spot it',bg1:'light',
  zones:[
   {bg:'light',type:'quiz',
    q:`Your CEO texts: \u201CIn a meeting. Buy 4 gift cards, $200 each, send the codes. Don\u2019t call.\u201D What\u2019s the red flag?`,
-   opts:['No company letterhead','It came after hours','Urgency + odd request + \u201Cdon\u2019t verify\u201D','CEO usually uses Slack'],correct:2,
+   opts:['The message has no company letterhead on it','Urgency, an odd request, and pressure not to check','The CEO would normally send this over Slack instead','It happened to arrive after normal office hours'],correct:1,
    expl:`Urgency + an unusual request (gift cards aren\u2019t how firms pay) + a block on checking = ${term('social engineering','se')}. Verify through a channel you trust — a known number, not the one that messaged you.`,
    tags:['Don\u2019t fall for fake','Verify through a known channel']},
   {bg:'light',type:'quiz',
    q:`You have MFA on. A push notification says \u201CApprove login\u201D — but you\u2019re not logging in. What do you do?`,
-   opts:['Approve — probably a glitch','Ignore and wait','Deny + change your password','Restart your phone'],correct:2,
+   opts:['Approve it — it\u2019s most likely just a glitch','Ignore the notification and wait to see','Deny it, then change your password','Restart your phone and then try again'],correct:2,
    expl:`Someone has your password and is trying right now. Deny blocks this attempt; changing your password stops the next. That push is your early warning — it means the password already leaked.`,
    tags:['One password, one account','Say something']}
  ]},
-{label:'Lock It In',eyebrow:'Make it real',title:'Turn these on',intro:'A few settings you can turn on today. Each one closes a common way in.',motif:'check',cap:'Lock in',bg1:'light',
+{label:'Lock It In',eyebrow:'Make it real',title:'Your settings',intro:'Settings to turn on today. Each closes a common way in.',motif:'check',cap:'Lock in',bg1:'light',
  zones:[
   {bg:'light',type:'action',zone:'\u26A1 Check them off as you go',
    check:['Turn on MFA for email + banking','Turn on automatic updates (OS, browser, phone)','Set phone auto-lock under 2 minutes','Save your IT security team\u2019s number'],
    note:`MFA alone blocks about 99% of automated login attempts. The others close common gaps.`,btn:'Almost done →'},
   {bg:'dark',type:'reflect',rq:`Has something ever felt \u201Coff\u201D online — and you went along with it anyway?`,rs:`Many people who get caught say they had a small doubt first. It’s worth pausing on that doubt and checking before you act.`,btn:'See your takeaways →'}
  ]},
-{label:'Foundation',eyebrow:'Module 1 complete',title:'The Foundation',intro:'A quick recap of what this module covered.',motif:'check',cap:'Done',bg1:'dark',
+{label:'Foundation',eyebrow:'Module 1 complete',title:'The Foundation',intro:'What this module covered.',motif:'check',cap:'Done',bg1:'dark',
  zones:[
   {bg:'dark',type:'summary',
    takeaways:['A single missing setting (MFA) was enough to cause the $2.4B Change Healthcare breach.','Most attacks reach you through a normal-looking message — checking the sender and the request catches them.','The core habits: turn on MFA, keep software updated, lock your devices, and verify unusual requests through a channel you trust.']}
@@ -227,24 +227,24 @@ const PA={
      ctx:'February 12, 2024. An employee at Change Healthcare reused their work password on some other website. That website was breached, and the password ended up on a list that attackers buy and sell. One of them now has a valid username and password for the company\u2019s remote-access system.',
      q:'The attacker has a real, working password. At this point, what actually stops him from logging in?',
      opts:[
-       ['Nothing stops him — without a second verification step, a valid password is all he needs to get in',1],
-       ['The company firewall notices the new login and automatically blocks it',0],
-       ['The IT team gets an alert about the login and phones him to check it\u2019s really him',0]],
+       ['Nothing — with no second verification step, a valid password is all he needs',1],
+       ['The company firewall spots the new login and automatically blocks it',0],
+       ['IT gets an alert about the login and calls him to confirm it\u2019s really him',0]],
      reveal:'Correct. A password on its own is a single lock. If that\u2019s the only thing guarding the door, a stolen password opens it — no alarms, no questions. He\u2019s inside within seconds, and to the system he looks exactly like a normal employee.'},
     {node:'2',crit:1,
      ctx:'He\u2019s now logged in as a real employee. Everything he does looks legitimate. This single moment is the one where the entire $2.4 billion breach could still have been prevented.',
      q:'There\u2019s one free setting that would have turned his stolen password into a dead end right here. Which one?',
      opts:[
-       ['Making everyone use a longer, more complex password',0],
-       ['Multi-factor authentication — a second step (a code or tap on the real employee\u2019s phone) that the attacker can\u2019t provide',1],
-       ['Installing antivirus software on every company laptop',0]],
+       ['A longer, more complex password policy for everyone',0],
+       ['Multi-factor authentication — a second phone step',1],
+       ['Antivirus software installed on every company laptop',0]],
      reveal:'This is the moment it all hinged on. Multi-factor authentication takes about a minute to switch on and costs nothing. With it, a stolen password is useless — the attacker would also need the employee\u2019s phone. It simply wasn\u2019t turned on, so he walked right in.',isCrit:1},
     {node:'3',crit:0,
      ctx:'Over the next nine days he moves quietly through the network — copying databases, learning how everything connects, and staying out of sight. Nobody notices. Then he\u2019s ready to make his money.',
      q:'After more than a week inside undetected, what does the attacker do to actually profit?',
      opts:[
        ['Quietly logs out and leaves, having seen enough',0],
-       ['Locks the company\u2019s files with ransomware and demands a $22 million payment to unlock them',1],
+       ['Locks the files with ransomware and demands $22 million',1],
        ['Emails the whole company to warn them about the weak password',0]],
      reveal:'He deploys ransomware, which locks the company\u2019s systems all at once. Pharmacies can no longer process prescriptions and hospitals can\u2019t verify insurance. Between the ransom, the recovery, the fines and the lawsuits, the total cost passes $2.4 billion — all traceable to one reused password and one missing setting, nine days earlier.'}
   ]
