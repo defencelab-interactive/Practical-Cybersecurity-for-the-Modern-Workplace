@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defence Lab · Scroll Timeline Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ac:#34B77D;--acd:#2A9A66;--ac-soft:rgba(52,183,125,.12);
+  --gr:#2EAD6B;--gl:rgba(46,173,107,.14);--rd:#E0574F;--rl:rgba(224,87,79,.12);
+  --tw:#EDEFEC;--tm:rgba(237,239,236,.66);--tf:rgba(237,239,236,.36);
+  --paper:#FCFCFB;--ink:#1A1A1A;--ink-m:#55605A;--ink-f:#8A938E;--line:#E4E7E3;
+  --blue:#4E7CA8;
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smoothing:antialiased}
+.app{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden}
+/* top chrome */
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;flex:none;z-index:30}
+.brand{font-family:var(--disp);font-size:18px;font-weight:600}.brand span{color:var(--ac)}
+.chip{font:700 12px var(--mono);color:var(--ac);background:var(--ac-soft);border-radius:20px;padding:6px 13px}
+.top-right{display:flex;gap:10px;align-items:center}
+.fs-btn{width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:var(--tm);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.fs-btn svg{width:15px;height:15px}
+/* body: rail (fixed) + scroll area */
+.stage{flex:1;min-height:0;display:grid;grid-template-columns:280px 1fr}
+.rail{padding:0 34px 0 40px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid rgba(255,255,255,.08);
+  background:radial-gradient(120% 80% at 0% 30%,rgba(46,150,110,.14),transparent 60%)}
+.rail .eyebrow{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ac);margin-bottom:14px}
+.rail h1{font-family:var(--disp);font-weight:600;font-size:clamp(26px,2.4vw,36px);line-height:1.08;letter-spacing:-.02em;margin-bottom:16px}
+.rail .r-sub{font-size:14px;line-height:1.55;color:var(--tm);margin-bottom:26px}
+.rail .sh{width:46px;height:auto;margin-bottom:12px}
+.rail .rprog{font:700 11px var(--mono);color:var(--tf);letter-spacing:.06em}
+.rail .rbar{height:5px;border-radius:3px;background:rgba(255,255,255,.12);margin-top:10px;overflow:hidden}
+.rail .rbar i{display:block;height:100%;background:var(--ac);width:8%;transition:width .4s}
+/* scroll area */
+.scroll{position:relative;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;
+  background:radial-gradient(90% 60% at 80% 0%,rgba(46,150,110,.10),transparent 55%),radial-gradient(80% 60% at 10% 100%,rgba(78,124,168,.10),transparent 60%),#161d19}
+.scroll::-webkit-scrollbar{width:8px}.scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:4px}
+.track{position:relative;max-width:760px;margin:0 auto;padding:10vh 40px 40vh}
+/* the vertical spine */
+.spine{position:absolute;left:60px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.14) 6%,rgba(255,255,255,.14) 94%,transparent)}
+.spine-fill{position:absolute;left:60px;top:0;width:2px;background:var(--ac);height:0;transition:height .3s ease;box-shadow:0 0 10px rgba(52,183,125,.5)}
+/* nodes on the spine */
+.node{position:relative;padding-left:96px;margin-bottom:64px;opacity:.5;transform:translateY(0);transition:opacity .5s}
+.node.seen{opacity:1}
+.node .dot{position:absolute;left:52px;top:2px;width:20px;height:20px;border-radius:50%;background:#2a332e;border:2px solid rgba(255,255,255,.25);transition:all .35s;z-index:2}
+.node.seen .dot{background:var(--ac);border-color:var(--ac);box-shadow:0 0 0 5px rgba(52,183,125,.15)}
+.node.crit.seen .dot{background:var(--rd);border-color:var(--rd);box-shadow:0 0 0 5px rgba(224,87,79,.15)}
+.node .date{font:700 11px var(--mono);letter-spacing:.06em;color:var(--ac);text-transform:uppercase;margin-bottom:6px}
+.node.crit .date{color:var(--rd)}
+.node .beat{font-family:var(--disp);font-size:clamp(19px,1.7vw,24px);font-weight:600;color:var(--tw);line-height:1.3;margin-bottom:8px}
+.node .body{font-size:16px;line-height:1.65;color:var(--tm);max-width:600px}
+/* SPOT — interactive point that opens a question */
+.spot{margin-top:16px;max-width:600px}
+.spot-trigger{display:inline-flex;align-items:center;gap:10px;background:rgba(52,183,125,.1);border:1px solid rgba(52,183,125,.4);color:var(--ac);
+  font:600 14px var(--body);padding:11px 18px;border-radius:12px;cursor:pointer;transition:all .18s}
+.spot-trigger:hover{background:rgba(52,183,125,.18);transform:translateY(-1px)}
+.spot-trigger .pulse{width:9px;height:9px;border-radius:50%;background:var(--ac);animation:sppulse 1.8s ease-in-out infinite}
+@keyframes sppulse{0%,100%{opacity:.5;box-shadow:0 0 0 0 rgba(52,183,125,.5)}50%{opacity:1;box-shadow:0 0 0 6px rgba(52,183,125,0)}}
+.spot-trigger.q-exp{background:rgba(78,124,168,.1);border-color:rgba(78,124,168,.5);color:#7ba7d4}
+.spot-trigger.q-exp .pulse{background:#7ba7d4;box-shadow:none;animation:none}
+.spot-card{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:0 16px 40px rgba(0,0,0,.28);
+  max-height:0;opacity:0;overflow:hidden;transition:max-height .45s ease,opacity .35s ease,padding .3s;padding-top:0;padding-bottom:0}
+.spot-card.open{max-height:900px;opacity:1;padding-top:24px;padding-bottom:26px}
+.spot-q{font-family:var(--disp);font-size:19px;font-weight:600;color:var(--ink);line-height:1.35;margin-bottom:16px}
+.spot-opts{display:flex;flex-direction:column;gap:10px}
+.spot-opt{background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:13px 16px;font-size:15px;color:var(--ink);cursor:pointer;text-align:left;font-family:var(--body);transition:all .16s}
+.spot-opt:hover{border-color:var(--acd)}
+.spot-opt.correct{border-color:var(--gr);background:var(--gl)}
+.spot-opt.wrong{border-color:var(--rd);background:var(--rl)}
+.spot-fb{margin-top:14px;font-size:14.5px;line-height:1.6;color:var(--ink-m);border-top:1px solid var(--line);padding-top:14px;display:none}
+.spot-fb.show{display:block;animation:rise .4s}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.spot-fb .xpb{display:inline-block;font:700 11px var(--mono);color:var(--acd);background:rgba(46,173,107,.12);border-radius:20px;padding:3px 10px;margin-bottom:8px}
+.spot-fb b.v-ok{color:var(--gr)}.spot-fb b.v-no{color:var(--rd)}
+/* experience (reflection) spot */
+.spot-card.exp{border-color:rgba(78,124,168,.35);background:linear-gradient(180deg,#fbfcfd,#f6f9fc)}
+.exp-scale{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+.exp-btn{flex:1;min-width:90px;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:11px;font:600 13px var(--body);color:var(--ink-m);cursor:pointer;transition:all .15s}
+.exp-btn:hover{border-color:var(--blue)}.exp-btn.sel{border-color:var(--blue);background:rgba(78,124,168,.08);color:var(--blue)}
+.exp-note{margin-top:14px;font-size:14.5px;line-height:1.6;color:var(--ink-m);display:none}.exp-note.show{display:block;animation:rise .4s}
+/* scroll hint */
+.scroll-hint{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font:600 12px var(--body);color:var(--tf);display:flex;flex-direction:column;align-items:center;gap:4px;animation:bob 2s ease-in-out infinite;pointer-events:none;z-index:5}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(5px)}}
+.scroll-hint.hide{opacity:0;transition:opacity .4s}
+/* end card */
+.endcard{padding-left:96px;margin-top:20px}
+.endcard .ec{background:linear-gradient(170deg,rgba(52,183,125,.12),rgba(52,183,125,.04));border:1px solid rgba(52,183,125,.3);border-radius:16px;padding:24px 28px;max-width:600px}
+.endcard .ec h3{font-family:var(--disp);font-size:22px;font-weight:600;margin-bottom:10px}
+.endcard .ec p{font-size:15px;line-height:1.6;color:var(--tm);margin-bottom:16px}
+.endcard .ec .nextbtn{background:var(--ac);color:#08130d;border:none;border-radius:11px;padding:12px 22px;font:600 15px var(--body);cursor:pointer}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><div class="brand">Defence<span>Lab</span></div>
+    <div class="top-right"><div class="chip" id="xp">0 XP</div>
+      <button class="fs-btn" onclick="fsT()"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="1,5 1,1 5,1"/><polyline points="9,1 13,1 13,5"/><polyline points="13,9 13,13 9,13"/><polyline points="5,13 1,13 1,9"/></svg></button>
+    </div>
+  </div>
+  <div class="stage">
+    <div class="rail">
+      <svg class="sh" viewBox="0 0 120 124"><path d="M60 6 L106 24 L106 66 Q106 104 60 120 Q14 104 14 66 L14 24 Z" fill="rgba(52,183,125,.06)" stroke="var(--ac)" stroke-width="3"/><path d="M60 30 L52 54 L66 62 L54 92" fill="none" stroke="var(--rd)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="eyebrow">Scene 1 · True Story</div>
+      <h1>The $2.4B Password</h1>
+      <div class="r-sub">Scroll down to walk the 2024 Change Healthcare breach — moment by moment. Tap the glowing points to make the calls yourself.</div>
+      <div class="rprog" id="rprog">0% explored</div>
+      <div class="rbar"><i id="rbar"></i></div>
+    </div>
+    <div class="scroll" id="scroll">
+      <div class="track" id="track">
+        <div class="spine"></div><div class="spine-fill" id="spineFill"></div>
+        <!-- nodes injected -->
+      </div>
+      <div class="scroll-hint" id="hint">scroll<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+  </div>
+</div>
+<script>
+const XPW={sure:3,pretty:2,guess:1};
+/* ===== SCENE 1 as a vertical timeline with spots ===== */
+const NODES=[
+ {date:'Feb 12, 2024',crit:0,beat:'A reused password shows up on a leak list',
+  body:'An employee reused their work password on another website. That site was breached, and the password ended up on a list attackers buy and sell. One of them now has a valid login for the company\u2019s remote-access system.',
+  spot:{type:'predict',q:'The attacker has a real, working password. What actually stops him from logging in?',
+    opts:[['Nothing — with no second verification step, a valid password is all he needs',1],['The company firewall spots the new login and blocks it',0],['IT gets an alert and calls him to confirm it\u2019s really him',0]],
+    fb:'A password on its own is a single lock. With nothing behind it, a stolen password just opens the door — no alarms, no questions.'}},
+ {date:'Feb 12, 2024',crit:1,beat:'He logs in — and this is the moment it all hinged on',
+  body:'He\u2019s now inside, looking exactly like a normal employee. Everything he does from here looks legitimate.',
+  spot:{type:'predict',q:'One free setting would have turned his stolen password into a dead end right here. Which one?',
+    opts:[['A longer, more complex password policy for everyone',0],['Multi-factor authentication — a second phone step he can\u2019t fake',1],['Antivirus software on every company laptop',0]],
+    fb:'Multi-factor authentication takes about a minute to switch on and costs nothing. With it, a stolen password is useless — the attacker would also need the employee\u2019s phone. It simply wasn\u2019t on.'}},
+ {date:'Feb 12–21',crit:0,beat:'Nine quiet days inside',
+  body:'For over a week he moves through the network — copying databases, mapping how everything connects, staying out of sight. Nobody notices.',
+  spot:{type:'experience',q:'Be honest: how quickly do you think you\u2019d notice a quiet intruder in your own accounts?',
+    scale:['Right away','Eventually','Probably never'],
+    note:'Most intrusions go unnoticed for weeks. That\u2019s why the early settings — MFA, alerts, unique passwords — matter more than spotting the attacker after the fact.'}},
+ {date:'Feb 21',crit:1,beat:'Ransomware. Everything locks at once.',
+  body:'He deploys ransomware across the company. Pharmacies can no longer process prescriptions; hospitals can\u2019t verify insurance.',
+  spot:{type:'quiz',q:'You\u2019re an employee and a file called \u201Cinvoice.zip\u201D you didn\u2019t expect just downloaded. First move?',
+    opts:[['Open it to check whether it\u2019s real',0],['Delete it and empty the recycle bin',0],['Disconnect from the internet, then tell IT',1],['Run antivirus while staying online',0]],
+    fb:'Most malware needs to phone home to its server. Disconnecting breaks that link first; then let IT take over. Opening it may trigger it; deleting doesn\u2019t help if it\u2019s already running.'}},
+ {date:'Ongoing',crit:0,beat:'The bill: $2.4 billion',
+  body:'Between the ransom, the recovery, the fines and the lawsuits, the total cost passes $2.4 billion — all traceable to one reused password and one missing setting, nine days earlier.',
+  spot:null}
+];
+
+const scroll=document.getElementById('scroll'),track=document.getElementById('track'),spineFill=document.getElementById('spineFill');
+let xp=0;const addXP=n=>{xp+=n;document.getElementById('xp').textContent=xp+' XP';};
+
+// build nodes
+NODES.forEach((n,i)=>{
+  const el=document.createElement('div');el.className='node'+(n.crit?' crit':'');el.dataset.i=i;
+  let h=`<div class="dot"></div><div class="date">${n.date}</div><div class="beat">${n.beat}</div><div class="body">${n.body}</div>`;
+  if(n.spot){
+    const s=n.spot;const isExp=s.type==='experience';
+    h+=`<div class="spot"><button class="spot-trigger${isExp?' q-exp':''}" data-spot="${i}"><span class="pulse"></span>${isExp?'Your experience':(s.type==='quiz'?'Your call':'What happens next?')}</button>
+      <div class="spot-card${isExp?' exp':''}" id="card-${i}"><div class="spot-q">${s.q}</div>`;
+    if(isExp){
+      h+=`<div class="exp-scale">`+s.scale.map((x,j)=>`<button class="exp-btn" data-exp="${i}" data-j="${j}">${x}</button>`).join('')+`</div><div class="exp-note" id="note-${i}">${s.note}</div>`;
+    }else{
+      h+=`<div class="spot-opts">`+s.opts.map((o,j)=>`<button class="spot-opt" data-opt="${i}" data-j="${j}">${o[0]}</button>`).join('')+`</div>
+        <div class="spot-fb" id="fb-${i}"><span class="xpb" id="xpb-${i}"></span><div id="fbt-${i}"></div></div>`;
+    }
+    h+=`</div></div>`;
+  }
+  el.innerHTML=h;track.appendChild(el);
+});
+// end card
+const end=document.createElement('div');end.className='endcard';
+end.innerHTML=`<div class="ec"><h3>That\u2019s the whole chain.</h3><p>One reused password, one missing setting — and a $2.4B outcome nine days later. Next: the four habits that break this chain.</p><button class="nextbtn">Continue to Scene 2 →</button></div>`;
+track.appendChild(end);
+
+// spot open/close
+track.addEventListener('click',e=>{
+  const trig=e.target.closest('.spot-trigger');
+  if(trig){const i=trig.dataset.spot;const card=document.getElementById('card-'+i);card.classList.toggle('open');
+    if(card.classList.contains('open'))setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'center'}),80);return;}
+  const opt=e.target.closest('.spot-opt');
+  if(opt){const i=opt.dataset.opt,j=+opt.dataset.j;const s=NODES[i].spot;const fb=document.getElementById('fb-'+i);
+    if(fb.classList.contains('show'))return;
+    const ci=s.opts.findIndex(o=>o[1]===1);const ok=j===ci;
+    [...document.querySelectorAll('[data-opt="'+i+'"]')].forEach((o,m)=>{o.style.pointerEvents='none';if(m===ci)o.classList.add('correct');else if(m===j)o.classList.add('wrong');});
+    const g=ok?3:1;addXP(g);document.getElementById('xpb-'+i).textContent='+'+g+' XP';
+    document.getElementById('fbt-'+i).innerHTML=(ok?'<b class="v-ok">\u2713 That\u2019s right.</b> ':'<b class="v-no">\u2717 Not quite.</b> ')+s.fb;
+    fb.classList.add('show');markSeen(i);return;}
+  const eb=e.target.closest('.exp-btn');
+  if(eb){const i=eb.dataset.exp;[...document.querySelectorAll('[data-exp="'+i+'"]')].forEach(x=>x.classList.remove('sel'));eb.classList.add('sel');
+    document.getElementById('note-'+i).classList.add('show');if(!eb.dataset.c){eb.dataset.c=1;addXP(2);}markSeen(i);return;}
+});
+function markSeen(i){document.querySelector('.node[data-i="'+i+'"]').classList.add('seen');updateProgress();}
+
+// scroll progress + reveal + spine fill
+const nodesEls=[...document.querySelectorAll('.node')];
+function updateProgress(){
+  const seen=document.querySelectorAll('.node.seen').length;const pct=Math.round(seen/NODES.length*100);
+  document.getElementById('rbar').style.width=Math.max(8,pct)+'%';document.getElementById('rprog').textContent=pct+'% explored';
+}
+scroll.addEventListener('scroll',()=>{
+  const st=scroll.scrollTop,vh=scroll.clientHeight;
+  document.getElementById('hint').classList.toggle('hide',st>60);
+  // spine fill to current scroll
+  const trackTop=track.offsetTop;
+  spineFill.style.height=Math.min(track.scrollHeight,(st+vh*0.5))+'px';
+  // reveal nodes near viewport
+  nodesEls.forEach(n=>{const r=n.getBoundingClientRect();if(r.top<vh*0.8)n.classList.add('seen');});
+  updateProgress();
+});
+// initial reveal for first node
+nodesEls[0].classList.add('seen');updateProgress();
+function fsT(){const el=document.documentElement;if(!document.fullscreenElement){el.requestFullscreen&&el.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();}}
+</script>
+</body></html>
