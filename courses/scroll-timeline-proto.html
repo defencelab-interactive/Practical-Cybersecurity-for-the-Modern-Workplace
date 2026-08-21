@@ -120,6 +120,7 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 .cl-how .clinks{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
 .cl-how .clinks a{font:600 13px var(--body);color:var(--acd);text-decoration:none;background:var(--gl);border:1px solid rgba(46,173,107,.3);border-radius:9px;padding:8px 12px;transition:all .15s}
 .cl-how .clinks a:hover{background:var(--acd);color:#fff}
+.cl-itnote{font-size:13px;line-height:1.5;color:var(--ink-f);background:rgba(78,124,168,.08);border-radius:9px;padding:9px 12px;margin-bottom:12px}
 .cl-done{background:var(--acd);color:#fff;border:none;border-radius:9px;font:600 13px var(--body);padding:9px 16px;cursor:pointer}
 .cl-done:hover{background:var(--gr)}
 .cl-gate{margin-top:14px;font:600 13px var(--body);color:var(--tf);display:flex;align-items:center;gap:8px}
@@ -202,18 +203,20 @@ const NODES=[
     items:[
       {topic:'mfa',t:'Turn on multi-factor authentication for email + banking',
        how:'Add a second step (a code or tap on your phone) so a stolen password isn\u2019t enough on its own.',
-       steps:['Open your account\u2019s Security settings','Find \u201C2-Step Verification\u201D or \u201CMulti-factor authentication\u201D','Turn it on and follow the prompts (authenticator app is safest)'],
-       links:[['Google account','https://myaccount.google.com/signinoptions/two-step-verification'],['Microsoft account','https://account.microsoft.com/security']]},
+       steps:['Open your account\u2019s security settings','Find \u201C2-Step Verification\u201D or \u201CMulti-factor authentication\u201D','Turn it on \u2014 an authenticator app is safest, an SMS code is fine to start'],
+       itnote:'Using company accounts? Your IT team can point you to the exact steps for your setup.'},
       {topic:'file',t:'Make \u201Cverify before opening\u201D your default for files & links',
        how:'A file or link you didn\u2019t expect is the most common way in. Check before you click, even if it looks like it\u2019s from someone you know.',
-       steps:['Hover a link (or long-press on mobile) to see where it really goes','Didn\u2019t expect the file? Confirm with the sender through another channel first','If it feels off, don\u2019t open it — send it to IT']},
+       steps:['Hover a link (or long-press on mobile) to see where it really goes','Didn\u2019t expect the file? Confirm with the sender through another channel first','If it still feels off, don\u2019t open it \u2014 report it'],
+       itnote:'Your company may have a specific way to report suspicious messages \u2014 check with IT.'},
       {topic:'update',t:'Turn on automatic updates (computer, phone, browser)',
        how:'Updates quietly close the exact security holes attackers rely on. Automatic means you never have to remember.',
-       steps:['Phone: Settings \u2192 Software Update \u2192 turn on Automatic Updates','Computer: enable auto-updates in system settings','Browser: it usually updates on restart — restart it now'],
-       links:[['How to enable auto-updates','https://www.cisa.gov/secure-our-world/update-software']]},
+       steps:['Phone: look under Settings for Software Update and enable automatic updates','Computer: enable automatic updates in system settings','Browser: it usually updates on restart \u2014 restart it today'],
+       itnote:'On a managed work device, updates may be handled for you \u2014 IT can confirm.'},
       {topic:'report',t:'Save your IT / security team\u2019s contact in your phone',
        how:'When something looks wrong, the fastest responses come from people who already knew who to call.',
-       steps:['Find your IT or security team\u2019s email/number (intranet or a colleague)','Save it as a contact now','Note how to report something after hours']}
+       steps:['Find your IT or security team\u2019s email or number','Save it as a contact in your phone now','Note how to reach them after hours'],
+       itnote:'Not sure who that is? Ask a colleague or check your company intranet.'}
     ]}}
 ];
 
@@ -233,10 +236,10 @@ NODES.forEach((n,i)=>{
           <div class="cl-row"><div class="cl-box" data-check="${i}-${j}">\u2713</div><div class="cl-t">${it.t}</div><div class="cl-flag">start here</div><button class="cl-toggle" data-how="${i}-${j}">How ▾</button></div>`;
         h+=`<div class="cl-how" id="how-${i}-${j}"><p class="chow">${it.how}</p>`;
         if(it.steps){h+='<ol class="csteps">'+it.steps.map(x=>`<li>${x}</li>`).join('')+'</ol>';}
-        if(it.links){h+='<div class="clinks">'+it.links.map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${l[0]} ↗</a>`).join('')+'</div>';}
-        h+=`<button class="cl-done" data-done="${i}-${j}">Mark as done \u2713</button></div></div>`;
+        if(it.itnote){h+=`<div class="cl-itnote">\u2139\uFE0F ${it.itnote}</div>`;}
+        h+=`<button class="cl-done" data-done="${i}-${j}">I\u2019ll do this \u2713</button></div></div>`;
       });
-      h+=`</div><div class="cl-gate" id="gate-${i}">Complete all four to finish this scene.</div></div>`;
+      h+=`</div><div class="cl-gate" id="gate-${i}">Mark all four to finish this scene.</div></div>`;
     } else {
       h+=`<div class="spot"><button class="spot-trigger${isExp?' q-exp':''}" data-spot="${i}"><span class="pulse"></span>${isExp?'Your experience':(s.type==='quiz'?'Your call':'What happens next?')}</button>
         <div class="spot-card${isExp?' exp':''}" id="card-${i}"><div class="spot-q">${s.q}</div>`;
@@ -283,7 +286,7 @@ track.addEventListener('click',e=>{
   const done=e.target.closest('.cl-done');
   if(done){const id=done.dataset.done;const item=done.closest('.cl-item');
     if(!item.classList.contains('on')){item.classList.add('on');item.dataset.c=1;addXP(1);}
-    const how=document.getElementById('how-'+id);how.classList.remove('open');const tg=item.querySelector('.cl-toggle');if(tg)tg.textContent='Done \u2713';
+    const how=document.getElementById('how-'+id);how.classList.remove('open');const tg=item.querySelector('.cl-toggle');if(tg)tg.textContent='Planned \u2713';
     checkChecklistDone(item.dataset.cl);return;}
   // clicking the box itself also toggles done (quick check)
   const box=e.target.closest('.cl-box');
@@ -314,7 +317,7 @@ function checkChecklistDone(i){
   const items=[...document.querySelectorAll('[data-cl="'+i+'"]')];
   const done=items.filter(x=>x.classList.contains('on')).length;
   const gate=document.getElementById('gate-'+i);
-  if(gate){if(done===items.length){gate.textContent='\u2713 All set — scene unlocked below.';gate.classList.add('done');}else{gate.textContent=`${done} of ${items.length} done — complete all to finish this scene.`;}}
+  if(gate){if(done===items.length){gate.textContent='\u2713 Added to your plan — scene unlocked below.';gate.classList.add('done');}else{gate.textContent=`${done} of ${items.length} added — mark all to finish this scene.`;}}
   if(done===items.length)unlockNext(+i);
 }
 const nodesEls=[...document.querySelectorAll('.node')];
