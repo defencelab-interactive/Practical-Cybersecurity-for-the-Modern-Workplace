@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defence Lab · Link Inspector</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#34B77D;--acd:#2A9A66;--td:#1A1A1A;--tb:#4A4844;--mu:#8a8884;--paper:#F2F5F2;--paper2:#E8EEEC;--line:#dce4e0;
+  --sh:0 3px 8px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);--hi:inset 0 1.5px 0 rgba(255,255,255,1);
+  --blue:#4E7CA8;--rd:#C0392B;--rdl:rgba(192,57,43,.09);--am:#B07A1E;--aml:rgba(176,122,30,.1);
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:var(--body);color:var(--td);min-height:100%;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(70% 50% at 12% 6%,rgba(52,183,125,.16),transparent 52%),
+    radial-gradient(80% 60% at 92% 30%,rgba(78,124,168,.14),transparent 58%),
+    radial-gradient(60% 45% at 55% 40%,rgba(255,255,255,.5),transparent 60%),
+    linear-gradient(160deg,#eef2ee,#e4ebeb)}
+.wrap{max-width:920px;margin:0 auto;padding:40px 32px 80px}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.eyebrow{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acd);margin-bottom:12px}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(28px,4vw,42px);line-height:1.05;letter-spacing:-.02em;margin-bottom:14px}
+.lede{font-size:17px;line-height:1.6;color:var(--tb);max-width:62ch}
+.chip{font:700 12px var(--mono);color:var(--acd);background:rgba(52,183,125,.12);border-radius:20px;padding:6px 13px;white-space:nowrap;flex:none}
+.note{display:flex;gap:11px;align-items:flex-start;background:rgba(78,124,168,.09);border:1px solid rgba(78,124,168,.25);border-radius:13px;padding:14px 18px;margin:22px 0 26px;font-size:14.5px;line-height:1.55;color:var(--tb)}
+.note b{color:var(--td)}
+/* input */
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px;box-shadow:var(--sh),var(--hi)}
+.flab{font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mu);display:block;margin-bottom:7px}
+.inp{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:13px 15px;font:500 15px var(--mono);color:var(--td);background:var(--paper);outline:none;transition:border .15s}
+.inp:focus{border-color:var(--acd);background:#fff}
+.inp::placeholder{color:#b3b8b4;font-family:var(--body);font-weight:400}
+.optional{margin-top:16px}
+.optional .hintline{font-size:13px;color:var(--mu);margin-top:6px;line-height:1.5}
+.go{margin-top:16px;background:var(--acd);color:#fff;border:none;border-radius:11px;padding:13px 26px;font:600 15px var(--body);cursor:pointer;transition:background .15s}
+.go:hover{background:var(--ac)}
+.clr{background:none;border:1px solid var(--line);color:var(--mu);border-radius:11px;padding:13px 18px;font:600 14px var(--body);cursor:pointer;margin-left:8px}
+.clr:hover{border-color:var(--mu)}
+/* examples */
+.egs{margin-top:22px}
+.egs .flab{margin-bottom:9px}
+.egrow{display:flex;flex-wrap:wrap;gap:8px}
+.eg{background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:8px 13px;font:500 12.5px var(--mono);color:var(--tb);cursor:pointer;box-shadow:var(--sh);transition:all .15s}
+.eg:hover{border-color:var(--acd);color:var(--acd)}
+/* result */
+.res{margin-top:26px;display:none}
+.res.on{display:block;animation:rise .35s}
+@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.verdict{background:#fff;border:1px solid var(--line);border-left:4px solid var(--mu);border-radius:14px;padding:20px 24px;box-shadow:var(--sh),var(--hi);margin-bottom:16px}
+.verdict.flagged{border-left-color:var(--rd)}
+.verdict.clean{border-left-color:var(--acd)}
+.v-lab{font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.v-dom{font-family:var(--mono);font-weight:700;font-size:clamp(20px,3.2vw,29px);line-height:1.25;word-break:break-all;letter-spacing:-.01em}
+.v-dec{font-family:var(--mono);font-size:14px;color:var(--rd);margin-top:6px}
+.v-dec b{font-weight:700}
+.v-sub{font-size:14.5px;line-height:1.6;color:var(--tb);margin-top:11px}
+/* host breakdown */
+.hostbox{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin-top:15px;font-family:var(--mono);font-size:15.5px;word-break:break-all;line-height:1.7}
+.hl-scheme{color:var(--mu)}
+.hl-sub{color:var(--mu)}
+.hl-dom{color:var(--td);font-weight:700;background:rgba(52,183,125,.16);border-radius:4px;padding:1px 3px}
+.hl-dom.bad{background:rgba(192,57,43,.13)}
+.hl-path{color:var(--mu)}
+.hl-user{color:var(--rd);font-weight:700;background:var(--rdl);border-radius:4px;padding:1px 3px}
+.hostlab{font:700 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+/* findings */
+.sect-h{font-family:var(--disp);font-size:19px;font-weight:600;margin:24px 0 11px}
+.finds{display:flex;flex-direction:column;gap:10px}
+.f{display:flex;gap:13px;background:#fff;border:1px solid var(--line);border-left:3px solid var(--mu);border-radius:12px;padding:14px 17px;box-shadow:var(--sh)}
+.f.flag{border-left-color:var(--rd)}
+.f.warn{border-left-color:var(--am)}
+.f.ok{border-left-color:var(--acd)}
+.f-tag{font:700 10px var(--mono);letter-spacing:.07em;text-transform:uppercase;flex:none;padding-top:3px;width:52px;color:var(--mu)}
+.f.flag .f-tag{color:var(--rd)}.f.warn .f-tag{color:var(--am)}.f.ok .f-tag{color:var(--acd)}
+.f-body{flex:1}
+.f-t{font-size:15px;font-weight:600;margin-bottom:3px}
+.f-d{font-size:14px;line-height:1.55;color:var(--tb)}
+.f-d code{font-family:var(--mono);font-size:13px;background:var(--paper2);border-radius:4px;padding:1px 5px}
+/* limits + how-to */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+@media(max-width:760px){.cols{grid-template-columns:1fr}.wrap{padding:28px 20px 60px}}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 21px;box-shadow:var(--sh),var(--hi)}
+.card h3{font-family:var(--disp);font-size:17px;font-weight:600;margin-bottom:9px}
+.card p,.card li{font-size:14.5px;line-height:1.6;color:var(--tb)}
+.card ul{margin:0;padding-left:19px}
+.card li{margin-bottom:5px}
+.warnbox{background:var(--aml);border:1px solid rgba(176,122,30,.3);border-radius:13px;padding:15px 19px;margin-top:16px;font-size:14.5px;line-height:1.6;color:var(--tb)}
+.warnbox b{color:var(--td)}
+.foot{margin-top:32px;font-size:13px;color:var(--mu);line-height:1.6;border-top:1px solid var(--line);padding-top:18px}
+.err{color:var(--rd);font-size:14.5px;margin-top:12px;display:none}
+.err.on{display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Security Byte · Phishing</div>
+      <h1>Link Inspector</h1>
+      <p class="lede">Paste a link you are unsure about and see where it actually goes. The address bar hides the part that matters, and most link tricks work by putting a name you trust somewhere it has no authority.</p>
+    </div>
+    <div class="chip">~3 min</div>
+  </div>
+
+  <div class="note"><span>🔒</span><div><b>Nothing leaves this page.</b> The link is taken apart in your browser using code that is already in this file. No request is made, the page is not opened, and nothing is logged or sent anywhere — so a link from a work inbox is safe to paste here.</div></div>
+
+  <div class="panel">
+    <label class="flab" for="u">The link</label>
+    <input class="inp" id="u" placeholder="Paste or type a URL — right-click a link and choose Copy link address" autocomplete="off" spellcheck="false">
+    <div class="optional">
+      <label class="flab" for="t">What the link says it is (optional)</label>
+      <input class="inp" id="t" placeholder="e.g. amazon.com/verify" autocomplete="off" spellcheck="false">
+      <div class="hintline">The visible text of a link and its real destination are two separate things. Fill this in to compare them.</div>
+    </div>
+    <button class="go" id="go">Inspect</button><button class="clr" id="clr">Clear</button>
+    <div class="err" id="err"></div>
+  </div>
+
+  <div class="egs">
+    <span class="flab">Or try one of these</span>
+    <div class="egrow" id="egrow"></div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="verdict" id="verdict">
+      <div class="v-lab">This link goes to</div>
+      <div class="v-dom" id="vdom"></div>
+      <div class="v-dec" id="vdec" style="display:none"></div>
+      <div class="v-sub" id="vsub"></div>
+      <div class="hostbox"><div class="hostlab">How it breaks down</div><div id="hostline"></div></div>
+    </div>
+    <div class="sect-h" id="findh">What stands out</div>
+    <div class="finds" id="finds"></div>
+    <div class="warnbox"><b>No flags is not the same as safe.</b> This page only reads the address. It knows nothing about who owns the domain, when it was registered, or what the page does once it loads. A brand-new domain built for one campaign can look perfectly ordinary here. If a message is asking you for money, credentials or access, the address is never the whole check — confirm it with the sender on a channel you chose.</div>
+  </div>
+
+  <div class="cols">
+    <div class="card">
+      <h3>Checking without this page</h3>
+      <ul>
+        <li><b>Desktop:</b> hover over the link and read the preview in the bottom-left corner of the browser.</li>
+        <li><b>Phone:</b> press and hold the link until a preview appears, then dismiss it.</li>
+        <li>Read the domain <b>right to left</b>: find the last two parts before the first single slash. That is the site you are visiting.</li>
+        <li>Everything to the left of it is chosen by whoever owns that domain, and can say anything at all.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Where the name goes</h3>
+      <p>In <code style="font-family:var(--mono);font-size:13px">dropbox.secure-files.com</code> the site is <b>secure-files.com</b>. In <code style="font-family:var(--mono);font-size:13px">www.dropbox.com/share</code> the site is <b>dropbox.com</b>. Same word, completely different owner — the only thing that changed is which side of the last dot it sits on.</p>
+    </div>
+  </div>
+
+  <div class="foot">Domain boundaries are worked out from a shortened list of public suffixes covering common endings such as .com, .co.uk and .com.ua. Unusual national suffixes may be split one label off — when in doubt, treat the highlighted part as approximate and read the full host yourself. Part of Defence Lab · pairs with the course <i>The 4:47 PM Email</i>.</div>
+</div>
+
+<script>
+/* ── shortened public suffix list: multi-label endings that need special handling ── */
+const MULTI=new Set(('co.uk ac.uk gov.uk org.uk net.uk sch.uk me.uk ltd.uk plc.uk nhs.uk police.uk mod.uk '+
+'com.ua net.ua org.ua in.ua kiev.ua co.ua edu.ua gov.ua '+
+'com.au net.au org.au edu.au gov.au id.au asn.au '+
+'co.nz net.nz org.nz govt.nz ac.nz school.nz '+
+'co.jp ne.jp or.jp ac.jp go.jp ad.jp lg.jp '+
+'com.cn net.cn org.cn gov.cn edu.cn ac.cn '+
+'com.br net.br org.br gov.br edu.br '+
+'com.mx org.mx gob.mx com.ar net.ar org.ar gob.ar com.co net.co gov.co edu.co '+
+'co.za org.za net.za gov.za ac.za web.za '+
+'com.tr net.tr org.tr gov.tr edu.tr bel.tr k12.tr '+
+'com.sg edu.sg gov.sg net.sg org.sg com.my net.my org.my gov.my edu.my '+
+'com.hk org.hk net.hk gov.hk edu.hk idv.hk co.kr or.kr ne.kr go.kr re.kr pe.kr '+
+'com.tw org.tw net.tw gov.tw edu.tw idv.tw '+
+'co.in net.in org.in gen.in firm.in ind.in gov.in ac.in edu.in res.in nic.in '+
+'com.pk net.pk org.pk gov.pk edu.pk com.bd net.bd org.bd gov.bd '+
+'com.ph net.ph org.ph gov.ph edu.ph co.id or.id ac.id go.id web.id my.id biz.id '+
+'com.vn net.vn org.vn gov.vn edu.vn co.th in.th ac.th go.th or.th '+
+'com.sa net.sa org.sa gov.sa edu.sa com.eg net.eg org.eg gov.eg edu.eg '+
+'com.ng net.ng org.ng gov.ng edu.ng co.ke or.ke ac.ke go.ke co.tz or.tz ac.tz '+
+'com.pl net.pl org.pl gov.pl edu.pl waw.pl krakow.pl wroclaw.pl '+
+'com.ru net.ru org.ru edu.ru gov.ru msk.ru spb.ru com.by com.kz org.kz '+
+'com.es nom.es org.es gob.es edu.es com.pt net.pt org.pt gov.pt edu.pt '+
+'com.gr net.gr org.gr gov.gr edu.gr com.cy net.cy org.cy gov.cy ac.cy '+
+'com.hr com.ro net.ro org.ro nom.ro info.ro store.ro tm.ro '+
+'co.il net.il org.il ac.il gov.il muni.il idf.il '+
+'com.ge org.ge net.ge edu.ge gov.ge com.am com.az com.md '+
+'co.at or.at ac.at gv.at priv.at co.hu info.hu org.hu priv.hu sport.hu '+
+'gov.it edu.it co.ve com.ve net.ve org.ve com.pe net.pe org.pe gob.pe '+
+'com.uy net.uy org.uy gub.uy com.ec net.ec org.ec gob.ec fin.ec med.ec '+
+'com.bo org.bo net.bo gob.bo com.py org.py net.py gov.py com.do org.do net.do gob.do '+
+'com.gt org.gt net.gt gob.gt com.pa net.pa org.pa com.ni org.ni net.ni gob.ni '+
+'com.cu com.jm com.tt co.cr ac.cr go.cr or.cr sa.cr fi.cr '+
+'co.ug or.ug ac.ug go.ug co.zm org.zm com.gh org.gh edu.gh gov.gh '+
+'com.et org.et net.et gov.et edu.et co.ao it.ao ed.ao gv.ao og.ao pb.ao '+
+'com.mt net.mt org.mt edu.mt gov.mt com.is net.is org.is edu.is gov.is '+
+'github.io gitlab.io pages.dev workers.dev netlify.app vercel.app herokuapp.com '+
+'firebaseapp.com web.app azurewebsites.net cloudfront.net amazonaws.com appspot.com '+
+'blogspot.com wordpress.com weebly.com wixsite.com squarespace.com sites.google.com '+
+'r2.dev s3.amazonaws.com storage.googleapis.com').split(/\s+/).filter(Boolean));
+
+/* brands whose names commonly get planted in the wrong place */
+const BRANDS=['google','microsoft','office365','office','outlook','onedrive','sharepoint','apple','icloud',
+'amazon','aws','paypal','netflix','facebook','instagram','whatsapp','linkedin','twitter','dropbox','docusign',
+'adobe','dhl','fedex','ups','usps','royalmail','hmrc','irs','chase','wellsfargo','hsbc','barclays','santander',
+'revolut','monzo','binance','coinbase','metamask','steam','spotify','zoom','slack','github','gitlab','okta',
+'sap','oracle','salesforce','intuit','quickbooks','stripe','shopify','ebay','alibaba','booking','airbnb','uber','telegram','signal'];
+
+const SHORTENERS=new Set(['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','is.gd','buff.ly','cutt.ly','rebrand.ly',
+'shorturl.at','rb.gy','t.ly','tiny.cc','bl.ink','lnkd.in','trib.al','soo.gd','clck.ru','v.gd','shorte.st','adf.ly','s.id','urlz.fr','vk.cc','qps.ru','clc.to']);
+
+const RISKY_EXT=['exe','scr','bat','cmd','com','pif','msi','vbs','js','jar','ps1','apk','dmg','iso','img','zip','rar','7z','gz','hta','lnk','reg','wsf','docm','xlsm','pptm'];
+
+const EXAMPLES=[
+ ['Text says one thing','https://dbx-secure-files.com/d/8k2m','dropbox.com'],
+ ['Brand in the wrong place','https://dropbox.secure-files-login.com/share/q3-budget',''],
+ ['The @ trick','https://www.paypal.com@account-verify.net/login',''],
+ ['Punycode lookalike','https://xn--pypal-4ve.com/signin',''],
+ ['Character swap','http://amaz0n-verify.net/secure/login',''],
+ ['A file, not a page','https://cdn-invoice-share.com/INV-4471.zip',''],
+ ['A genuine one','https://www.dropbox.com/scl/fi/8k2m/report.pdf','']
+];
+
+const $=id=>document.getElementById(id);
+
+/* ── parse ── */
+function registrable(host){
+  if(looksLikeIP(host))return{dom:host,sub:''};
+  const p=host.split('.').filter(Boolean);
+  if(p.length<=2)return{dom:host,sub:''};
+  for(let take=3;take>=2;take--){
+    if(p.length<take)continue;
+    const cand=p.slice(-(take-1)).join('.');
+    if(take===3&&MULTI.has(cand))return{dom:p.slice(-3).join('.'),sub:p.slice(0,-3).join('.')};
+  }
+  return{dom:p.slice(-2).join('.'),sub:p.slice(0,-2).join('.')};
+}
+function looksLikeIP(h){return /^\d{1,3}(\.\d{1,3}){3}$/.test(h)||(/^\[?[0-9a-f:]+\]?$/i.test(h)&&h.includes(':'));}
+/* RFC 3492 punycode decode — so an xn-- label can be shown as the characters it stands for */
+function adapt(delta,n,first){delta=first?Math.floor(delta/700):delta>>1;delta+=Math.floor(delta/n);
+  let k=0;while(delta>455){delta=Math.floor(delta/35);k+=36;}return k+Math.floor(36*delta/(delta+38));}
+function punyLabel(label){
+  if(!label.startsWith('xn--'))return label;
+  const input=label.slice(4);
+  try{
+    let out=[],i=0,n=128,bias=72;
+    let basic=input.lastIndexOf('-');if(basic<0)basic=0;
+    for(let j=0;j<basic;j++)out.push(input.charCodeAt(j));
+    for(let idx=basic>0?basic+1:0;idx<input.length;){
+      let oldi=i,w=1;
+      for(let k=36;;k+=36){
+        if(idx>=input.length)return label;
+        const c=input.charCodeAt(idx++);let digit;
+        if(c-48<10&&c>=48)digit=c-22;else if(c-65<26&&c>=65)digit=c-65;else if(c-97<26&&c>=97)digit=c-97;else return label;
+        i+=digit*w;
+        const t=k<=bias?1:(k>=bias+26?26:k-bias);
+        if(digit<t)break;
+        w*=36-t;
+      }
+      const len=out.length+1;
+      bias=adapt(i-oldi,len,oldi===0);
+      n+=Math.floor(i/len);i%=len;
+      out.splice(i++,0,n);
+    }
+    return String.fromCodePoint(...out);
+  }catch(e){return label;}
+}
+function punyHost(h){return h.split('.').map(punyLabel).join('.');}
+function hasMixedScript(s){
+  const latin=/[a-z]/i.test(s), cyr=/[\u0400-\u04FF]/.test(s), grk=/[\u0370-\u03FF]/.test(s);
+  return (latin&&cyr)||(latin&&grk)||(cyr&&grk);
+}
+function normalise(word){
+  return word.toLowerCase().replace(/0/g,'o').replace(/1/g,'l').replace(/3/g,'e').replace(/5/g,'s')
+    .replace(/7/g,'t').replace(/\$/g,'s').replace(/rn/g,'m').replace(/vv/g,'w').replace(/[^a-z]/g,'');
+}
+
+function inspect(raw,claimText){
+  const out={finds:[],dom:'',sub:'',ok:true};
+  let s=raw.trim();
+  if(!s)throw new Error('Paste a link first.');
+  if(/\s/.test(s))throw new Error('That contains spaces, so it is not a single link. Copy just the address — right-click the link and choose “Copy link address”.');
+  let noScheme=false;
+  if(!/^[a-z][a-z0-9+.-]*:/i.test(s)){s='http://'+s;noScheme=true;}
+  let u;
+  try{u=new URL(s);}catch(e){throw new Error('That does not parse as a web address. Copy the link itself rather than the text around it.');}
+
+  const scheme=u.protocol.replace(':','');
+  if(!['http','https'].includes(scheme)){
+    out.finds.push(['flag','Scheme','Not a web link',`This is a <code>${scheme}:</code> address, not an ordinary web page. Links using schemes like <code>javascript:</code>, <code>data:</code> or <code>file:</code> in an email are almost never legitimate.`]);
+  }
+
+  const host=u.hostname.toLowerCase();
+  if(!looksLikeIP(host)&&!host.includes('.'))throw new Error('That does not look like a web address — there is no domain in it. Copy the link itself rather than the text around it.');
+  const {dom,sub}=registrable(host);
+  out.dom=dom;out.sub=sub;out.host=host;out.scheme=scheme;out.port=u.port;
+  out.path=(u.pathname||'')+(u.search||'')+(u.hash||'');
+  out.user=(u.username||'')+(u.password?':'+u.password:'');
+
+  // 1. userinfo (@ trick)
+  if(u.username||u.password){
+    out.finds.push(['flag','Flag','Everything before the @ is ignored',
+      `Your browser reads <code>${escapeHtml(out.user)}</code> as a username and sends you to <b>${escapeHtml(dom)}</b>. Whatever is written before the @ has no effect on the destination — it is there to be read by you, not by the browser.`]);
+  }
+  // 2. IP literal
+  if(looksLikeIP(host)){
+    out.finds.push(['flag','Flag','A raw IP address instead of a name',
+      `This points at <code>${escapeHtml(host)}</code> directly. Real organisations use a domain name; a bare IP in a link from a company is a strong signal that something is wrong.`]);
+  }
+  // 3. punycode
+  const decoded=punyHost(host);
+  out.decoded=(decoded!==host)?decoded:'';
+  if(decoded!==host){
+    out.finds.push(['flag','Flag','Written in punycode',
+      `Labels beginning <code>xn--</code> hold non-Latin characters encoded for the address bar. This one decodes to <b>${escapeHtml(decoded)}</b> — which is what a browser will display, and it can be visually identical to an ordinary word. The encoded form is the honest one.`]);
+  }
+  // 4. mixed scripts (checked on the decoded form, where the trick actually lives)
+  if(hasMixedScript(decoded)){
+    out.finds.push(['flag','Flag','Mixed alphabets in the host',
+      'This host combines Latin letters with characters from another alphabet. Some of those characters are visually identical to Latin ones, which is the whole point of using them here.']);
+  }
+  // 5. brand planted to the left of the real domain
+  const domCore=dom.split('.')[0];
+  const subLabels=sub?sub.split('.'):[];
+  const planted=[];
+  BRANDS.forEach(b=>{
+    if(domCore.includes(b))return; // brand is genuinely in the registrable domain
+    if(subLabels.some(l=>l.includes(b))||domCore.split(/[-_]/).includes(b))planted.push(b);
+    else if(dom.includes(b)&&!domCore.startsWith(b))planted.push(b);
+  });
+  const uniq=[...new Set(planted)];
+  if(uniq.length){
+    out.finds.push(['flag','Flag','A familiar name in a place it does not control',
+      `“${uniq.map(escapeHtml).join('”, “')}” appears in this address, but the site you would actually visit is <b>${escapeHtml(dom)}</b>. Anyone who owns a domain can put any word to the left of it — that part costs nothing and proves nothing.`]);
+  }
+  // 6. brand-like domain via character substitution
+  let nearMiss=null,nearPart=null;
+  const parts=[domCore,...domCore.split(/[-_]/)].filter(Boolean);
+  parts.forEach(part=>{
+    if(nearMiss)return;
+    if(part.length<4)return;
+    const nb=normalise(part);
+    BRANDS.forEach(b=>{
+      if(nearMiss)return;
+      if(part===b||part.includes(b))return;   // genuinely contains the name, handled elsewhere
+      if(nb===b){nearMiss=b;nearPart=part;}
+    });
+  });
+  if(nearMiss){
+    out.finds.push(['flag','Flag','Characters swapped to imitate a name',
+      `<code>${escapeHtml(nearPart)}</code> reads as “${escapeHtml(nearMiss)}” once you undo the substitutions — digits standing in for letters, or <code>rn</code> where you expect an <code>m</code>. At a glance in a mail client the difference disappears.`]);
+  }
+  // 7. hyphenated brand-ish domain
+  if(!nearMiss&&!uniq.length){
+    const hb=BRANDS.find(b=>domCore.split(/[-_]/).includes(b)&&domCore!==b);
+    if(hb)out.finds.push(['warn','Check','A brand name with something bolted on',
+      `The domain is <b>${escapeHtml(dom)}</b> — the brand plus an extra word. Companies do register domains like this, and so does everyone else. Worth confirming against the address the company actually uses.`]);
+  }
+  // 8. shortener
+  if(SHORTENERS.has(dom)){
+    out.finds.push(['warn','Check','A link shortener hides the destination',
+      `<b>${escapeHtml(dom)}</b> is a redirect service, so this address says nothing about where you end up. Shorteners are used legitimately all the time — the issue is that you cannot check what is behind one without opening it.`]);
+  }
+  // 9. http
+  if(scheme==='http'&&!noScheme){
+    out.finds.push(['warn','Check','Not encrypted',
+      'This uses <code>http</code> rather than <code>https</code>, so anything typed on the page travels in the clear. Note that https on its own means very little — phishing pages get certificates as easily as anyone else.']);
+  }
+  // 10. unusual port
+  if(u.port&&!['80','443',''].includes(u.port)){
+    out.finds.push(['warn','Check','An unusual port',
+      `The address specifies port <code>${escapeHtml(u.port)}</code>. Normal web traffic uses 80 or 443; something else usually means a service that was not meant to be handed out in an email.`]);
+  }
+  // 11. risky file
+  const last=(u.pathname||'').split('/').pop()||'';
+  const ext=last.includes('.')?last.split('.').pop().toLowerCase():'';
+  if(RISKY_EXT.includes(ext)){
+    out.finds.push(['flag','Flag','It ends in a file, not a page',
+      `The link finishes with <code>.${escapeHtml(ext)}</code>, so it downloads a file rather than opening a page. Archives and installers arriving by link are worth treating as hostile until someone you trust confirms otherwise.`]);
+  }
+  // 12. very deep subdomain chain
+  if(subLabels.length>=4){
+    out.finds.push(['warn','Check','A long chain of subdomains',
+      `There are ${subLabels.length} labels in front of <b>${escapeHtml(dom)}</b>. Long chains are used to push the real domain off the edge of a phone screen, where only the first part is visible.`]);
+  }
+  // 13. claimed text mismatch
+  if(claimText&&claimText.trim()){
+    let ct=claimText.trim();
+    if(!/^[a-z][a-z0-9+.-]*:/i.test(ct))ct='http://'+ct;
+    let cdom='';
+    try{cdom=registrable(new URL(ct).hostname.toLowerCase()).dom;}catch(e){}
+    if(cdom&&cdom!==dom){
+      out.finds.push(['flag','Flag','The text and the destination disagree',
+        `The link presents itself as <b>${escapeHtml(cdom)}</b> but goes to <b>${escapeHtml(dom)}</b>. Link text is free-form writing; it has no connection to where the link points.`]);
+    }else if(cdom&&cdom===dom){
+      out.finds.push(['ok','OK','The text matches the destination',
+        `Both the visible text and the real address resolve to <b>${escapeHtml(dom)}</b>.`]);
+    }
+  }
+  // neutral observations
+  if(noScheme)out.finds.push(['ok','Note','No scheme was given',
+    'The address was pasted without <code>http://</code> or <code>https://</code>, so it was read as plain http for the purpose of taking it apart. That does not change which domain it points at.']);
+
+  out.ok=!out.finds.some(f=>f[0]==='flag');
+  return out;
+}
+
+function escapeHtml(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+/* ── render ── */
+function render(r){
+  $('vdom').textContent=r.dom||r.host;
+  const dl=$('vdec');
+  if(r.decoded){dl.innerHTML='shows in a browser as <b>'+escapeHtml(punyHost(r.dom))+'</b>';dl.style.display='block';}
+  else dl.style.display='none';
+  const flags=r.finds.filter(f=>f[0]==='flag').length;
+  const warns=r.finds.filter(f=>f[0]==='warn').length;
+  const v=$('verdict');
+  v.className='verdict '+(flags?'flagged':'clean');
+  let sub;
+  if(flags)sub=`This is the site you would land on — not necessarily the name written in the link. ${flags} thing${flags>1?'s':''} here ${flags>1?'are':'is'} worth a second look before you open it.`;
+  else if(warns)sub='This is the site you would land on. Nothing in the address is deceptive, though there are a couple of points worth reading below.';
+  else sub='This is the site you would land on, and the address itself is built the ordinary way.';
+  $('vsub').textContent=sub;
+
+  // host breakdown
+  let h='<span class="hl-scheme">'+escapeHtml(r.scheme)+'://</span>';
+  if(r.user)h+='<span class="hl-user">'+escapeHtml(r.user)+'@</span>';
+  if(r.sub)h+='<span class="hl-sub">'+escapeHtml(r.sub)+'.</span>';
+  h+='<span class="hl-dom'+(flags?' bad':'')+'">'+escapeHtml(r.dom)+'</span>';
+  if(r.port)h+='<span class="hl-sub">:'+escapeHtml(r.port)+'</span>';
+  if(r.path&&r.path!=='/')h+='<span class="hl-path">'+escapeHtml(r.path)+'</span>';
+  $('hostline').innerHTML=h;
+
+  const order={flag:0,warn:1,ok:2};
+  const list=[...r.finds].sort((a,b)=>order[a[0]]-order[b[0]]);
+  $('findh').textContent=list.length?'What stands out':'Nothing stands out in the address';
+  $('finds').innerHTML=list.map(f=>
+    `<div class="f ${f[0]}"><div class="f-tag">${escapeHtml(f[1])}</div><div class="f-body"><div class="f-t">${escapeHtml(f[2])}</div><div class="f-d">${f[3]}</div></div></div>`
+  ).join('')||'<div class="f ok"><div class="f-tag">OK</div><div class="f-body"><div class="f-t">The address is built normally</div><div class="f-d">No misdirection in how it is written. That says nothing about who owns the domain or what the page does — see the note below.</div></div></div>';
+  $('res').classList.add('on');
+}
+
+function run(){
+  $('err').classList.remove('on');
+  try{
+    const r=inspect($('u').value,$('t').value);
+    render(r);
+    $('res').scrollIntoView({behavior:'smooth',block:'nearest'});
+  }catch(e){
+    $('res').classList.remove('on');
+    $('err').textContent=e.message;$('err').classList.add('on');
+  }
+}
+$('go').addEventListener('click',run);
+$('u').addEventListener('keydown',e=>{if(e.key==='Enter')run();});
+$('t').addEventListener('keydown',e=>{if(e.key==='Enter')run();});
+$('clr').addEventListener('click',()=>{$('u').value='';$('t').value='';$('res').classList.remove('on');$('err').classList.remove('on');$('u').focus();});
+$('egrow').innerHTML=EXAMPLES.map((e,i)=>`<button class="eg" data-i="${i}">${escapeHtml(e[0])}</button>`).join('');
+$('egrow').addEventListener('click',e=>{const b=e.target.closest('.eg');if(!b)return;
+  const ex=EXAMPLES[+b.dataset.i];$('u').value=ex[1];$('t').value=ex[2]||'';run();});
+</script>
+</body></html>
