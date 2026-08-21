@@ -100,16 +100,30 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 .personal .p-weak li{font-size:15.5px;line-height:1.6;color:var(--tw);font-weight:600}
 .personal .p-strong{font-size:14px;color:var(--tm);margin-top:8px}
 .checklist{display:flex;flex-direction:column;gap:11px}
-.cl-item{display:flex;align-items:center;gap:14px;background:var(--paper);border:1.5px solid var(--line);border-radius:13px;padding:15px 18px;cursor:pointer;transition:all .16s;position:relative}
-.cl-item:hover{border-color:var(--acd)}
-.cl-box{width:24px;height:24px;border-radius:7px;border:2px solid #cdd3ce;flex:none;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:14px;color:transparent}
+.cl-item{background:var(--paper);border:1.5px solid var(--line);border-radius:13px;padding:6px 18px 6px;transition:all .16s;position:relative;overflow:hidden}
+.cl-row{display:flex;align-items:center;gap:14px;padding:10px 0;cursor:default}
+.cl-box{width:24px;height:24px;border-radius:7px;border:2px solid #cdd3ce;flex:none;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:14px;color:transparent;cursor:pointer}
 .cl-item.on .cl-box{background:var(--acd);border-color:var(--acd);color:#fff}
 .cl-item.on{border-color:var(--acd);background:var(--gl)}
-.cl-item .cl-t{font-size:16px;color:var(--ink);flex:1}
+.cl-t{font-size:16px;color:var(--ink);flex:1}
 .cl-flag{display:none;font:700 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--blue);border-radius:20px;padding:4px 10px;flex:none}
 .cl-item.focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(78,124,168,.12)}
 .cl-item.focus .cl-flag{display:block}
 .cl-item.focus.on .cl-flag{background:var(--acd)}
+.cl-toggle{background:none;border:1px solid var(--line);border-radius:8px;color:var(--ink-m);font:600 12px var(--body);padding:6px 12px;cursor:pointer;flex:none;transition:all .15s}
+.cl-toggle:hover{border-color:var(--acd);color:var(--acd)}
+.cl-how{max-height:0;opacity:0;overflow:hidden;transition:max-height .4s ease,opacity .3s ease}
+.cl-how.open{max-height:400px;opacity:1;padding:4px 0 14px}
+.cl-how .chow{font-size:14.5px;line-height:1.55;color:var(--ink-m);margin-bottom:10px}
+.cl-how .csteps{margin:0 0 12px;padding-left:20px}
+.cl-how .csteps li{font-size:14.5px;line-height:1.6;color:var(--ink);margin-bottom:4px}
+.cl-how .clinks{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.cl-how .clinks a{font:600 13px var(--body);color:var(--acd);text-decoration:none;background:var(--gl);border:1px solid rgba(46,173,107,.3);border-radius:9px;padding:8px 12px;transition:all .15s}
+.cl-how .clinks a:hover{background:var(--acd);color:#fff}
+.cl-done{background:var(--acd);color:#fff;border:none;border-radius:9px;font:600 13px var(--body);padding:9px 16px;cursor:pointer}
+.cl-done:hover{background:var(--gr)}
+.cl-gate{margin-top:14px;font:600 13px var(--body);color:var(--tf);display:flex;align-items:center;gap:8px}
+.cl-gate.done{color:var(--ac)}
 
 /* gating: locked nodes are a blurred teaser, unreadable + non-interactive until unlocked */
 .node{transition:opacity .55s ease,filter .55s ease,transform .55s ease}
@@ -182,14 +196,24 @@ const NODES=[
     opts:[['Turning on multi-factor authentication for the login',1],['Buying a more expensive corporate firewall appliance setup',0],['Training staff to spot ransomware pop-up windows',0],['Backing up the databases more often each week',0]],
     fb:'The entire chain hinged on one stolen password working. Multi-factor authentication would have stopped the login on Day 1 — before any of the rest could happen.'}},
  // ── Scene 2 · Lock It In (actions, in the same scroll format) ──
- {scene2:1,date:'Now it\u2019s your turn',crit:0,beat:'Break the chain — on your own accounts',
-  body:'That whole $2.4B chain came down to a few settings nobody switched on. The good news: the same settings take a few minutes on your side, and each one snaps a different link in that chain. Here\u2019s your short list — tap each as you do it.',
+ {scene2:1,date:'Your settings',crit:0,beat:'Set these up on your own accounts',
+  body:'The breach you just walked through relied on settings that weren\u2019t turned on. The same settings take a few minutes to enable on your side. Open each item for the exact steps, then check it off once it\u2019s done.',
   spot:{type:'checklist',
     items:[
-      {topic:'mfa',t:'Turn on multi-factor authentication for email + banking'},
-      {topic:'file',t:'Set unexpected files/links to \u201Cverify before opening\u201D as a habit'},
-      {topic:'update',t:'Turn on automatic updates (computer, phone, browser)'},
-      {topic:'report',t:'Save your IT / security team\u2019s number in your phone'}
+      {topic:'mfa',t:'Turn on multi-factor authentication for email + banking',
+       how:'Add a second step (a code or tap on your phone) so a stolen password isn\u2019t enough on its own.',
+       steps:['Open your account\u2019s Security settings','Find \u201C2-Step Verification\u201D or \u201CMulti-factor authentication\u201D','Turn it on and follow the prompts (authenticator app is safest)'],
+       links:[['Google account','https://myaccount.google.com/signinoptions/two-step-verification'],['Microsoft account','https://account.microsoft.com/security']]},
+      {topic:'file',t:'Make \u201Cverify before opening\u201D your default for files & links',
+       how:'A file or link you didn\u2019t expect is the most common way in. Check before you click, even if it looks like it\u2019s from someone you know.',
+       steps:['Hover a link (or long-press on mobile) to see where it really goes','Didn\u2019t expect the file? Confirm with the sender through another channel first','If it feels off, don\u2019t open it — send it to IT']},
+      {topic:'update',t:'Turn on automatic updates (computer, phone, browser)',
+       how:'Updates quietly close the exact security holes attackers rely on. Automatic means you never have to remember.',
+       steps:['Phone: Settings \u2192 Software Update \u2192 turn on Automatic Updates','Computer: enable auto-updates in system settings','Browser: it usually updates on restart — restart it now'],
+       links:[['How to enable auto-updates','https://www.cisa.gov/secure-our-world/update-software']]},
+      {topic:'report',t:'Save your IT / security team\u2019s contact in your phone',
+       how:'When something looks wrong, the fastest responses come from people who already knew who to call.',
+       steps:['Find your IT or security team\u2019s email/number (intranet or a colleague)','Save it as a contact now','Note how to report something after hours']}
     ]}}
 ];
 
@@ -204,8 +228,15 @@ NODES.forEach((n,i)=>{
     const s=n.spot;const isExp=s.type==='experience';const isCheck=s.type==='checklist';
     if(isCheck){
       h+=`<div class="spot checklist-spot"><div class="personal" id="personal-${i}"></div><div class="checklist" id="cl-${i}">`;
-      s.items.forEach((it,j)=>h+=`<div class="cl-item" data-cl="${i}" data-topic="${it.topic}"><div class="cl-box">\u2713</div><div class="cl-t">${it.t}</div><div class="cl-flag">start here</div></div>`);
-      h+=`</div></div>`;
+      s.items.forEach((it,j)=>{
+        h+=`<div class="cl-item" data-cl="${i}" data-idx="${j}" data-topic="${it.topic}">
+          <div class="cl-row"><div class="cl-box" data-check="${i}-${j}">\u2713</div><div class="cl-t">${it.t}</div><div class="cl-flag">start here</div><button class="cl-toggle" data-how="${i}-${j}">How ▾</button></div>`;
+        h+=`<div class="cl-how" id="how-${i}-${j}"><p class="chow">${it.how}</p>`;
+        if(it.steps){h+='<ol class="csteps">'+it.steps.map(x=>`<li>${x}</li>`).join('')+'</ol>';}
+        if(it.links){h+='<div class="clinks">'+it.links.map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${l[0]} ↗</a>`).join('')+'</div>';}
+        h+=`<button class="cl-done" data-done="${i}-${j}">Mark as done \u2713</button></div></div>`;
+      });
+      h+=`</div><div class="cl-gate" id="gate-${i}">Complete all four to finish this scene.</div></div>`;
     } else {
       h+=`<div class="spot"><button class="spot-trigger${isExp?' q-exp':''}" data-spot="${i}"><span class="pulse"></span>${isExp?'Your experience':(s.type==='quiz'?'Your call':'What happens next?')}</button>
         <div class="spot-card${isExp?' exp':''}" id="card-${i}"><div class="spot-q">${s.q}</div>`;
@@ -245,9 +276,18 @@ track.addEventListener('click',e=>{
   const eb=e.target.closest('.exp-btn');
   if(eb){const i=eb.dataset.exp;[...document.querySelectorAll('[data-exp="'+i+'"]')].forEach(x=>x.classList.remove('sel'));eb.classList.add('sel');
     document.getElementById('note-'+i).classList.add('show');if(!eb.dataset.c){eb.dataset.c=1;addXP(2);}markSeen(i);return;}
-  // checklist item toggle
-  const cli=e.target.closest('.cl-item');
-  if(cli){cli.classList.toggle('on');if(cli.classList.contains('on')&&!cli.dataset.c){cli.dataset.c=1;addXP(1);}checkChecklistDone(cli.dataset.cl);return;}
+  // checklist: expand how-to
+  const tog=e.target.closest('.cl-toggle');
+  if(tog){const id=tog.dataset.how;const how=document.getElementById('how-'+id);const open=how.classList.toggle('open');tog.textContent=open?'How \u25B4':'How \u25BE';return;}
+  // checklist: mark item done (checks the box)
+  const done=e.target.closest('.cl-done');
+  if(done){const id=done.dataset.done;const item=done.closest('.cl-item');
+    if(!item.classList.contains('on')){item.classList.add('on');item.dataset.c=1;addXP(1);}
+    const how=document.getElementById('how-'+id);how.classList.remove('open');const tg=item.querySelector('.cl-toggle');if(tg)tg.textContent='Done \u2713';
+    checkChecklistDone(item.dataset.cl);return;}
+  // clicking the box itself also toggles done (quick check)
+  const box=e.target.closest('.cl-box');
+  if(box){const item=box.closest('.cl-item');item.classList.toggle('on');if(item.classList.contains('on')&&!item.dataset.c){item.dataset.c=1;addXP(1);}checkChecklistDone(item.dataset.cl);return;}
 });
 
 // personalized checklist header + flags, built when the checklist node unlocks
@@ -272,7 +312,10 @@ function buildPersonal(i){
 }
 function checkChecklistDone(i){
   const items=[...document.querySelectorAll('[data-cl="'+i+'"]')];
-  if(items.every(x=>x.classList.contains('on')))unlockNext(+i);
+  const done=items.filter(x=>x.classList.contains('on')).length;
+  const gate=document.getElementById('gate-'+i);
+  if(gate){if(done===items.length){gate.textContent='\u2713 All set — scene unlocked below.';gate.classList.add('done');}else{gate.textContent=`${done} of ${items.length} done — complete all to finish this scene.`;}}
+  if(done===items.length)unlockNext(+i);
 }
 const nodesEls=[...document.querySelectorAll('.node')];
 const endEl=document.querySelector('.endcard');
@@ -286,7 +329,7 @@ function lockState(){
     // when a checklist node becomes unlocked, build its personalized header
     if(!locked&&NODES[idx].spot&&NODES[idx].spot.type==='checklist')buildPersonal(idx);
   });
-  if(endEl)endEl.classList.toggle('locked',unlockedUpTo<nodesEls.length-1);
+  if(endEl)endEl.classList.toggle('locked',unlockedUpTo<nodesEls.length);
 }
 function unlockNext(fromIdx){
   if(fromIdx<unlockedUpTo)return;            // already past
