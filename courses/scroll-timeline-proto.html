@@ -4,6 +4,7 @@
 <title>Defence Lab · Scroll Timeline Prototype</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
+@property --mood{syntax:'<number>';inherits:true;initial-value:0}
 :root{
   --ac:#34B77D;--acd:#2A9A66;--ac-soft:rgba(52,183,125,.12);
   --gr:#2EAD6B;--gl:rgba(46,173,107,.14);--rd:#E0574F;--rl:rgba(224,87,79,.12);
@@ -24,8 +25,8 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 .fs-btn{width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:var(--tm);cursor:pointer;display:flex;align-items:center;justify-content:center}
 .fs-btn svg{width:15px;height:15px}
 /* body: rail (fixed) + scroll area */
-.stage{flex:1;min-height:0;display:grid;grid-template-columns:280px 1fr}
-.rail{padding:0 34px 0 40px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid rgba(255,255,255,.08);
+.stage{flex:1;min-height:0;display:grid;grid-template-columns:250px 1fr}
+.rail{padding:0 30px 0 40px;display:flex;flex-direction:column;justify-content:center;
   background:radial-gradient(120% 80% at 0% 30%,rgba(46,150,110,.14),transparent 60%)}
 .rail .eyebrow{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ac);margin-bottom:14px}
 .rail h1{font-family:var(--disp);font-weight:600;font-size:clamp(26px,2.4vw,36px);line-height:1.08;letter-spacing:-.02em;margin-bottom:16px}
@@ -35,17 +36,22 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 .rail .rbar{height:5px;border-radius:3px;background:rgba(255,255,255,.12);margin-top:10px;overflow:hidden}
 .rail .rbar i{display:block;height:100%;background:var(--ac);width:8%;transition:width .4s}
 /* scroll area */
-.scroll{position:relative;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;
-  background:radial-gradient(90% 60% at 80% 0%,rgba(46,150,110,.10),transparent 55%),radial-gradient(80% 60% at 10% 100%,rgba(78,124,168,.10),transparent 60%),#161d19}
+.scroll{position:relative;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;--mood:0;
+  background:
+    radial-gradient(120% 80% at 75% 100%,rgba(224,70,60,calc(0.05 + var(--mood)*0.45)),transparent 60%),
+    radial-gradient(90% 55% at 78% 4%,rgba(46,170,120,calc(0.16 - var(--mood)*0.12)),transparent 55%),
+    radial-gradient(70% 50% at 6% 90%,rgba(78,124,168,calc(0.10 - var(--mood)*0.06)),transparent 60%),
+    linear-gradient(180deg,#121a16,#1a1512 calc(45% + var(--mood)*10%),#2a0f0b);
+  transition:--mood .25s linear}
 .scroll::-webkit-scrollbar{width:8px}.scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:4px}
-.track{position:relative;max-width:760px;margin:0 auto;padding:10vh 40px 40vh}
+.track{position:relative;max-width:960px;margin:0;padding:10vh 5vw 40vh 3vw}
 /* the vertical spine */
-.spine{position:absolute;left:60px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.14) 6%,rgba(255,255,255,.14) 94%,transparent)}
-.spine-fill{position:absolute;left:60px;top:0;width:2px;background:var(--ac);height:0;transition:height .3s ease;box-shadow:0 0 10px rgba(52,183,125,.5)}
+.spine{position:absolute;left:calc(3vw + 10px);top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.14) 6%,rgba(255,255,255,.14) 94%,transparent)}
+.spine-fill{position:absolute;left:calc(3vw + 10px);top:0;width:2px;background:var(--ac);height:0;transition:height .3s ease;box-shadow:0 0 10px rgba(52,183,125,.5)}
 /* nodes on the spine */
-.node{position:relative;padding-left:96px;margin-bottom:64px;opacity:.5;transform:translateY(0);transition:opacity .5s}
+.node{position:relative;padding-left:calc(3vw + 46px);margin-bottom:64px;opacity:.5;transform:translateY(0);transition:opacity .5s}
 .node.seen{opacity:1}
-.node .dot{position:absolute;left:52px;top:2px;width:20px;height:20px;border-radius:50%;background:#2a332e;border:2px solid rgba(255,255,255,.25);transition:all .35s;z-index:2}
+.node .dot{position:absolute;left:3vw;top:2px;width:20px;height:20px;border-radius:50%;background:#2a332e;border:2px solid rgba(255,255,255,.25);transition:all .35s;z-index:2}
 .node.seen .dot{background:var(--ac);border-color:var(--ac);box-shadow:0 0 0 5px rgba(52,183,125,.15)}
 .node.crit.seen .dot{background:var(--rd);border-color:var(--rd);box-shadow:0 0 0 5px rgba(224,87,79,.15)}
 .node .date{font:700 11px var(--mono);letter-spacing:.06em;color:var(--ac);text-transform:uppercase;margin-bottom:6px}
@@ -86,7 +92,7 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(5px)}}
 .scroll-hint.hide{opacity:0;transition:opacity .4s}
 /* end card */
-.endcard{padding-left:96px;margin-top:20px}
+.endcard{padding-left:calc(3vw + 46px);margin-top:20px}
 .endcard .ec{background:linear-gradient(170deg,rgba(52,183,125,.12),rgba(52,183,125,.04));border:1px solid rgba(52,183,125,.3);border-radius:16px;padding:24px 28px;max-width:600px}
 .endcard .ec h3{font-family:var(--disp);font-size:22px;font-weight:600;margin-bottom:10px}
 .endcard .ec p{font-size:15px;line-height:1.6;color:var(--tm);margin-bottom:16px}
@@ -105,7 +111,7 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
       <svg class="sh" viewBox="0 0 120 124"><path d="M60 6 L106 24 L106 66 Q106 104 60 120 Q14 104 14 66 L14 24 Z" fill="rgba(52,183,125,.06)" stroke="var(--ac)" stroke-width="3"/><path d="M60 30 L52 54 L66 62 L54 92" fill="none" stroke="var(--rd)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <div class="eyebrow">Scene 1 · True Story</div>
       <h1>The $2.4B Password</h1>
-      <div class="r-sub">Scroll down to walk the 2024 Change Healthcare breach — moment by moment. Tap the glowing points to make the calls yourself.</div>
+      <div class="r-sub">Scroll down to walk the Change Healthcare breach — moment by moment. Tap the glowing points to make the calls yourself.</div>
       <div class="rprog" id="rprog">0% explored</div>
       <div class="rbar"><i id="rbar"></i></div>
     </div>
@@ -122,29 +128,31 @@ body{font-family:var(--body);background:#141a17;color:var(--tw);-webkit-font-smo
 const XPW={sure:3,pretty:2,guess:1};
 /* ===== SCENE 1 as a vertical timeline with spots ===== */
 const NODES=[
- {date:'Feb 12, 2024',crit:0,beat:'A reused password shows up on a leak list',
+ {date:'The setup',crit:0,beat:'A reused password shows up on a leak list',
   body:'An employee reused their work password on another website. That site was breached, and the password ended up on a list attackers buy and sell. One of them now has a valid login for the company\u2019s remote-access system.',
   spot:{type:'predict',q:'The attacker has a real, working password. What actually stops him from logging in?',
-    opts:[['Nothing — with no second verification step, a valid password is all he needs',1],['The company firewall spots the new login and blocks it',0],['IT gets an alert and calls him to confirm it\u2019s really him',0]],
+    opts:[['Nothing — a valid password is all he needs to get in',1],['The company firewall spots the login and blocks it fast',0],['IT gets an alert and calls to confirm it\u2019s really him',0]],
     fb:'A password on its own is a single lock. With nothing behind it, a stolen password just opens the door — no alarms, no questions.'}},
- {date:'Feb 12, 2024',crit:1,beat:'He logs in — and this is the moment it all hinged on',
+ {date:'Day 1 · the way in',crit:1,beat:'He logs in — and this is the moment it all hinged on',
   body:'He\u2019s now inside, looking exactly like a normal employee. Everything he does from here looks legitimate.',
   spot:{type:'predict',q:'One free setting would have turned his stolen password into a dead end right here. Which one?',
-    opts:[['A longer, more complex password policy for everyone',0],['Multi-factor authentication — a second phone step he can\u2019t fake',1],['Antivirus software on every company laptop',0]],
+    opts:[['A longer, more complex company-wide password policy',0],['Multi-factor authentication — a second step',1],['Antivirus software on every single company laptop',0]],
     fb:'Multi-factor authentication takes about a minute to switch on and costs nothing. With it, a stolen password is useless — the attacker would also need the employee\u2019s phone. It simply wasn\u2019t on.'}},
- {date:'Feb 12–21',crit:0,beat:'Nine quiet days inside',
+ {date:'Days 1–9 · unseen',crit:0,beat:'Nine quiet days inside',
   body:'For over a week he moves through the network — copying databases, mapping how everything connects, staying out of sight. Nobody notices.',
   spot:{type:'experience',q:'Be honest: how quickly do you think you\u2019d notice a quiet intruder in your own accounts?',
     scale:['Right away','Eventually','Probably never'],
     note:'Most intrusions go unnoticed for weeks. That\u2019s why the early settings — MFA, alerts, unique passwords — matter more than spotting the attacker after the fact.'}},
- {date:'Feb 21',crit:1,beat:'Ransomware. Everything locks at once.',
+ {date:'Day 9 · the strike',crit:1,beat:'Ransomware. Everything locks at once.',
   body:'He deploys ransomware across the company. Pharmacies can no longer process prescriptions; hospitals can\u2019t verify insurance.',
   spot:{type:'quiz',q:'You\u2019re an employee and a file called \u201Cinvoice.zip\u201D you didn\u2019t expect just downloaded. First move?',
-    opts:[['Open it to check whether it\u2019s real',0],['Delete it and empty the recycle bin',0],['Disconnect from the internet, then tell IT',1],['Run antivirus while staying online',0]],
+    opts:[['Open it to check whether it\u2019s really an invoice',0],['Delete it and then empty the recycle bin',0],['Disconnect from the internet, then tell IT',1],['Run an antivirus scan while staying online',0]],
     fb:'Most malware needs to phone home to its server. Disconnecting breaks that link first; then let IT take over. Opening it may trigger it; deleting doesn\u2019t help if it\u2019s already running.'}},
- {date:'Ongoing',crit:0,beat:'The bill: $2.4 billion',
+ {date:'The aftermath',crit:0,beat:'The bill: $2.4 billion',
   body:'Between the ransom, the recovery, the fines and the lawsuits, the total cost passes $2.4 billion — all traceable to one reused password and one missing setting, nine days earlier.',
-  spot:null}
+  spot:{type:'quiz',q:'Looking back at the whole chain, which single step would have prevented all of this?',
+    opts:[['Turning on multi-factor authentication for the login',1],['Buying a more expensive corporate firewall appliance setup',0],['Training staff to spot ransomware pop-up windows',0],['Backing up the databases more often each week',0]],
+    fb:'The entire chain hinged on one stolen password working. Multi-factor authentication would have stopped the login on Day 1 — before any of the rest could happen.'}}
 ];
 
 const scroll=document.getElementById('scroll'),track=document.getElementById('track'),spineFill=document.getElementById('spineFill');
@@ -200,6 +208,7 @@ function updateProgress(){
 }
 scroll.addEventListener('scroll',()=>{
   const st=scroll.scrollTop,vh=scroll.clientHeight;
+  const mood=Math.min(1,st/Math.max(1,(scroll.scrollHeight-vh)));scroll.style.setProperty('--mood',mood.toFixed(3));
   document.getElementById('hint').classList.toggle('hide',st>60);
   // spine fill to current scroll
   const trackTop=track.offsetTop;
