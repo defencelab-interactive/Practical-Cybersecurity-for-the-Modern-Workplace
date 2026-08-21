@@ -188,12 +188,12 @@ function term(t,key){const D={
 
 /* ===== 4 SCENES, trimmed to the bone, each beat = a decision or an action ===== */
 const SCENES=[
-{label:'The Breach',eyebrow:'True Story',title:'The $2.4B Password',intro:'One stolen login. One setting that wasn\u2019t on. Nine days later, catastrophe.',motif:'crack',cap:'Breach',bg1:'dark',
+{label:'The Breach',eyebrow:'True Story',title:'The $2.4B Password',intro:'A real 2024 breach that began with one password. We\u2019ll look at what happened and what would have prevented it.',motif:'crack',cap:'Breach',bg1:'dark',
  zones:[
-  {bg:'dark',type:'story',html:`<div class="big">$2.4B</div><p class="lead">In 2024 an attacker got one employee\u2019s login at Change Healthcare — a third of all U.S. patient records flow through it. ${term('MFA','mfa')} wasn\u2019t on, so he just logged in.</p><p class="lead">Nine days later he deployed ${term('ransomware','ransomware')}. Pharmacies couldn\u2019t fill prescriptions. Damage: <strong>$2.4 billion</strong>.</p><p class="dim">You\u2019re about to walk the attack yourself — and find the one moment it could have been stopped.</p>`,btn:'Walk the attack →'},
+  {bg:'dark',type:'story',html:`<div class="big">$2.4B</div><p class="lead">In 2024 an attacker got one employee\u2019s login at Change Healthcare — a third of all U.S. patient records flow through it. ${term('MFA','mfa')} wasn\u2019t on, so he just logged in.</p><p class="lead">Nine days later he installed ${term('ransomware','ransomware')}. Pharmacies couldn\u2019t fill prescriptions. Damage: <strong>$2.4 billion</strong>.</p><p class="dim">Next you\u2019ll go through the attack step by step and see where it could have been stopped.</p>`,btn:'Walk the attack →'},
   {bg:'light',type:'predict'}
  ]},
-{label:'Spot It',eyebrow:'Your turn',title:'Would you catch it?',intro:'Attackers don\u2019t break in — they get invited. Two messages land in your day. You decide.',motif:'eye',cap:'Spot it',bg1:'light',
+{label:'Spot It',eyebrow:'Your turn',title:'Two messages',intro:'Two messages you could realistically get at work. Decide how you\u2019d handle each one.',motif:'eye',cap:'Spot it',bg1:'light',
  zones:[
   {bg:'light',type:'quiz',
    q:`Your CEO texts: \u201CIn a meeting. Buy 4 gift cards, $200 each, send the codes. Don\u2019t call.\u201D What\u2019s the red flag?`,
@@ -206,18 +206,17 @@ const SCENES=[
    expl:`Someone has your password and is trying right now. Deny blocks this attempt; changing your password stops the next. That push is your early warning — it means the password already leaked.`,
    tags:['One password, one account','Say something']}
  ]},
-{label:'Lock It In',eyebrow:'Make it real',title:'Four minutes, four locks',intro:'Knowing isn\u2019t doing. These are the moves that would have stopped the $2.4B breach — do them now.',motif:'check',cap:'Lock in',bg1:'light',
+{label:'Lock It In',eyebrow:'Make it real',title:'Turn these on',intro:'A few settings you can turn on today. Each one closes a common way in.',motif:'check',cap:'Lock in',bg1:'light',
  zones:[
   {bg:'light',type:'action',zone:'\u26A1 Check them off as you go',
    check:['Turn on MFA for email + banking','Turn on automatic updates (OS, browser, phone)','Set phone auto-lock under 2 minutes','Save your IT security team\u2019s number'],
-   note:`Every one of these breaks a step in a real attack. MFA alone blocks 99% of automated login attempts.`,btn:'Almost done →'},
-  {bg:'dark',type:'reflect',rq:`Has something ever felt \u201Coff\u201D online — and you went along with it anyway?`,rs:`Most people who get scammed say they had a gut feeling first. That feeling is the skill. Trust it, then verify.`,btn:'See your takeaways →'}
+   note:`MFA alone blocks about 99% of automated login attempts. The others close common gaps.`,btn:'Almost done →'},
+  {bg:'dark',type:'reflect',rq:`Has something ever felt \u201Coff\u201D online — and you went along with it anyway?`,rs:`Many people who get caught say they had a small doubt first. It’s worth pausing on that doubt and checking before you act.`,btn:'See your takeaways →'}
  ]},
-{label:'Foundation',eyebrow:'Module 1 complete',title:'The Foundation',intro:'You didn\u2019t read about security — you made the calls yourself.',motif:'check',cap:'Done',bg1:'dark',
+{label:'Foundation',eyebrow:'Module 1 complete',title:'The Foundation',intro:'A quick recap of what this module covered.',motif:'check',cap:'Done',bg1:'dark',
  zones:[
   {bg:'dark',type:'summary',
-   takeaways:['One missing setting cost $2.4B. Basics are the whole game.','You spotted the scam and stopped the login — that\u2019s the skill.','MFA, updates, lock, verify — you\u2019ve already started.'],
-   next:[['\uD83D\uDCCC Security Byte \u00B7 2 min','Check If You\u2019ve Been Breached'],['\uD83D\uDCDA Next module','Passwords & MFA']]}
+   takeaways:['A single missing setting (MFA) was enough to cause the $2.4B Change Healthcare breach.','Most attacks reach you through a normal-looking message — checking the sender and the request catches them.','The core habits: turn on MFA, keep software updated, lock your devices, and verify unusual requests through a channel you trust.']}
  ]}
 ];
 
@@ -257,7 +256,7 @@ function buildZone(z,scObj){
     h+=`</div><div class="expl"><span class="xpb"></span><div>${z.expl}</div>${z.tags?`<div class="habit-tags">${z.tags.map(t=>`<span>✓ ${t}</span>`).join('')}</div>`:''}</div><button class="zbtn qc" style="display:none" data-next>Continue →</button>`;}
   if(z.type==='action'){h=`<div class="act-zone">${z.zone}</div><div class="checklist">`;z.check.forEach(c=>h+=`<div class="cl-item"><div class="cl-box">✓</div><div class="cl-t">${c}</div></div>`);h+=`</div>`;if(z.note)h+=`<div class="pa-reveal show" style="margin-top:18px">${z.note}</div>`;if(z.btn)h+=`<button class="zbtn" data-next>${z.btn}</button>`;}
   if(z.type==='reflect'){h=`<div class="reflect-card"><div class="rq">${z.rq}</div><div class="rs">${z.rs}</div></div>`+(z.btn?`<button class="zbtn" data-next>${z.btn}</button>`:'');}
-  if(z.type==='summary'){h=`<ol class="slist">`;z.takeaways.forEach(t=>h+=`<li>${t}</li>`);h+=`</ol><div class="nextcards">`;z.next.forEach(n=>h+=`<a href="#"><small>${n[0]}</small>${n[1]}</a>`);h+=`</div>`;}
+  if(z.type==='summary'){h=`<ol class="slist">`;z.takeaways.forEach(t=>h+=`<li>${t}</li>`);h+=`</ol>`;}
   I.innerHTML=h;wireZone(Z,z);return Z;
 }
 function wireZone(Z,z){
