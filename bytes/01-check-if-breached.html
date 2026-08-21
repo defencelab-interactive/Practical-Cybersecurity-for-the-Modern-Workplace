@@ -75,6 +75,7 @@ h1{font-family:var(--disp);font-size:25px;font-weight:600;line-height:1.14;lette
 .nav button{font-family:var(--body);font-size:13px;font-weight:600;border:none;border-radius:9px;padding:9px 16px;cursor:pointer;transition:all .15s}
 .nav .b-back{background:transparent;color:var(--mu)}.nav .b-back:hover{color:var(--td)}.nav .b-back:disabled{opacity:.3;cursor:default}
 .nav .b-next{background:var(--ac);color:#fff;box-shadow:0 2px 6px rgba(42,154,102,.3)}.nav .b-next:hover{background:var(--acd)}
+a.go-btn{display:inline-block;text-decoration:none;text-align:center}
 </style>
 </head>
 <body>
@@ -108,12 +109,13 @@ h1{font-family:var(--disp);font-size:25px;font-weight:600;line-height:1.14;lette
       </div>
 
       <div class="pane">
-        <div class="slbl">Try it</div>
+        <div class="slbl">Do it now</div>
         <div class="builder">
-          <div class="l2">Type an email to see how the check works</div>
-          <input class="field" id="email" type="email" placeholder="you@example.com" oninput="clr()">
-          <button class="go-btn" onclick="checkIt()">Check this email</button>
-          <div class="result" id="result"></div>
+          <div class="l2">Open the real checker and enter your email</div>
+          <a class="go-btn" href="https://haveibeenpwned.com" target="_blank" rel="noopener">Check on haveibeenpwned.com ↗</a>
+          <div class="result show">
+            <b>Reading your results:</b> most people show up in several breaches — that’s normal, it just means a site you used was hacked at some point. What matters is the password. <b>For any breach where you still reuse that password anywhere, change it now</b>, and turn on MFA on that account.
+          </div>
         </div>
       </div>
 
@@ -139,8 +141,6 @@ const dotsEl=document.getElementById('dots');for(let i=0;i<N;i++)dotsEl.appendCh
 const dots=[...dotsEl.children];
 function render(){panes.forEach((p,i)=>{p.classList.toggle('on',i===cur);p.classList.toggle('prev',i<cur);});dots.forEach((d,i)=>{d.className='';if(i<cur)d.classList.add('past');else if(i===cur)d.classList.add('on');});document.getElementById('count').textContent=`Step ${cur+1} of ${N}`;document.getElementById('back').disabled=cur===0;const nx=document.getElementById('next');nx.textContent=cur===N-1?'Done ✓':'Next →';nx.disabled=cur===N-1;}
 function go(d){cur=Math.max(0,Math.min(N-1,cur+d));render();}
-function clr(){document.getElementById('result').classList.remove('show');}
-function checkIt(){const v=document.getElementById('email').value.trim();const r=document.getElementById('result');if(!v||!v.includes('@')){r.innerHTML="Enter a full email address to see how the check works.";r.classList.add('show');return;}r.innerHTML="This is a <b>demo</b> — on the real site, haveibeenpwned.com would now show which breaches this address appeared in. Most people appear in several. For any breach where you still use that password anywhere, change it.";r.classList.add('show');}
 const byteEl=document.querySelector('.byte'),fsbtn=document.getElementById('fsbtn');
 const eIco='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>';
 const sIco='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/></svg>';
