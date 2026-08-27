@@ -9,7 +9,7 @@ Cybersecurity awareness training for non-technical employees. Two content format
 
 Courses build understanding. Bytes build habits. Both work independently. Both stack into learning paths.
 
-**Total library:** 40 items (13 courses + 27 bytes), ~127 min combined.
+**Total library:** 39 items (13 courses + 26 bytes), ~123 min combined.
 
 ---
 
@@ -115,78 +115,85 @@ Six courses include a **"Want to know more?"** expandable section for technicall
 
 ## Security Bytes
 
-Each bite follows a consistent structure: hook (one sentence) → how (steps or tool) → do it (action or interactive) → done (confirmation + link to paired course).
+Each Byte follows a consistent structure: hook (one sentence) → how (steps or tool) → do it (action or interactive) → done (confirmation + link to the paired course).
 
 No stories, no theory, no breathers. Pure action.
 
+**Numbering:** a Byte carries the number of the course it pairs with, plus a letter — Byte 6b belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.html`), so a Byte always sorts next to the material it extends.
+
 ### 🟢 General Awareness
 
-| # | Byte | What you'll do | Time | Paired with |
+| # | Byte | What you'll do | Time | Pairs with |
 |---|---|---|---|---|
-| 1 | **Check If You've Been Breached** | Enter your email at haveibeenpwned.com, understand the results, know what to do next | 2 min | Course 1 |
-| 2 | **Spot a Social Engineering Attempt** | Five common tactics (urgency, authority, fear, reciprocity, scarcity) — recognize the pattern in 3 examples | 2 min | Course 2 |
-| 3 | **The Clean Desk Checklist** | End-of-day routine: lock screen, clear desk, collect printouts, secure documents, badge check | 2 min | Course 3 |
-| 4 | **Your Company's Security Policy — Quick Guide** | Where to find it, what to look for, who to ask. Adaptable template. | 2 min | Onboarding |
-| 5 | **Safe Browsing: 3 Quick Rules** | HTTPS check, download safety, pop-up handling — visual guide with real examples | 2 min | Course 1 |
-| 26 | **Tools Worth Knowing About** | Filterable rundown of security tools and extensions by OS, browser and phone — what each does, who it helps | ~4 min | Course 1 |
+| 1a | **Safe Browsing: Three Rules** | Certificate check, download safety, pop-up handling — visual guide with real examples | 2 min | Course 1 |
+| 1b | **Tools Worth Knowing About** | Filterable rundown of security tools and extensions by OS, browser and phone — what each does, who it helps | ~4 min | Course 1 |
+| 1c | **Your Company's Security Policy** | Where to find it, what to look for, who to ask. Adaptable template. | 2 min | Course 1 |
+| 2a | **Spot a Social Engineering Attempt** | Five common tactics (urgency, authority, fear, reciprocity, scarcity) — recognise the pattern in three examples | 2 min | Course 2 |
+| 3a | **The Clean Desk Checklist** | End-of-day routine: lock screen, clear desk, collect printouts, secure documents, badge check | 2 min | Course 3 |
+| 3b | **Secure Printing** | Use secure/pull print, collect immediately, shred sensitive documents | 2 min | Course 3 |
 
 ### 🔑 Authentication
 
-| # | Byte | What you'll do | Time | Paired with |
+| # | Byte | What you'll do | Time | Pairs with |
 |---|---|---|---|---|
-| 6 | **Create a Passphrase in 60 Seconds** | Pick 4 words, add separators, test the length, save it | 2 min | Course 4 |
-| 7 | **Set Up MFA — Step by Step** | Open settings, find 2FA, scan the QR code, save recovery codes | 3 min | Course 5 |
+| 4a | **Build a Passphrase in 60 Seconds** | Pick four words, add separators, test the length, save it | 2 min | Course 4 |
+| 5a | **Set Up MFA — Step by Step** | Open settings, find 2FA, scan the QR code, save recovery codes | 3 min | Course 5 |
 
 ### 🎣 Phishing & Social Engineering
 
-| # | Byte | What you'll do | Time | Paired with |
+| # | Byte | What you'll do | Time | Pairs with |
 |---|---|---|---|---|
-| 8 | **The 5-Second Email Check** | Three things to check before clicking: sender, link, tone. Three visual examples. | 2 min | Course 6 |
-| 9 | **How to Report a Phishing Email** | Where to find the "Report" button in Outlook/Gmail, what happens after, what NOT to do | 2 min | Course 6 |
-| 27 | **Link Inspector** | Paste a URL and see where it really goes — registrable domain, @ trick, punycode, lookalikes, shorteners. Runs entirely in the browser | ~3 min | Course 6 |
+| 6a | **The 5-Second Email Check** | Three things to check before clicking: sender, link, tone — practised on your own inbox | 2 min | Course 6 |
+| 6b | **Link Inspector** | Paste a URL and see where it really goes — registrable domain, @ trick, punycode, lookalikes, shorteners. Runs entirely in the browser | ~3 min | Course 6 |
+| 6c | **How to Report a Phishing Email** | Where the Report button lives in Outlook/Gmail, what happens next, and why forwarding strips the headers | 2 min | Course 6 |
 
 ### 💻 Device Security
 
-| # | Byte | What you'll do | Time | Paired with |
+| # | Byte | What you'll do | Time | Pairs with |
 |---|---|---|---|---|
-| 10 | **5 Settings to Check on Your Laptop** | Auto-lock, encryption, updates, antivirus, browser extensions — checklist walkthrough | 2 min | Course 7 |
-| 11 | **App Permission Cleanup** | Open phone settings, review permissions, revoke what doesn't make sense | 2 min | Course 8 |
-| 12 | **Secure Your Home WiFi** | Change router password, check encryption type, rename network | 2 min | Course 7 |
-| 13 | **What to Do When You Lose Your Phone** | Remote lock/wipe, notify IT, change passwords, check bank — emergency guide | 2 min | Course 8 |
-| 14 | **Travel Security Checklist** | Packing, airport, hotel — quick reference for secure travel | 2 min | Courses 7-8 |
-| 15 | **Working from a Coffee Shop** | Screen position, VPN, auto-lock, no sensitive calls — visual checklist | 2 min | Course 7 |
-| 16 | **USB Drives: Don't Plug and Pray** | Why you should never plug in a found USB drive, what to do instead | 2 min | Course 7 |
+| 7a | **Five Settings to Check on Your Laptop** | Auto-lock, encryption, updates, antivirus, browser extensions — checklist walkthrough | 2 min | Course 7 |
+| 7b | **Secure Your Home WiFi** | Change router password, check encryption type, rename network | 2 min | Course 7 |
+| 7c | **Working from a Coffee Shop** | Screen position, VPN, auto-lock, no sensitive calls — visual checklist | 2 min | Course 7 |
+| 7d | **USB Drives: Don't Plug and Pray** | Why you should never plug in a found USB drive, what to do instead | 2 min | Course 7 |
+| 7e | **Travel Security Checklist** | Packing, airport, hotel — quick reference for secure travel | 2 min | Courses 7–8 |
+| 8a | **App Permission Cleanup** | Open phone settings, review permissions, revoke what doesn't make sense | 2 min | Course 8 |
+| 8b | **When You Lose Your Phone** | Remote lock/wipe, notify IT, change passwords, check bank — emergency guide | 2 min | Course 8 |
 
 ### 🌐 Online Presence
 
-| # | Byte | What you'll do | Time | Paired with |
+| # | Byte | What you'll do | Time | Pairs with |
 |---|---|---|---|---|
-| 17 | **LinkedIn Privacy in 2 Minutes** | Connections → private, location → off, third-party apps → review | 2 min | Course 9 |
-| 18 | **Clean Up Your Digital Footprint** | Delete old accounts, check data broker sites, Google yourself | 3 min | Course 9 |
+| 9a | **LinkedIn Privacy in Two Minutes** | Connections → private, location → off, third-party apps → review | 2 min | Course 9 |
+| 9b | **Clean Up Your Digital Footprint** | Delete old accounts, check data broker sites, search for yourself | 3 min | Course 9 |
 
 ### 🤖 AI Security
 
-| # | Byte | What you'll do | Time | Paired with |
+| # | Byte | What you'll do | Time | Pairs with |
 |---|---|---|---|---|
-| 19 | **How to Anonymize an AI Prompt** | Three before/after prompt rewrites — remove names, companies, and project details | 2 min | Course 10 |
-| 20 | **Spot a Deepfake Call** | Three verification questions, "call them back at a known number", family code word setup | 2 min | Course 10 |
+| 10a | **How to Anonymise an AI Prompt** | Three before/after rewrites — remove names, companies and project details | 2 min | Course 10 |
+| 10b | **Spot a Deepfake Call** | Three verification questions, call back on a known number, family code word | 2 min | Course 10 |
 
 ### 📂 Data Protection
 
-| # | Byte | What you'll do | Time | Paired with |
+| # | Byte | What you'll do | Time | Pairs with |
 |---|---|---|---|---|
-| 21 | **Classify This: Quick Exercise** | Six data items, drag each to Public / Internal / Confidential / Restricted | 3 min | Course 11 |
-| 22 | **Is This PII?** | Eight examples — sort into PII / not PII. Interactive exercise. | 2 min | Course 11 |
-| 23 | **Sharing Files Safely — Quick Rules** | Link types, expiry dates, folder inheritance — visual cheat sheet | 2 min | Course 12 |
-| 24 | **Secure Printing** | Use secure print/pull print, collect immediately, shred sensitive documents | 2 min | Course 3 |
+| 11a | **Classify This: Quick Exercise** | Six data items, drag each to Public / Internal / Confidential / Restricted | 3 min | Course 11 |
+| 11b | **Is This PII?** | Eight examples — sort into PII / not PII | 2 min | Course 11 |
+| 12a | **Sharing Files Safely** | Link types, expiry dates, folder inheritance — visual cheat sheet | 2 min | Course 12 |
 
 ### 🚨 Incident Response
 
-| # | Byte | What you'll do | Time | Paired with |
+| # | Byte | What you'll do | Time | Pairs with |
 |---|---|---|---|---|
-| 25 | **STOP · DOCUMENT · REPORT Card** | Interactive cheat sheet you can save or print + two practice scenarios | 2 min | Course 13 |
+| 13a | **STOP · DOCUMENT · REPORT Card** | Interactive cheat sheet you can save or print + two practice scenarios | 2 min | Course 13 |
 
-**Total Security Bytes: 27 items, ~59 min**
+**Total Security Bytes: 26 items, ~55 min**
+
+### Retired
+
+| Byte | Why it was dropped |
+|---|---|
+| Check If You've Been Breached | A single instruction to visit one external site. Nothing to return to, and the course already covers what a leaked password means — the Byte added a step, not a habit. |
 
 ---
 
@@ -201,7 +208,7 @@ The complete curriculum. Recommended deployment: one item per 1-2 weeks over 6 m
 | Week | Type | Item | Group | Time |
 |---|---|---|---|---|
 | 1 | Course | Security Basics: Why One Setting Matters | General | 7 min |
-| 2 | Byte | Check If You've Been Breached | General | 2 min |
+| 2 | Byte | Tools Worth Knowing About | General | 4 min |
 | 3 | Course | Social Engineering: How People Get Played | General | 7 min |
 | 4 | Byte | Spot a Social Engineering Attempt | General | 2 min |
 | 5 | Course | Physical Security: Desks, Screens, Printers | General | 6 min |
@@ -227,7 +234,7 @@ The complete curriculum. Recommended deployment: one item per 1-2 weeks over 6 m
 | 25 | Course | Incident Response: First 30 Minutes | Incident | 7 min |
 | 26 | Byte | STOP · DOCUMENT · REPORT Card | Incident | 2 min |
 
-**Total: 26 items, ~116 min over 26 weeks (one per week) or 13 months (biweekly)**
+**Total: 26 items, ~118 min over 26 weeks (one per week) or 13 months (biweekly)**
 
 Pattern: Course → paired Byte → next Course → paired Byte. The course builds understanding, the Byte locks in the action. General Awareness comes first — it sets the foundation for everything else.
 
@@ -353,17 +360,17 @@ For EU organizations subject to NIS2 Directive Article 21(2) or DORA requirement
 | Requirement | Defence Lab coverage |
 |---|---|
 | NIS2 Art. 21(2)(a) — Risk analysis and security policies | Course 1 (Foundation), Course 11 (Data Classification: Four Levels) |
-| NIS2 Art. 21(2)(b) — Incident handling | Course 13 (Incident Response: First 30 Minutes), Byte 25 (STOP/DOC/REPORT) |
-| NIS2 Art. 21(2)(d) — Supply chain security | Course 12 (File Sharing & Access), Byte 23 (Sharing Files Safely) |
+| NIS2 Art. 21(2)(b) — Incident handling | Course 13 (Incident Response: First 30 Minutes), Byte 13a (STOP/DOC/REPORT) |
+| NIS2 Art. 21(2)(d) — Supply chain security | Course 12 (File Sharing & Access), Byte 12a (Sharing Files Safely) |
 | NIS2 Art. 21(2)(g) — Basic cyber hygiene and training | All courses — especially General Awareness group (1-3) |
-| NIS2 Art. 21(2)(g) — Phishing awareness | Course 6 (Phishing: Spot, Check, Report), Byte 8 (5-Second Email Check), Byte 9 (Report Phishing) |
+| NIS2 Art. 21(2)(g) — Phishing awareness | Course 6 (Phishing: Spot, Check, Report), Byte 6a (5-Second Email Check), Byte 6c (Report Phishing) |
 | NIS2 Art. 21(2)(g) — Access control / credentials | Courses 4-5 (Passwords, MFA), Bytes 6-7 |
 | NIS2 Art. 21(2)(j) — Cryptography and encryption | Course 7 (Laptop Security Settings) |
 | DORA Art. 13.6 — ICT security awareness | All courses, role-based paths |
 | DORA Art. 13.6 — Digital operational resilience training | Course 13, Course 1 |
 | NIS2 Art. 20 — Management body training | Executive path |
 | ISO 27001 Clause 7.2 — Role-based competence | Role-based learning paths |
-| GDPR Art. 39.1(b) — Staff awareness | Courses 11-12 (Data Protection), Byte 22 (Is This PII?) |
+| GDPR Art. 39.1(b) — Staff awareness | Courses 11-12 (Data Protection), Byte 11b (Is This PII?) |
 
 ---
 
@@ -622,9 +629,8 @@ a scene-2 checklist that assembles the learner's personal action plan.
 | Course 4 | Passwords & Passphrases | `courses/04-passwords-mfa.html` | Built — currently **combined with Course 5** in one deck |
 | Course 5 | MFA: The Second Step | — | Covered by the combined deck above; not yet split out |
 | Course 6 | Phishing: Spot, Check, Report | `courses/06-the-447-email.html` | Built, opens with a cold-open email pick |
-| Byte 1 | Check If You've Been Breached | `bytes/01-check-if-breached.html` | Built |
-| Byte 26 | Tools Worth Knowing About | `bytes/26-security-toolkit.html` | Built |
-| Byte 27 | Link Inspector | `bytes/27-link-inspector.html` | Built |
+| Byte 1b | Tools Worth Knowing About | `bytes/01b-security-toolkit.html` | Built |
+| Byte 6b | Link Inspector | `bytes/06b-link-inspector.html` | Built |
 
 Everything else in this catalogue is still to be produced.
 
