@@ -626,6 +626,7 @@ a scene-2 checklist that assembles the learner's personal action plan.
 | Catalogue # | Item | File | Status |
 |---|---|---|---|
 | Course 1 | Security Basics: Why One Setting Matters | `courses/01-security-basics.html` | Built |
+| Course 2 | Social Engineering: How People Get Played | `courses/02-social-engineering.html` | Built as *The Cheapest Way In*, opens attacker-side |
 | Course 4 | Passwords & Passphrases | `courses/04-passwords-mfa.html` | Built — currently **combined with Course 5** in one deck |
 | Course 5 | MFA: The Second Step | — | Covered by the combined deck above; not yet split out |
 | Course 6 | Phishing: Spot, Check, Report | `courses/06-the-447-email.html` | Built, opens with a cold-open email pick |
@@ -644,5 +645,6 @@ learning path use the same opening.
 | Course | Opening used |
 |---|---|
 | 1 | Story — the $2.4B Change Healthcare breach |
+| 2 | You are the attacker — pick the cheapest way in |
 | 4 | Story — the domino effect |
 | 6 | Challenge / cold open — two emails, pick the fake |
