@@ -274,6 +274,22 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 .aud-fb{margin-top:15px;background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:18px 21px;font-size:14.5px;line-height:1.65;color:var(--ink-m);display:none}
 .aud-fb.show{display:block;animation:rise .4s}
 
+
+/* ── optional depth ── */
+.more{margin-top:15px;max-width:980px}
+.more-t{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.14);
+  color:var(--tm);font:600 13.5px var(--body);padding:9px 15px;border-radius:11px;cursor:pointer;transition:all .18s}
+.more-t:hover{border-color:rgba(255,255,255,.3);color:var(--tw)}
+.more-t .cv{width:8px;height:8px;border-right:2px solid var(--tf);border-bottom:2px solid var(--tf);transform:rotate(45deg) translateY(-2px);transition:transform .25s}
+.more.open .more-t .cv{transform:rotate(225deg) translateY(-1px)}
+.more.open .more-t{color:var(--tw);border-color:rgba(255,255,255,.26)}
+.more-b{max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .3s ease,margin .3s}
+.more.open .more-b{max-height:1200px;opacity:1;margin-top:12px}
+.more-in{background:rgba(255,255,255,.04);border-left:2px solid rgba(255,255,255,.18);border-radius:0 12px 12px 0;
+  padding:16px 20px;font-size:15px;line-height:1.7;color:var(--tm)}
+.more-in b{color:var(--tw)}
+@media (max-width:820px){.more-in{padding:14px 16px;font-size:14.5px}}
+
 .endcard .ec .nextbtn{background:var(--ac);color:#08130d;border:none;border-radius:11px;padding:12px 22px;font:600 15px var(--body);cursor:pointer}
 
 /* ══ mobile: rail becomes a compact header, content takes the full width ══ */
@@ -343,116 +359,120 @@ const XPW={sure:3,pretty:2,guess:1};
 /* ===== SCENE 1 as a vertical timeline with spots ===== */
 const NODES=[
  {date:'Start here',crit:0,beat:'Look up for a second',
-  body:'Before any of this becomes theory, check the room you are actually sitting in. Tick anything that is true right now — and if you are at home today, answer for the last place you worked from with other people in it. Nothing here is a test and nothing is scored. The point is that most of these are invisible until you deliberately look, which is exactly why they persist.',
+  body:'Before this becomes theory, check the room you are actually in. Tick anything true right now — if you are at home today, answer for the last place you worked around other people. Nothing is scored. Most of these stay invisible until you deliberately look, which is why they persist.',
   spot:{type:'audit',topic:'space',q:'True in your space right now?',
     items:[
-     {t:'Someone walking past could read my screen',why:'This is the most common one and the least noticed, because you cannot see your own screen from behind. On a train, in a café or in an open-plan row, the readable distance is further than people assume.'},
-     {t:'There is paper on my desk with work information on it',why:'Printouts, notebooks, handwritten notes from a call. Paper does not lock, does not log who read it, and does not tell you afterwards that it was photographed.'},
-     {t:'A password or code is written somewhere visible',why:'On a note, in a notebook, on a whiteboard. It is a rational response to too many passwords — the problem is not the person, it is that anyone in the room inherits the access.'},
-     {t:'My laptop would stay here if I stepped out for ten minutes',why:'Ten minutes is a long time. Whether that matters depends entirely on whether the screen locks itself, which most people have never checked.'},
-     {t:'I have left something in a printer tray and collected it later',why:'Printer trays are the quietest leak in most offices. Everyone walks past them, nobody owns them, and what sits there is usually the document someone thought was important enough to print.'},
-     {t:'People can get into this space without a badge or a key',why:'A propped door, a shared entrance, a café. Not automatically a problem — it just means the door is not doing the work you might assume it is.'}],
-    fb:'Whatever you ticked, none of it makes you careless. Every one of these is a side effect of getting work done: you print because reading on paper is easier, you write the code down because there are eleven of them, you leave the laptop because you are coming straight back. Physical security fails through convenience rather than negligence, which is why telling people to be more careful has never worked. What follows is the small number of things that do.'}},
+     {t:'Someone walking past could read my screen',why:'The least noticed one, because you cannot see your own screen from behind. Readable distance is further than people assume.'},
+     {t:'There is paper on my desk with work information on it',why:'Paper does not lock, does not log who read it, and never tells you it was photographed.'},
+     {t:'A password or code is written somewhere visible',why:'A rational response to eleven passwords. The problem is not the person \u2014 it is that everyone in the room inherits the access.'},
+     {t:'My laptop would stay here if I stepped out for ten minutes',why:'Whether that matters depends entirely on whether the screen locks itself, which most people have never checked.'},
+     {t:'I have left something in a printer tray and collected it later',why:'Everyone walks past the tray, nobody owns it, and what sits there was important enough to print.'},
+     {t:'People can get into this space without a badge or a key',why:'Not automatically a problem. It just means the door is not doing the work you might assume.'}],
+    fb:'Whatever you ticked, none of it makes you careless. You print because paper is easier to read, you write the code down because there are eleven of them, you leave the laptop because you are coming straight back. Physical security fails through convenience, not negligence \u2014 which is why telling people to be more careful has never worked.'}},
 
  {date:'Why it still matters',crit:0,beat:'Physical access skips everything else',
-  body:'Encryption, MFA, password managers, the security team — all of it assumes the attacker is somewhere else, coming down a wire. Someone standing behind you is not subject to any of it. They do not need your password if they can watch you type it, and they do not need to breach a system if the document is already printed and sitting in a tray. This is not a large category of attack, but it is a reliably successful one, and the fix is unusually cheap: nothing here needs budget, a project, or IT to approve it.'},
+  body:'Encryption, MFA, the security team \u2014 all of it assumes the attacker is somewhere else, coming down a wire. Someone standing behind you is subject to none of it. They do not need your password if they can watch you type it, or a breach if the document is already printed. Small category of attack, reliably successful, and unusually cheap to fix: nothing here needs budget or approval.'},
 
  {date:'July 2017',crit:1,beat:'The password was in the photograph',
-  body:'The Associated Press published a routine story about Hawaii’s emergency management agency, with a photograph of an employee at his workstation. On the monitor, on a yellow sticky note, was a password — legible in the published picture. The agency confirmed it was real, said it was for an internal system, and changed it. Six months later the same agency accidentally sent a statewide alert warning of an inbound ballistic missile, which is how most people remember it. The photograph is the more instructive story: nobody broke in, nobody was tricked. A password left the building because someone took a picture of a desk.',
+  body:'The Associated Press ran a routine story about Hawaii\u2019s emergency management agency, with a photo of an employee at his workstation. On the monitor, on a yellow sticky note, was a password \u2014 legible in the published picture. The agency confirmed it was real and changed it. Nobody broke in and nobody was tricked. A password left the building because someone photographed a desk.',
   spot:{type:'predict',topic:'screens',q:'A journalist is photographing your team for a company story. What is the actual risk?',
     opts:[
      ['Whatever is on the screens and walls behind everyone',1],
      ['Faces and names becoming publicly linked to the company',0],
      ['The photographer having unescorted access to the floor',0]],
-    fb:'What is behind you. People compose themselves for a camera and forget the background entirely — monitors with mail or dashboards open, whiteboards with architecture on them, notes stuck to a screen. The same thing happens on video calls and in conference livestreams. In 2015 a French broadcaster gave an interview in an office where passwords were visible on the wall behind the presenter, including one for a social media account. Faces are usually fine, and an escorted visitor is normal. The background is the part nobody checks.'}},
+    fb:'What is behind you. People compose themselves for a camera and forget the background \u2014 open mail, dashboards, whiteboards, notes stuck to a monitor. The same happens on video calls and conference livestreams. Faces are usually fine and an escorted visitor is normal. The background is what nobody checks.'}},
 
  {date:'Screens',crit:0,beat:'Further away than you think',
-  body:'On a train, standard laptop text is readable from the seat behind and often the one across the aisle. In an open-plan office, anyone walking to the kitchen passes several screens at reading distance. The information at risk is rarely dramatic — it is a customer name, a salary line, a supplier’s bank details, an email thread about a deal not yet announced. Two fixes cover nearly all of it. The first is where you sit: back to a wall, not to a walkway. The second is a keyboard shortcut you can do without looking — <b>Win+L</b> on Windows, <b>Ctrl+Cmd+Q</b> on a Mac — done every time you stand up, until you stop thinking about it.',
-  spot:{type:'quiz',topic:'screens',q:'You are on a train, working on something confidential. The best available protection is:',
+  body:'On a train, laptop text is readable from the seat behind and often across the aisle. In an open-plan office, anyone heading to the kitchen passes several screens at reading distance. What leaks is rarely dramatic: a customer name, a salary line, a supplier\u2019s bank details. Two fixes cover most of it. Sit with your back to a wall rather than a walkway. And learn the lock shortcut \u2014 <b>Win+L</b>, or <b>Ctrl+Cmd+Q</b> on a Mac \u2014 until you do it without thinking every time you stand up.',
+  spot:{type:'quiz',topic:'screens',q:'You are on a train working on something confidential. The best available protection is:',
     opts:[
      ['Turning the screen brightness right down',0],
      ['Sitting where the wall is behind your screen',1],
      ['Working quickly so it is on screen for less time',0],
      ['Angling the laptop lid slightly away from the aisle',0]],
-    fb:'Position, not settings. If nobody can get behind the screen, nothing else is needed. Dimming makes the screen harder for you to read long before it defeats someone glancing over, angling helps against one seat and not the one opposite, and working faster does not change who can see it. A privacy filter is the one accessory worth having if you travel often — it narrows the viewing angle so the screen looks black from the side.'}},
+    fb:'Position, not settings. If nobody can get behind the screen, nothing else is needed. Dimming makes it unreadable for you first; angling helps against one seat and not the one opposite. A privacy filter is worth having if you travel often \u2014 it makes the screen look black from the side.'}},
 
  {date:'Paper',crit:0,beat:'The tray nobody owns',
-  body:'Paper is the format with no access control. Once printed, a document can be read, photographed or carried out by anyone who passes it, and there is no record that any of that happened. Shared printers make this worse in a specific way: the gap between pressing print and collecting is when the document sits unattended in a corridor. <b>Secure print</b> — sometimes called pull print or follow-me — holds the job until you enter a PIN or tap a badge at the machine, which closes that gap entirely. If your office has it and you are not using it, that is a two-minute change. Whiteboards deserve the same thought: they are designed to be read from across a room, and they are frequently photographed by accident in the background of something else.',
+  body:'Paper is the format with no access control. Once printed, a document can be read, photographed or carried out by anyone passing, with no record that it happened. Shared printers add a specific gap: the minutes between pressing print and collecting. <b>Secure print</b> \u2014 also called pull print \u2014 holds the job until you enter a PIN or tap a badge at the machine, which closes it. Whiteboards deserve the same thought: they are built to be read across a room, and they end up in the background of photographs.',
+  more:{t:'What counts as an incident, and why it matters',
+    body:'A confidential document you cannot account for is a potential data breach, not just an annoyance. Under GDPR and most equivalent rules, the reporting clock starts when someone becomes <i>aware</i> of a possible loss \u2014 not when it is confirmed, and not when the investigation finishes. Organisations generally have 72 hours to notify a regulator once that threshold is crossed, which is why security teams would rather hear about a missing printout that turns up an hour later than find out about it three weeks on. Quietly reprinting and moving on removes the only chance anyone had to establish where the first copy went.'},
   spot:{type:'quiz',topic:'paper',q:'You printed a contract twenty minutes ago and forgot to collect it. It is not in the tray now. What is the right response?',
     opts:[
      ['Print another copy and be quicker this time',0],
      ['Check with colleagues who print to the same machine',0],
      ['Assume a colleague tidied it away and let it go',0],
      ['Report it as a possible loss of a document',1]],
-    fb:'Report it. A confidential document that cannot be accounted for is a potential data incident, and under most privacy rules the clock starts at the moment you notice, not the moment it is confirmed. Asking colleagues is a reasonable thing to do at the same time, but not instead. The instinct to quietly reprint and move on is understandable and it is the one response that guarantees nobody ever finds out where the first copy went.'}},
+    fb:'Report it. Asking colleagues is reasonable at the same time, but not instead. The instinct to quietly reprint is understandable, and it is the one response that guarantees nobody ever finds out where the first copy went.'}},
 
  {date:'Devices',crit:0,beat:'Three minutes is enough',
-  body:'A laptop left on a café table while you visit the counter, a bag in a car boot, a phone face-up on a meeting room table. Theft of a locked, encrypted laptop is a bad afternoon and an insurance claim. Theft of an unencrypted one is a data breach, because the disk can simply be removed and read on another machine — the login screen protects nothing at that point. Two settings decide which of those you are in: <b>full-disk encryption</b> and <b>auto-lock</b> after a short idle period. Both are free, both are on by default on recent phones, and both are frequently off on laptops that have been through several owners.',
+  body:'A laptop left on a caf\u00e9 table while you order, a bag in a car boot, a phone face-up in a meeting room. A stolen laptop that is locked and encrypted is a bad afternoon and an insurance claim. An unencrypted one is a data breach. Two settings decide which you are in: <b>full-disk encryption</b> and a short <b>auto-lock</b>. Both are free, both are on by default on recent phones, and both are often off on laptops that have had several owners.',
+  more:{t:'Why the login screen stops mattering',
+    body:'A password protects the operating system, and the operating system is only involved if the thief boots your machine normally. Remove the drive, connect it to another computer as external storage, and there is no login to pass \u2014 the files are simply there. That is what happened in a well-documented 2019 case where a healthcare laptop was stolen from a car: it had a password, patient records appeared for sale weeks later, and the drive had never been encrypted.<br><br>Encryption changes the shape of the problem. The disk contents are scrambled with a key derived from your credentials, so an attacker holding the physical drive sees noise. Remote wipe is genuinely useful, but conditional: the device has to power on and reach the network, and anyone who steals hardware for the data will not oblige.'},
   spot:{type:'predict',topic:'devices',q:'Your work laptop is stolen. Which single fact most determines how bad this gets?',
     opts:[
      ['Whether the disk was encrypted',1],
      ['How strong your login password was',0],
      ['Whether you can wipe it remotely',0]],
-    fb:'Encryption. A password protects the login screen, and the login screen is irrelevant once the drive is out of the machine and connected to another computer. Remote wipe is genuinely useful, but it only works if the device is switched on and reaches the network — a thief who never powers it up online is unaffected. Encryption is the one that holds regardless of what anyone does next, which is why it is the first thing to check rather than the last.'}},
+    fb:'Encryption. It is the one that holds regardless of what anyone does next, which makes it the first thing to check rather than the last.'}},
 
  {date:'Away from the office',crit:0,beat:'Home counts too',
-  body:'Most of this moves with you. A home office has fewer strangers but more people who are not covered by any agreement you signed — flatmates, family, a visiting friend, someone doing repairs. A video call broadcasts whatever is behind you and, if you share your screen carelessly, whatever notification arrives mid-call. Cafés and coworking spaces put you back among strangers, without the badge door. None of this argues for working somewhere else. It argues for the same two habits being deliberate rather than accidental: lock the screen when you stand up, and know what is visible behind you before you turn the camera on.',
-  spot:{type:'experience',topic:'space',q:'Think about where you worked from most recently. If you had stood up and walked away for five minutes, what would have been readable to whoever was around?',
-    scale:['Nothing — it locks itself','Some of it','More or less everything'],
-    note:'The useful thing about this question is that it has a settings answer rather than a discipline answer. Auto-lock after two or three minutes turns the honest reply into the first one permanently, without you having to remember anything. It is worth setting to a duration short enough to matter but long enough that you are not typing your password every time you read something on your phone \u2014 for most people that is two to five minutes. On a laptop it sits under screen or lock settings; on a phone it is usually called auto-lock or screen timeout.'}},
+  body:'Most of this moves with you. A home office has fewer strangers but more people covered by nothing you signed \u2014 flatmates, family, someone doing repairs. A video call broadcasts whatever is behind you, and any notification that arrives while you share your screen. Caf\u00e9s put you back among strangers without the badge door. None of that argues for working elsewhere. It argues for the same two habits being deliberate: lock the screen when you stand up, and know what is behind you before the camera goes on.',
+  spot:{type:'experience',topic:'space',q:'Think about where you worked most recently. If you had walked away for five minutes, what would have been readable to whoever was around?',
+    scale:['Nothing \u2014 it locks itself','Some of it','More or less everything'],
+    note:'The useful thing here is that this question has a settings answer rather than a discipline answer. Auto-lock after two to five minutes makes the first reply permanently true without you remembering anything. On a laptop it sits under screen or lock settings; on a phone it is usually called auto-lock or screen timeout.'}},
 
  {date:'Look at someone else\u2019s',crit:0,beat:'A desk, five minutes after its owner left',
-  body:'Here is a colleague’s desk as a visitor would find it — someone in the building legitimately, walking past on their own for a couple of minutes. Click whatever you think is worth having. Some of it is genuinely nothing, and knowing which is which matters as much as spotting the rest.',
+  body:'Here is a colleague\u2019s desk as a visitor would find it \u2014 someone in the building legitimately, passing on their own for a couple of minutes. Click whatever is worth having. Some of it genuinely is not, and knowing which is which matters as much as spotting the rest.',
   spot:{type:'flags',topic:'paper',
     mail:[
       {label:'Screen',parts:[[0,'Email client open, inbox visible'],' \u00b7 ',[1,'screen not locked']]},
-      {label:'On the desk',parts:[[2,'A sticky note on the monitor bezel reading \u201CVPN: Summer2024!\u201D']]},
+      {label:'On the desk',parts:[[2,'A sticky note on the monitor reading \u201CVPN: Summer2024!\u201D']]},
       {body:1,parts:[[3,'A printed spreadsheet titled \u201CQ3 headcount \u2014 salary bands\u201D']]},
       {body:1,parts:[[4,'The building access badge, still on its lanyard']]},
       {body:1,parts:[[5,'A phone, face up, showing message previews']]},
       {body:1,parts:['A mug, a plant, and ',[6,'a framed photo of two children']]},
-      {body:1,parts:[[7,'A notebook, closed'],', and ',[8,'a whiteboard behind the desk showing a system diagram with server names']]},
+      {body:1,parts:[[7,'A notebook, closed'],', and ',[8,'a whiteboard showing a system diagram with server names']]},
       {foot:1,parts:['Owner: away from desk, coat still on the chair']}],
     flags:[
-      {ok:0,why:'<b>An open mail client</b> \u2014 the fastest reconnaissance available. Subject lines alone give away current projects, who talks to whom, and which suppliers and systems are in play. No access is needed; it is already on screen.'},
-      {ok:0,why:'<b>Unlocked</b> \u2014 this is what turns everything else on the desk from a look into a session. Two minutes is enough to send mail as this person, which is far harder to unpick afterwards than anything read here.'},
-      {ok:0,why:'<b>A password on the monitor</b> \u2014 exactly the Hawaii photograph, minus the newspaper. Worth remembering that this is a symptom: people write passwords down when there are too many to hold, and a password manager fixes the cause.'},
-      {ok:0,why:'<b>Salary bands on paper</b> \u2014 personal data about named colleagues, printed, unattended and easy to photograph. This is the category most likely to become a formal privacy incident rather than an internal embarrassment.'},
-      {ok:0,why:'<b>The badge</b> \u2014 the physical key to the building, left with the door. It can be cloned in seconds with equipment that costs very little, and its design tells a forger what a convincing one looks like.'},
-      {ok:0,why:'<b>Message previews</b> \u2014 a lock screen showing content leaks one-time codes, which is enough to complete an account takeover that already has the password. Turning previews off while locked is a single setting.'},
-      {ok:1,why:'<b>A family photo</b> is not a security problem, and treating it as one is how these lists lose people. It is personal information, but it is the sort colleagues share deliberately, and nothing follows from a stranger seeing it.'},
-      {ok:1,why:'<b>A closed notebook</b> \u2014 fine as it sits. Someone could open it, but a closed notebook on a desk is not an exposure in the way an unlocked screen is. Worth locking away overnight rather than during a coffee break.'},
-      {ok:0,why:'<b>The whiteboard</b> \u2014 server names and system layout are the reconnaissance an attacker would otherwise spend weeks assembling. Whiteboards are also the thing most often captured accidentally, in the background of a photo or a video call.'}],
-    fb:'Seven things worth having, two that only look like it. The pattern is the same throughout: nothing here required breaking anything, and every item was left by someone doing ordinary work. The two decisions that would have removed most of it are locking the screen and not printing what does not need printing.'}},
+      {ok:0,why:'<b>An open inbox</b> \u2014 subject lines alone give away current projects, who talks to whom, and which suppliers are in play. No access needed; it is already on screen.'},
+      {ok:0,why:'<b>Unlocked</b> \u2014 this turns everything else from a look into a session. Two minutes is enough to send mail as this person, which is far harder to unpick afterwards.'},
+      {ok:0,why:'<b>A password on the monitor</b> \u2014 the Hawaii photograph, minus the newspaper. Worth treating as a symptom: people write passwords down when there are too many to hold.'},
+      {ok:0,why:'<b>Salary bands on paper</b> \u2014 personal data about named colleagues, unattended and easy to photograph. The item here most likely to become a formal privacy incident.'},
+      {ok:0,why:'<b>The badge</b> \u2014 the physical key, left with the door. Cloneable in seconds with cheap equipment, and its design shows a forger what a convincing one looks like.'},
+      {ok:0,why:'<b>Message previews</b> \u2014 a lock screen showing content leaks one-time codes, which completes an account takeover that already has the password. One setting to turn off.'},
+      {ok:1,why:'<b>A family photo</b> is not a security problem, and treating it as one is how these lists lose people. Nothing follows from a stranger seeing it.'},
+      {ok:1,why:'<b>A closed notebook</b> is fine as it sits. Worth locking away overnight rather than during a coffee break.'},
+      {ok:0,why:'<b>The whiteboard</b> \u2014 server names and system layout are reconnaissance that would otherwise take weeks. Also the thing most often captured by accident in the background of a photo.'}],
+    fb:'Seven things worth having, two that only look like it. Nothing here required breaking anything, and every item was left by someone doing ordinary work. Two decisions would have removed most of it: locking the screen, and not printing what did not need printing.'}},
 
  {scene2:1,date:'Your settings',crit:0,beat:'Four things to sort out',
-  body:'Two settings and two habits. The settings take about a minute each and then work permanently, which makes them a better use of your attention than the habits. Open each for the steps, then mark it once you intend to do it.',
+  body:'Two settings and two habits. The settings take about a minute each and then work permanently, which makes them the better use of your attention. Open each for the steps, then mark it once you intend to do it.',
   spot:{type:'checklist',
     items:[
       {topic:'devices',t:'Check encryption and auto-lock on your laptop',
-       how:'These are the two that decide whether a stolen device is an inconvenience or an incident, and both are set once.',
-       steps:['Windows: search for \u201CDevice encryption\u201D or BitLocker and confirm it is on; macOS: System Settings \u2192 Privacy & Security \u2192 FileVault','Set the screen to lock after two to five minutes of inactivity, and require the password on wake','Learn the manual lock shortcut and use it when you stand up \u2014 Win+L, or Ctrl+Cmd+Q on a Mac'],
-       itnote:'On a managed work laptop these may be controlled centrally. If encryption appears to be off, that is worth raising \u2014 it is usually a misconfiguration rather than a decision.'},
+       how:'These two decide whether a stolen device is an inconvenience or an incident, and both are set once.',
+       steps:['Windows: search \u201CDevice encryption\u201D or BitLocker and confirm it is on. macOS: System Settings \u2192 Privacy & Security \u2192 FileVault','Set the screen to lock after two to five minutes, and require the password on wake','Learn the manual lock shortcut \u2014 Win+L, or Ctrl+Cmd+Q on a Mac'],
+       itnote:'On a managed work laptop these may be set centrally. If encryption appears to be off, raise it \u2014 usually a misconfiguration rather than a decision.'},
       {topic:'screens',t:'Turn off message previews on your lock screen',
-       how:'A locked phone that displays the content of messages will happily show a verification code to whoever is holding it.',
-       steps:['iPhone: Settings \u2192 Notifications \u2192 Show Previews \u2192 When Unlocked','Android: Settings \u2192 Notifications \u2192 Lock screen \u2192 hide sensitive content','Check the same on your laptop, where banner notifications can appear over a locked screen'],
+       how:'A locked phone that displays message content will show a verification code to whoever is holding it.',
+       steps:['iPhone: Settings \u2192 Notifications \u2192 Show Previews \u2192 When Unlocked','Android: Settings \u2192 Notifications \u2192 Lock screen \u2192 hide sensitive content','Check the same on your laptop, where banners can appear over a locked screen'],
        itnote:''},
       {topic:'paper',t:'Find out how printing works where you work',
        how:'Secure print closes the gap between sending a document and collecting it, which is where most paper goes missing.',
-       steps:['Ask whether your printers support secure or pull print \u2014 collection by PIN or badge at the machine','If they do, make it your default rather than something you remember to use','Agree with yourself that anything with personal or financial data gets collected immediately, or not printed'],
+       steps:['Ask whether your printers support secure or pull print \u2014 collection by PIN or badge','If they do, make it the default rather than something you remember','Anything with personal or financial data gets collected immediately, or not printed'],
        itnote:'If secure print is not available, ask what the expectation is for confidential documents \u2014 and where the shredding actually happens.'},
       {topic:'space',t:'Decide your end-of-day pass',
-       how:'A single sweep at the end of the day catches most of what accumulates during it, and takes under a minute once it is a habit.',
-       steps:['Paper away and locked if it is sensitive, shredded if it is finished with','Screen locked, badge with you rather than on the desk, phone not left face-up','Glance at the whiteboard \u2014 wipe anything that would be a gift to a photograph'],
+       how:'One sweep catches most of what accumulates during the day, and takes under a minute once it is habit.',
+       steps:['Paper locked away if sensitive, shredded if finished with','Screen locked, badge with you rather than on the desk, phone not left face-up','Glance at the whiteboard \u2014 wipe anything that would be a gift to a photograph'],
        itnote:''}
     ]}},
 
  {scene2:1,date:'What you take away',crit:0,beat:'Three things worth remembering',
-  body:'You started by looking at your own space and finished by looking at someone else’s. Three things worth keeping.',
+  body:'You started by looking at your own space and finished by looking at someone else\u2019s. Three things worth keeping.',
   spot:{type:'takeaways',items:[
-    ['\ud83d\udc40','Physical access ignores your other defences','Encryption and MFA assume the attacker is elsewhere. Someone reading your screen, photographing your desk or taking a printout is not covered by any of it \u2014 and does not need to be clever.'],
-    ['\u2328\ufe0f','Two settings beat any amount of vigilance','Full-disk encryption and a short auto-lock decide most outcomes here, and they keep working on the days you are tired, rushed and not thinking about security at all.'],
-    ['\ud83d\uddc2\ufe0f','Paper is the format with no access control','Once printed, a document can be read, photographed or removed with no record that it happened. Collect it immediately, or think again about whether it needs printing.']
+    ['\ud83d\udc40','Physical access ignores your other defences','Encryption and MFA assume the attacker is elsewhere. Someone reading your screen or taking a printout is covered by none of it \u2014 and does not need to be clever.'],
+    ['\u2328\ufe0f','Two settings beat any amount of vigilance','Full-disk encryption and a short auto-lock decide most outcomes, and they keep working on the days you are tired and not thinking about security at all.'],
+    ['\ud83d\uddc2\ufe0f','Paper is the format with no access control','Once printed, it can be read, photographed or removed with no record. Collect it immediately, or think again about whether it needs printing.']
   ]}}
 ];
 
@@ -463,6 +483,10 @@ let xp=0;const addXP=n=>{xp+=n;document.getElementById('xp').textContent=xp+' XP
 NODES.forEach((n,i)=>{
   const el=document.createElement('div');el.className='node'+(n.crit?' crit':'')+(n.scene2?' s2':'');el.dataset.i=i;
   let h=`<div class="dot"></div><div class="date">${n.date}</div><div class="beat">${n.beat}</div><div class="body">${n.body}</div>`;
+  if(n.more){
+    h+=`<div class="more" id="more-${i}"><button class="more-t" data-more="${i}"><span class="cv"></span>${n.more.t}</button>
+      <div class="more-b"><div class="more-in">${n.more.body}</div></div></div>`;
+  }
   if(n.spot){
     const s=n.spot;const isExp=s.type==='experience';const isCheck=s.type==='checklist';
     if(isCheck){
@@ -567,6 +591,8 @@ track.addEventListener('click',e=>{
     const g=ok?3:1;addXP(g);document.getElementById('xpb-'+i).textContent='+'+g+' XP';
     document.getElementById('fbt-'+i).innerHTML=(ok?'<b class="v-ok">\u2713 That\u2019s right.</b> ':'<b class="v-no">\u2717 Not quite.</b> ')+s.fb;
     fb.classList.add('show');recordAnswer(s.topic,ok);markSeen(i);return;}
+  const mt=e.target.closest('[data-more]');
+  if(mt){document.getElementById('more-'+mt.dataset.more).classList.toggle('open');return;}
   // self-audit: tick an observation
   const ar=e.target.closest('[data-aud]');
   if(ar){const[i,j]=ar.dataset.aud.split('-').map(Number);

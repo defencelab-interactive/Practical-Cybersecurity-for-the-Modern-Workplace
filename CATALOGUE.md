@@ -628,7 +628,7 @@ a scene-2 checklist that assembles the learner's personal action plan.
 |---|---|---|---|
 | Course 1 | Security Basics: Why One Setting Matters | `courses/01-security-basics.html` | Built |
 | Course 2 | Social Engineering: How People Get Played | `courses/02-social-engineering.html` | Built as *The Cheapest Way In*, opens attacker-side |
-| Course 3 | Physical Security: Desks, Screens, Printers | `courses/03-physical-security.html` | Built as *The Sticky Note in the Photo*, opens with a self-audit |
+| Course 3 | Physical Security: Desks, Screens, Printers | `courses/03-physical-security.html` | Built as *The Sticky Note in the Photo*, opens with a self-audit. ~8 min base, ~10 with the two optional depth blocks expanded |
 | Course 4 | Passwords & Passphrases | `courses/04-passwords-mfa.html` | Built — currently **combined with Course 5** in one deck |
 | Course 5 | MFA: The Second Step | — | Covered by the combined deck above; not yet split out |
 | Course 6 | Phishing: Spot, Check, Report | `courses/06-the-447-email.html` | Built, opens with a cold-open email pick |
@@ -652,3 +652,22 @@ learning path use the same opening.
 | 3 | Self-audit — look at the room you are in |
 | 4 | Story — the domino effect |
 | 6 | Challenge / cold open — two emails, pick the fake |
+
+### Length and optional depth
+
+Courses target **~8 minutes at the base layer**, measured at 200 words per minute across body
+text, feedback, widget explanations and checklist steps.
+
+Detail that is genuinely useful but not needed to act on the material goes into a collapsed
+`more` block inside a node — not a separate node, so the timeline and the progress bar stay
+the same length either way. Two or three per course at most. The label states what is inside
+("Why the login screen stops mattering") rather than inviting the reader onward, so it reads
+as optional depth rather than a truncated base layer.
+
+| Course | Base | With depth expanded |
+|---|---|---|
+| 1 | ~5 min | — |
+| 2 | ~12 min | — *(needs the same treatment)* |
+| 3 | ~8 min | ~10 min |
+| 4 | ~6 min | — |
+| 6 | ~12 min | — *(needs the same treatment)* |
