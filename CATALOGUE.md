@@ -128,7 +128,7 @@ No stories, no theory, no breathers. Pure action.
 | 1a | **Safe Browsing: Three Rules** | Certificate check, download safety, pop-up handling — visual guide with real examples | 2 min | Course 1 |
 | 1b | **Tools Worth Knowing About** | Filterable rundown of security tools and extensions by OS, browser and phone — what each does, who it helps | ~4 min | Course 1 |
 | 1c | **Your Company's Security Policy** | Where to find it, what to look for, who to ask. Adaptable template. | 2 min | Course 1 |
-| 2a | **Spot a Social Engineering Attempt** | Five common tactics (urgency, authority, fear, reciprocity, scarcity) — recognise the pattern in three examples | 2 min | Course 2 |
+| 2a | **Your Verification Card** | Answer three questions about where you work, get a card naming who confirms money/access requests and on which channel. Blanks return a fallback rule instead of a gap. Saves locally, prints. | ~3 min | Course 2 |
 | 3a | **The Clean Desk Checklist** | End-of-day routine: lock screen, clear desk, collect printouts, secure documents, badge check | 2 min | Course 3 |
 | 3b | **Secure Printing** | Use secure/pull print, collect immediately, shred sensitive documents | 2 min | Course 3 |
 
@@ -193,6 +193,7 @@ No stories, no theory, no breathers. Pure action.
 
 | Byte | Why it was dropped |
 |---|---|
+| Spot a Social Engineering Attempt | Five tactics and three examples — which is what Course 2 already does, in more depth. Replaced at 2a by the Verification Card, which produces something the learner keeps. |
 | Check If You've Been Breached | A single instruction to visit one external site. Nothing to return to, and the course already covers what a leaked password means — the Byte added a step, not a habit. |
 
 ---
@@ -631,6 +632,7 @@ a scene-2 checklist that assembles the learner's personal action plan.
 | Course 5 | MFA: The Second Step | — | Covered by the combined deck above; not yet split out |
 | Course 6 | Phishing: Spot, Check, Report | `courses/06-the-447-email.html` | Built, opens with a cold-open email pick |
 | Byte 1b | Tools Worth Knowing About | `bytes/01b-security-toolkit.html` | Built |
+| Byte 2a | Your Verification Card | `bytes/02a-verification-card.html` | Built — adapts to org size; `ORG` block at the top lets a client pre-fill their own details |
 | Byte 6b | Link Inspector | `bytes/06b-link-inspector.html` | Built |
 
 Everything else in this catalogue is still to be produced.
