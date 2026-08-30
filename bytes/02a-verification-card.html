@@ -92,8 +92,8 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
 
   <!-- step 1: context -->
   <div class="step" id="s1">
-    <div class="sh">First — where do you work?</div>
-    <div class="ssub">The right answer to “who do I check with” is completely different in a company of four hundred and a company of four. This only changes which questions are worth asking you.</div>
+    <div class="sh">First — when your laptop breaks, what do you do?</div>
+    <div class="ssub">An odd way to start, but it is the fastest way to work out how verification has to run where you are — and unlike “do you have an IT department”, it is something you already know the answer to. If none of these quite fit, take the last one.</div>
     <div class="opts" id="ctxopts"></div>
   </div>
 
@@ -129,34 +129,42 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
 const ORG={name:'',itContact:'',securityEmail:'',paymentRule:''};
 
 const CONTEXTS={
- big:{label:'A company with an IT or security team',
-   note:'Someone is formally responsible for this. The job is knowing who, before you need them at four on a Friday.',
+ big:{label:'I raise a ticket, or message a help desk',
+   note:'Someone is formally responsible for this, which is the easy case. The work is knowing who, before you need them at four on a Friday.',
    fields:[
-    ['it','Your IT or help desk contact','Phone or internal extension you would dial',ORG.itContact],
-    ['sec','Where you report something suspicious','Security team address, or the person who handles it',ORG.securityEmail],
-    ['money','Who confirms a payment or bank-detail change','A name and role — not the CEO unless you genuinely could ring them',''],
+    ['it','Your IT or help desk contact','Phone or extension you would actually dial',ORG.itContact],
+    ['sec','Where you report something suspicious','Security team address, or whoever handles it',ORG.securityEmail],
+    ['money','Who confirms a payment or bank-detail change','A name and role \u2014 not the CEO unless you could genuinely ring them',''],
     ['access','Who confirms an access or account request','Line manager, system owner, or the help desk',''],
-    ['channel','Which channel counts as confirmation','e.g. a call to their known number, or a message in the team chat','']]},
- small:{label:'A small company — no dedicated IT',
-   note:'There is no help desk to ring, so verification runs on people who already know each other. That works, but only if you name them in advance.',
+    ['channel','Which channel counts as confirmation','e.g. a call to their known number, or your team chat','']]},
+ small:{label:'I message a particular person, or the team chat',
+   note:'No help desk, so verification runs on people who already know each other. That works well \u2014 but only if you name them before you need them.',
    fields:[
-    ['it','Who handles IT problems','A colleague, an external provider, or nobody — say which',ORG.itContact],
+    ['it','Who you go to with a computer problem','A colleague, an outside provider, or nobody \u2014 say which',ORG.itContact],
     ['money','Who confirms a payment or bank-detail change','The second person who has to agree before money moves',''],
-    ['channel','Which channel counts as confirmation','e.g. a phone call, never email or chat alone',''],
+    ['channel','Which channel counts as confirmation','e.g. a phone call \u2014 never email or chat on their own',''],
     ['threshold','Above what amount does a payment need two people','A number you can hold to when someone is in a hurry','']]},
- solo:{label:'Freelance, sole trader, or just me',
-   note:'There is nobody to confirm with, so the card cannot be about people. It becomes a rule about time instead — which is the part that actually stops these attacks.',
+ solo:{label:'I sort it myself, or call someone in',
+   note:'There is nobody to confirm with, so this cannot be about people. It becomes a rule about time instead \u2014 which is the part that actually stops these attacks.',
    fields:[
     ['bank','Your bank\u2019s real number','From the back of your card, never from a message',''],
-    ['pause','How long you pause before acting on an urgent request','Long enough to stop being rushed — fifteen minutes is enough',''],
-    ['second','Someone you would run it past, even informally','An accountant, a partner, a friend in the trade — leave blank if none','']]},
- contractor:{label:'Contractor with access to a client\u2019s systems',
-   note:'Two sets of rules apply at once, and the client\u2019s take priority on their systems. A request that arrives about client work gets verified the client\u2019s way, not yours.',
+    ['pause','How long you pause before acting on anything urgent','Long enough to stop being rushed \u2014 fifteen minutes is plenty',''],
+    ['second','Someone you would run it past, even informally','An accountant, a partner, a friend in the trade \u2014 blank if none','']]},
+ contractor:{label:'Depends whose laptop \u2014 I work in a client\u2019s systems',
+   note:'Two sets of rules apply at once, and the client\u2019s take priority on their systems. A request about client work gets verified the client\u2019s way, not yours.',
    fields:[
-    ['own','Who you check with on your own side','Your own IT, partner, or accountant',''],
-    ['client','Your named contact at the client','The person whose job it is to confirm requests about their systems',''],
-    ['clientrule','The client\u2019s rule for access and payment requests','Ask for it at the start of the engagement, in writing',''],
-    ['channel','Which channel counts as confirmation with the client','Agree this while nothing is urgent','']]}
+    ['own','Who you check with on your own side','Your own IT, business partner, or accountant',''],
+    ['client','Your named contact at the client','Whoever\u2019s job it is to confirm requests about their systems',''],
+    ['clientrule','The client\u2019s rule for access and payment requests','Ask at the start of the engagement, in writing',''],
+    ['channel','Which channel counts as confirmation with the client','Agree this while nothing is urgent','']]},
+ unsure:{label:'Honestly, I am not sure',
+   cardLabel:'Still working out who to ask',
+   note:'Common, and not a failing \u2014 most people never find out until something breaks, and new starters almost never know. This turns into a short list of things to find out, and you get a rule that works in the meantime.',
+   unsure:1,
+   fields:[
+    ['who','Who did you or a colleague last ask about a computer problem','A name is enough to start with \u2014 leave blank if it has not come up yet',''],
+    ['money','Who would have to agree before money left the business','Your manager, finance, the owner \u2014 a guess is fine here',''],
+    ['pause','How long you will pause before acting on anything urgent','This one you can decide by yourself, right now. Fifteen minutes.','']]}
 };
 
 const SAY=[
@@ -199,6 +207,7 @@ function collect(){document.querySelectorAll('#fields .inp').forEach(i=>vals[i.d
 
 /* ── fallback rules when a field is left blank ── */
 const FALLBACK={
+ who:'No name yet. Ask a colleague who they messaged last time something broke \u2014 that is the fastest route to the answer, and it takes one question.',
  it:'No IT contact. Then treat any technical instruction that arrives unprompted as a request from a stranger — nobody legitimate needs you to install or log into something during the call itself.',
  sec:'Nowhere to report to. Tell whoever runs the business, in writing, on the day. A record that it happened is worth more than you think when the second attempt arrives.',
  money:'No second person for payments. Then the rule is time: nothing involving money moves on the same message it arrived in. Send it back through a channel you chose and wait for a reply.',
@@ -222,7 +231,7 @@ function render(){
 
  let h=`<div class="card-hd"><div class="k">Verification Card</div>
    <h2>Check here before you act</h2>
-   <div class="ctx">${esc(c.label)}${ORG.name?' \u00b7 '+esc(ORG.name):''}</div></div><div class="card-bd">`;
+   <div class="ctx">${esc(c.cardLabel||c.label)}${ORG.name?' \u00b7 '+esc(ORG.name):''}</div></div><div class="card-bd">`;
 
  c.fields.forEach(([k,label])=>{
   const v=vals[k];
@@ -233,9 +242,13 @@ function render(){
  h+=`<div class="rule"><span class="rt">The rule this card exists for</span>
    Anything asking for <b>money, credentials or access</b> gets confirmed on a channel you chose, not the one it arrived on. That applies when the request looks genuine, and it applies to people more senior than you \u2014 those are the two situations it was written for.</div>`;
 
- if(blanks.length){
+ if(blanks.length&&!c.unsure){
   h+=`<div class="rule gap"><span class="rt">${blanks.length} thing${blanks.length>1?'s':''} you couldn\u2019t fill in</span>
    That is the useful part of this exercise. A blank means there is no agreed answer where you work \u2014 which is worth raising with whoever runs IT, finance, or the business, rather than solving alone in the moment. The fallback rules above hold until then.</div>`;
+ }
+ if(c.unsure){
+  h+=`<div class="rule gap"><span class="rt">How to find the rest out</span>
+   None of this needs a formal conversation. <b>Ask a colleague</b> who they contacted the last time something broke. <b>Check whether there is a ticket system</b> \u2014 a help desk address, a service portal, an IT channel in your chat tool. <b>Ask your manager</b> what happens when a payment request comes in unexpectedly; if the answer is vague, that is worth knowing too. And if you are new, asking these in your first weeks is expected rather than awkward.<br><br>Until you have the answers, the pause rule below carries the weight on its own. It works without knowing a single name.</div>`;
  }
 
  h+=`<div class="lines-say"><span class="flab" style="margin-bottom:9px">Ways to end the conversation</span>`;
