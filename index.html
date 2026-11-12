@@ -63,7 +63,7 @@ a.card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.1)}
   <div class="head">
     <div class="brand">Defence Lab</div>
     <h1>Practical Cybersecurity for the Modern Workplace</h1>
-    <p class="sub">Security awareness training for people who don't work in security. Two formats: <b>Courses</b> build the why — a real incident, taken apart step by step, 6–8 minutes. <b>Security Bytes</b> give the how — one specific thing to set up or check, 2–3 minutes. Both stand alone, and both stack into a path.</p>
+    <p class="sub">Security awareness training for people who don't work in security. Two formats: <b>Courses</b> build the why — a real incident, taken apart step by step, 4–7 minutes. <b>Security Bytes</b> give the how — a tool or a card you keep, 2–4 minutes. Both stand alone, and both stack into a path.</p>
   </div>
 
   <div class="bar">
@@ -89,57 +89,42 @@ const GROUPS=[
  ['\u{1F7E2} General Awareness',[
   ['course','1','How a Breach Unfolds','~6 min','One reused password, nine days unnoticed, and the setting that would have stopped it.','courses/01-security-basics.html'],
   ['byte','1b','Tools Worth Knowing About','~4 min','Filter security tools and extensions by your OS, browser and phone.','bytes/01b-security-toolkit.html'],
-  ['byte','1a','Safe Browsing: Three Rules','2 min','Certificates, downloads and pop-ups, with real examples.',''],
-  ['byte','1c',"Your Company's Security Policy",'2 min','Where to find it, what to look for, who to ask.',''],
   ['course','2','How People Get Talked Into It','~7 min','Pretexting, tailgating, baiting \u2014 attacks that never touch a system.','courses/02-social-engineering.html'],
   ['byte','2a','Your Verification Card','~3 min','Decide who you check with now, while nobody is rushing you. Saves and prints.','bytes/02a-verification-card.html'],
-  ['course','3','Screens, Paper and Devices','~4 min','What a passer-by can read, photograph or carry off from your desk.','courses/03-physical-security.html'],
-  ['byte','3a','The Clean Desk Checklist','2 min','An end-of-day routine that takes under a minute.',''],
-  ['byte','3b','Secure Printing','2 min','Pull print, collect immediately, shred what matters.','']]],
+  ['course','3','Screens, Paper and Devices','~4 min','What a passer-by can read, photograph or carry off from your desk.','courses/03-physical-security.html']]],
 
  ['\u{1F511} Authentication',[
   ['course','4','Reused Passwords and the Second Lock','~7 min','How one reused password opens 47 accounts, and the habits that break the chain.','courses/04-passwords-mfa.html'],
-  ['byte','4a','Build a Passphrase in 60 Seconds','2 min','Four words, separators, and why length beats symbols.',''],
-  ['course','5','MFA: The Second Step','~7 min','Free, takes a minute, and most people still have not done it.',''],
-  ['byte','5a','Set Up MFA \u2014 Step by Step','3 min','Find the setting, scan the code, save the recovery codes.','']]],
+  ['byte','4a','Build a Passphrase','2 min','Four words, separators, strength shown as you type.',''],
+  ['byte','5a','Set Up MFA \u2014 Step by Step','3 min','The settings path in each major account. The course says turn it on; this shows where.','']]],
 
  ['\u{1F3A3} Phishing & Social Engineering',[
   ['course','6','Spotting a Fake Email','~6 min','How a convincing message is built, and the three checks that catch one.','courses/06-the-447-email.html'],
-  ['byte','6b','Link Inspector','~3 min','Paste a URL and see where it actually goes. Runs in your browser.','bytes/06b-link-inspector.html'],
-  ['byte','6a','The 5-Second Email Check','2 min','Sender, link, tone \u2014 practised on your own inbox.',''],
-  ['byte','6c','How to Report a Phishing Email','2 min','Where the button is, and why forwarding breaks the headers.','']]],
+  ['byte','6b','Link Inspector','~3 min','Paste a URL and see where it actually goes. Runs in your browser.','bytes/06b-link-inspector.html']]],
 
  ['\u{1F4BB} Device Security',[
   ['course','7','Laptop Security Settings','~6 min','Ninety seconds of an unlocked screen, and what it cost.',''],
-  ['byte','7a','Five Settings to Check on Your Laptop','2 min','Auto-lock, encryption, updates, antivirus, extensions.',''],
   ['byte','7b','Secure Your Home WiFi','2 min','Router password, encryption type, network name.',''],
-  ['byte','7c','Working from a Coffee Shop','2 min','Screen angle, network, auto-lock, and calls you should not take.',''],
-  ['byte','7d',"USB Drives: Don't Plug and Pray",'2 min','Why a found drive is bait, and what to do with it instead.',''],
-  ['byte','7e','Travel Security Checklist','2 min','Packing, airport, hotel \u2014 a short reference.',''],
+  ['byte','7f','Working Away From the Office','3 min','Laptop settings, caf\u00e9s and travel in one reference.',''],
   ['course','8','Phone Security Settings','~6 min','Your phone holds more access than your laptop does.',''],
-  ['byte','8a','App Permission Cleanup','2 min','Review what your apps can reach, revoke what makes no sense.',''],
-  ['byte','8b','When You Lose Your Phone','2 min','Lock, wipe, notify, and the order to do it in.','']]],
+  ['byte','8b','When You Lose Your Phone','2 min','Lock, wipe, notify \u2014 in order, written for a panic.','']]],
 
  ['\u{1F310} Online Presence',[
-  ['course','9',"Social Media: What You're Really Sharing",'~8 min','One photo on LinkedIn gave an attacker everything they needed.',''],
-  ['byte','9a','LinkedIn Privacy in Two Minutes','2 min','Connections, location, and third-party app access.',''],
-  ['byte','9b','Clean Up Your Digital Footprint','3 min','Old accounts, data brokers, and searching for yourself.','']]],
+  ['course','9',"Social Media: What You're Really Sharing",'~6 min','One photo on LinkedIn gave an attacker everything they needed.',''],
+  ['byte','9a',"Clean Up What's Public About You",'3 min','LinkedIn settings, old accounts, and searching for yourself.','']]],
 
  ['\u{1F916} AI Security',[
-  ['course','10','AI Tools: Safe Use at Work','~7 min','A $25M deepfake call, and what people paste into public models.',''],
-  ['byte','10a','How to Anonymise an AI Prompt','2 min','Three rewrites: names, companies and project details removed.',''],
-  ['byte','10b','Spot a Deepfake Call','2 min','Verification questions, calling back, and a family code word.','']]],
+  ['course','10','AI Tools: Safe Use at Work','~6 min','What people paste into public models, and what happens to it.',''],
+  ['byte','10a','Anonymise an AI Prompt','2 min','Paste a prompt; names and company details get flagged with replacements.','']]],
 
  ['\u{1F4C2} Data Protection',[
   ['course','11','Data Classification: Four Levels','~6 min','Same spreadsheet, three locations, three completely different risks.',''],
-  ['byte','11a','Classify This: Quick Exercise','3 min','Six items, four levels, drag each where it belongs.',''],
   ['byte','11b','Is This PII?','2 min','Eight examples to sort, and the edge cases that catch people.',''],
-  ['course','12','File Sharing & Access','~6 min','"Anyone with the link" is rarely the setting you meant.',''],
-  ['byte','12a','Sharing Files Safely','2 min','Link types, expiry dates, and folders that inherit access.','']]],
+  ['course','12','File Sharing & Access','~6 min','"Anyone with the link" is rarely the setting you meant.','']]],
 
  ['\u{1F6A8} Incident Response',[
-  ['course','13','The First 30 Minutes','~7 min','Stop, document, report \u2014 and why speed decides the cost.',''],
-  ['byte','13a','STOP \u00B7 DOCUMENT \u00B7 REPORT Card','2 min','A card you can save or print, plus two practice scenarios.','']]]
+  ['course','13','The First 30 Minutes','~6 min','Stop, document, report \u2014 and why speed decides the cost.',''],
+  ['byte','13a','STOP \u00b7 DOCUMENT \u00b7 REPORT','2 min','A card you fill in once, save and print.','']]]
 ];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const lib=document.getElementById('lib');
