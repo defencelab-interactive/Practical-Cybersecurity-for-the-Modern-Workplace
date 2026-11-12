@@ -349,6 +349,7 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 
 .endcard .ec-tk{display:flex;flex-direction:column;gap:11px;margin:4px 0 18px}
 .endcard .ec-t{display:flex;gap:12px;font-size:14.5px;line-height:1.6;color:var(--tm)}
+.endcard .ec-src{margin:22px 0 4px;border-top:1px solid var(--line);padding-top:16px}.endcard .ec-src summary{cursor:pointer;font:600 13px var(--body);color:var(--tm);letter-spacing:.02em;list-style:none}.endcard .ec-src summary::-webkit-details-marker{display:none}.endcard .ec-src summary::before{content:'+ ';font-weight:700}.endcard .ec-src[open] summary::before{content:'\2212 '}.endcard .ec-src ol{margin:12px 0 0;padding-left:20px;font-size:13px;line-height:1.65;color:var(--tm)}.endcard .ec-src li{margin-bottom:9px}.endcard .ec-src a{color:var(--ac);text-decoration:none;border-bottom:1px solid rgba(52,183,125,.35)}.endcard .ec-src .ec-src-note{margin-top:12px;font-size:12.5px;color:var(--tm);opacity:.85;font-style:italic}
 .endcard .ec-t span{font-size:17px;flex:none;line-height:1.4}
 .endcard .ec-t b{color:var(--tw);font-weight:600}
 .endcard .ec .nextbtn{background:var(--ac);color:#08130d;border:none;border-radius:11px;padding:12px 22px;font:600 15px var(--body);cursor:pointer}
@@ -432,7 +433,7 @@ const NODES=[
     fb:'The pattern is the same in all three: the protection people assume they have is doing something narrower than they think.<br><br>What follows is the three that actually carry weight on a laptop — and none of them need you to be technical.'}},
 
  {date:'Updates',crit:1,beat:'A patch is also a map for attackers',
-  body:'That last myth has a famous example. In 2017 Equifax knew about a vulnerability in software they ran, the patch existed, and it was not applied. Attackers used that exact hole and took the personal records of about 147 million people.<br><br>Nobody was tricked. Nobody clicked anything. A known fix was available and sitting uninstalled.',
+  body:'That last myth has a famous example. In 2017 Equifax knew about a vulnerability in software they ran, the patch existed, and it was not applied. Attackers used that exact hole, and the FTC later put the number of people whose personal information was exposed at about <b>147 million</b>.<br><br>Nobody was tricked. Nobody clicked anything. A known fix was available and sitting uninstalled.',
   more:{t:'Why the gap after a patch is the dangerous part',
     body:'When a vendor publishes a security update, it usually publishes what it fixed — a reference number and a description. Security researchers need that. So do attackers, who work backwards from the description to build something that exploits machines where the patch has not landed yet.<br><br>The window between “patch released” and “patch installed” is therefore the most dangerous period in a vulnerability’s life, not the quiet months before anyone noticed. Automatic updates matter because they close that window without needing you to decide anything at the moment you are busiest.'},
   spot:{type:'quiz',topic:'updates',q:'When is a known vulnerability most dangerous to your machine?',
@@ -463,7 +464,7 @@ const NODES=[
     fb:'Assume malware until someone qualified says otherwise. Disabling protection is one of the first things malicious software does, precisely so it can keep working unnoticed.<br><br>Expired subscriptions and broken updates do happen, and they announce themselves differently — a licence warning, an error message. Protection that silently refuses to stay on is the one to treat as an incident: disconnect from the network and tell IT.'}},
 
  {date:'Networks',crit:0,beat:'What a public network can and cannot see',
-  body:'The laptop is only as private as the network it is on.<br><br>At DEF CON in 2019, researchers set up an access point called “Free Conference WiFi”. Hundreds of security professionals connected to it. The researchers could see which sites they visited and, in some cases, far more.<br><br>Sites that use HTTPS protect the contents of what you send to them. A VPN adds a second layer and hides which sites you are visiting at all — which is the part public networks can otherwise read.',
+  body:'The laptop is only as private as the network it is on.<br><br>In 2024 Australian Federal Police charged a man over “evil twin” WiFi networks — access points that copied the names of real free networks — set up at airports in Perth, Melbourne and Adelaide and on domestic flights. Anyone who joined was sent to a fake sign-in page asking for their email or social media login. Police said they found dozens of other people’s credentials on his devices.<br><br>Sites that use HTTPS protect the contents of what you send to them. A VPN adds a second layer and hides which sites you are visiting at all — which is the part public networks can otherwise read.',
   spot:{type:'quiz',topic:'network',q:'You are on hotel WiFi, about to log into your work email. HTTPS is on. Do you still need a VPN?',
     opts:[
      ['No — HTTPS already encrypts everything that matters',0],
@@ -588,7 +589,7 @@ NODES.forEach((n,i)=>{
         </div>
         <div class="rslider-bar"><div class="rslider-marker" id="rsm-${i}"></div></div>
         <div class="rslider-eg" id="rseg-${i}"></div>
-        <div class="rslider-src">Illustrative estimate — real crack times depend on the attacker\u2019s hardware and method. Orders of magnitude follow the <a href="https://www.hivesystems.com/password" target="_blank" rel="noopener">Hive Systems password table</a>; official guidance favouring passphrases is in <a href="https://pages.nist.gov/800-63-4/sp800-63b.html" target="_blank" rel="noopener">NIST SP 800-63B</a>.</div>
+        <div class="rslider-src">Illustrative estimate — real crack times depend on the attacker\u2019s hardware and method. Orders of magnitude follow the <a href="https://www.hivesystems.com/password" target="_blank" rel="noopener">Hive Systems password table</a>; official guidance favouring passphrases is in <a href="https://pages.nist.gov/800-63-4/sp800-63b/authenticators" target="_blank" rel="noopener">NIST SP 800-63B</a>.</div>
       </div></div>`;
     } else {
       h+=`<div class="spot"><button class="spot-trigger${isExp?' q-exp':''}" data-spot="${i}"><span class="pulse"></span>${isExp?'Your experience':(s.type==='quiz'?'Your call':'What happens next?')}</button>
@@ -617,6 +618,13 @@ end.innerHTML=`<div class="ec"><h3>That\u2019s the course.</h3>
     <div class="ec-t"><span>\ud83e\udde9</span><div><b>An unused extension is not inactive.</b> It keeps its permissions and keeps updating itself, including after it quietly changes owner.</div></div>
     <div class="ec-t"><span>\ud83d\udee1\ufe0f</span><div><b>Protection that will not stay on is a symptom.</b> Antivirus disabling itself is one of the first things malware arranges \u2014 treat it as an incident, not a glitch.</div></div>
   </div>
+  <details class="ec-src"><summary>Sources and what is not sourced</summary>
+  <ol>
+<li>Equifax, 2017 — FTC: the breach "affected approximately 147 million people"; Equifax "failed to patch its network after being alerted in March 2017". <a href="https://www.ftc.gov/news-events/news/press-releases/2019/07/equifax-pay-575-million-part-settlement-ftc-cfpb-states-related-2017-data-breach" target="_blank" rel="noopener">FTC press release, 22 Jul 2019</a>.</li>
+<li>The Great Suspender removed from the Chrome Web Store for malware, February 2021, after a change of owner. Reported: <a href="https://9to5google.com/2021/02/04/the-great-suspender-extension-has-been-removed-from-chrome-web-store-for-containing-malware/" target="_blank" rel="noopener">9to5Google, 4 Feb 2021</a>.</li>
+<li>"Evil twin" free-WiFi networks at Australian airports and on domestic flights: <a href="https://afp.gov.au/news-centre/media-release/man-charged-over-creation-evil-twin-free-wifi-networks-access-personal" target="_blank" rel="noopener">Australian Federal Police media release, 28 Jun 2024</a>.</li>
+  </ol>
+  <div class="ec-src-note">The AFP release describes charges, not a conviction at the time of writing.</div></details>
   <div class="yourplan" id="yourplan"></div><button class="nextbtn">Finish Scene \u2192</button></div>`;
 
 track.appendChild(end);

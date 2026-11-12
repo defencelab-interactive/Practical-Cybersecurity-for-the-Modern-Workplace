@@ -294,6 +294,7 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 
 .endcard .ec-tk{display:flex;flex-direction:column;gap:11px;margin:4px 0 18px}
 .endcard .ec-t{display:flex;gap:12px;font-size:14.5px;line-height:1.6;color:var(--tm)}
+.endcard .ec-src{margin:22px 0 4px;border-top:1px solid var(--line);padding-top:16px}.endcard .ec-src summary{cursor:pointer;font:600 13px var(--body);color:var(--tm);letter-spacing:.02em;list-style:none}.endcard .ec-src summary::-webkit-details-marker{display:none}.endcard .ec-src summary::before{content:'+ ';font-weight:700}.endcard .ec-src[open] summary::before{content:'\2212 '}.endcard .ec-src ol{margin:12px 0 0;padding-left:20px;font-size:13px;line-height:1.65;color:var(--tm)}.endcard .ec-src li{margin-bottom:9px}.endcard .ec-src a{color:var(--ac);text-decoration:none;border-bottom:1px solid rgba(52,183,125,.35)}.endcard .ec-src .ec-src-note{margin-top:12px;font-size:12.5px;color:var(--tm);opacity:.85;font-style:italic}
 .endcard .ec-t span{font-size:17px;flex:none;line-height:1.4}
 .endcard .ec-t b{color:var(--tw);font-weight:600}
 .endcard .ec-tk{display:flex;flex-direction:column;gap:11px;margin:4px 0 18px}
@@ -378,8 +379,8 @@ const NODES=[
      ['Ring the help desk and say you are locked out',1]],
     fb:'The phone call. A usable flaw is expensive, gets patched, and may not exist on the day you need it. Buying access means trusting a criminal. Password guessing runs into MFA.<br><br>The help desk is staffed by people whose job is to be helpful to anyone who sounds like a colleague in trouble, and it is open all day. It costs nothing.'}},
 
- {date:'July 2020',crit:1,beat:'A phone call that reached 130 accounts',
-  body:'That is not a thought experiment. Twitter employees were working from home and the VPN was misbehaving for everyone.<br><br>Someone rang a few of them claiming to be internal IT, walked them through a fix, and asked them to log in on a page that looked exactly like the company sign-in. Enough did. With those credentials the callers reached the internal admin tools, took over 130 accounts — Obama, Musk, Gates, Apple — and posted a bitcoin scam.<br><br>They wrote no malware. They knew the VPN was flaky, and they were willing to try several people until one helped.',
+ {date:'July 2020',crit:1,beat:'A phone call that reached 45 verified accounts',
+  body:'That is not a thought experiment. Twitter employees were working from home and the VPN was misbehaving for everyone.<br><br>Someone rang a few of them claiming to be internal IT, walked them through a fix, and asked them to log in on a page that looked exactly like the company sign-in. Enough did. With those credentials the callers reached the internal admin tools. Twitter later said about <b>130 accounts were targeted</b> and <b>45 were taken over</b> — Obama, Musk, Gates, Apple among them — and used to post a bitcoin scam.<br><br>They wrote no malware. They knew the VPN was flaky, and they were willing to try several people until one helped.',
   spot:{type:'predict',topic:'verify',q:'You get that call. The caller knows your name, your team, and that the VPN has failed all week. What settles it?',
     opts:[
      ['Ask a question only real IT would know the answer to',0],
@@ -537,7 +538,7 @@ NODES.forEach((n,i)=>{
         </div>
         <div class="rslider-bar"><div class="rslider-marker" id="rsm-${i}"></div></div>
         <div class="rslider-eg" id="rseg-${i}"></div>
-        <div class="rslider-src">Illustrative estimate — real crack times depend on the attacker\u2019s hardware and method. Orders of magnitude follow the <a href="https://www.hivesystems.com/password" target="_blank" rel="noopener">Hive Systems password table</a>; official guidance favouring passphrases is in <a href="https://pages.nist.gov/800-63-4/sp800-63b.html" target="_blank" rel="noopener">NIST SP 800-63B</a>.</div>
+        <div class="rslider-src">Illustrative estimate — real crack times depend on the attacker\u2019s hardware and method. Orders of magnitude follow the <a href="https://www.hivesystems.com/password" target="_blank" rel="noopener">Hive Systems password table</a>; official guidance favouring passphrases is in <a href="https://pages.nist.gov/800-63-4/sp800-63b/authenticators" target="_blank" rel="noopener">NIST SP 800-63B</a>.</div>
       </div></div>`;
     } else {
       h+=`<div class="spot"><button class="spot-trigger${isExp?' q-exp':''}" data-spot="${i}"><span class="pulse"></span>${isExp?'Your experience':(s.type==='quiz'?'Your call':'What happens next?')}</button>
@@ -566,6 +567,12 @@ end.innerHTML=`<div class="ec"><h3>That\u2019s the course.</h3>
     <div class="ec-t"><span>\ud83e\udde9</span><div><b>Knowing true things about you proves nothing.</b> A pretext is built from public material \u2014 your role, your tools, the colleagues you tag, when you are away.</div></div>
     <div class="ec-t"><span>\u23f8\ufe0f</span><div><b>Every version needs you to decide right now.</b> Ending the conversation and confirming elsewhere defeats nearly all of it \u2014 which makes it a rule to agree with your team, not an act of personal nerve.</div></div>
   </div>
+  <details class="ec-src"><summary>Sources and what is not sourced</summary>
+  <ol>
+<li>Twitter incident update, 17–18 July 2020 — about 130 accounts targeted, 45 taken over. Reported: <a href="https://www.npr.org/2020/07/18/892615413/we-re-embarrassed-twitter-says-high-profile-hack-hit-130-users" target="_blank" rel="noopener">NPR, 18 Jul 2020</a>.</li>
+<li>Charges brought 31 July 2020 (US DOJ and Hillsborough County State Attorney). Reported: <a href="https://www.npr.org/2020/07/31/897815039/florida-teen-charged-as-mastermind-of-massive-twitter-hack" target="_blank" rel="noopener">NPR, 31 Jul 2020</a>.</li>
+  </ol>
+  <div class="ec-src-note">The detail that the callers knew the VPN was failing comes from contemporaneous reporting, not from a Twitter statement.</div></details>
   <div class="yourplan" id="yourplan"></div><button class="nextbtn">Finish Scene \u2192</button></div>`;
 track.appendChild(end);
 

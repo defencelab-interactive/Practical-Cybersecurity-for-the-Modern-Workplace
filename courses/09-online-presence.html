@@ -398,6 +398,7 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 
 .endcard .ec-tk{display:flex;flex-direction:column;gap:11px;margin:4px 0 18px}
 .endcard .ec-t{display:flex;gap:12px;font-size:14.5px;line-height:1.6;color:var(--tm)}
+.endcard .ec-src{margin:22px 0 4px;border-top:1px solid var(--line);padding-top:16px}.endcard .ec-src summary{cursor:pointer;font:600 13px var(--body);color:var(--tm);letter-spacing:.02em;list-style:none}.endcard .ec-src summary::-webkit-details-marker{display:none}.endcard .ec-src summary::before{content:'+ ';font-weight:700}.endcard .ec-src[open] summary::before{content:'\2212 '}.endcard .ec-src ol{margin:12px 0 0;padding-left:20px;font-size:13px;line-height:1.65;color:var(--tm)}.endcard .ec-src li{margin-bottom:9px}.endcard .ec-src a{color:var(--ac);text-decoration:none;border-bottom:1px solid rgba(52,183,125,.35)}.endcard .ec-src .ec-src-note{margin-top:12px;font-size:12.5px;color:var(--tm);opacity:.85;font-style:italic}
 .endcard .ec-t span{font-size:17px;flex:none;line-height:1.4}
 .endcard .ec-t b{color:var(--tw);font-weight:600}
 .endcard .ec .nextbtn{background:var(--ac);color:#08130d;border:none;border-radius:11px;padding:12px 22px;font:600 15px var(--body);cursor:pointer}
@@ -452,7 +453,7 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
       <svg class="sh" viewBox="0 0 120 124"><path d="M60 6 L106 24 L106 66 Q106 104 60 120 Q14 104 14 66 L14 24 Z" fill="rgba(52,183,125,.06)" stroke="var(--ac)" stroke-width="3"/><path d="M60 30 L52 54 L66 62 L54 92" fill="none" stroke="var(--rd)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <div class="eyebrow">Course 9 · Online Presence</div>
       <h1>What You Post About Work</h1>
-      <div class="r-sub">How one proud team photo became the script for a $340,000 fraud — and which three settings actually help.</div>
+      <div class="r-sub">How a proud team photo becomes the script for an invoice fraud — and which three settings actually help.</div>
 
     </div>
     <div class="scroll" id="scroll">
@@ -469,7 +470,7 @@ const XPW={sure:3,pretty:2,guess:1};
 /* ===== SCENE 1 as a vertical timeline with spots ===== */
 const NODES=[
  {date:'Start here',crit:0,beat:'One post, and what a stranger takes from it',
-  body:'Mark is an analyst at a financial services firm. His team spent three weeks on a system upgrade, finished on a Friday, and he posted a photo of the room they had worked in.<br><br>Before you read on: how much of that post is useful to someone planning an attack on his company?',
+  body:'<i>The scenario below is composed from the standard pattern of these frauds rather than from one reported case.</i><br><br>Mark is an analyst at a financial services firm. His team spent three weeks on a system upgrade, finished on a Friday, and he posted a photo of the room they had worked in.<br><br>Before you read on: how much of that post is useful to someone planning an attack on his company?',
   spot:{type:'estimate',topic:'post',max:10,real:8,
     post:{head:'Mark Dalton · Senior Analyst',
       body:'“Three weeks of chaos, but we shipped it! Huge props to the team for crushing this legacy system upgrade. Weekend mode: activated 🎉”',
@@ -652,7 +653,7 @@ NODES.forEach((n,i)=>{
         </div>
         <div class="rslider-bar"><div class="rslider-marker" id="rsm-${i}"></div></div>
         <div class="rslider-eg" id="rseg-${i}"></div>
-        <div class="rslider-src">Illustrative estimate — real crack times depend on the attacker\u2019s hardware and method. Orders of magnitude follow the <a href="https://www.hivesystems.com/password" target="_blank" rel="noopener">Hive Systems password table</a>; official guidance favouring passphrases is in <a href="https://pages.nist.gov/800-63-4/sp800-63b.html" target="_blank" rel="noopener">NIST SP 800-63B</a>.</div>
+        <div class="rslider-src">Illustrative estimate — real crack times depend on the attacker\u2019s hardware and method. Orders of magnitude follow the <a href="https://www.hivesystems.com/password" target="_blank" rel="noopener">Hive Systems password table</a>; official guidance favouring passphrases is in <a href="https://pages.nist.gov/800-63-4/sp800-63b/authenticators" target="_blank" rel="noopener">NIST SP 800-63B</a>.</div>
       </div></div>`;
     } else {
       h+=`<div class="spot"><button class="spot-trigger${isExp?' q-exp':''}" data-spot="${i}"><span class="pulse"></span>${isExp?'Your experience':(s.type==='quiz'?'Your call':'What happens next?')}</button>
@@ -681,6 +682,11 @@ end.innerHTML=`<div class="ec"><h3>That\u2019s the course.</h3>
     <div class="ec-t"><span>\ud83d\udcac</span><div><b>Comments count as your post.</b> Half of what exposed Mark came from colleagues. Your settings do not cover what other people write under your name.</div></div>
     <div class="ec-t"><span>\ud83d\udd12</span><div><b>Three settings carry most of it.</b> Your connection list, location on posts, and old app permissions \u2014 the rest of the privacy menu matters far less.</div></div>
   </div>
+  <details class="ec-src"><summary>Sources and what is not sourced</summary>
+  <ol>
+<li>No external case is cited in this course.</li>
+  </ol>
+  <div class="ec-src-note">Mark, the post and the $340,000 invoice are a composed scenario built from the standard pattern of business email compromise, not a reported case. Every detail in the post exercise is there to be found in real posts, but this particular fraud did not happen to a real Mark.</div></details>
   <div class="yourplan" id="yourplan"></div><button class="nextbtn">Finish Scene \u2192</button></div>`;
 
 track.appendChild(end);

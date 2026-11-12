@@ -374,6 +374,7 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 
 .endcard .ec-tk{display:flex;flex-direction:column;gap:11px;margin:4px 0 18px}
 .endcard .ec-t{display:flex;gap:12px;font-size:14.5px;line-height:1.6;color:var(--tm)}
+.endcard .ec-src{margin:22px 0 4px;border-top:1px solid var(--line);padding-top:16px}.endcard .ec-src summary{cursor:pointer;font:600 13px var(--body);color:var(--tm);letter-spacing:.02em;list-style:none}.endcard .ec-src summary::-webkit-details-marker{display:none}.endcard .ec-src summary::before{content:'+ ';font-weight:700}.endcard .ec-src[open] summary::before{content:'\2212 '}.endcard .ec-src ol{margin:12px 0 0;padding-left:20px;font-size:13px;line-height:1.65;color:var(--tm)}.endcard .ec-src li{margin-bottom:9px}.endcard .ec-src a{color:var(--ac);text-decoration:none;border-bottom:1px solid rgba(52,183,125,.35)}.endcard .ec-src .ec-src-note{margin-top:12px;font-size:12.5px;color:var(--tm);opacity:.85;font-style:italic}
 .endcard .ec-t span{font-size:17px;flex:none;line-height:1.4}
 .endcard .ec-t b{color:var(--tw);font-weight:600}
 .endcard .ec .nextbtn{background:var(--ac);color:#08130d;border:none;border-radius:11px;padding:12px 22px;font:600 15px var(--body);cursor:pointer}
@@ -458,7 +459,7 @@ const NODES=[
     fb:'The phone, and it is not close.<br><br>A laptop holds work. A phone holds the <b>means of getting back into everything else</b> — your authenticator codes, your email for password resets, and the number used to confirm it is really you. Someone holding an unlocked phone can often reset accounts that were never on the phone at all.<br><br>Which is why a phone deserves at least the care people give a laptop, and usually gets less.<br><br>That stays true whether the phone is yours or the company\u2019s. A work phone holds the codes for work accounts. A personal one holds the email those accounts are reset through. Either way, it is the device that opens the others.'}},
 
  {date:'Permissions',crit:0,beat:'What your apps can see when you are not looking',
-  body:'Start with what is already installed. Apps ask for permissions at install and keep them indefinitely — location, microphone, camera, contacts — whether or not they still need them.<br><br>In 2021 a flashlight app with tens of millions of downloads was found requesting contacts, location, camera and microphone. A flashlight needs a torch and nothing else.',
+  body:'Start with what is already installed. Apps ask for permissions at install and keep them indefinitely — location, microphone, camera, contacts — whether or not they still need them.<br><br>In 2019 Avast looked at 937 flashlight apps on Google Play. They asked for <b>25 permissions on average</b>, and one asked for 77. Among them: 180 wanted to read your contacts, and 77 wanted to record audio. A flashlight needs the torch and nothing else.',
   spot:{type:'quiz',topic:'perms',q:'A weather app you installed a year ago wants your contacts and microphone. What do you do?',
     opts:[
      ['Allow it — weather apps use extra data sources',0],
@@ -467,14 +468,14 @@ const NODES=[
      ['Leave the settings and just stop using the app',0]],
     fb:'Deny both. Weather needs a location, optionally, and an internet connection. Contacts and a microphone have nothing to do with forecasting, and a request for them says the app is collecting beyond its stated purpose.<br><br>Leaving an unused app installed changes nothing — the permissions stay live whether you open it or not.'}},
 
- {date:'Charging and WiFi',crit:1,beat:'Why that airport USB socket is not just power',
-  body:'Permissions are what you granted. These two are what you walk into.<br><br>A USB cable carries power and data on the same connector. A tampered public charging point can read from the phone while it charges — the FBI and FCC both issued warnings about it. A wall socket with your own adapter carries power only.<br><br>Public WiFi has the same shape. At DEF CON in 2019, researchers put up an access point called “Free Conference WiFi” and hundreds of security professionals joined it.',
+ {date:'Charging and WiFi',crit:1,beat:'Why that airport USB socket is not only power',
+  body:'Permissions are what you granted. These two are what you walk into.<br><br>A USB cable carries power and data on the same connector. A tampered public charging point could in principle read from the phone while it charges. The FBI and FCC both issued warnings about this in 2023, and researchers demonstrated working attacks at USENIX Security in 2025 — but <b>no confirmed real-world case has been reported</b>, so treat it as a cheap habit rather than an emergency. A wall socket with your own adapter carries power only, which removes the question.<br><br>Public WiFi has the same shape. In 2024 Australian Federal Police charged a man over fake free-WiFi networks at three airports and on domestic flights: they copied the names of the real ones, and asked anyone who joined to sign in with their email or social media login.',
   spot:{type:'predict',topic:'public',q:'Airport, 5% battery, boarding soon. A free USB charging post, or a wall socket across the hall.',
     opts:[
      ['Use the USB post — you need the charge now',0],
      ['Walk to the wall socket and use your own adapter',1],
      ['Use the USB post, but switch the phone off first',0]],
-    fb:'The wall socket. Your own adapter carries power and nothing else, which removes the question entirely.<br><br>Switching the phone off helps on some devices and not others, and “charge only” prompts can be bypassed on tampered hardware. A USB data blocker costs about the price of a coffee and solves it permanently if you travel often.'}},
+    fb:'The wall socket. Your own adapter carries power and nothing else, which removes the question entirely.<br><br>Switching the phone off helps on some devices and not others. The “trust this computer” prompt is a real protection, though 2025 research (“ChoiceJacking”) showed a malicious charger can defeat it on phones from every major vendor; those vendors are shipping fixes. A USB data blocker costs about the price of a coffee and settles it permanently if you travel often.'}},
 
  {date:'If it goes missing',crit:1,beat:'The order to do things in',
   body:'Assume it happens. What you do in the first ten minutes decides most of the rest.<br><br><b>Lock it remotely</b> first — that stops anything further without destroying evidence of where it is. <b>Then tell IT</b>, if it is a work phone or has work accounts on it. <b>Then change the passwords</b> for anything that was signed in. Wipe it only when you are sure it is gone rather than misplaced, because a wipe is permanent and ends the chance of finding it.<br><br>All of that needs Find My Device switched on beforehand. It cannot be turned on afterwards.',
@@ -614,7 +615,7 @@ NODES.forEach((n,i)=>{
         </div>
         <div class="rslider-bar"><div class="rslider-marker" id="rsm-${i}"></div></div>
         <div class="rslider-eg" id="rseg-${i}"></div>
-        <div class="rslider-src">Illustrative estimate — real crack times depend on the attacker\u2019s hardware and method. Orders of magnitude follow the <a href="https://www.hivesystems.com/password" target="_blank" rel="noopener">Hive Systems password table</a>; official guidance favouring passphrases is in <a href="https://pages.nist.gov/800-63-4/sp800-63b.html" target="_blank" rel="noopener">NIST SP 800-63B</a>.</div>
+        <div class="rslider-src">Illustrative estimate — real crack times depend on the attacker\u2019s hardware and method. Orders of magnitude follow the <a href="https://www.hivesystems.com/password" target="_blank" rel="noopener">Hive Systems password table</a>; official guidance favouring passphrases is in <a href="https://pages.nist.gov/800-63-4/sp800-63b/authenticators" target="_blank" rel="noopener">NIST SP 800-63B</a>.</div>
       </div></div>`;
     } else {
       h+=`<div class="spot"><button class="spot-trigger${isExp?' q-exp':''}" data-spot="${i}"><span class="pulse"></span>${isExp?'Your experience':(s.type==='quiz'?'Your call':'What happens next?')}</button>
@@ -643,6 +644,14 @@ end.innerHTML=`<div class="ec"><h3>That\u2019s the course.</h3>
     <div class="ec-t"><span>\ud83d\udd0c</span><div><b>A USB socket carries data as well as power.</b> Your own adapter in a wall socket removes the question; a data blocker does the same if you travel often.</div></div>
     <div class="ec-t"><span>\ud83d\udccd</span><div><b>Lock first, wipe last.</b> Locking is immediate and reversible. Wiping is permanent and ends any chance of getting the phone back.</div></div>
   </div>
+  <details class="ec-src"><summary>Sources and what is not sourced</summary>
+  <ol>
+<li>"Evil twin" free-WiFi networks at Perth, Melbourne and Adelaide airports and on domestic flights: <a href="https://afp.gov.au/news-centre/media-release/man-charged-over-creation-evil-twin-free-wifi-networks-access-personal" target="_blank" rel="noopener">Australian Federal Police media release, 28 Jun 2024</a>.</li>
+<li>Juice jacking: FBI Denver warning (6 Apr 2023) and an updated FCC advisory; reviews have found "no credible reported cases of juice jacking on mobile OSs outside of research efforts". <a href="https://en.wikipedia.org/wiki/Juice_jacking" target="_blank" rel="noopener">Overview and citations</a>.</li>
+<li>ChoiceJacking — research showing a malicious charger can defeat the USB trust prompt on Android and iOS; disclosed to Google, Samsung, Xiaomi and Apple. <a href="https://www.usenix.org/conference/usenixsecurity25/presentation/draschbacher" target="_blank" rel="noopener">USENIX Security 2025</a>.</li>
+<li>Avast analysis of 937 Google Play flashlight apps, September 2019 — 25 permissions requested on average, 77 at most; 180 asked to read contacts, 77 to record audio. Reported: <a href="https://www.securityweek.com/android-flashlight-apps-request-77-permissions/" target="_blank" rel="noopener">SecurityWeek</a>. Vendor research.</li>
+  </ol>
+  <div class="ec-src-note">The AFP release describes charges, not a conviction at the time of writing. The ChoiceJacking vendors were reported to be shipping mitigations; check the current status for your own device.</div></details>
   <div class="yourplan" id="yourplan"></div><button class="nextbtn">Finish Scene \u2192</button></div>`;
 
 track.appendChild(end);

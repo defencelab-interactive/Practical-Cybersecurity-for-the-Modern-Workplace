@@ -305,6 +305,7 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 
 .endcard .ec-tk{display:flex;flex-direction:column;gap:11px;margin:4px 0 18px}
 .endcard .ec-t{display:flex;gap:12px;font-size:14.5px;line-height:1.6;color:var(--tm)}
+.endcard .ec-src{margin:22px 0 4px;border-top:1px solid var(--line);padding-top:16px}.endcard .ec-src summary{cursor:pointer;font:600 13px var(--body);color:var(--tm);letter-spacing:.02em;list-style:none}.endcard .ec-src summary::-webkit-details-marker{display:none}.endcard .ec-src summary::before{content:'+ ';font-weight:700}.endcard .ec-src[open] summary::before{content:'\2212 '}.endcard .ec-src ol{margin:12px 0 0;padding-left:20px;font-size:13px;line-height:1.65;color:var(--tm)}.endcard .ec-src li{margin-bottom:9px}.endcard .ec-src a{color:var(--ac);text-decoration:none;border-bottom:1px solid rgba(52,183,125,.35)}.endcard .ec-src .ec-src-note{margin-top:12px;font-size:12.5px;color:var(--tm);opacity:.85;font-style:italic}
 .endcard .ec-t span{font-size:17px;flex:none;line-height:1.4}
 .endcard .ec-t b{color:var(--tw);font-weight:600}
 .endcard .ec-tk{display:flex;flex-direction:column;gap:11px;margin:4px 0 18px}
@@ -394,7 +395,7 @@ const NODES=[
     fb:'The second one — and if you went by the sender domain, that reasoning would have failed here. <b>dropboxmail.com</b> looks like a lookalike but is genuinely what Dropbox sends from.<br><br>What separates them is the <b>link</b>. The real one points at dropbox.com. The fake comes from dropbox-notifications.com but sends you to <b>dbx-secure-files.com</b> — a third domain, unrelated to either. Sender and destination not matching is the signal.'}},
 
  {date:'Friday, 4:47pm',crit:1,beat:'A transfer that looked completely normal',
-  body:'That pair was close because the easy fakes are not the ones that reach you. Here is one that reached an accountant.<br><br>Tom works in finance. At 4:47 on a Friday, an email from his CEO asks him to wire $280,000 before the weekend. The signature is right, and it refers to a board meeting he presented at three days earlier.<br><br>He sends it at 4:52. On Monday she knows nothing about it. The attackers had been reading the company’s email for weeks — which is how they knew about the meeting, her tone, and that she was travelling.',
+  body:'That pair was close because the easy fakes are not the ones that reach you. Here is the shape the convincing ones take. <i>The scenario below is composed from the standard pattern of these frauds rather than from one reported case.</i><br><br>Tom works in finance. At 4:47 on a Friday, an email from his CEO asks him to wire $280,000 before the weekend. The signature is right, and it refers to a board meeting he presented at three days earlier.<br><br>He sends it at 4:52. On Monday she knows nothing about it. The attackers had been reading the company’s email for weeks — which is how they knew about the meeting, her tone, and that she was travelling.',
   spot:{type:'predict',topic:'verify',q:'Something feels slightly off to Tom. What would actually have stopped this?',
     opts:[
      ['Replying to the email to ask her to confirm it',0],
@@ -445,7 +446,7 @@ const NODES=[
  {date:'What changed',crit:1,beat:'Bad grammar is no longer a reliable tell',
   body:'Two of those three checks still hold. The third one — tone — has stopped being reliable.<br><br>For years the advice was to look for awkward phrasing. That advice is now actively unhelpful: language models write fluent email in any language, at scale, using details from public profiles. The same tools clone a voice from a short recording.<br><br>Fluency proves nothing now. The sender address, the link destination and a second channel still do.',
   more:{t:'The $25 million video call',
-    body:'In a case reported in early 2024, a finance employee at a Hong Kong firm joined a video call with what appeared to be several colleagues, including the CFO. They discussed a confidential transaction, and he authorised transfers totalling around $25 million.<br><br>Every other participant on that call was synthetic — generated from publicly available footage of real executives. He had been suspicious of the initial email, and the call is what convinced him.<br><br>The practical response is not better scrutiny of faces and voices, which is a contest you will lose. It is the same second channel as always: end the call, reach the person on a number you already had, and ask.'},
+    body:'In early 2024 the engineering firm Arup confirmed that an employee in its Hong Kong office had been tricked into making 15 transfers totalling HK$200 million — about US$25 million. He had received an email from the UK-based CFO about a confidential transaction and suspected it was phishing. Then he joined a video call with the CFO and several colleagues, and it settled the matter for him.<br><br>Hong Kong police later said the people he saw on that call were all fake. How the fakes were built was not disclosed.<br><br>The practical response is not better scrutiny of faces and voices, which is a contest you will lose. It is the same second channel as always: end the call, reach the person on a number you already had, and ask.'},
   spot:{type:'quiz',topic:'verify',q:'A colleague emails a shared document. It reads like her, but the link points to docs.g00gle-share.net.',
     opts:[
      ['Reply to the email to check that she meant to',0],
@@ -552,7 +553,7 @@ NODES.forEach((n,i)=>{
         </div>
         <div class="rslider-bar"><div class="rslider-marker" id="rsm-${i}"></div></div>
         <div class="rslider-eg" id="rseg-${i}"></div>
-        <div class="rslider-src">Illustrative estimate — real crack times depend on the attacker\u2019s hardware and method. Orders of magnitude follow the <a href="https://www.hivesystems.com/password" target="_blank" rel="noopener">Hive Systems password table</a>; official guidance favouring passphrases is in <a href="https://pages.nist.gov/800-63-4/sp800-63b.html" target="_blank" rel="noopener">NIST SP 800-63B</a>.</div>
+        <div class="rslider-src">Illustrative estimate — real crack times depend on the attacker\u2019s hardware and method. Orders of magnitude follow the <a href="https://www.hivesystems.com/password" target="_blank" rel="noopener">Hive Systems password table</a>; official guidance favouring passphrases is in <a href="https://pages.nist.gov/800-63-4/sp800-63b/authenticators" target="_blank" rel="noopener">NIST SP 800-63B</a>.</div>
       </div></div>`;
     } else {
       h+=`<div class="spot"><button class="spot-trigger${isExp?' q-exp':''}" data-spot="${i}"><span class="pulse"></span>${isExp?'Your experience':(s.type==='quiz'?'Your call':'What happens next?')}</button>
@@ -581,6 +582,12 @@ end.innerHTML=`<div class="ec"><h3>That\u2019s the course.</h3>
     <div class="ec-t"><span>\ud83d\udd0d</span><div><b>Check the address and the link, not the look.</b> A sender domain that looks odd can still be genuine \u2014 what gives it away is a link going somewhere unrelated to whoever sent it.</div></div>
     <div class="ec-t"><span>\ud83d\udcde</span><div><b>Verify where the message can\u2019t reach.</b> Anything about money, credentials or access gets confirmed on a channel you chose.</div></div>
   </div>
+  <details class="ec-src"><summary>Sources and what is not sourced</summary>
+  <ol>
+<li>Arup, Hong Kong, early 2024 — 15 transfers totalling HK$200 million (about US$25m) after a video call; Hong Kong police said the other participants were fake. Reported: <a href="https://www.insurancebusinessmag.com/asia/news/cyber/deepfake-video-conference-sees-criminals-escape-with-hk200-million-489791.aspx" target="_blank" rel="noopener">Insurance Business Asia</a>.</li>
+<li>Dropbox's own list of domains it sends from, including dropboxmail.com: <a href="https://help.dropbox.com/accounts-billing/security/official-domains" target="_blank" rel="noopener">Dropbox Help Centre</a>.</li>
+  </ol>
+  <div class="ec-src-note">Tom and the $280,000 transfer are a composed scenario, not a reported case. How the Arup deepfakes were produced was not disclosed.</div></details>
   <div class="yourplan" id="yourplan"></div><button class="nextbtn">Finish Scene \u2192</button></div>`;
 track.appendChild(end);
 
