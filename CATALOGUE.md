@@ -136,7 +136,7 @@ No two courses open the same way. Spot types built to date:
 | 10 | Sort six things into fine / not mine | `sort` |
 | 11 | Follow one file through three places | `trace` |
 | 12 | Set the sharing yourself, then see what each choice permits | `share` |
-| 13 | Put the first four actions into sequence | `order` |
+| 13 | Drag the first four actions into sequence | `order` |
 
 Other spot types available mid-course: `quiz`, `predict`, `experience`, `checklist`, `takeaways`, `slider`, `flags`, `scan`.
 
@@ -200,6 +200,13 @@ Byte 4b lost its “add your own accounts” field, its tick boxes and its progr
 none of them did anything a reader would miss once the return visit stopped being the premise.
 Printing is not the escape hatch either: `window.print()` can be refused by an LMS iframe sandbox
 and then does nothing at all, so no Byte offers it as the way its content leaves.
+
+**Interactions must move what they claim to move.** The order mechanic first worked by tapping
+rows to assign them a number — the number appeared and the row stayed where it was, which reads as
+broken. It now reorders for real: pointer drag by a handle (works with a mouse and with touch,
+`touch-action:none` on the handle only, so the page still scrolls everywhere else), plus up/down
+arrows that do the same thing for anyone who does not try dragging and for keyboard users. If an
+instruction says tap, drag or move, the thing has to visibly do it.
 
 **Width:** one column for every Byte — `max-width:1000px`, 36px side padding — and no per-element
 `max-width:Nch` on block prose. A reading-measure cap on paragraphs while the cards beside them run
