@@ -1,0 +1,66 @@
+const NODES=[
+ {date:'Start here',crit:0,beat:'One post, and what a stranger takes from it',
+  body:'Mark is an analyst at a financial services firm. His team spent three weeks on a system upgrade, finished on a Friday, and he posted a photo of the room they had worked in.<br><br>Before you read on: how much of that post is useful to someone planning an attack on his company?',
+  spot:{type:'estimate',topic:'post',max:10,real:8,
+    post:{head:'Mark Dalton · Senior Analyst',
+      body:'“Three weeks of chaos, but we shipped it! Huge props to the team for crushing this legacy system upgrade. Weekend mode: activated 🎉”',
+      meta:'Photo: the team in their war room — whiteboards, laptops, coffee cups, everyone giving a thumbs up',
+      comments:['Boss: “Great work team! Sorry to miss it — at the FinTech Summit in Denver all week”','Colleague: “TechBridge have been amazing on this one”']},
+    q:'How many separate details here are useful to an attacker?',
+    label:'useful details',
+    items:[
+     'The software version written on the whiteboard — the system they run, and that it is old',
+     'The network diagram behind them — how their systems connect',
+     'A consulting firm named in the comments — someone real to impersonate',
+     '“Legacy system upgrade” — confirmation they run software with known weaknesses',
+     '“Three weeks of chaos” — a rushed deployment, so mistakes are likely',
+     'Shipped on a Friday — the quietest time of the week for oversight',
+     'The boss is away all week — nobody senior available to verify anything',
+     'Team members’ names and faces — more people to approach'],
+    fb:'Eight, from one post and two comments. None of it was secret and none of it was careless in the ordinary sense — Mark was proud of his team and said so.<br><br>That is what makes this hard to teach. He did not leak anything. He described his week.'}},
+
+ {date:'Eight weeks later',crit:1,beat:'How the post became a phone call',
+  body:'On the Monday, someone rang the front desk. Tired, slightly irritated, the voice of a consultant who had been up late fixing things. He was David from TechBridge, working with Mark’s team on the migration.<br><br>He knew the project, the firm, the people. He also knew the one person who could have checked was in Denver. Eight weeks later the finance team paid an invoice that looked exactly like every other invoice that month. <b>$340,000</b>, through several accounts, gone.',
+  more:{t:'Why the invoice worked, not just the call',
+    body:'The phone call bought access, not money. What it got him was enough internal detail to spend six weeks studying how the company actually paid people — the format of their invoices, who approved what, the rhythm of their payment runs.<br><br>When the invoice arrived it matched all of it: right vendor, right template, typical amount, right week. Nobody had to be fooled by anything dramatic. It looked like Tuesday.<br><br>This is the shape of most invoice fraud. The research is the attack; the payment is just the last step. Which is also why it is usually discovered weeks later, when the real supplier asks where their money is.'},
+  spot:{type:'quiz',topic:'post',q:'Which detail made the initial phone call possible?',
+    opts:[
+     ['The team’s faces in the photo',0],
+     ['The consulting firm name, and the boss being away',1],
+     ['The three weeks of intense work',0],
+     ['The number of likes the post got',0]],
+    fb:'The firm name gave him a real company and a plausible role. The boss being away meant the one person who might have checked could not be reached easily.<br><br>The rest mattered later — for sounding informed once he was already talking to someone.'}},
+
+ {date:'What others post',crit:0,beat:'Comments and tags you did not write',
+  body:'Half of what gave Mark away came from other people. His boss announced her own travel. A colleague named the consultant.<br><br>This is the part you cannot fix by being careful yourself. Your own privacy settings do not cover what a colleague writes under your post, who tags you in a conference photo, or which team page lists you by name and role.',
+  spot:{type:'predict',topic:'others',q:'A colleague tags you in a photo from a client site, with the client’s name in the caption. What is the useful response?',
+    opts:[
+     ['Ask them to remove the client name, and untag yourself',1],
+     ['Leave it — asking would be awkward over something small',0],
+     ['Report the post to the platform',0]],
+    fb:'Ask. Most people take it down immediately and are glad to be told, because they had not thought about it — the same way Mark had not.<br><br>Untagging yourself removes it from your profile but leaves the post up and the client named. The ask is the part that matters; the untag is housekeeping.'}},
+
+ {date:'Settings',crit:0,beat:'Which privacy settings actually change anything',
+  body:'Most of the work is in three settings, and the rest is noise.<br><br><b>Your connection list.</b> Public by default on LinkedIn, and it maps your colleagues, your suppliers and your reporting line in one click. <b>Location on posts.</b> Live location says the house is empty and where you are instead. <b>Third-party app access.</b> Apps you connected years ago still read your profile and your contacts.',
+  spot:{type:'experience',topic:'settings',q:'Think about your own public profile. If a stranger read it today, how much would they learn about where you work and who you work with?',
+    scale:['Not much','A fair amount','Honestly, most of it'],
+    note:'There is no right answer here, and going quiet is not the goal — for most people a public professional profile is part of the job.<br><br>What helps is knowing which parts are load-bearing. Your role and employer are usually fine and often necessary. The systems you name, the clients you mention, and when you are away are the three that turn a profile into a plan.'}},
+
+ {scene2:1,date:'Your settings',crit:0,beat:'Three things to change on your profiles',
+  body:'Mark whichever you mean to do.',
+  spot:{type:'checklist',
+    items:[
+      {topic:'settings',t:'Make your connection list private',
+       how:'It is the fastest way for a stranger to map your colleagues, your suppliers and who reports to whom.',
+       steps:['LinkedIn: Settings → Visibility → Connections → Only you','Facebook: Settings → Privacy → How people find you → friends list','Check what your profile looks like signed out — that is what a stranger sees'],
+       itnote:''},
+      {topic:'post',t:'Set a rule for what you post about work',
+       how:'Not what to stop posting — which three things to leave out of posts you were going to make anyway.',
+       steps:['No system or product names, versions, or screenshots of internal tools','No client or supplier names unless the client published it first','Nothing about who is away, and nothing live — post the conference photo after you are home'],
+       itnote:'Some companies have a social media policy that already says this. Worth reading once rather than guessing.'},
+      {topic:'others',t:'Review the apps connected to your accounts',
+       how:'Apps you authorised years ago still have whatever access you granted then, including your contacts.',
+       steps:['LinkedIn: Settings → Data privacy → Permitted services','Google: myaccount.google.com → Data & privacy → Third-party apps','Remove anything you do not recognise or no longer use'],
+       itnote:''}
+    ]}}
+];
