@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Defence Lab · Anonymise an AI Prompt</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#34B77D;--acd:#2A9A66;--td:#1A1A1A;--tb:#4A4844;--mu:#8a8884;--paper:#F2F5F2;--paper2:#E8EEEC;--line:#dce4e0;
+  --sh:0 3px 8px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);
+  --blue:#4E7CA8;--rd:#C0392B;--rdl:rgba(192,57,43,.09);--am:#B07A1E;--aml:rgba(176,122,30,.12);
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);color:var(--td);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background:radial-gradient(70% 50% at 12% 6%,rgba(52,183,125,.16),transparent 52%),
+    radial-gradient(80% 60% at 92% 30%,rgba(78,124,168,.14),transparent 58%),
+    radial-gradient(60% 45% at 55% 40%,rgba(255,255,255,.5),transparent 60%),
+    linear-gradient(160deg,#eef2ee,#e4ebeb)}
+.wrap{max-width:1000px;margin:0 auto;padding:40px 36px 80px}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.eyebrow{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acd);margin-bottom:12px}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-height:1.06;letter-spacing:-.02em;margin-bottom:14px}
+.lede{font-size:17px;line-height:1.6;color:var(--tb)}
+.chip{font:700 12px var(--mono);color:var(--acd);background:rgba(52,183,125,.12);border-radius:20px;padding:6px 13px;white-space:nowrap;flex:none}
+
+.lab{font:700 11px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--mu);margin:26px 0 9px}
+textarea{width:100%;min-height:128px;border:1.5px solid var(--line);border-radius:13px;padding:15px 17px;
+  font:500 15px/1.6 var(--body);color:var(--td);background:#fff;outline:none;resize:vertical;box-shadow:var(--sh)}
+textarea:focus{border-color:var(--acd)}
+.row{display:flex;gap:9px;margin-top:10px;flex-wrap:wrap}
+.btn{border:1.5px solid var(--line);background:#fff;color:var(--tb);border-radius:10px;padding:9px 15px;
+  font:700 13px var(--body);cursor:pointer;transition:all .15s}
+.btn:hover{border-color:var(--blue);color:var(--blue)}
+
+.out{background:#fff;border:1.5px solid var(--line);border-radius:15px;padding:19px 21px;box-shadow:var(--sh);margin-top:8px}
+.out-txt{font:500 15px/1.85 var(--body);color:var(--td);word-wrap:break-word;white-space:pre-wrap}
+.w{border-radius:5px;padding:1px 2px;margin:0 -2px;cursor:pointer;transition:background .12s}
+.w:hover{background:rgba(78,124,168,.14)}
+.tag{display:inline-block;font:700 12.5px var(--mono);border-radius:6px;padding:2px 7px;cursor:pointer;line-height:1.45;white-space:nowrap}
+.t-auto{background:rgba(192,57,43,.11);color:var(--rd);border:1px solid rgba(192,57,43,.25)}
+.t-man{background:var(--aml);color:var(--am);border:1px solid rgba(176,122,30,.3)}
+.hint{font-size:13.5px;line-height:1.6;color:var(--mu);margin-top:13px;padding-top:12px;border-top:1px solid var(--line)}
+.hint b{color:var(--tb)}
+
+.found{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+.f{font:600 12px var(--mono);background:var(--paper2);border:1.5px solid var(--line);border-radius:20px;padding:5px 11px;color:var(--tb)}
+.f b{color:var(--rd)}
+.none{font-size:13.5px;color:var(--mu);margin-top:13px}
+
+.warn{background:var(--aml);border:1.5px solid rgba(176,122,30,.32);border-radius:15px;padding:20px 23px;margin-top:26px}
+.warn h3{font-family:var(--disp);font-weight:600;font-size:19px;margin-bottom:9px;color:#8A5E12}
+.warn p{font-size:14.5px;line-height:1.65;color:var(--tb)}
+.warn p+p{margin-top:9px}
+.warn b{color:var(--td)}
+
+.foot{margin-top:28px;border-top:1px solid var(--line);padding-top:16px;font-size:13.5px;line-height:1.7;color:var(--mu)}
+.foot b{color:var(--tb)}
+
+@media (max-width:620px){
+  .wrap{padding:26px 18px 60px}
+  .head{flex-direction:column;gap:12px}
+  .out{padding:16px 15px}
+}
+</style>
+</head><body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Security Byte 10a</div>
+      <h1>Anonymise an AI Prompt</h1>
+      <div class="lede">Paste what you were about to send. The patterns a machine can recognise are marked for you; the names are yours to mark, because that is the part no pattern gets right.</div>
+    </div>
+    <div class="chip">~2 min</div>
+  </div>
+
+  <div class="lab">Your prompt</div>
+  <textarea id="in" spellcheck="false"></textarea>
+  <div class="row">
+    <button class="btn" id="clear">Clear</button>
+    <button class="btn" id="example">Load the example again</button>
+    <button class="btn" id="copy">Copy the cleaned version</button>
+  </div>
+
+  <div class="lab">Cleaned</div>
+  <div class="out">
+    <div class="out-txt" id="out"></div>
+    <div id="found"></div>
+    <div class="hint"><b>Click any word</b> to mark it yourself — each click cycles it through <span class="tag t-man">[NAME]</span> <span class="tag t-man">[COMPANY]</span> <span class="tag t-man">[PROJECT]</span> and back. Every copy of that word changes with it, so the prompt still reads sensibly.</div>
+  </div>
+
+  <div class="warn">
+    <h3>What this cannot do</h3>
+    <p>It finds <b>shapes</b>: an email address looks like an email address, an amount looks like an amount. It has no idea that Hartwell is a client, that “the Ashworth matter” is a case, or that a sentence about one person in a team of three identifies them to anyone who knows the team. <b>Assume it missed something.</b></p>
+    <p>So use it as a second pair of eyes rather than a filter: read the cleaned version and ask whether anyone outside your organisation could work out who or what it is about. Most of the time the honest answer is to describe the situation instead of pasting the document.</p>
+    <p>Nothing you type here leaves this page. There is no server — the matching runs in your browser, which is the only arrangement that makes sense for a tool whose whole job is text you did not want to send anywhere.</p>
+  </div>
+
+  <div class="foot">
+    <b>Pairs with the course <i>What You Paste Into AI</i>.</b> The test it gives is two questions: is this mine to hand over, and would I be relaxed if it came back out with my name on it. This page helps with the first one only.
+  </div>
+</div>
+
+<script>
+const EXAMPLE = `Hi — can you rewrite this follow-up so it sounds firmer but still polite?
+
+Context: Hartwell Logistics still hasn't paid invoice 4471982 for £18,400, due 14/09/2026. I chased Marcus Webb (marcus.webb@hartwell-logistics.com, +44 7700 900412) twice. Our account manager Priya says the delay is their new finance system, srv-fin-02, which has been failing since the migration.
+
+Draft something I can send today.`;
+
+/* Patterns a machine can actually recognise. Order matters: the broader
+   ones run last so they do not swallow the specific ones. */
+const RULES=[
+  {k:'URL',     re:/\bhttps?:\/\/[^\s<>"]+/gi},
+  {k:'EMAIL',   re:/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/gi},
+  {k:'IP',      re:/\b\d{1,3}(?:\.\d{1,3}){3}\b/g},
+  {k:'SYSTEM',  re:/\b(?:srv|host|db|app|web|vm|node|prod|stg|dev|sql|api)[-_][a-z0-9][a-z0-9-]*\b/gi},
+  {k:'AMOUNT',  re:/[£$€]\s?\d[\d,]*(?:\.\d+)?\s?[km]?\b/gi},
+  {k:'PHONE',   re:/\+\d[\d\s().-]{7,}\d|\b0\d{3,4}[\s-]?\d{3}[\s-]?\d{3,4}\b/g},
+  {k:'DATE',    re:/\b\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}\b/g},
+  {k:'NUMBER',  re:/\b\d{6,}\b/g}
+];
+const CYCLE=['NAME','COMPANY','PROJECT'];
+
+const $=id=>document.getElementById(id);
+let manual={};   // lowercase word -> label
+
+function autoMask(text){
+  const hits=[];
+  let out=text;
+  RULES.forEach(r=>{
+    out=out.replace(r.re,m=>{ hits.push({k:r.k,v:m.trim()}); return '\u0000'+r.k+'\u0000'; });
+  });
+  return {out,hits};
+}
+
+function render(){
+  const raw=$('in').value;
+  const {out,hits}=autoMask(raw);
+  const frag=document.createDocumentFragment();
+
+  out.split(/(\u0000[A-Z]+\u0000|\s+)/).forEach(piece=>{
+    if(!piece) return;
+    const auto=piece.match(/^\u0000([A-Z]+)\u0000$/);
+    if(auto){
+      const s=document.createElement('span');
+      s.className='tag t-auto'; s.textContent='['+auto[1]+']';
+      frag.appendChild(s); return;
+    }
+    if(/^\s+$/.test(piece)){ frag.appendChild(document.createTextNode(piece)); return; }
+    // a word plus whatever punctuation hangs off it
+    const m=piece.match(/^(\W*)(.*?)(\W*)$/s);
+    const [,pre,word,post]=m;
+    if(pre) frag.appendChild(document.createTextNode(pre));
+    if(word){
+      const key=word.toLowerCase();
+      const s=document.createElement('span');
+      if(manual[key]){ s.className='tag t-man'; s.textContent='['+manual[key]+']'; }
+      else { s.className='w'; s.textContent=word; }
+      s.dataset.word=key;
+      s.title='Click to mark or unmark';
+      frag.appendChild(s);
+    }
+    if(post) frag.appendChild(document.createTextNode(post));
+  });
+
+  const o=$('out'); o.innerHTML=''; o.appendChild(frag);
+  if(!raw.trim()) o.innerHTML='<span style="color:var(--mu)">Paste a prompt above, or load the example.</span>';
+
+  // what was found
+  const counts={};
+  hits.forEach(h=>{ counts[h.k]=(counts[h.k]||0)+1; });
+  Object.values(manual).forEach(l=>{ counts[l]=(counts[l]||0)+1; });
+  const f=$('found');
+  const keys=Object.keys(counts);
+  f.className = keys.length ? 'found' : 'none';
+  f.innerHTML = keys.length
+    ? keys.map(k=>`<span class="f">${k} <b>×${counts[k]}</b></span>`).join('')
+    : (raw.trim() ? 'No recognisable patterns found — which does not mean there is nothing here. Read it again, and click the names.' : '');
+}
+
+$('out').addEventListener('click',e=>{
+  const t=e.target.closest('[data-word]'); if(!t) return;
+  const k=t.dataset.word;
+  const cur=manual[k];
+  const next = !cur ? CYCLE[0] : (CYCLE.indexOf(cur)===CYCLE.length-1 ? null : CYCLE[CYCLE.indexOf(cur)+1]);
+  if(next) manual[k]=next; else delete manual[k];
+  render();
+});
+$('in').addEventListener('input',render);
+$('clear').addEventListener('click',()=>{ $('in').value=''; manual={}; render(); $('in').focus(); });
+$('example').addEventListener('click',()=>{ $('in').value=EXAMPLE; manual={}; render(); });
+$('copy').addEventListener('click',async()=>{
+  const txt=$('out').innerText;
+  const btn=$('copy');
+  try{
+    await navigator.clipboard.writeText(txt);
+    btn.textContent='Copied'; setTimeout(()=>btn.textContent='Copy the cleaned version',1600);
+  }catch(e){
+    const r=document.createRange(); r.selectNodeContents($('out'));
+    const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    btn.textContent='Selected — copy it yourself';
+    setTimeout(()=>btn.textContent='Copy the cleaned version',2600);
+  }
+});
+
+$('in').value=EXAMPLE;
+render();
+</script>
+</body></html>

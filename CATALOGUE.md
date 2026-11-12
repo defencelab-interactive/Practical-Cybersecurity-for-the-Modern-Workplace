@@ -9,7 +9,7 @@ Cybersecurity awareness training for non-technical employees. Two content format
 
 Courses build understanding. Bytes build habits. Both work independently. Both stack into learning paths.
 
-**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 19 built, 5 to build. **All 12 courses are built;** the remainder are Bytes.
+**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 20 built, 4 to build. **All 12 courses are built;** the remainder are Bytes.
 
 ---
 
@@ -213,6 +213,13 @@ for something only the new version contains. The tell when this goes wrong is th
 old content while the repository holds the new — compare against `raw.githubusercontent.com` to
 separate a delivery failure from a code problem.
 
+**A detector must say what it cannot detect.** Byte 10a finds shapes — an email looks like an
+email, an amount looks like an amount — and has no way to know that a surname is a client or that
+one sentence identifies the only person on a team of three. A tool like that is dangerous when it
+reads as a filter, because someone will paste the “cleaned” text trusting it. So the limits get
+their own panel, not a footnote, and the hard class is handed back to the reader: names are marked
+by clicking, not guessed.
+
 **Interactions must move what they claim to move.** The order mechanic first worked by tapping
 rows to assign them a number — the number appeared and the row stayed where it was, which reads as
 broken. It now reorders for real: pointer drag by a handle (works with a mouse and with touch,
@@ -243,11 +250,11 @@ belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.h
 | 7f | **Working Away From the Office** | Laptop settings, cafés and travel in one reference *(merges the old 7a, 7c, 7e)* | 3 min | Courses 7–8 | To build |
 | 8b | **When Your Phone Goes Missing** | Two tabs: the three settings that only work beforehand, and the lock→notify→passwords→wipe order for when it is gone | ~2 min | Course 8 | Built |
 | 9a | **Clean Up What's Public About You** | LinkedIn settings, old accounts, searching for yourself *(merges the old 9a, 9b)* | 3 min | Course 9 | To build |
-| 10a | **Anonymise an AI Prompt** | Paste a prompt; names, companies and project details are highlighted with suggested replacements | 2 min | Course 10 | To build |
+| 10a | **Anonymise an AI Prompt** | Paste a prompt: emails, phones, amounts, dates, IDs and internal hostnames are marked automatically; names and companies you click yourself, because no pattern gets those right. Runs entirely in the browser. | ~2 min | Course 10 | Built |
 | 11b | **Is This PII?** | Eight examples to sort, including the edge cases that catch people | 2 min | Course 11 | To build |
 | 13a | **The First Four Actions** | Pick the situation — clicked a link, machine misbehaving, device gone, sent to the wrong person, money moved — and see what the same four steps mean in that one. | ~2 min | Course 13 | Built |
 
-**Total Security Bytes: 12 items (7 built, 5 to build)**
+**Total Security Bytes: 12 items (8 built, 4 to build)**
 
 ### Retired
 
