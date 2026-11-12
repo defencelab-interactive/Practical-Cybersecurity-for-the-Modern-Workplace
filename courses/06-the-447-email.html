@@ -394,7 +394,7 @@ const NODES=[
     fb:'The second one — and if you went by the sender domain, that reasoning would have failed here. <b>dropboxmail.com</b> looks like a lookalike but is genuinely what Dropbox sends from.<br><br>What separates them is the <b>link</b>. The real one points at dropbox.com. The fake comes from dropbox-notifications.com but sends you to <b>dbx-secure-files.com</b> — a third domain, unrelated to either. Sender and destination not matching is the signal.'}},
 
  {date:'Friday, 4:47pm',crit:1,beat:'A transfer that looked completely normal',
-  body:'Tom is an accountant. At 4:47 on a Friday, an email from his CEO asks him to wire $280,000 before the weekend. The signature is right, and it refers to a board meeting he presented at three days earlier.<br><br>He sends it at 4:52. On Monday she knows nothing about it. The attackers had been reading the company’s email for weeks — which is how they knew about the meeting, her tone, and that she was travelling.',
+  body:'That pair was close because the easy fakes are not the ones that reach you. Here is one that reached an accountant.<br><br>Tom works in finance. At 4:47 on a Friday, an email from his CEO asks him to wire $280,000 before the weekend. The signature is right, and it refers to a board meeting he presented at three days earlier.<br><br>He sends it at 4:52. On Monday she knows nothing about it. The attackers had been reading the company’s email for weeks — which is how they knew about the meeting, her tone, and that she was travelling.',
   spot:{type:'predict',topic:'verify',q:'Something feels slightly off to Tom. What would actually have stopped this?',
     opts:[
      ['Replying to the email to ask her to confirm it',0],
@@ -405,7 +405,7 @@ const NODES=[
     body:'Most people do not have the CEO’s mobile number, and phoning a senior person on a Friday evening to ask whether they really meant it takes nerve that not everyone has on demand — particularly if they are new, junior, or on a short contract.<br><br>Which is why this should not rest on personal courage. Verification works when it belongs to the process: a rule that payments above a threshold need a second approver, a finance lead or executive assistant whose job it is to confirm, a shared channel where “did you send this?” is a normal question.<br><br>If the only route available to you is calling the CEO directly, the gap is organisational. Worth raising before the Friday afternoon when it matters.'}},
 
  {date:'The pressure',crit:0,beat:'Four feelings these messages need from you',
-  body:'<b>Urgency</b> — a deadline that leaves no room to check. <b>Authority</b> — a request from someone you do not question. <b>Fear</b> — a consequence for not acting. <b>Curiosity</b> — a package, a bonus, a document with your name on it.<br><br>Tom got urgency and authority at the end of a Friday. Not an accident either.',
+  body:'Nothing in that email was technically clever. It worked on how Tom felt at 4:47 on a Friday.<br><br><b>Urgency</b> — a deadline that leaves no room to check. <b>Authority</b> — a request from someone you do not question. <b>Fear</b> — a consequence for not acting. <b>Curiosity</b> — a package, a bonus, a document with your name on it.<br><br>Tom got urgency and authority at the end of a Friday. Not an accident either.',
   spot:{type:'quiz',topic:'triggers',q:'“Your mailbox password expires today. Renew by 5pm or lose access.” Which pair is that?',
     opts:[
      ['Curiosity and reward — it offers something you want',0],
@@ -415,7 +415,7 @@ const NODES=[
     fb:'“Today” and “5pm” are the deadline; “lose access” is the consequence. Real IT departments give notice. The deadline is nearly always invented, because the whole approach needs you moving before you think.'}},
 
  {date:'The three checks',crit:0,beat:'Sender, link, tone — about five seconds',
-  body:'<b>The sender.</b> The display name is free text and can say anything. The address behind it has to be real.<br><br><b>The link.</b> Hover on a desktop, long-press on a phone. The true destination appears without opening it.<br><br><b>The tone.</b> Generic greetings, invented deadlines, a department that does not exist. None is proof alone. Two or three together is different.',
+  body:'Against all four of those, the same three checks.<br><br><b>The sender.</b> The display name is free text and can say anything. The address behind it has to be real.<br><br><b>The link.</b> Hover on a desktop, long-press on a phone. The true destination appears without opening it.<br><br><b>The tone.</b> Generic greetings, invented deadlines, a department that does not exist. None is proof alone. Two or three together is different.',
   spot:{type:'flags',topic:'spot',
     mail:[
       {label:'From',parts:[[0,'Amazon Security'],' <',[1,'security@arnazon.com'],'>']},
@@ -443,7 +443,7 @@ const NODES=[
     fb:'Six real flags, four things that only look suspicious. Nobody gets all six first time, and you do not need to — two is usually enough to make you check somewhere else.'}},
 
  {date:'What changed',crit:1,beat:'Bad grammar is no longer a reliable tell',
-  body:'For years the advice was to look for awkward phrasing. That advice is now actively unhelpful: language models write fluent email in any language, at scale, using details from public profiles. The same tools clone a voice from a short recording.<br><br>Fluency proves nothing now. The sender address, the link destination and a second channel still do.',
+  body:'Two of those three checks still hold. The third one — tone — has stopped being reliable.<br><br>For years the advice was to look for awkward phrasing. That advice is now actively unhelpful: language models write fluent email in any language, at scale, using details from public profiles. The same tools clone a voice from a short recording.<br><br>Fluency proves nothing now. The sender address, the link destination and a second channel still do.',
   more:{t:'The $25 million video call',
     body:'In a case reported in early 2024, a finance employee at a Hong Kong firm joined a video call with what appeared to be several colleagues, including the CFO. They discussed a confidential transaction, and he authorised transfers totalling around $25 million.<br><br>Every other participant on that call was synthetic — generated from publicly available footage of real executives. He had been suspicious of the initial email, and the call is what convinced him.<br><br>The practical response is not better scrutiny of faces and voices, which is a contest you will lose. It is the same second channel as always: end the call, reach the person on a number you already had, and ask.'},
   spot:{type:'quiz',topic:'verify',q:'A colleague emails a shared document. It reads like her, but the link points to docs.g00gle-share.net.',
@@ -455,7 +455,7 @@ const NODES=[
     fb:'Ask her somewhere else. If her mailbox is compromised, your reply lands with whoever is sitting in it — and they will happily confirm she sent it. A chat message answers it in ten seconds.'}},
 
  {date:'If you already clicked',crit:0,beat:'What to do in the first few minutes',
-  body:'Entered a password? Change it now, and anywhere else you used it. Turn on multi-factor on that account.<br><br>Downloaded a file? Do not open it. Disconnect from the network and tell IT.<br><br>Sent money or data? Contact the bank and your security team immediately, and write down what you sent and when.<br><br>What decides how bad it gets is how quickly someone else finds out.',
+  body:'Which means some of them get through, to people who were paying attention.<br><br>Entered a password? Change it now, and anywhere else you used it. Turn on multi-factor on that account.<br><br>Downloaded a file? Do not open it. Disconnect from the network and tell IT.<br><br>Sent money or data? Contact the bank and your security team immediately, and write down what you sent and when.<br><br>What decides how bad it gets is how quickly someone else finds out.',
   spot:{type:'experience',topic:'report',q:'Say you typed your password in before realising. How quickly would you tell IT?',
     scale:['Straight away','After checking myself first','Honestly, I might not'],
     note:'The gap between “straight away” and “after I check” is where the damage settles in. In that window a security team can reset sessions, block the domain and warn everyone else who got the same message.<br><br>Reporting something that turns out to be nothing costs a few minutes of someone’s time. If reporting feels like admitting failure where you work, that is a problem with the process rather than with you.'}},
