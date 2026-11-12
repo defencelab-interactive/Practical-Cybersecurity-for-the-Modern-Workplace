@@ -141,6 +141,17 @@ A Byte earns its place if it is a **tool or an artefact people come back to**. A
 instruction, or a retelling of its own course, does not — that was the lesson of the retired
 breach-check Byte, and the list below was rebuilt on it.
 
+**A Byte may not depend on the reader coming back to it.** People open a module once, often
+through an LMS, in whatever browser is to hand, and then leave. Anything whose value only pays
+off on a return visit — a list you build up, a profile you fill in over time — is worth nothing to
+them. In-session state (ticks that keep your place while you work down a list) is fine; promises
+that the page will remember are not. Whatever is worth keeping leaves as **print or PDF**.
+Byte 4b lost its “add your own accounts” field to this rule.
+
+**Storage:** `window.storage` exists only inside the Defence Lab host. Standalone pages must fall
+back to `localStorage`, wrapped, and work with neither. Every Byte that stores anything gets a
+reload test before it ships.
+
 **Numbering:** a Byte carries the number of the course it pairs with, plus a letter — Byte 6b
 belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.html`).
 
