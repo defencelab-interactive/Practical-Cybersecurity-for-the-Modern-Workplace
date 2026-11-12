@@ -631,7 +631,7 @@ a scene-2 checklist that assembles the learner's personal action plan.
 | Course 3 | Physical Security: Desks, Screens, Printers | `courses/03-physical-security.html` | Built as *Screens, Paper and Devices*, opens with a self-audit. ~4 min base, ~5 with the two deep-dive blocks expanded |
 | Course 4 | Passwords & Passphrases | `courses/04-passwords-mfa.html` | Built — currently **combined with Course 5** in one deck |
 | Course 5 | MFA: The Second Step | — | Covered by the combined deck above; not yet split out |
-| Course 6 | Phishing: Spot, Check, Report | `courses/06-the-447-email.html` | Built, opens with a cold-open email pick |
+| Course 6 | Phishing: Spot, Check, Report | `courses/06-the-447-email.html` | Built as *Spotting a Fake Email*, cold-open email pick. ~6 min base, ~7 with deep dives |
 | Byte 1b | Tools Worth Knowing About | `bytes/01b-security-toolkit.html` | Built |
 | Byte 2a | Your Verification Card | `bytes/02a-verification-card.html` | Built — adapts to org size; `ORG` block at the top lets a client pre-fill their own details |
 | Byte 6b | Link Inspector | `bytes/06b-link-inspector.html` | Built |
@@ -667,7 +667,7 @@ as optional depth rather than a truncated base layer.
 | Course | Base | With depth expanded |
 |---|---|---|
 | 1 | ~5 min | — |
-| 2 | ~12 min | — *(needs the same treatment)* |
+| 2 | ~12 min | — *(still to do)* |
 | 3 | ~4 min | ~5 min |
 | 4 | ~6 min | — |
-| 6 | ~12 min | — *(needs the same treatment)* |
+| 6 | ~6 min | ~7 min |
