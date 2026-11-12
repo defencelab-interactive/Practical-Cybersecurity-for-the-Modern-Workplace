@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Defence Lab · The $2.4B Password</title>
+<title>Defence Lab · How a Breach Unfolds</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 @property --mood{syntax:'<number>';inherits:true;initial-value:0}
@@ -165,6 +165,29 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 .endcard .ec{background:linear-gradient(170deg,rgba(52,183,125,.12),rgba(52,183,125,.04));border:1px solid rgba(52,183,125,.3);border-radius:16px;padding:24px 28px;max-width:820px}
 .endcard .ec h3{font-family:var(--disp);font-size:22px;font-weight:600;margin-bottom:10px}
 .endcard .ec p{font-size:15px;line-height:1.6;color:var(--tm);margin-bottom:16px}
+/* ── optional depth ── */
+.more{margin-top:15px;max-width:980px}
+.more-t{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.14);
+  color:var(--tm);font:600 13.5px var(--body);padding:9px 15px;border-radius:11px;cursor:pointer;transition:all .18s}
+.more-t:hover{border-color:rgba(255,255,255,.3);color:var(--tw)}
+.more-t .cv{width:8px;height:8px;border-right:2px solid var(--tf);border-bottom:2px solid var(--tf);transform:rotate(45deg) translateY(-2px);transition:transform .25s}
+.more.open .more-t .cv{transform:rotate(225deg) translateY(-1px)}
+.more.open .more-t{color:var(--tw);border-color:rgba(255,255,255,.26)}
+.more-b{max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .3s ease,margin .3s}
+.more.open .more-b{max-height:1200px;opacity:1;margin-top:12px}
+.more-in{background:rgba(255,255,255,.04);border-left:2px solid rgba(255,255,255,.18);border-radius:0 12px 12px 0;
+  padding:16px 20px;font-size:15px;line-height:1.7;color:var(--tm)}
+.more-in b{color:var(--tw)}
+@media (max-width:820px){.more-in{padding:14px 16px;font-size:14.5px}}
+
+.endcard .ec-tk{display:flex;flex-direction:column;gap:11px;margin:4px 0 18px}
+.endcard .ec-t{display:flex;gap:12px;font-size:14.5px;line-height:1.6;color:var(--tm)}
+.endcard .ec-t span{font-size:17px;flex:none;line-height:1.4}
+.endcard .ec-t b{color:var(--tw);font-weight:600}
+.endcard .ec-tk{display:flex;flex-direction:column;gap:11px;margin:4px 0 18px}
+.endcard .ec-t{display:flex;gap:12px;font-size:14.5px;line-height:1.6;color:var(--tm)}
+.endcard .ec-t span{font-size:17px;flex:none;line-height:1.4}
+.endcard .ec-t b{color:var(--tw);font-weight:600}
 .endcard .ec .nextbtn{background:var(--ac);color:#08130d;border:none;border-radius:11px;padding:12px 22px;font:600 15px var(--body);cursor:pointer}
 
 /* ══ mobile: rail becomes a compact header, content takes the full width ══ */
@@ -216,8 +239,8 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
     <div class="rail">
       <svg class="sh" viewBox="0 0 120 124"><path d="M60 6 L106 24 L106 66 Q106 104 60 120 Q14 104 14 66 L14 24 Z" fill="rgba(52,183,125,.06)" stroke="var(--ac)" stroke-width="3"/><path d="M60 30 L52 54 L66 62 L54 92" fill="none" stroke="var(--rd)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <div class="eyebrow">Course 1 · General Awareness</div>
-      <h1>The $2.4B Password</h1>
-      <div class="r-sub">Scroll down to walk the Change Healthcare breach — moment by moment. Tap the glowing points to make the calls yourself.</div>
+      <h1>How a Breach Unfolds</h1>
+      <div class="r-sub">One stolen password, nine days unnoticed, and the single free setting that would have stopped it.</div>
 
     </div>
     <div class="scroll" id="scroll">
@@ -238,56 +261,46 @@ const NODES=[
   spot:{type:'predict',topic:'mfa',q:'The attacker has a real, working password. What actually stops him from logging in?',
     opts:[['Nothing — a valid password is all he needs to get in',1],['The company firewall spots the login and blocks it fast',0],['IT gets an alert and calls to confirm it\u2019s really him',0]],
     fb:'A password on its own is a single lock. With nothing behind it, a stolen password just opens the door — no alarms, no questions.'}},
- {date:'Day 1 · the way in',crit:1,beat:'He logs in — and this is the moment it all hinged on',
+ {date:'Day 1 · the way in',crit:1,beat:'He logs in, and no second step is asked for',
   body:'The attacker types in the stolen username and password on the company\u2019s remote-access portal — the same one real employees use to work from home. It accepts them. No second code, no phone tap, no \u201Cis this really you?\u201D He\u2019s in. And here\u2019s the quiet horror of it: to every system inside, he now looks exactly like a trusted employee doing their job. There\u2019s no alarm, because from the network\u2019s point of view, nothing suspicious happened — someone with the right password simply logged in.',
   spot:{type:'predict',topic:'mfa',q:'One free setting would have turned his stolen password into a dead end right here. Which one?',
     opts:[['A longer, more complex company-wide password policy',0],['<span class="gloss" data-def="<b>Multi-factor authentication (MFA)</b> — a second proof beyond your password, usually a code or tap on your phone. Even a stolen password isn’t enough on its own.">Multi-factor authentication</span> — a second step',1],['Antivirus software on every single company laptop',0]],
     fb:'Multi-factor authentication takes about a minute to switch on and costs nothing. With it, a stolen password is useless — the attacker would also need the employee\u2019s phone. It simply wasn\u2019t on.'}},
- {date:'Days 1–9 · unseen',crit:0,beat:'Nine quiet days inside',
+ {date:'Days 1–9 · unseen',crit:0,beat:'Nine days of reading files unnoticed',
   body:'Now he takes his time. For nine days he moves carefully through the network — reading files, copying entire databases of patient records, learning how the systems connect and where the valuable data lives. He\u2019s patient because patience pays: the longer he watches unnoticed, the more he can steal and the more damage he can set up. Meanwhile it\u2019s an ordinary week at the company. People answer emails, join meetings, go home. Nobody sees the intruder quietly reading over their shoulder.',
   spot:{type:'experience',q:'Be honest: how quickly do you think you\u2019d notice a quiet intruder in your own accounts?',
     scale:['Right away','Eventually','Probably never'],
     note:'Most intrusions go unnoticed for weeks. That\u2019s why the early settings — MFA, alerts, unique passwords — matter more than spotting the attacker after the fact.'}},
- {date:'Day 9 · the strike',crit:1,beat:'Ransomware. Everything locks at once.',
+ {date:'Day 9 · the strike',crit:1,beat:'Ransomware locks every system at once',
   body:'When he\u2019s ready, he pulls the trigger. <span class="gloss" data-def="&lt;b&gt;Ransomware&lt;/b&gt; — malware that locks or encrypts a company’s files and demands payment to unlock them. Often the final blow after attackers get in.">Ransomware</span> sweeps across the company and locks everything at once — files, systems, the tools that keep claims and prescriptions flowing. And because this one company sits in the middle of so much of U.S. healthcare, the damage doesn\u2019t stay contained. Pharmacies across the country suddenly can\u2019t confirm what a patient\u2019s insurance will cover. Some people walk away from the counter without the medication they came for. A single stolen login has reached all the way to a pharmacy in another state.',
-  spot:{type:'quiz',topic:'file',q:'You\u2019re an employee and a file called \u201Cinvoice.zip\u201D you didn\u2019t expect just downloaded. First move?',
+  spot:{type:'quiz',topic:'reuse',q:'You\u2019re an employee and a file called \u201Cinvoice.zip\u201D you didn\u2019t expect just downloaded. First move?',
     opts:[['Open it to check whether it\u2019s really an invoice',0],['Delete it and then empty the recycle bin',0],['Disconnect from the internet, then tell IT',1],['Run an antivirus scan while staying online',0]],
     fb:'Most malware needs to phone home to its server. Disconnecting breaks that link first; then let IT take over. Opening it may trigger it; deleting doesn\u2019t help if it\u2019s already running.'}},
- {date:'The aftermath',crit:0,beat:'The bill: $2.4 billion',
+ {date:'The aftermath',crit:0,beat:'What it cost: $2.4 billion',
   body:'The company pays a $22 million ransom to unlock its systems — but the stolen data is already gone, copied days earlier. Then come the recovery costs, the regulatory fines, the lawsuits, and months of disruption across the healthcare system. Add it all up and the bill passes $2.4 billion. Every dollar of it traces back to two small things nine days earlier: a password used in more than one place, and a single security setting that was never switched on.',
   spot:{type:'quiz',topic:'mfa',q:'Looking back at the whole chain, which single step would have prevented all of this?',
     opts:[['Turning on multi-factor authentication for the login',1],['Buying a more expensive corporate firewall appliance setup',0],['Training staff to spot ransomware pop-up windows',0],['Backing up the databases more often each week',0]],
     fb:'The entire chain hinged on one stolen password working. Multi-factor authentication would have stopped the login on Day 1 — before any of the rest could happen.'}},
  // ── Scene 2 · Lock It In (actions, in the same scroll format) ──
- {scene2:1,date:'Your settings',crit:0,beat:'Set these up on your own accounts',
+ {scene2:1,date:'Your settings',crit:0,beat:'Three things to set up on your own accounts',
   body:'The breach you just walked through relied on settings that weren\u2019t turned on. The same settings take a few minutes to enable on your side. Open each item for the exact steps, then check it off once it\u2019s done.',
   spot:{type:'checklist',
     items:[
-      {topic:'mfa',t:'Turn on multi-factor authentication for email + banking',
-       how:'Add a second step (a code or tap on your phone) so a stolen password isn\u2019t enough on its own.',
-       steps:['Open your account\u2019s security settings','Find \u201C2-Step Verification\u201D or \u201CMulti-factor authentication\u201D','Turn it on \u2014 an authenticator app is safest, an SMS code is fine to start'],
-       itnote:'Using company accounts? Your IT team can point you to the exact steps for your setup.'},
-      {topic:'file',t:'Make \u201Cverify before opening\u201D your default for files & links',
-       how:'A file or link you didn\u2019t expect is the most common way in. Check before you click, even if it looks like it\u2019s from someone you know.',
-       steps:['Hover a link (or long-press on mobile) to see where it really goes','Didn\u2019t expect the file? Confirm with the sender through another channel first','If it still feels off, don\u2019t open it \u2014 report it'],
-       itnote:'Your company may have a specific way to report suspicious messages \u2014 check with IT.'},
-      {topic:'update',t:'Turn on automatic updates (computer, phone, browser)',
-       how:'Updates quietly close the exact security holes attackers rely on. Automatic means you never have to remember.',
-       steps:['Phone: look under Settings for Software Update and enable automatic updates','Computer: enable automatic updates in system settings','Browser: it usually updates on restart \u2014 restart it today'],
-       itnote:'On a managed work device, updates may be handled for you \u2014 IT can confirm.'},
-      {topic:'report',t:'Save your IT / security team\u2019s contact in your phone',
+      {topic:'mfa',t:'Turn on multi-factor authentication for email and banking',
+       how:'Add a second step so a stolen password is not enough on its own. This is the setting that was missing in the story.',
+       steps:['Open your account’s security settings','Find “2-Step Verification” or “Multi-factor authentication”','Turn it on — an authenticator app is safest, an SMS code is fine to start'],
+       itnote:'On company accounts, IT can point you to the exact steps for your setup.'},
+      {topic:'reuse',t:'Stop using your work password anywhere else',
+       how:'The breach began because one password was shared across sites. When any of those sites is breached, the rest go with it.',
+       steps:['Pick the accounts that matter most — work email, banking — and give each its own password','Use a password manager, or write them somewhere physically safe at home','Change any password you know you have reused in more than one place'],
+       itnote:'Many companies provide a password manager already — worth asking before setting up your own.'},
+      {topic:'report',t:'Save your IT or security team’s contact in your phone',
        how:'When something looks wrong, the fastest responses come from people who already knew who to call.',
-       steps:['Find your IT or security team\u2019s email or number','Save it as a contact in your phone now','Note how to reach them after hours'],
-       itnote:'Not sure who that is? Ask a colleague or check your company intranet.'}
+       steps:['Find your IT or security team’s email or number','Save it as a contact now, and note how to reach them after hours'],
+       itnote:'Not sure who that is? Ask a colleague or check your intranet.'}
     ]}},
  // ── Takeaways (3 conclusions) before the finish ──
- {scene2:1,date:'What you take away',crit:0,beat:'Three things worth remembering',
-  body:'You didn\u2019t just read about a breach — you walked it, made the calls, and set up the defences. Here\u2019s what it all comes down to.',
-  spot:{type:'takeaways',items:[
-    ['\uD83D\uDD11','One weak link is enough','The whole $2.4B chain started with a single reused password and one setting left off. Security isn\u2019t about doing everything — it\u2019s about not leaving the easy doors open.'],
-    ['\uD83D\uDC41\uFE0F','Attacks look normal','No dramatic hacking — just a valid login and a quiet week inside. The habit that catches this is pausing on the small \u201Cthat\u2019s odd\u201D moments and checking before you act.'],
-    ['\u26A1','A few minutes changes the odds','MFA, updates, verify-before-you-click, and knowing who to call. None of it is hard, and together they break the exact chain you just watched.']
-  ]}}
+
 ];
 
 const scroll=document.getElementById('scroll'),track=document.getElementById('track'),spineFill=document.getElementById('spineFill');
@@ -297,6 +310,10 @@ let xp=0;const addXP=n=>{xp+=n;document.getElementById('xp').textContent=xp+' XP
 NODES.forEach((n,i)=>{
   const el=document.createElement('div');el.className='node'+(n.crit?' crit':'')+(n.scene2?' s2':'');el.dataset.i=i;
   let h=`<div class="dot"></div><div class="date">${n.date}</div><div class="beat">${n.beat}</div><div class="body">${n.body}</div>`;
+  if(n.more){
+    h+=`<div class="more" id="more-${i}"><button class="more-t" data-more="${i}"><span class="cv"></span>${n.more.t}</button>
+      <div class="more-b"><div class="more-in">${n.more.body}</div></div></div>`;
+  }
   if(n.spot){
     const s=n.spot;const isExp=s.type==='experience';const isCheck=s.type==='checklist';
     if(isCheck){
@@ -309,7 +326,7 @@ NODES.forEach((n,i)=>{
         if(it.itnote){h+=`<div class="cl-itnote">\u2139\uFE0F ${it.itnote}</div>`;}
         h+=`<button class="cl-done" data-done="${i}-${j}">I\u2019ll do this \u2713</button></div></div>`;
       });
-      h+=`</div><div class="cl-gate" id="gate-${i}">Mark all four to finish this scene.</div></div>`;
+      h+=`</div><div class="cl-gate" id="gate-${i}">Mark whichever you mean to do — they go into your plan below.</div></div>`;
     } else if(s.type==='takeaways'){
       h+=`<div class="spot takeaways"><div class="tk-list">`;
       s.items.forEach(t=>h+=`<div class="tk"><div class="tk-ic">${t[0]}</div><div><div class="tk-t">${t[1]}</div><div class="tk-b">${t[2]}</div></div></div>`);
@@ -334,7 +351,14 @@ function recordAnswer(topic,ok){if(!topic)return;if(!topicResults[topic])topicRe
 
 // end card
 const end=document.createElement('div');end.className='endcard';
-end.innerHTML=`<div class="ec"><h3>You broke the chain.</h3><p>You walked the whole attack and set up the defences that would have stopped it. That\u2019s the foundation — every other module builds on it.</p><div class="yourplan" id="yourplan"></div><button class="nextbtn">Finish Scene →</button></div>`;
+end.innerHTML=`<div class="ec"><h3>That\u2019s the course.</h3>
+  <p>One reused password, nine quiet days, and a bill in the billions. Three things worth keeping:</p>
+  <div class="ec-tk">
+    <div class="ec-t"><span>\ud83d\udd11</span><div><b>A password on its own is one lock.</b> Stolen, it opens the door with no alarm \u2014 because from the inside, nothing unusual happened.</div></div>
+    <div class="ec-t"><span>\ud83d\udcf2</span><div><b>The second step is what stops it.</b> Multi-factor takes a minute to switch on and makes a stolen password useless on its own.</div></div>
+    <div class="ec-t"><span>\u23f3</span><div><b>Intruders are patient.</b> The damage comes days later, which is why the settings you choose beforehand matter more than spotting anyone afterwards.</div></div>
+  </div>
+  <div class="yourplan" id="yourplan"></div><button class="nextbtn">Finish Scene \u2192</button></div>`;
 track.appendChild(end);
 
 // spot open/close
@@ -350,6 +374,8 @@ track.addEventListener('click',e=>{
     const g=ok?3:1;addXP(g);document.getElementById('xpb-'+i).textContent='+'+g+' XP';
     document.getElementById('fbt-'+i).innerHTML=(ok?'<b class="v-ok">\u2713 That\u2019s right.</b> ':'<b class="v-no">\u2717 Not quite.</b> ')+s.fb;
     fb.classList.add('show');recordAnswer(s.topic,ok);markSeen(i);return;}
+  const mt=e.target.closest('[data-more]');
+  if(mt){document.getElementById('more-'+mt.dataset.more).classList.toggle('open');return;}
   const eb=e.target.closest('.exp-btn');
   if(eb){const i=eb.dataset.exp;[...document.querySelectorAll('[data-exp="'+i+'"]')].forEach(x=>x.classList.remove('sel'));eb.classList.add('sel');
     document.getElementById('note-'+i).classList.add('show');if(!eb.dataset.c){eb.dataset.c=1;addXP(2);}markSeen(i);return;}
@@ -368,7 +394,7 @@ track.addEventListener('click',e=>{
 });
 
 // personalized checklist header + flags, built when the checklist node unlocks
-const TOPIC_LABEL={mfa:'Multi-factor authentication',file:'Handling unexpected files & links',update:'Software updates',report:'Reporting to IT'};
+const TOPIC_LABEL={mfa:'The second step',reuse:'Reusing passwords',report:'Reporting it'};
 function buildPersonal(i){
   const box=document.getElementById('personal-'+i);if(!box||box.dataset.built)return;box.dataset.built=1;
   const weak=[],strong=[];
@@ -391,18 +417,22 @@ function checkChecklistDone(i){
   const items=[...document.querySelectorAll('[data-cl="'+i+'"]')];
   const done=items.filter(x=>x.classList.contains('on')).length;
   const gate=document.getElementById('gate-'+i);
-  if(gate){if(done===items.length){gate.textContent='\u2713 Added to your plan — scene unlocked below.';gate.classList.add('done');}else{gate.textContent=`${done} of ${items.length} added — mark all to finish this scene.`;}}
-  if(done===items.length)unlockNext(+i);
+  if(gate){
+    if(done){gate.textContent='\u2713 '+done+' added to your plan below.';gate.classList.add('done');}
+    else{gate.textContent='Mark whichever you mean to do — they go into your plan below.';gate.classList.remove('done');}
+  }
+  buildPlan();
+  unlockNext(+i,true);
 }
 const nodesEls=[...document.querySelectorAll('.node')];
 const endEl=document.querySelector('.endcard');
 let unlockedUpTo=0; // highest node index currently readable
 
 function buildPlan(){
-  const box=document.getElementById('yourplan');if(!box||box.dataset.built)return;box.dataset.built=1;
+  const box=document.getElementById('yourplan');if(!box)return;
   const committed=[...document.querySelectorAll('.cl-item.on .cl-t')].map(x=>x.textContent);
-  if(!committed.length)return;
-  box.innerHTML='<div class="yp-title">Your plan</div><p class="yp-sub">You said you\u2019ll do these — that\u2019s your commitment coming out of this scene:</p><ul class="yp-list">'+committed.map(t=>`<li>${t}</li>`).join('')+'</ul>';
+  if(!committed.length){box.innerHTML='';return;}
+  box.innerHTML='<div class="yp-title">Your plan</div><p class="yp-sub">You said you\u2019ll do these:</p><ul class="yp-list">'+committed.map(t=>`<li>${t}</li>`).join('')+'</ul>';
 }
 function lockState(){
   nodesEls.forEach((n,idx)=>{
@@ -431,7 +461,7 @@ function unlockNext(fromIdx,quiet){
   if(nxt&&!quiet)setTimeout(()=>softReveal(nxt),520);
   // if the newly unlocked node has NO spot (pure narrative), chain-unlock the one after it
   const nd=NODES[unlockedUpTo];
-  if(nd&&(!nd.spot||nd.spot.type==='takeaways'))setTimeout(()=>unlockNext(unlockedUpTo,true),700);
+  if(nd&&(!nd.spot||nd.spot.type==='takeaways'||nd.spot.type==='checklist'))setTimeout(()=>unlockNext(unlockedUpTo,true),700);
 }
 function markSeen(i){ unlockNext(+i); }   // answering spot i unlocks i+1
 

@@ -626,10 +626,10 @@ a scene-2 checklist that assembles the learner's personal action plan.
 
 | Catalogue # | Item | File | Status |
 |---|---|---|---|
-| Course 1 | Security Basics: Why One Setting Matters | `courses/01-security-basics.html` | Built |
+| Course 1 | Security Basics: Why One Setting Matters | `courses/01-security-basics.html` | Built as *How a Breach Unfolds*, ~6 min |
 | Course 2 | Social Engineering: How People Get Played | `courses/02-social-engineering.html` | Built as *How People Get Talked Into It*, opens attacker-side. ~7 min base |
 | Course 3 | Physical Security: Desks, Screens, Printers | `courses/03-physical-security.html` | Built as *Screens, Paper and Devices*, opens with a self-audit. ~4 min base, ~5 with the two deep-dive blocks expanded |
-| Course 4 | Passwords & Passphrases | `courses/04-passwords-mfa.html` | Built — currently **combined with Course 5** in one deck |
+| Course 4 | Passwords & Passphrases | `courses/04-passwords-mfa.html` | Built as *Reused Passwords and the Second Lock*, ~7 min — still **combined with Course 5** |
 | Course 5 | MFA: The Second Step | — | Covered by the combined deck above; not yet split out |
 | Course 6 | Phishing: Spot, Check, Report | `courses/06-the-447-email.html` | Built as *Spotting a Fake Email*, cold-open email pick. ~6 min base, ~7 with deep dives |
 | Byte 1b | Tools Worth Knowing About | `bytes/01b-security-toolkit.html` | Built |
@@ -666,8 +666,8 @@ as optional depth rather than a truncated base layer.
 
 | Course | Base | With depth expanded |
 |---|---|---|
-| 1 | ~5 min | — |
+| 1 | ~6 min | — |
 | 2 | ~7 min | ~7.5 min |
 | 3 | ~4 min | ~5 min |
-| 4 | ~6 min | — |
+| 4 | ~7 min | — |
 | 6 | ~6 min | ~7 min |
