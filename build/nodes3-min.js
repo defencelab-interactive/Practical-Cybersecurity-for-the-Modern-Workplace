@@ -1,0 +1,81 @@
+const NODES=[
+ {date:'Start here',crit:0,beat:'Look up for a second',
+  body:'Tick anything true in the room you are in right now. At home today? Answer for the last place you worked around other people.',
+  spot:{type:'audit',topic:'space',q:'True in your space right now?',
+    items:[
+     {t:'Someone walking past could read my screen',why:'You cannot see your own screen from behind. Readable distance is further than people assume.'},
+     {t:'There is paper on my desk with work information on it',why:'Paper does not lock, and never tells you it was photographed.'},
+     {t:'A password or code is written somewhere visible',why:'Everyone in the room inherits the access.'},
+     {t:'My laptop would stay here if I stepped out for ten minutes',why:'Whether that matters depends on whether the screen locks itself.'},
+     {t:'I have left something in a printer tray and collected it later',why:'Everyone walks past the tray. Nobody owns it.'},
+     {t:'People can get into this space without a badge or a key',why:'Not automatically a problem — it just means the door is not doing the work you assume.'}],
+    fb:'None of this makes you careless. You print because paper is easier to read, you leave the laptop because you are coming straight back.<br><br>That is the whole problem: physical security fails through convenience, not negligence.'}},
+
+ {date:'July 2017',crit:1,beat:'The password was in the photograph',
+  body:'A news agency ran a routine story about an emergency management agency in Hawaii, with a photo of an employee at his desk. On the monitor, on a yellow sticky note, was a password. Legible in the published picture.<br><br>Nobody broke in. Somebody photographed a desk.',
+  more:{t:'The same thing happens on video calls',
+    body:'People compose themselves for a camera and forget what is behind them — open mail, dashboards, a whiteboard, notes stuck to a monitor.<br><br>In 2015 a French broadcaster gave an interview in an office where passwords were visible on the wall behind the presenter, including one for a social media account. Conference livestreams and screen shares have the same problem: the content you chose to show is fine, and the thing beside it is not.'}},
+
+ {date:'Screens',crit:0,beat:'Further away than you think',
+  body:'On a train, your screen is readable from the seat behind. In an open-plan office, everyone walking to the kitchen passes it at reading distance.<br><br>What leaks is rarely dramatic — a customer name, a salary line, a supplier’s bank details.',
+  spot:{type:'quiz',topic:'screens',q:'On a train with something confidential open. Best protection available?',
+    opts:[
+     ['Turning the screen brightness right down',0],
+     ['Sitting where the wall is behind your screen',1],
+     ['Working quickly so it is on screen for less time',0],
+     ['Angling the lid slightly away from the aisle',0]],
+    fb:'Position. If nobody can get behind the screen, nothing else is needed. Dimming makes it unreadable for you first; angling helps against one seat and not the one opposite.'}},
+
+ {date:'What you leave behind',crit:0,beat:'Paper, and the laptop on the table',
+  body:'Printed pages have no access control: once out, they can be read, photographed or carried off with no record. The gap is between pressing print and collecting.<br><br>A stolen laptop is an insurance claim if it is encrypted, and a data breach if it is not. Two settings decide which: <b>full-disk encryption</b> and a short <b>auto-lock</b>.',
+  more:{t:'Why the login screen stops mattering, and when a printout becomes an incident',
+    body:'<b>The laptop.</b> A password protects the operating system, and the operating system only matters if the thief boots the machine normally. Remove the drive, connect it to another computer as external storage, and the files are simply there. Encryption scrambles the disk with a key derived from your credentials, so the drive on its own is noise. Remote wipe is useful but conditional — the device has to power on and reach the network.<br><br><b>The printout.</b> A confidential document you cannot account for is a potential data breach. Under GDPR the clock starts when someone becomes <i>aware</i> of a possible loss, not when it is confirmed, and there are generally 72 hours to notify a regulator. Reprinting quietly removes the only chance of finding out where the first copy went.<br><br><b>Secure print</b> — also called pull print — holds the job until you enter a PIN at the machine. That closes the gap entirely, and most offices that have it have it switched off by default.'},
+  spot:{type:'predict',topic:'devices',q:'Your work laptop is stolen. Which single fact decides how bad this gets?',
+    opts:[
+     ['Whether the disk was encrypted',1],
+     ['How strong your login password was',0],
+     ['Whether you can wipe it remotely',0]],
+    fb:'Encryption. It holds regardless of what anyone does next — which makes it the thing to check first rather than last.'}},
+
+ {date:'Someone else’s desk',crit:0,beat:'Five minutes after its owner left',
+  body:'A visitor walks past this desk alone for two minutes. Click whatever is worth having — some of it genuinely is not.',
+  spot:{type:'flags',topic:'paper',
+    mail:[
+      {label:'Screen',parts:[[0,'Email client open, inbox visible'],' · ',[1,'screen not locked']]},
+      {label:'On the desk',parts:[[2,'A sticky note on the monitor: “VPN: Summer2024!”']]},
+      {body:1,parts:[[3,'A printed spreadsheet: “Q3 headcount — salary bands”']]},
+      {body:1,parts:[[4,'The building access badge, still on its lanyard']]},
+      {body:1,parts:[[5,'A phone, face up, showing message previews']]},
+      {body:1,parts:['A mug, a plant, and ',[6,'a framed photo of two children']]},
+      {body:1,parts:[[7,'A notebook, closed'],', and ',[8,'a whiteboard showing server names']]},
+      {foot:1,parts:['Owner: away from desk, coat still on the chair']}],
+    flags:[
+      {ok:0,why:'<b>An open inbox</b> — subject lines give away current projects, who talks to whom, which suppliers are in play. Already on screen; no access needed.'},
+      {ok:0,why:'<b>Unlocked</b> — turns everything else from a look into a session. Two minutes is enough to send mail as this person.'},
+      {ok:0,why:'<b>A password on the monitor</b> — the Hawaii photograph, minus the newspaper.'},
+      {ok:0,why:'<b>Salary bands on paper</b> — personal data about named colleagues, unattended and easy to photograph.'},
+      {ok:0,why:'<b>The badge</b> — the physical key, left beside the door. Cloneable in seconds with cheap equipment.'},
+      {ok:0,why:'<b>Message previews</b> — a lock screen showing content leaks one-time codes. One setting to turn off.'},
+      {ok:1,why:'<b>A family photo</b> is not a security problem, and treating it as one is how these lists lose people.'},
+      {ok:1,why:'<b>A closed notebook</b> is fine as it sits. Lock it away overnight, not during a coffee break.'},
+      {ok:0,why:'<b>The whiteboard</b> — server names and layout are reconnaissance that would otherwise take weeks.'}],
+    fb:'Seven worth having, two that only look like it. Nothing here needed breaking into anything, and every item was left by someone doing ordinary work.'}},
+
+ {scene2:1,date:'Your settings',crit:0,beat:'Three things, about a minute each',
+  body:'Mark whichever you mean to do.',
+  spot:{type:'checklist',
+    items:[
+      {topic:'devices',t:'Check encryption and auto-lock on your laptop',
+       how:'These two decide whether a stolen device is an inconvenience or an incident.',
+       steps:['Windows: search “Device encryption” or BitLocker. macOS: System Settings → Privacy & Security → FileVault','Set the screen to lock after two to five minutes','Learn the manual lock shortcut — Win+L, or Ctrl+Cmd+Q on a Mac'],
+       itnote:'On a managed laptop these may be set centrally. If encryption looks off, raise it — usually a misconfiguration.'},
+      {topic:'screens',t:'Turn off message previews on your lock screen',
+       how:'A locked phone showing message content will show a verification code to whoever is holding it.',
+       steps:['iPhone: Settings → Notifications → Show Previews → When Unlocked','Android: Settings → Notifications → Lock screen → hide sensitive content'],
+       itnote:''},
+      {topic:'paper',t:'Ask whether your printers support secure print',
+       how:'Collection by PIN or badge closes the gap where most paper goes missing.',
+       steps:['Ask IT whether pull print is available, and switch to it if so','Anything with personal or financial data gets collected immediately, or not printed'],
+       itnote:'If it is not available, ask what the expectation is for confidential documents — and where the shredding happens.'}
+    ]}}
+];
