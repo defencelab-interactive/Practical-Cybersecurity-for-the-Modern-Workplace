@@ -250,6 +250,17 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 .fl b{color:var(--ink)}
 .fl .fl-ic{flex:none;font:700 11px var(--mono);color:var(--rd);padding-top:2px}
 .fl.decoy .fl-ic{color:var(--gr)}
+.flag-one{max-height:0;overflow:hidden;opacity:0;transition:max-height .35s ease,opacity .25s ease,margin .25s;
+  background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--rd);border-radius:12px;
+  font-size:14.5px;line-height:1.6;color:var(--ink-m)}
+.flag-one.show{max-height:320px;opacity:1;margin-top:14px;padding:14px 17px}
+.flag-one.decoy{border-left-color:var(--gr)}
+.flag-one b{color:var(--ink)}
+.flags-rest{display:none;margin-top:12px}
+.flags-rest.show{display:block;animation:rise .35s}
+.flags-rest .fr-h{font:700 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--tf);margin-bottom:8px}
+.flags-rest .fr{font-size:13.5px;line-height:1.55;color:var(--tm);padding:6px 0 6px 13px;border-left:2px solid rgba(255,255,255,.14)}
+.flags-rest .fr b{color:var(--tw);font-weight:600}
 .flags-fb{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:17px 20px;font-size:14.5px;line-height:1.65;color:var(--ink-m);display:none}
 .flags-fb.show{display:block;animation:rise .4s}
 
@@ -494,7 +505,7 @@ NODES.forEach((n,i)=>{
       h+=`</div><div class="cmp-fb" id="cfb-${i}"></div></div>`;
     } else if(s.type==='flags'){
       const total=s.flags.filter(f=>!f.ok).length;
-      h+=`<div class="spot flags-spot"><div class="flags-hint">Click whatever is worth having \u2014 some of it genuinely isn\u2019t.</div><div class="mail">`;
+      h+=`<div class="spot flags-spot"><div class="mail">`;
       s.mail.forEach(row=>{
         const inner=row.parts.map(p=>typeof p==='string'?p:`<span class="fseg" data-fseg="${i}-${p[0]}">${p[1]}</span>`).join('');
         if(row.label){h+=`<div class="mail-hd" style="border-bottom:${row.label==='Subject'?'1px solid var(--line)':'none'};padding-bottom:${row.label==='Subject'?'12px':'4px'}"><div class="mail-row"><span class="ml">${row.label}</span><span${row.label==='Subject'?' class="mail-subj"':''}>${inner}</span></div></div>`;}
@@ -502,8 +513,8 @@ NODES.forEach((n,i)=>{
         else if(row.foot){h+=`<div class="mail-foot">${inner}</div>`;}
         else{h+=`<div class="mail-bd" style="padding-top:6px;padding-bottom:6px"><p style="margin:0">${inner}</p></div>`;}
       });
-      h+=`</div><div class="flags-bar"><span class="flags-count" id="fc-${i}">Found 0 of ${total}</span><button class="flags-show" data-fshow="${i}">Show what I missed</button></div>
-        <div class="flags-list" id="flist-${i}"></div><div class="flags-fb" id="ffb-${i}"></div></div>`;
+      h+=`</div><div class="flags-bar"><span class="flags-count" id="fc-${i}">Nothing picked yet</span><button class="flags-show" data-fshow="${i}">That\u2019s all I can see</button></div>
+        <div class="flag-one" id="fone-${i}"></div><div class="flags-fb" id="ffb-${i}"></div><div class="flags-rest" id="frest-${i}"></div></div>`;
     } else if(s.type==='takeaways'){
       h+=`<div class="spot takeaways"><div class="tk-list">`;
       s.items.forEach(t=>h+=`<div class="tk"><div class="tk-ic">${t[0]}</div><div><div class="tk-t">${t[1]}</div><div class="tk-b">${t[2]}</div></div></div>`);
@@ -601,22 +612,22 @@ track.addEventListener('click',e=>{
   if(seg&&!seg.classList.contains('hit')&&!seg.classList.contains('okhit')&&!seg.classList.contains('missed')){
     const[i,fi]=seg.dataset.fseg.split('-').map(Number);const s=NODES[i].spot;const f=s.flags[fi];
     seg.classList.add(f.ok?'okhit':'hit');
-    const list=document.getElementById('flist-'+i);
-    const row=document.createElement('div');row.className='fl'+(f.ok?' decoy':'');
-    row.innerHTML=`<span class="fl-ic">${f.ok?'MINOR':'USEFUL'}</span><span>${f.why}</span>`;
-    list.appendChild(row);
+    const one=document.getElementById('fone-'+i);
+    one.className='flag-one show'+(f.ok?' decoy':'');
+    one.innerHTML=f.why;
     if(!f.ok){addXP(1);}
     updateFlagCount(i);return;}
-  // spot the threat: reveal the rest
+  // spot the threat: finish, and list what is left compactly
   const fshow=e.target.closest('[data-fshow]');
-  if(fshow){const i=+fshow.dataset.fshow;const s=NODES[i].spot;const list=document.getElementById('flist-'+i);
+  if(fshow){const i=+fshow.dataset.fshow;const s=NODES[i].spot;
+    const rest=[];
     s.flags.forEach((f,fi)=>{
       if(f.ok)return;
       const el=document.querySelector('[data-fseg="'+i+'-'+fi+'"]');
-      if(el&&!el.classList.contains('hit')){el.classList.add('missed');
-        const row=document.createElement('div');row.className='fl';
-        row.innerHTML=`<span class="fl-ic">MISSED</span><span>${f.why}</span>`;list.appendChild(row);}
+      if(el&&!el.classList.contains('hit')){el.classList.add('missed');rest.push(f.why);}
     });
+    const box=document.getElementById('frest-'+i);
+    if(rest.length){box.innerHTML='<div class="fr-h">Also worth having</div>'+rest.map(r=>`<div class="fr">${r}</div>`).join('');box.classList.add('show');}
     fshow.remove();updateFlagCount(i,true);return;}
   const eb=e.target.closest('.exp-btn');
   if(eb){const i=eb.dataset.exp;[...document.querySelectorAll('[data-exp="'+i+'"]')].forEach(x=>x.classList.remove('sel'));eb.classList.add('sel');
@@ -639,7 +650,7 @@ function updateFlagCount(i,forced){
   const s=NODES[i].spot;const total=s.flags.filter(f=>!f.ok).length;
   const found=document.querySelectorAll('[data-fseg^="'+i+'-"].hit').length;
   const c=document.getElementById('fc-'+i);
-  if(c)c.textContent='Found '+found+' of '+total;
+  if(c)c.textContent=found?found+' of '+total+' found':'Nothing picked yet';
   if(found===total||forced){
     const fb=document.getElementById('ffb-'+i);
     if(fb&&!fb.classList.contains('show')){fb.innerHTML=s.fb;fb.classList.add('show');
@@ -647,6 +658,7 @@ function updateFlagCount(i,forced){
     const btn=document.querySelector('[data-fshow="'+i+'"]');if(btn)btn.remove();
   }
 }
+
 
 // personalized checklist header + flags, built when the checklist node unlocks
 const TOPIC_LABEL={space:'Your working space',screens:'Screens and what they show',paper:'Paper and printers',devices:'Laptops and phones'};
