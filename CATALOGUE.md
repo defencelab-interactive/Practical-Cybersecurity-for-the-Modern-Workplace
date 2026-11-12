@@ -9,7 +9,7 @@ Cybersecurity awareness training for non-technical employees. Two content format
 
 Courses build understanding. Bytes build habits. Both work independently. Both stack into learning paths.
 
-**Total library:** 25 items (13 courses + 12 bytes), ~105 min combined. 15 built, 10 to build.
+**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 16 built, 8 to build.
 
 ---
 
@@ -29,8 +29,7 @@ Each course follows a consistent structure: story → content with interactive e
 
 | # | Course | Hook | AI Buddy | Time |
 |---|---|---|---|---|
-| 4 | **Passwords & Passphrases** | Complexity is a myth. Length wins. Here's how to build passwords that take centuries to crack. | 🔐 Describe your pattern → AI tests strength | ~7 min |
-| 5 | **MFA: The Second Step** | MFA blocks 99% of automated attacks. Free, takes one minute, most people still haven't done it. | — | ~7 min |
+| 4 | **Reused Passwords and the Second Lock** | One reused password, then account after account. Covers both passwords and MFA — the old Course 5 is folded in here. | 🔐 Describe your pattern → AI tests strength | ~7 min | **Built** |
 
 ### 🎣 Phishing & Social Engineering
 
@@ -70,7 +69,7 @@ Each course follows a consistent structure: story → content with interactive e
 |---|---|---|---|---|
 | 13 | **Incident Response: First 30 Minutes** | The difference between a $0 incident and a $280K loss is 30 seconds of action. STOP · DOCUMENT · REPORT. | 🏋️ Describe incident → AI coaches through STOP/DOC/REPORT | ~7 min |
 
-**Total: 13 courses, ~94 min**
+**Total: 12 courses, ~87 min**
 
 ### Opening mechanics used so far
 
@@ -150,7 +149,7 @@ belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.h
 | 1b | **Tools Worth Knowing About** | Filterable rundown of security tools by OS, browser and phone | ~4 min | Course 1 | Built |
 | 2a | **Your Verification Card** | Three questions about where you work, then a card naming who confirms what. Saves and prints. | ~3 min | Course 2 | Built |
 | 4a | **Build a Passphrase** | Generator: four words, separators, strength shown as you go | 2 min | Course 4 | To build |
-| 5a | **Set Up MFA — Step by Step** | The settings path in each major account, with screenshots. The course says turn it on; this shows where. | 3 min | Course 4 | To build |
+| 4b | **Turn On MFA** | Your accounts in the order that matters, each with the company's own term for the setting, a link where one was confirmed, and a tick that saves. Add your own. | ~3 min | Course 4 | Built |
 | 6b | **Link Inspector** | Paste a URL and see where it really goes — domain, @ trick, punycode, lookalikes. Runs in the browser. | ~3 min | Course 6 | Built |
 | 7b | **Your Home Network** | Paste your WiFi name and see what it gives away (surname, address, router model, ISP default), then three router settings | 2 min | Course 7 | Built |
 | 7f | **Working Away From the Office** | Laptop settings, cafés and travel in one reference *(merges the old 7a, 7c, 7e)* | 3 min | Courses 7–8 | To build |
@@ -160,9 +159,15 @@ belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.h
 | 11b | **Is This PII?** | Eight examples to sort, including the edge cases that catch people | 2 min | Course 11 | To build |
 | 13a | **STOP · DOCUMENT · REPORT** | A card you fill in once, save and print | 2 min | Course 13 | To build |
 
-**Total Security Bytes: 12 items (5 built, 7 to build)**
+**Total Security Bytes: 12 items (6 built, 6 to build)**
 
 ### Retired
+
+**Course 5 — MFA: The Second Step.** Dropped. Course 4 already carries both halves: a reused
+password is the problem and the second factor is the answer, and splitting them made two thin courses
+out of one argument. The practical half moved to Byte 4b. Its old hook, “MFA blocks 99% of automated
+attacks”, was not reused — it is a vendor figure about a specific attack class and a specific period,
+and it gets quoted as if it were a general fact.
 
 | Byte | Why it was dropped |
 |---|---|
@@ -188,36 +193,34 @@ The complete curriculum. Recommended deployment: one item per 1-2 weeks over 6 m
 
 **Sequence:**
 
-| Week | Type | Item | Group | Time |
-|---|---|---|---|---|
-| 1 | Course | Security Basics: Why One Setting Matters | General | 7 min |
-| 2 | Byte | Tools Worth Knowing About | General | 4 min |
-| 3 | Course | Social Engineering: How People Get Played | General | 7 min |
-| 4 | Byte | Spot a Social Engineering Attempt | General | 2 min |
-| 5 | Course | Physical Security: Desks, Screens, Printers | General | 6 min |
-| 6 | Byte | The Clean Desk Checklist | General | 2 min |
-| 7 | Course | Passwords & Passphrases | Auth | 7 min |
-| 8 | Byte | Create a Passphrase in 60 Seconds | Auth | 2 min |
-| 9 | Course | MFA: The Second Step | Auth | 7 min |
-| 10 | Byte | Set Up MFA — Step by Step | Auth | 3 min |
-| 11 | Course | Phishing: Spot, Check, Report | Phishing | 8 min |
-| 12 | Byte | The 5-Second Email Check | Phishing | 2 min |
-| 13 | Course | Laptop Security Settings | Devices | 6 min |
-| 14 | Byte | 5 Settings to Check on Your Laptop | Devices | 2 min |
-| 15 | Course | Phone Security Settings | Devices | 6 min |
-| 16 | Byte | App Permission Cleanup | Devices | 2 min |
-| 17 | Course | Social Media: What You're Really Sharing | Online | 8 min |
-| 18 | Byte | LinkedIn Privacy in 2 Minutes | Online | 2 min |
-| 19 | Course | AI Tools: Safe Use at Work | AI | 7 min |
-| 20 | Byte | How to Anonymize an AI Prompt | AI | 2 min |
-| 21 | Course | Data Classification: Four Levels | Data | 6 min |
-| 22 | Byte | Classify This: Quick Exercise | Data | 3 min |
-| 23 | Course | File Sharing & Access | Data | 6 min |
-| 24 | Byte | Sharing Files Safely — Quick Rules | Data | 2 min |
-| 25 | Course | Incident Response: First 30 Minutes | Incident | 7 min |
-| 26 | Byte | STOP · DOCUMENT · REPORT Card | Incident | 2 min |
+| Week | Type | # | Item | Group | Time |
+|---|---|---|---|---|---|
+| 1 | Course | 1 | How a Breach Unfolds | General | 6 min |
+| 2 | Byte | 1b | Tools Worth Knowing About | General | 4 min |
+| 3 | Course | 2 | How People Get Talked Into It | General | 7 min |
+| 4 | Byte | 2a | Your Verification Card | General | 3 min |
+| 5 | Course | 3 | Screens, Paper and Devices | General | 4 min |
+| 6 | Course | 4 | Reused Passwords and the Second Lock | Auth | 7 min |
+| 7 | Byte | 4a | Build a Passphrase | Auth | 2 min |
+| 8 | Byte | 4b | Turn On MFA | Auth | 3 min |
+| 9 | Course | 6 | Spotting a Fake Email | Phishing | 6 min |
+| 10 | Byte | 6b | Link Inspector | Phishing | 3 min |
+| 11 | Course | 7 | What Runs on Your Laptop | Devices | 5 min |
+| 12 | Byte | 7b | Your Home Network | Devices | 2 min |
+| 13 | Byte | 7f | Working Away From the Office | Devices | 3 min |
+| 14 | Course | 8 | What Your Phone Can Reach | Devices | 5 min |
+| 15 | Byte | 8b | When Your Phone Goes Missing | Devices | 2 min |
+| 16 | Course | 9 | What You Post About Work | Online | 5 min |
+| 17 | Byte | 9a | Clean Up What's Public About You | Online | 3 min |
+| 18 | Course | 10 | What You Paste Into AI | AI | 6 min |
+| 19 | Byte | 10a | Anonymise an AI Prompt | AI | 2 min |
+| 20 | Course | 11 | What Counts as Confidential | Data | 5 min |
+| 21 | Byte | 11b | Is This PII? | Data | 2 min |
+| 22 | Course | 12 | File Sharing & Access | Data | 6 min |
+| 23 | Course | 13 | The First 30 Minutes | Incident | 6 min |
+| 24 | Byte | 13a | STOP · DOCUMENT · REPORT | Incident | 2 min |
 
-**Total: 26 items, ~118 min over 26 weeks (one per week) or 13 months (biweekly)**
+**Total: 24 items, ~99 min.** One per week is 24 weeks; one per fortnight is about 11 months.
 
 Pattern: Course → paired Byte → next Course → paired Byte. The course builds understanding, the Byte locks in the action. General Awareness comes first — it sets the foundation for everything else.
 
@@ -234,8 +237,7 @@ Each path selects the most relevant courses and bytes for a specific role. Items
 | Course | Social Engineering: How People Get Played | Social engineering — finance is the #1 target for pretexting |
 | Course | Phishing: Spot, Check, Report | Phishing + BEC — #1 risk for finance |
 | Byte | The 5-Second Email Check | Daily habit for email-heavy role |
-| Course | MFA: The Second Step | MFA for financial systems |
-| Byte | Set Up MFA — Step by Step | Action step |
+| Byte | Turn On MFA | Action step — MFA on the accounts that hold money first |
 | Course | Incident Response: First 30 Minutes | Incident response — wire fraud recovery |
 | Byte | STOP · DOCUMENT · REPORT Card | Emergency reference |
 | **Total** | **5 courses + 3 bytes** | **~40 min** |
@@ -256,8 +258,7 @@ Each path selects the most relevant courses and bytes for a specific role. Items
 | Type | Item | Why |
 |---|---|---|
 | Course | Passwords & Passphrases | Credential hygiene |
-| Course | MFA: The Second Step | MFA + passkeys — technical depth available |
-| Byte | Set Up MFA — Step by Step | Action step |
+| Byte | Turn On MFA | Action step — includes passkeys and hardware keys |
 | Course | AI Tools: Safe Use at Work | Shadow AI, code in prompts |
 | Byte | How to Anonymize an AI Prompt | Daily skill for developers |
 | Course | Laptop Security Settings | Device security |
@@ -281,7 +282,7 @@ Each path selects the most relevant courses and bytes for a specific role. Items
 |---|---|---|
 | Byte | Your Company's Security Policy | Day 1: know where to look |
 | Byte | Create a Passphrase in 60 Seconds | Day 1: set up credentials securely |
-| Byte | Set Up MFA — Step by Step | Day 1: enable MFA on all accounts |
+| Byte | Turn On MFA | Day 1: enable MFA, in the order the byte gives |
 | Byte | The 5-Second Email Check | Day 1: immediate phishing defense |
 | Byte | The Clean Desk Checklist | Day 1: physical security from the start |
 | Course | Security Basics: Why One Setting Matters | Week 1: understand why this matters |
@@ -347,7 +348,7 @@ For EU organizations subject to NIS2 Directive Article 21(2) or DORA requirement
 | NIS2 Art. 21(2)(d) — Supply chain security | Course 12 (File Sharing & Access), Byte 12a (Sharing Files Safely) |
 | NIS2 Art. 21(2)(g) — Basic cyber hygiene and training | All courses — especially General Awareness group (1-3) |
 | NIS2 Art. 21(2)(g) — Phishing awareness | Course 6 (Phishing: Spot, Check, Report), Byte 6a (5-Second Email Check), Byte 6c (Report Phishing) |
-| NIS2 Art. 21(2)(g) — Access control / credentials | Courses 4-5 (Passwords, MFA), Bytes 6-7 |
+| NIS2 Art. 21(2)(g) — Access control / credentials | Course 4 (passwords and MFA), Bytes 4a and 4b |
 | NIS2 Art. 21(2)(j) — Cryptography and encryption | Course 7 (Laptop Security Settings) |
 | DORA Art. 13.6 — ICT security awareness | All courses, role-based paths |
 | DORA Art. 13.6 — Digital operational resilience training | Course 13, Course 1 |
@@ -583,7 +584,6 @@ Student describes their approach (not actual credentials). AI evaluates and impr
 | **Social Engineering: How People Get Played** | 🎭 Role-play | AI plays social engineer, student responds |
 | **Physical Security: Desks, Screens, Printers** | 📸 Image | Upload desk photo, AI spots risks |
 | **Passwords & Passphrases** | 🔐 Strength check | Describe pattern, AI estimates crack time |
-| MFA: The Second Step | — | No AI block (procedural — enable MFA) |
 | **Phishing: Spot, Check, Report** | 📨 Text + 🎭 Role-play | Paste email for analysis, or BEC role-play |
 | Laptop Security Settings | — | No AI block (checklist-based) |
 | Phone Security Settings | — | No AI block (checklist-based) |
@@ -611,7 +611,7 @@ a scene-2 checklist that assembles the learner's personal action plan.
 | Course 1 | Security Basics: Why One Setting Matters | `courses/01-security-basics.html` | Built as *How a Breach Unfolds*, ~6 min |
 | Course 2 | Social Engineering: How People Get Played | `courses/02-social-engineering.html` | Built as *How People Get Talked Into It*, opens attacker-side. ~7 min base |
 | Course 3 | Physical Security: Desks, Screens, Printers | `courses/03-physical-security.html` | Built as *Screens, Paper and Devices*, opens with a self-audit. ~4 min base, ~5 with the two deep-dive blocks expanded |
-| Course 4 | Passwords & Passphrases | `courses/04-passwords-mfa.html` | Built as *Reused Passwords and the Second Lock*, ~7 min — still **combined with Course 5** |
+| Course 4 | Reused Passwords and the Second Lock | `courses/04-passwords-mfa.html` | Built, ~7 min — carries both passwords and MFA; the old Course 5 is folded in |
 | Course 5 | MFA: The Second Step | — | **Dropped.** Course 4 covers passwords and the second step in one pass; splitting them would mean either removing MFA from Course 4 or repeating it. |
 | Course 6 | Phishing: Spot, Check, Report | `courses/06-the-447-email.html` | Built as *Spotting a Fake Email*, cold-open email pick. ~6 min base, ~7 with deep dives |
 | Byte 1b | Tools Worth Knowing About | `bytes/01b-security-toolkit.html` | Built |

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Defence Lab · Turn On MFA</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#34B77D;--acd:#2A9A66;--td:#1A1A1A;--tb:#4A4844;--mu:#8a8884;--paper:#F2F5F2;--paper2:#E8EEEC;--line:#dce4e0;
+  --sh:0 3px 8px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);--hi:inset 0 1.5px 0 rgba(255,255,255,1);
+  --blue:#4E7CA8;--rd:#C0392B;--rdl:rgba(192,57,43,.09);--am:#B07A1E;--aml:rgba(176,122,30,.1);
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);color:var(--td);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background:radial-gradient(70% 50% at 12% 6%,rgba(52,183,125,.16),transparent 52%),
+    radial-gradient(80% 60% at 92% 30%,rgba(78,124,168,.14),transparent 58%),
+    radial-gradient(60% 45% at 55% 40%,rgba(255,255,255,.5),transparent 60%),
+    linear-gradient(160deg,#eef2ee,#e4ebeb)}
+.wrap{max-width:860px;margin:0 auto;padding:40px 32px 80px}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.eyebrow{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acd);margin-bottom:12px}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-height:1.06;letter-spacing:-.02em;margin-bottom:14px}
+.lede{font-size:17px;line-height:1.6;color:var(--tb);max-width:62ch}
+.chip{font:700 12px var(--mono);color:var(--acd);background:rgba(52,183,125,.12);border-radius:20px;padding:6px 13px;white-space:nowrap;flex:none}
+
+/* progress */
+.prog{display:flex;align-items:center;gap:13px;margin:28px 0 8px}
+.prog-n{font:700 13px var(--mono);color:var(--acd);white-space:nowrap}
+.prog-bar{flex:1;height:6px;border-radius:6px;background:var(--line);overflow:hidden}
+.prog-bar i{display:block;height:100%;width:0;background:var(--ac);border-radius:6px;transition:width .35s ease}
+
+/* tiers */
+.tier{margin-top:30px}
+.tier-h{display:flex;align-items:baseline;gap:11px;margin-bottom:5px}
+.tier-n{font:700 12px var(--mono);color:var(--acd);background:rgba(52,183,125,.12);border-radius:7px;padding:3px 8px;flex:none}
+.tier-t{font-family:var(--disp);font-weight:600;font-size:20px;letter-spacing:-.01em}
+.tier-w{font-size:14.5px;line-height:1.6;color:var(--tb);margin-bottom:14px;max-width:62ch}
+
+/* account rows */
+.acct{display:flex;align-items:center;gap:14px;background:#fff;border:1.5px solid var(--line);border-radius:13px;
+  padding:13px 16px;margin-bottom:9px;box-shadow:var(--sh)}
+.acct.on{border-color:var(--acd);background:rgba(52,183,125,.06)}
+.tick{width:25px;height:25px;border-radius:7px;border:2px solid var(--line);background:#fff;cursor:pointer;
+  flex:none;display:grid;place-items:center;transition:all .16s;padding:0}
+.tick:hover{border-color:var(--acd)}
+.tick svg{opacity:0;transition:opacity .16s;width:14px;height:14px}
+.acct.on .tick{background:var(--ac);border-color:var(--ac)}
+.acct.on .tick svg{opacity:1}
+.acct-b{flex:1;min-width:0}
+.acct-n{font-weight:600;font-size:15.5px;margin-bottom:3px}
+.acct.on .acct-n{color:var(--acd)}
+.acct-term{font:500 12.5px var(--mono);color:var(--tb)}
+.acct-term b{color:var(--td);font-weight:700}
+.acct-go{flex:none;font:700 11.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;text-decoration:none;
+  border-radius:9px;padding:8px 12px;white-space:nowrap;transition:all .15s}
+a.acct-go{color:#fff;background:var(--blue)}
+a.acct-go:hover{background:#3F688F}
+span.acct-go{color:var(--mu);background:var(--paper2);border:1.5px solid var(--line)}
+.own{display:flex;gap:9px;margin-top:11px}
+.own input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:11px;padding:12px 14px;
+  font:500 15px var(--body);color:var(--td);background:#fff;outline:none;transition:border .15s}
+.own input:focus{border-color:var(--acd)}
+.own button{flex:none;border:0;border-radius:11px;padding:12px 18px;background:var(--acd);color:#fff;
+  font:700 13.5px var(--body);cursor:pointer}
+.acct-x{flex:none;border:0;background:none;color:var(--mu);font:700 17px var(--body);cursor:pointer;padding:0 4px;line-height:1}
+.acct-x:hover{color:var(--rd)}
+
+/* decision cards */
+.dec{background:#fff;border:1.5px solid var(--line);border-radius:15px;padding:20px 22px;margin-bottom:12px;box-shadow:var(--sh)}
+.dec h3{font-family:var(--disp);font-weight:600;font-size:18px;margin-bottom:9px;letter-spacing:-.01em}
+.dec p{font-size:14.5px;line-height:1.65;color:var(--tb)}
+.dec p+p{margin-top:9px}
+.dec b{color:var(--td)}
+.rank{display:flex;flex-direction:column;gap:7px;margin:13px 0 4px}
+.rk{display:flex;align-items:flex-start;gap:11px;font-size:14px;line-height:1.55;color:var(--tb)}
+.rk-t{font:700 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:20px;flex:none;margin-top:1px}
+.rk.best .rk-t{background:rgba(46,173,107,.15);color:var(--acd)}
+.rk.ok .rk-t{background:var(--aml);color:var(--am)}
+.rk.last .rk-t{background:var(--rdl);color:var(--rd)}
+
+/* managed note */
+.managed{background:rgba(78,124,168,.07);border:1.5px solid rgba(78,124,168,.25);border-radius:15px;padding:19px 22px;margin-top:12px}
+.managed h3{font-family:var(--disp);font-weight:600;font-size:17.5px;margin-bottom:8px;color:#36587A}
+.managed p{font-size:14.5px;line-height:1.65;color:var(--tb)}
+.managed p+p{margin-top:8px}
+
+h2{font-family:var(--disp);font-weight:600;font-size:23px;letter-spacing:-.015em;margin:38px 0 7px}
+.sub{font-size:14.5px;line-height:1.6;color:var(--tb);margin-bottom:16px;max-width:62ch}
+
+.stale{margin-top:34px;border-top:1px solid var(--line);padding-top:17px;font-size:13px;line-height:1.65;color:var(--mu);max-width:68ch}
+.stale b{color:var(--tb)}
+
+@media (max-width:620px){
+  .wrap{padding:26px 18px 60px}
+  .head{flex-direction:column;gap:12px}
+  .acct{flex-wrap:wrap;gap:11px}
+  .acct-b{flex:1 1 100%;order:2}
+  .tick{order:1}
+  .acct-go{order:1;margin-left:auto}
+  .own{flex-direction:column}
+}
+</style>
+</head><body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Security Byte 4b</div>
+      <h1>Turn On MFA</h1>
+      <div class="lede">Your accounts in the order that actually matters, with what each company calls the setting. Tick them off as you go — this page remembers.</div>
+    </div>
+    <div class="chip">~3 min + the doing</div>
+  </div>
+
+  <div class="prog"><span class="prog-n" id="pn">0 of 0 done</span><span class="prog-bar"><i id="pb"></i></span></div>
+
+  <div id="tiers"></div>
+
+  <h2>Two decisions people get wrong</h2>
+  <div class="sub">Turning it on asks you two questions. These are the answers.</div>
+
+  <div class="dec">
+    <h3>Which second factor</h3>
+    <p>Most services offer several. They are not equivalent.</p>
+    <div class="rank">
+      <div class="rk best"><span class="rk-t">Best</span><div><b>A passkey or a hardware key.</b> Tied to the real site, so a convincing fake login page gets nothing. Your phone or laptop can act as one.</div></div>
+      <div class="rk ok"><span class="rk-t">Good</span><div><b>An authenticator app</b> — the six-digit code. Works offline, cannot be intercepted from your phone number.</div></div>
+      <div class="rk last"><span class="rk-t">Last resort</span><div><b>SMS.</b> Better than nothing, and the weakest of the three: the code goes to your phone number, which someone can get transferred to a SIM of their own.</div></div>
+    </div>
+    <p>If a service only offers SMS, take it. If it offers an app, take the app.</p>
+  </div>
+
+  <div class="dec">
+    <h3>Where the recovery codes go</h3>
+    <p>When you switch MFA on, most services show you a set of one-time recovery codes. People skip past this screen, and it is the screen that decides whether losing your phone is an inconvenience or a lockout.</p>
+    <p><b>Save them somewhere that is not the phone they would be recovering.</b> Printed and in a drawer is fine. In your password manager is fine. A screenshot in your camera roll is not, because the camera roll is on the phone.</p>
+    <p>Back up the authenticator app itself as well, if it offers that. Both together, because cloud backup fails quietly if the account it syncs to was also only on that phone.</p>
+  </div>
+
+  <div class="managed">
+    <h3>If it is a work account, you may not be the one deciding</h3>
+    <p>On an account your employer manages, an administrator can require MFA, choose which methods are allowed, or hide the setting from you entirely. If the option is missing or greyed out, that is usually why — not a fault.</p>
+    <p>If someone handles IT or security where you work, that is a one-line question for them: is MFA on for my account, and which method should I use? If nobody does, the setting is yours to turn on, and the order below still holds.</p>
+  </div>
+
+  <div class="stale">
+    <b>On the links.</b> Menu paths and screenshots go out of date within months, so this page does not use them. Each account shows <b>the company's own term</b> — which is what finds the current instructions in their help search — and links straight to the vendor's own page where that link was confirmed. Where it says <i>search their help</i>, the term is right and the link was not confirmed, so look it up on the company's own site rather than trusting a third-party walkthrough.
+    <br><br>Links confirmed November 2026. If one has moved since, search the term on the company's own help site; the term changes far less often than the address.
+  </div>
+</div>
+
+<script>
+const TICK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+
+const TIERS=[
+ {n:'1',t:'Your main email',w:'First, always, and not because the email itself is precious. Every other account resets through it — so whoever holds your inbox holds everything else, MFA on those accounts included.',
+  items:[
+   {id:'google',n:'Google / Gmail',term:'2-Step Verification',url:'https://support.google.com/accounts/answer/185839'},
+   {id:'apple',n:'Apple Account / iCloud',term:'Two-factor authentication',url:'https://support.apple.com/102660'},
+   {id:'ms',n:'Microsoft / Outlook',term:'Two-step verification',url:'https://support.microsoft.com/help/12408'}]},
+ {n:'2',t:'Anything holding money',w:'Second, because this is where a break-in costs you directly. Many banks have MFA on already and call it something of their own — check rather than assume, and use the number on your card, never a link in a message.',
+  items:[
+   {id:'bank',n:'Your bank',term:'Often called “secure key”, “strong authentication” or “app approval”',url:''},
+   {id:'amazon',n:'Amazon',term:'Two-Step Verification',url:''},
+   {id:'paypal',n:'PayPal',term:'2-step verification',url:''}]},
+ {n:'3',t:'Your work accounts',w:'Third, because an attacker inside a work account reaches colleagues, clients and systems rather than only you. Some of these your employer may already control.',
+  items:[
+   {id:'gh',n:'GitHub',term:'Two-factor authentication',url:'https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication'},
+   {id:'slack',n:'Slack',term:'Two-factor authentication',url:''},
+   {id:'dbx',n:'Dropbox',term:'Two-step verification',url:''}]},
+ {n:'4',t:'The accounts you would hate to lose',w:'Last by order, not by importance. A hijacked social account is used to reach the people who trust you, and a messaging account is used to ask them for things in your voice.',
+  items:[
+   {id:'ig',n:'Instagram',term:'Two-factor authentication',url:'https://help.instagram.com/566810106808145'},
+   {id:'fb',n:'Facebook',term:'Two-factor authentication',url:''},
+   {id:'wa',n:'WhatsApp',term:'Two-step verification',url:''},
+   {id:'li',n:'LinkedIn',term:'Two-step verification',url:''}]}
+];
+
+let own=[];
+
+function rowHTML(a,isOwn){
+  const go = a.url
+    ? `<a class="acct-go" href="${a.url}" target="_blank" rel="noopener">Open guide</a>`
+    : `<span class="acct-go">Search their help</span>`;
+  return `<div class="acct" data-id="${a.id}">
+    <button class="tick" data-tick="${a.id}" aria-label="Mark ${a.n} done">${TICK}</button>
+    <div class="acct-b"><div class="acct-n">${a.n}</div>
+      <div class="acct-term">${isOwn?'Search: <b>two-factor authentication</b>':'Their term: <b>'+a.term+'</b>'}</div></div>
+    ${isOwn?'<button class="acct-x" data-rm="'+a.id+'" aria-label="Remove">&times;</button>':go}
+  </div>`;
+}
+
+function render(){
+  let h='';
+  TIERS.forEach(t=>{
+    h+=`<div class="tier"><div class="tier-h"><span class="tier-n">${t.n}</span><span class="tier-t">${t.t}</span></div>
+      <div class="tier-w">${t.w}</div>${t.items.map(a=>rowHTML(a,false)).join('')}</div>`;
+  });
+  h+=`<div class="tier"><div class="tier-h"><span class="tier-n">+</span><span class="tier-t">Anything else you use</span></div>
+    <div class="tier-w">Add the accounts this list does not know about — your own, your team's, the one you keep meaning to get to.</div>
+    <div id="ownlist">${own.map(a=>rowHTML(a,true)).join('')}</div>
+    <div class="own"><input id="ownin" placeholder="Account name" maxlength="46">
+      <button id="ownadd">Add</button></div></div>`;
+  document.getElementById('tiers').innerHTML=h;
+  applyTicks(); updateProg();
+}
+
+let ticked={};
+function applyTicks(){
+  document.querySelectorAll('.acct').forEach(el=>{
+    el.classList.toggle('on',!!ticked[el.dataset.id]);
+  });
+}
+function updateProg(){
+  const all=[...document.querySelectorAll('.acct')];
+  const done=all.filter(x=>x.classList.contains('on')).length;
+  document.getElementById('pn').textContent=done+' of '+all.length+' done';
+  document.getElementById('pb').style.width=all.length?Math.round(done/all.length*100)+'%':'0%';
+}
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-tick]');
+  if(t){const id=t.dataset.tick; ticked[id]=!ticked[id]; applyTicks(); updateProg(); save(); return;}
+  const rm=e.target.closest('[data-rm]');
+  if(rm){const id=rm.dataset.rm; own=own.filter(a=>a.id!==id); delete ticked[id]; render(); save(); return;}
+  if(e.target.id==='ownadd'){addOwn(); return;}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.id==='ownin'){e.preventDefault();addOwn();}
+});
+function addOwn(){
+  const i=document.getElementById('ownin'); if(!i)return;
+  const v=i.value.trim(); if(!v)return;
+  own.push({id:'own-'+Date.now().toString(36),n:v,term:'',url:''});
+  i.value=''; render(); save();
+  const ni=document.getElementById('ownin'); if(ni)ni.focus();
+}
+
+/* persistence — survives closing the tab */
+async function save(){
+  try{
+    if(!window.storage)return;
+    await window.storage.set('turn-on-mfa',JSON.stringify({ticked,own}));
+  }catch(e){}
+}
+async function load(){
+  try{
+    if(window.storage){
+      const r=await window.storage.get('turn-on-mfa');
+      if(r&&r.value){const d=JSON.parse(r.value); ticked=d.ticked||{}; own=d.own||[];}
+    }
+  }catch(e){}
+  render();
+}
+load();
+</script>
+</body></html>
