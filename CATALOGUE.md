@@ -9,7 +9,7 @@ Cybersecurity awareness training for non-technical employees. Two content format
 
 Courses build understanding. Bytes build habits. Both work independently. Both stack into learning paths.
 
-**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 20 built, 4 to build. **All 12 courses are built;** the remainder are Bytes.
+**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 21 built, 3 to build. **All 12 courses are built;** the remainder are Bytes.
 
 ---
 
@@ -213,6 +213,12 @@ for something only the new version contains. The tell when this goes wrong is th
 old content while the repository holds the new — compare against `raw.githubusercontent.com` to
 separate a delivery failure from a code problem.
 
+**Do not hand the reader a way to count the answers.** Byte 11b opened with “two of them are not
+personal data; the other six are”, which lets anyone score well by tallying rather than thinking —
+the same family of defect as the correct answer being the longest option. Reworded to say that most
+are personal data without giving the split, and the two explanations that said “one of only two on
+this list” were trimmed for the same reason.
+
 **A detector must say what it cannot detect.** Byte 10a finds shapes — an email looks like an
 email, an amount looks like an amount — and has no way to know that a surname is a client or that
 one sentence identifies the only person on a team of three. A tool like that is dangerous when it
@@ -251,10 +257,10 @@ belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.h
 | 8b | **When Your Phone Goes Missing** | Two tabs: the three settings that only work beforehand, and the lock→notify→passwords→wipe order for when it is gone | ~2 min | Course 8 | Built |
 | 9a | **Clean Up What's Public About You** | LinkedIn settings, old accounts, searching for yourself *(merges the old 9a, 9b)* | 3 min | Course 9 | To build |
 | 10a | **Anonymise an AI Prompt** | Paste a prompt: emails, phones, amounts, dates, IDs and internal hostnames are marked automatically; names and companies you click yourself, because no pattern gets those right. Runs entirely in the browser. | ~2 min | Course 10 | Built |
-| 11b | **Is This PII?** | Eight examples to sort, including the edge cases that catch people | 2 min | Course 11 | To build |
+| 11b | **Is This Personal Data?** | Eight examples to sort. Built on the GDPR definition with sources per answer — swap the definition if a client works to another regime. | ~2 min | Course 11 | Built |
 | 13a | **The First Four Actions** | Pick the situation — clicked a link, machine misbehaving, device gone, sent to the wrong person, money moved — and see what the same four steps mean in that one. | ~2 min | Course 13 | Built |
 
-**Total Security Bytes: 12 items (8 built, 4 to build)**
+**Total Security Bytes: 12 items (9 built, 3 to build)**
 
 ### Retired
 
@@ -310,7 +316,7 @@ The complete curriculum. Recommended deployment: one item per 1-2 weeks over 6 m
 | 18 | Course | 10 | What You Paste Into AI | AI | 6 min |
 | 19 | Byte | 10a | Anonymise an AI Prompt | AI | 2 min |
 | 20 | Course | 11 | What Counts as Confidential | Data | 5 min |
-| 21 | Byte | 11b | Is This PII? | Data | 2 min |
+| 21 | Byte | 11b | Is This Personal Data? | Data | 2 min |
 | 22 | Course | 12 | Share Links, Folders and Old Access | Data | 5 min |
 | 23 | Course | 13 | Disconnect, Report, Write It Down | Incident | 5 min |
 | 24 | Byte | 13a | The First Four Actions | Incident | 2 min |

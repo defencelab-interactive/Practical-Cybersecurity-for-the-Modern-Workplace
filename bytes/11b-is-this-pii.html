@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Defence Lab · Is This Personal Data?</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#34B77D;--acd:#2A9A66;--gr:#2EAD6B;--td:#1A1A1A;--tb:#4A4844;--mu:#8a8884;--paper:#F2F5F2;--paper2:#E8EEEC;--line:#dce4e0;
+  --sh:0 3px 8px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);
+  --blue:#4E7CA8;--rd:#C0392B;--rdl:rgba(192,57,43,.09);--am:#B07A1E;--aml:rgba(176,122,30,.12);
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);color:var(--td);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background:radial-gradient(70% 50% at 12% 6%,rgba(52,183,125,.16),transparent 52%),
+    radial-gradient(80% 60% at 92% 30%,rgba(78,124,168,.14),transparent 58%),
+    radial-gradient(60% 45% at 55% 40%,rgba(255,255,255,.5),transparent 60%),
+    linear-gradient(160deg,#eef2ee,#e4ebeb)}
+.wrap{max-width:1000px;margin:0 auto;padding:40px 36px 80px}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.eyebrow{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acd);margin-bottom:12px}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-height:1.06;letter-spacing:-.02em;margin-bottom:14px}
+.lede{font-size:17px;line-height:1.6;color:var(--tb)}
+.chip{font:700 12px var(--mono);color:var(--acd);background:rgba(52,183,125,.12);border-radius:20px;padding:6px 13px;white-space:nowrap;flex:none}
+
+.rule{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:17px 20px;margin:26px 0 8px;box-shadow:var(--sh)}
+.rule-l{font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.rule-q{font-size:15.5px;line-height:1.6;color:var(--td)}
+.rule-q b{color:var(--acd)}
+.rule-n{font-size:13.5px;line-height:1.6;color:var(--tb);margin-top:9px}
+
+.prog{display:flex;align-items:center;gap:13px;margin:22px 0 14px}
+.prog-n{font:700 13px var(--mono);color:var(--acd);white-space:nowrap}
+.prog-bar{flex:1;height:5px;border-radius:5px;background:var(--line);overflow:hidden}
+.prog-bar i{display:block;height:100%;width:0;background:var(--ac);border-radius:5px;transition:width .35s ease}
+
+.items{display:flex;flex-direction:column;gap:10px}
+.it{background:#fff;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--sh)}
+.it-t{padding:16px 19px 13px;font-size:15.5px;line-height:1.5;color:var(--td)}
+.it-t .mono{font:600 14px var(--mono);background:var(--paper2);border-radius:5px;padding:1px 6px}
+.it-sub{display:block;margin-top:6px;font-size:13.5px;line-height:1.55;color:var(--mu)}
+.it-btns{display:flex;gap:8px;padding:0 19px 16px}
+.b{flex:1;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:11px 10px;
+  font:600 13.5px var(--body);color:var(--tb);cursor:pointer;transition:all .15s}
+.b:hover{border-color:var(--blue);color:var(--blue)}
+.it.done .it-btns{display:none}
+.it-v{display:none;align-items:center;gap:10px;padding:0 19px 12px}
+.it.done .it-v{display:flex}
+.tag{font:700 10.5px var(--mono);letter-spacing:.07em;text-transform:uppercase;padding:4px 10px;border-radius:20px}
+.it.right .tag{background:rgba(46,173,107,.15);color:var(--gr)}
+.it.wrong .tag{background:var(--rdl);color:var(--rd)}
+.verdict{font:700 12.5px var(--body);color:var(--tb)}
+.it-w{max-height:0;overflow:hidden;transition:max-height .34s ease}
+.it.done .it-w{max-height:400px}
+.it-wi{padding:13px 19px 17px;font-size:14px;line-height:1.65;color:var(--tb);border-top:1px solid var(--line)}
+.it-wi b{color:var(--td)}
+.it-src{display:block;margin-top:8px;font-size:12.5px;line-height:1.55;color:var(--mu)}
+.it-src a{color:var(--acd);text-decoration:none;border-bottom:1px solid rgba(52,183,125,.35)}
+
+.done-box{background:rgba(78,124,168,.07);border:1.5px solid rgba(78,124,168,.25);border-radius:16px;padding:22px 25px;margin-top:22px;display:none}
+.done-box.show{display:block}
+.done-box h3{font-family:var(--disp);font-weight:600;font-size:19px;margin-bottom:9px;color:#36587A}
+.done-box p{font-size:14.5px;line-height:1.65;color:var(--tb)}
+.done-box p+p{margin-top:9px}
+.done-box b{color:var(--td)}
+
+.foot{margin-top:28px;border-top:1px solid var(--line);padding-top:16px;font-size:13.5px;line-height:1.7;color:var(--mu)}
+.foot b{color:var(--tb)}
+.foot a{color:var(--acd);text-decoration:none;border-bottom:1px solid rgba(52,183,125,.35)}
+
+@media (max-width:620px){
+  .wrap{padding:26px 18px 60px}
+  .head{flex-direction:column;gap:12px}
+  .it-btns{flex-direction:column}
+}
+</style>
+</head><body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Security Byte 11b</div>
+      <h1>Is This Personal Data?</h1>
+      <div class="lede">Eight things that land on an ordinary desk. Most are personal data — more than people expect — and the ones that are not are not where you would guess.</div>
+    </div>
+    <div class="chip">~2 min</div>
+  </div>
+
+  <div class="rule">
+    <div class="rule-l">The test</div>
+    <div class="rule-q">Can a living person be <b>identified</b> from this, directly or indirectly, by you or by anyone else using means they could reasonably use?</div>
+    <div class="rule-n">Not “does it contain a name”. Indirectly is the word that does the work — and “anyone else” means the question is not only about what <i>you</i> can see.</div>
+  </div>
+
+  <div class="prog"><span class="prog-n" id="pn">0 of 8 sorted</span><span class="prog-bar"><i id="pb"></i></span></div>
+
+  <div class="items" id="items"></div>
+
+  <div class="done-box" id="donebox">
+    <h3>What the personal-data ones had in common</h3>
+    <p>None of them needed a name. Identification came from a role with one holder, a login pattern, a key held in another file, or three ordinary fields that together leave one person standing.</p>
+    <p><b>The practical version:</b> before you treat a file as safe to share, ask who could be picked out of it by someone who already knows a little — a colleague, the client, anyone who can see one more dataset than you can. That is the test the law is describing, and it is also just the sensible question.</p>
+  </div>
+
+  <div class="foot">
+    <b>Where these answers come from.</b> The definition is <a href="https://gdpr-text.com/uk/read/article-4" target="_blank" rel="noopener">GDPR Article 4(1)</a>: “any information relating to an identified or identifiable natural person”, who can be identified “directly or indirectly”. Pseudonymisation is Article 4(5) — data that cannot be attributed to a person “without the use of additional information”, which is why it stays personal data while that information exists.
+    <br><br><b>If you are outside the EU and UK</b>, the boundary moves. Some regimes are narrower, some wider, and a few treat business contact details differently from this. Use these eight as the shape of the question rather than as your jurisdiction’s answer — and if your organisation has its own definition, that is the one your colleagues will be working to.
+  </div>
+</div>
+
+<script>
+const ITEMS=[
+ {t:'A customer’s full name and home address',
+  pii:1,
+  why:'The straightforward case, and worth starting from: a name plus an address identifies a person directly. Everything after this one is harder.'},
+
+ {t:'<span class="mono">info@hartwell.com</span> and the main switchboard number<span class="it-sub">A shared inbox and a reception line, both published on the website</span>',
+  pii:0,
+  why:'<b>Not personal data.</b> These relate to the organisation, not to a person — nobody is identified by them.<br><br>Watch the edge: for a sole trader whose business address <i>is</i> their name, or a line that reaches one named individual, the answer flips.'},
+
+ {t:'<span class="mono">j.okafor@hartwell.com</span><span class="it-sub">A work address, on the company’s domain</span>',
+  pii:1,
+  why:'<b>Personal data.</b> Being a work address changes who pays for the mailbox, not whether it identifies someone — and this one spells out an initial and a surname.<br><br>Even an address with no name in it is personal data if it reaches one identifiable person. The common mistake is treating anything on a company domain as the company’s rather than a person’s.'},
+
+ {t:'An IP address in a web server log<span class="it-sub">No account, no name — just the address a visitor connected from</span>',
+  pii:1,
+  why:'<b>Personal data, in the situation most organisations are in.</b> The Court of Justice of the EU held in 2016 that a dynamic IP address held by a website operator is personal data where the operator has the legal means to identify the visitor using information the internet provider holds.<br><br>The point generalises past IP addresses: data you cannot resolve to a person on your own is still personal data when someone else holds the missing piece and you could lawfully get at it.<span class="it-src">CJEU, <i>Breyer</i> (C-582/14), 19 October 2016.</span>'},
+
+ {t:'Survey answers where names are replaced with participant numbers<span class="it-sub">The list matching numbers to names is in a separate file, held by one person</span>',
+  pii:1,
+  why:'<b>Still personal data.</b> This is pseudonymisation, and the GDPR defines it as a way of <i>processing</i> personal data — not a way of ceasing to hold it. The data can be attributed again “with the use of additional information”, and that information exists.<br><br>Pseudonymising is genuinely worth doing; it reduces the damage if the file goes astray. It just does not take the file outside the rules.<span class="it-src">GDPR Article 4(5).</span>'},
+
+ {t:'A dataset with the names stripped out<span class="it-sub">What remains: postcode, gender, and full date of birth</span>',
+  pii:1,
+  why:'<b>Personal data — and this is the one that catches people, because it looks anonymised.</b> Those three fields together leave very few people standing. A recomputation on US census data found <b>63%</b> of the population uniquely identifiable by gender, ZIP code and full date of birth; the earlier figure, on 1990 data, was 87%.<br><br>Removing names is not anonymisation. Anonymisation means nobody can be picked out, by anyone, with any dataset they could reasonably obtain — a much higher bar than deleting a column.<span class="it-src">Golle, <i>Revisiting the Uniqueness of Simple Demographics in the US Population</i> (2006), revisiting Sweeney.</span>'},
+
+ {t:'“Our CFO’s bonus came to 22% of salary this year”<span class="it-sub">In a company with one CFO</span>',
+  pii:1,
+  why:'<b>Personal data.</b> No name appears and none is needed: the role has one holder, so the sentence is about an identifiable person and it happens to be about their pay.<br><br>Same shape as “the only woman on the engineering team” or “our Berlin contractor”. A role, a team or a location with one occupant is a name written differently.'},
+
+ {t:'“47% of our customers renewed last quarter”',
+  pii:0,
+  why:'<b>Not personal data.</b> Genuine aggregate: one number covering many people, from which no individual can be recovered.<br><br>The caution is that aggregates stop being safe as the group shrinks. “Both of our Luxembourg customers renewed” is about two identifiable companies and, in a small enough market, two identifiable people.'}
+];
+
+const $=id=>document.getElementById(id);
+let done=0, right=0;
+
+$('items').innerHTML=ITEMS.map((it,i)=>`
+  <div class="it" id="it-${i}">
+    <div class="it-t">${it.t}</div>
+    <div class="it-btns">
+      <button class="b" data-a="${i}-1">Personal data</button>
+      <button class="b" data-a="${i}-0">Not personal data</button>
+    </div>
+    <div class="it-v"><span class="tag"></span><span class="verdict"></span></div>
+    <div class="it-w"><div class="it-wi">${it.why}</div></div>
+  </div>`).join('');
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-a]'); if(!b) return;
+  const [i,ans]=b.dataset.a.split('-').map(Number);
+  const el=$('it-'+i); if(el.classList.contains('done')) return;
+  const ok = (ans===ITEMS[i].pii);
+  el.classList.add('done', ok?'right':'wrong');
+  el.querySelector('.tag').textContent = ITEMS[i].pii ? 'Personal data' : 'Not personal data';
+  el.querySelector('.verdict').textContent = ok ? 'You had it right.' : 'Other way.';
+  done++; if(ok) right++;
+  $('pn').textContent = done+' of '+ITEMS.length+' sorted';
+  $('pb').style.width = Math.round(done/ITEMS.length*100)+'%';
+  if(done===ITEMS.length){
+    $('pn').textContent = right+' of '+ITEMS.length+' right';
+    $('donebox').classList.add('show');
+  }
+});
+</script>
+</body></html>
