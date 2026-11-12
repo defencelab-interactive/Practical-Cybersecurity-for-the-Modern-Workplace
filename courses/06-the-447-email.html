@@ -385,12 +385,12 @@ const NODES=[
     mails:[
       {from:'Dropbox',addr:'no-reply@dropboxmail.com',
        subj:'Priya Raman shared “Q3-budget-draft.xlsx” with you',
-       lines:['Priya Raman (p.raman@yourcompany.com) invited you to view a file.','Q3-budget-draft.xlsx · 84 KB'],
-       link:'www.dropbox.com/scl/fi/8k2m…',btn:'View file',fake:0},
+       lines:['Hi,','Priya Raman (p.raman@yourcompany.com) invited you to view a file on Dropbox.','<b>Q3-budget-draft.xlsx</b> · 84 KB · added 12 November','This link stays active until Priya turns it off.'],
+       link:'https://www.dropbox.com/scl/fi/8k2m…',btn:'View file',foot:'You are receiving this because someone shared a file with you.<br>Dropbox, 1800 Owens St, San Francisco, CA 94158',fake:0},
       {from:'Dropbox',addr:'no-reply@dropbox-notifications.com',
        subj:'Priya Raman shared “Q3-budget-draft.xlsx” with you',
-       lines:['Priya Raman (p.raman@yourcompany.com) invited you to view a file.','Q3-budget-draft.xlsx · 84 KB'],
-       link:'dbx-secure-files.com/d/8k2m',btn:'View file',fake:1}],
+       lines:['Hi,','Priya Raman (p.raman@yourcompany.com) invited you to view a file on Dropbox.','<b>Q3-budget-draft.xlsx</b> · 84 KB · added 12 November','This link stays active until Priya turns it off.'],
+       link:'https://dbx-secure-files.com/d/8k2m',btn:'View file',foot:'You are receiving this because someone shared a file with you.<br>Dropbox, 1800 Owens St, San Francisco, CA 94158',fake:1}],
     fb:'The second one — and if you went by the sender domain, that reasoning would have failed here. <b>dropboxmail.com</b> looks like a lookalike but is genuinely what Dropbox sends from.<br><br>What separates them is the <b>link</b>. The real one points at dropbox.com. The fake comes from dropbox-notifications.com but sends you to <b>dbx-secure-files.com</b> — a third domain, unrelated to either. Sender and destination not matching is the signal.'}},
 
  {date:'Friday, 4:47pm',crit:1,beat:'A transfer that looked completely normal',
@@ -510,11 +510,13 @@ NODES.forEach((n,i)=>{
           <div class="mail">
             <div class="mail-hd">
               <div class="mail-row"><span class="ml">From</span><span>${m.from} &lt;${m.addr}&gt;</span></div>
+              <div class="mail-row"><span class="ml">To</span><span>${m.to||'you@yourcompany.com'}</span></div>
               <div class="mail-row"><span class="ml">Subject</span><span class="mail-subj">${m.subj}</span></div>
             </div>
             <div class="mail-bd">${m.lines.map(l=>`<p>${l}</p>`).join('')}
-              <div class="mail-link">${m.link}</div>
               <div class="mail-btn">${m.btn}</div>
+              <div class="mail-link">${m.link}</div>
+              ${m.foot?`<div class="mail-foot">${m.foot}</div>`:''}
             </div>
           </div>
           <button class="mail-pick" data-pick="${i}-${j}">This one\u2019s fake</button>
