@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Defence Lab · Your Home Network</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#34B77D;--acd:#2A9A66;--td:#1A1A1A;--tb:#4A4844;--mu:#8a8884;--paper:#F2F5F2;--paper2:#E8EEEC;--line:#dce4e0;
+  --sh:0 3px 8px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);--hi:inset 0 1.5px 0 rgba(255,255,255,1);
+  --blue:#4E7CA8;--rd:#C0392B;--rdl:rgba(192,57,43,.09);--am:#B07A1E;--aml:rgba(176,122,30,.1);--gr:#2EAD6B;
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);color:var(--td);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background:radial-gradient(70% 50% at 12% 6%,rgba(52,183,125,.16),transparent 52%),
+    radial-gradient(80% 60% at 92% 30%,rgba(78,124,168,.14),transparent 58%),
+    radial-gradient(60% 45% at 55% 40%,rgba(255,255,255,.5),transparent 60%),
+    linear-gradient(160deg,#eef2ee,#e4ebeb)}
+.wrap{max-width:860px;margin:0 auto;padding:40px 32px 80px}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.eyebrow{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acd);margin-bottom:12px}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-height:1.06;letter-spacing:-.02em;margin-bottom:14px}
+.lede{font-size:17px;line-height:1.6;color:var(--tb);max-width:62ch}
+.chip{font:700 12px var(--mono);color:var(--acd);background:rgba(52,183,125,.12);border-radius:20px;padding:6px 13px;white-space:nowrap;flex:none}
+.note{display:flex;gap:11px;align-items:flex-start;background:rgba(78,124,168,.09);border:1px solid rgba(78,124,168,.25);border-radius:13px;padding:14px 18px;margin:22px 0;font-size:14.5px;line-height:1.55;color:var(--tb)}
+.note b{color:var(--td)}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px;box-shadow:var(--sh),var(--hi)}
+.flab{font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mu);display:block;margin-bottom:7px}
+.inp{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:13px 15px;font:500 15px var(--mono);color:var(--td);background:var(--paper);outline:none;transition:border .15s}
+.inp:focus{border-color:var(--acd);background:#fff}
+.inp::placeholder{color:#b3b8b4;font-family:var(--body);font-weight:400}
+.hint{font-size:13px;color:var(--mu);margin-top:7px;line-height:1.5}
+.go{margin-top:15px;background:var(--acd);color:#fff;border:none;border-radius:11px;padding:13px 26px;font:600 15px var(--body);cursor:pointer}
+.go:hover{background:var(--ac)}
+.egs{margin-top:20px}
+.egrow{display:flex;flex-wrap:wrap;gap:8px}
+.eg{background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:8px 13px;font:500 12.5px var(--mono);color:var(--tb);cursor:pointer;box-shadow:var(--sh)}
+.eg:hover{border-color:var(--acd);color:var(--acd)}
+/* findings */
+.res{margin-top:24px;display:none}
+.res.on{display:block;animation:rise .35s}
+@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.f{display:flex;gap:13px;background:#fff;border:1px solid var(--line);border-left:3px solid var(--am);border-radius:12px;padding:14px 17px;box-shadow:var(--sh);margin-bottom:10px}
+.f.ok{border-left-color:var(--gr)}
+.f-tag{font:700 10px var(--mono);letter-spacing:.07em;text-transform:uppercase;flex:none;width:46px;padding-top:3px;color:var(--am)}
+.f.ok .f-tag{color:var(--gr)}
+.f-b{flex:1}
+.f-t{font-size:15px;font-weight:600;margin-bottom:3px}
+.f-d{font-size:14px;line-height:1.55;color:var(--tb)}
+.f-d code{font-family:var(--mono);font-size:13px;background:var(--paper2);border-radius:4px;padding:1px 5px}
+/* steps */
+.sect{font-family:var(--disp);font-size:20px;font-weight:600;margin:30px 0 12px}
+.step{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;box-shadow:var(--sh);overflow:hidden}
+.s-top{display:flex;gap:13px;align-items:flex-start;padding:15px 18px;cursor:pointer}
+.s-box{flex:none;width:21px;height:21px;border:2px solid #c3ccc6;border-radius:6px;margin-top:1px;position:relative;transition:all .15s}
+.step.on .s-box{background:var(--acd);border-color:var(--acd)}
+.step.on .s-box::after{content:'\2713';position:absolute;inset:0;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.s-t{flex:1;display:block;font-size:15.5px;line-height:1.4;font-weight:600}
+.s-w{padding:0 18px 16px 52px;font-size:14px;line-height:1.6;color:var(--tb)}
+.s-w ul{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:7px}
+.s-w li{padding-left:15px;position:relative}
+.s-w li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:#c3ccc6}
+.s-w b{color:var(--td)}
+.warnbox{background:var(--aml);border:1px solid rgba(176,122,30,.3);border-radius:13px;padding:15px 19px;margin-top:16px;font-size:14.5px;line-height:1.6;color:var(--tb)}
+.warnbox b{color:var(--td)}
+.foot{margin-top:32px;font-size:13px;color:var(--mu);line-height:1.65;border-top:1px solid var(--line);padding-top:18px}
+@media(max-width:620px){.wrap{padding:28px 18px 60px}.s-w{padding-left:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Security Byte · Device Security</div>
+      <h1>Your Home Network</h1>
+      <p class="lede">Your router is the gateway for every device in the house, and most are still running the settings they shipped with. Start with the one thing visible from the street — the network name.</p>
+    </div>
+    <div class="chip">2 min</div>
+  </div>
+
+  <div class="note"><span>🔒</span><div><b>Nothing leaves this page.</b> The name is checked by code already in this file — nothing is sent anywhere, and nothing is stored.</div></div>
+
+  <div class="panel">
+    <label class="flab" for="ssid">Your WiFi network name</label>
+    <input class="inp" id="ssid" placeholder="The name you pick from the list when you connect" autocomplete="off" spellcheck="false">
+    <div class="hint">Anyone within range sees this — neighbours, people in the street, anyone passing.</div>
+    <button class="go" id="go">Check it</button>
+  </div>
+
+  <div class="egs">
+    <span class="flab">Or try one of these</span>
+    <div class="egrow" id="egrow"></div>
+  </div>
+
+  <div class="res" id="res"></div>
+
+  <div class="sect">Three things to change tonight</div>
+
+  <div class="step" data-s="0">
+    <div class="s-top"><span class="s-box"></span><span class="s-t">Change the router's admin password</span></div>
+    <div class="s-w">This is not the WiFi password — it is the one that gets into the router's own settings. On a lot of routers it is still <code>admin</code>.
+      <ul>
+        <li>Type <b>192.168.1.1</b> or <b>192.168.0.1</b> into a browser on your home network</li>
+        <li>The current login is often printed on a sticker on the router itself</li>
+        <li>Change it to something long, and save it in your password manager</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step" data-s="1">
+    <div class="s-top"><span class="s-box"></span><span class="s-t">Check the encryption is WPA2 or WPA3</span></div>
+    <div class="s-w">In the same settings, find the wireless security section.
+      <ul>
+        <li><b>WPA3</b> is best, <b>WPA2</b> is fine</li>
+        <li><b>WEP</b> or <b>Open</b> means change it now — WEP can be broken in minutes, and Open means no encryption at all</li>
+        <li>If it offers "WPA2/WPA3 mixed", take it — old devices keep working</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step" data-s="2">
+    <div class="s-top"><span class="s-box"></span><span class="s-t">Update the router, and turn on automatic updates if it offers them</span></div>
+    <div class="s-w">Routers get security patches like everything else, and almost nobody installs them.
+      <ul>
+        <li>Look for Firmware, Update, or System in the settings</li>
+        <li>If the router is more than about six years old, check whether it still gets updates at all — many stop</li>
+        <li>If your provider supplied it, they may update it for you. Worth confirming rather than assuming</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="warnbox"><b>A guest network is worth the two minutes.</b> Most routers can run a second network with its own password. Visitors, and anything in the house that connects but never needs updating — a TV, a doorbell, a thermostat — go on that one. They then cannot reach the laptop you work from.</div>
+
+  <div class="foot">Part of Defence Lab · pairs with the course <i>What Runs on Your Laptop</i>. Router menus differ by make and model — if a setting is not where it says, search its name plus your router model.</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const SURNAME_HINTS=/\b(family|familie|famille|haus|residence|household)\b/i;
+const ROUTER_BRANDS=/\b(tp ?link|netgear|asus|linksys|d ?link|zyxel|huawei|xiaomi|mikrotik|ubiquiti|tenda|belkin|sagemcom|technicolor|fritz ?box|archer|orbi|nighthawk|deco|keenetic)\b/i;
+const ISP_DEFAULT=/\b(bt|sky|virgin|vodafone|orange|telekom|movistar|upc|ziggo|kpn|telenet|altice|sfr|plusnet|talktalk|eir|magenta|vivacom)\b[ ]?(hub|wifi|box|fibre|fiber|net|home)?[ ]?\d{2,}/i;
+const ADDRESSY=/\b\d{1,4}[a-z]?\b[^,]{0,18}\b(street|road|avenue|lane|drive|close|court|terrace|st|rd|ave|ln|dr)\b|\b(flat|apt|apartment|unit)\b[ ]?\d/i;
+const GENERIC=/^(wifi|internet|home ?net|home ?wifi|router|wireless|my ?wifi|default)\b/i;
+const BAND=/\b(5 ?g|2 ?4 ?g|5 ?ghz|2 ?4 ?ghz)\b$/i;
+
+/* separators are word characters to a regex, so \b never fires inside Smith_Family_5G */
+const norm = x => x.replace(/[_.\-]+/g,' ').replace(/\s+/g,' ').trim();
+
+const EXAMPLES=['Smith_Family_5G','TP-Link_A4F2','Flat 3B 14 Mill Road','HomeNet','Pretzel Logic'];
+
+function check(name){
+  const out=[];
+  const raw=name.trim();
+  if(!raw) throw new Error('Type the name of your network first.');
+  const n=norm(raw);
+
+  if(SURNAME_HINTS.test(n)){
+    out.push(['flag','It says whose house this is',
+      'Words like <code>Family</code> beside a surname tell anyone in range who lives here. That is a starting point for someone trying to sound like they know you, and the sort of detail that makes a phone call convincing.']);
+  }
+  if(ADDRESSY.test(n)){
+    out.push(['flag','It gives away where',
+      'A flat number or street name narrows a passer-by down to a specific door. Worth removing even if everything else is set up well.']);
+  }
+  const brand=(n.match(ROUTER_BRANDS)||[])[0];
+  if(brand){
+    out.push(['flag','It names the hardware \u2014 <code>'+esc(brand)+'</code>',
+      'Default names usually include the make or model, which tells someone which known weaknesses to try. It also suggests the admin password was never changed, because most people change neither.']);
+  }
+  if(ISP_DEFAULT.test(n)){
+    out.push(['flag','It looks like the name your provider set',
+      'Provider defaults say which company supplied the router, which narrows the model down and suggests the settings are untouched. It also makes a convincing opening for someone claiming to call from that provider.']);
+  }
+  if(GENERIC.test(n)&&!brand){
+    out.push(['ok','Generic, which is fine',
+      'It names no person, place or product. Dull is exactly what a network name should be \u2014 though if it is still the name it shipped with, the admin password is probably still the shipped one too.']);
+  }
+  if(BAND.test(n)){
+    out.push(['ok','The band suffix is harmless',
+      'A <code>5G</code> or <code>2.4G</code> ending marks which radio band it is, and tells nobody anything about you.']);
+  }
+  if(!out.some(x=>x[0]==='flag')&&!out.length){
+    out.unshift(['ok','Nothing in this name points at you',
+      'It does not name a person, a place, or the hardware. That is all a network name needs to do.']);
+  }
+  return out;
+}
+
+function render(list){
+  $('res').innerHTML = list.map(([k,t,d])=>
+    `<div class="f ${k==='ok'?'ok':''}"><div class="f-tag">${k==='ok'?'Fine':'Check'}</div>
+     <div class="f-b"><div class="f-t">${t}</div><div class="f-d">${d}</div></div></div>`).join('')
+    + `<div class="f ok"><div class="f-tag">Note</div><div class="f-b"><div class="f-t">Renaming is free, and takes effect the next time each device connects</div>
+       <div class="f-d">Pick something that means nothing to a stranger. You will have to reconnect each device once — that is the whole cost.</div></div></div>`;
+  $('res').classList.add('on');
+}
+
+function run(){
+  try{ render(check($('ssid').value)); }
+  catch(e){ $('res').innerHTML=`<div class="f"><div class="f-tag">—</div><div class="f-b"><div class="f-d">${esc(e.message)}</div></div></div>`; $('res').classList.add('on'); }
+}
+$('go').addEventListener('click',run);
+$('ssid').addEventListener('keydown',e=>{if(e.key==='Enter')run();});
+$('egrow').innerHTML=EXAMPLES.map((e,i)=>`<button class="eg" data-i="${i}">${esc(e)}</button>`).join('');
+$('egrow').addEventListener('click',e=>{const b=e.target.closest('.eg'); if(!b)return;
+  $('ssid').value=EXAMPLES[+b.dataset.i]; run();});
+
+document.querySelectorAll('.step .s-top').forEach(el=>{
+  el.addEventListener('click',()=>{el.parentElement.classList.toggle('on');save();});
+});
+async function save(){try{if(!window.storage)return;
+  await window.storage.set('home-wifi',JSON.stringify([...document.querySelectorAll('.step')].map(x=>x.classList.contains('on')?1:0)));}catch(e){}}
+async function load(){try{if(!window.storage)return;const r=await window.storage.get('home-wifi');if(!r||!r.value)return;
+  JSON.parse(r.value).forEach((v,i)=>{const el=document.querySelector(`.step[data-s="${i}"]`); if(el&&v)el.classList.add('on');});}catch(e){}}
+load();
+</script>
+</body></html>

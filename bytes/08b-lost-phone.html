@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Defence Lab · When Your Phone Goes Missing</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#34B77D;--acd:#2A9A66;--td:#1A1A1A;--tb:#4A4844;--mu:#8a8884;--paper:#F2F5F2;--paper2:#E8EEEC;--line:#dce4e0;
+  --sh:0 3px 8px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);--hi:inset 0 1.5px 0 rgba(255,255,255,1);
+  --blue:#4E7CA8;--rd:#C0392B;--rdl:rgba(192,57,43,.09);--am:#B07A1E;--aml:rgba(176,122,30,.1);
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);color:var(--td);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background:radial-gradient(70% 50% at 12% 6%,rgba(52,183,125,.16),transparent 52%),
+    radial-gradient(80% 60% at 92% 30%,rgba(78,124,168,.14),transparent 58%),
+    radial-gradient(60% 45% at 55% 40%,rgba(255,255,255,.5),transparent 60%),
+    linear-gradient(160deg,#eef2ee,#e4ebeb)}
+.wrap{max-width:860px;margin:0 auto;padding:40px 32px 80px}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.eyebrow{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acd);margin-bottom:12px}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-height:1.06;letter-spacing:-.02em;margin-bottom:14px}
+.lede{font-size:17px;line-height:1.6;color:var(--tb);max-width:62ch}
+.chip{font:700 12px var(--mono);color:var(--acd);background:rgba(52,183,125,.12);border-radius:20px;padding:6px 13px;white-space:nowrap;flex:none}
+/* tabs */
+.tabs{display:flex;gap:8px;margin:26px 0 18px}
+.tab{flex:1;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;text-align:left;font-family:var(--body);transition:all .16s;box-shadow:var(--sh)}
+.tab:hover{border-color:var(--mu)}
+.tab.on{border-color:var(--acd);background:rgba(52,183,125,.07)}
+.tab.urgent.on{border-color:var(--rd);background:var(--rdl)}
+.tab b{display:block;font-size:15.5px;font-weight:600;margin-bottom:3px}
+.tab span{font-size:13px;line-height:1.45;color:var(--tb)}
+.tab.urgent b{color:var(--rd)}
+@media(max-width:620px){.tabs{flex-direction:column}}
+.pane{display:none}
+.pane.on{display:block;animation:rise .35s}
+@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+/* steps */
+.step{background:#fff;border:1px solid var(--line);border-left:3px solid var(--rd);border-radius:14px;margin-bottom:11px;box-shadow:var(--sh);overflow:hidden}
+.step.done{border-left-color:var(--acd);background:var(--paper)}
+.s-top{display:flex;gap:14px;align-items:flex-start;padding:16px 19px;cursor:pointer}
+.s-n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--rdl);color:var(--rd);font:700 13px var(--mono);display:flex;align-items:center;justify-content:center;margin-top:1px}
+.step.done .s-n{background:rgba(52,183,125,.14);color:var(--acd)}
+.step.done .s-n::after{content:'\2713'}
+.step.done .s-n i{display:none}
+.s-b{flex:1;display:block}
+.s-t{display:block;font-size:16px;font-weight:600;line-height:1.35;margin-bottom:4px}
+.s-w{display:block;font-size:14px;line-height:1.55;color:var(--tb)}
+.s-more{padding:0 19px 17px 59px}
+.s-more ul{list-style:none;display:flex;flex-direction:column;gap:7px;margin-top:4px}
+.s-more li{font-size:14px;line-height:1.55;color:var(--tb);padding-left:15px;position:relative}
+.s-more li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:#c3ccc6}
+.s-more b{color:var(--td)}
+.warn{background:var(--aml);border:1px solid rgba(176,122,30,.3);border-radius:13px;padding:15px 19px;margin:16px 0;font-size:14.5px;line-height:1.6;color:var(--tb)}
+.warn b{color:var(--td)}
+.note{display:flex;gap:11px;align-items:flex-start;background:rgba(78,124,168,.09);border:1px solid rgba(78,124,168,.25);border-radius:13px;padding:14px 18px;margin:20px 0;font-size:14.5px;line-height:1.55;color:var(--tb)}
+.note b{color:var(--td)}
+/* prepare list */
+.prep{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:11px;box-shadow:var(--sh);overflow:hidden}
+.p-top{display:flex;gap:13px;align-items:flex-start;padding:15px 18px;cursor:pointer}
+.p-box{flex:none;width:21px;height:21px;border:2px solid #c3ccc6;border-radius:6px;margin-top:1px;position:relative;transition:all .15s}
+.prep.on .p-box{background:var(--acd);border-color:var(--acd)}
+.prep.on .p-box::after{content:'\2713';position:absolute;inset:0;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.p-t{flex:1;font-size:15.5px;line-height:1.4;font-weight:600}
+.p-w{padding:0 18px 16px 52px;font-size:14px;line-height:1.6;color:var(--tb)}
+.p-w ul{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:7px}
+.p-w li{padding-left:15px;position:relative}
+.p-w li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:#c3ccc6}
+.prog{font:700 13px var(--mono);color:var(--acd);margin-top:14px}
+.foot{margin-top:32px;font-size:13px;color:var(--mu);line-height:1.65;border-top:1px solid var(--line);padding-top:18px}
+@media(max-width:620px){.wrap{padding:28px 18px 60px}.s-more{padding-left:19px}.p-w{padding-left:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Security Byte · Device Security</div>
+      <h1>When Your Phone Goes Missing</h1>
+      <p class="lede">Two lists. One is three settings that only work if you turn them on beforehand. The other is the order to do things in when the phone is already gone — opened at the worst possible moment, so it is short.</p>
+    </div>
+    <div class="chip">~2 min</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-pane="prep"><b>Set this up now</b><span>Three things that cannot be done afterwards</span></button>
+    <button class="tab urgent" data-pane="gone"><b>It is gone right now</b><span>What to do, in order</span></button>
+  </div>
+
+  <!-- PREPARE -->
+  <div class="pane on" id="prep">
+    <div class="prep" data-p="0">
+      <div class="p-top"><span class="p-box"></span><span class="p-t">Turn on Find My Device — and test that it works</span></div>
+      <div class="p-w">It cannot be switched on once the phone is gone, and an untested setting is a guess.
+        <ul>
+          <li><b>iPhone:</b> Settings → your name → Find My → turn on all three options</li>
+          <li><b>Android:</b> Settings → Google → Find My Device, and check Location is on</li>
+          <li><b>Test it:</b> open icloud.com/find or android.com/find in a browser and confirm your phone appears on the map</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prep" data-p="1">
+      <div class="p-top"><span class="p-box"></span><span class="p-t">Back up your authenticator, and keep recovery codes elsewhere</span></div>
+      <div class="p-w">If your second factor lives only on the phone, losing it locks you out of the accounts you would use to recover everything else — including your email.
+        <ul>
+          <li>Google Authenticator: profile icon → "Use on multiple devices"</li>
+          <li>Microsoft Authenticator: Settings → cloud backup. Authy backs up by default</li>
+          <li>Save the recovery codes for your two or three most important accounts somewhere physical — not on the phone they would be recovering</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prep" data-p="2">
+      <div class="p-top"><span class="p-box"></span><span class="p-t">Write down who you would call, and from what</span></div>
+      <div class="p-w">Your contacts are in the phone. If it is gone, so are the numbers.
+        <ul>
+          <li>Your IT or security team, if the phone has work accounts on it</li>
+          <li>Your bank's number, from the back of the card</li>
+          <li>Your mobile provider, for blocking the SIM</li>
+          <li>Keep these somewhere reachable without the phone — on paper, or on a laptop</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prog" id="prog">0 of 3 set up</div>
+
+    <div class="note"><span>🔒</span><div><b>Nothing here is sent anywhere.</b> Ticks are saved in this browser so the list remembers where you got to.</div></div>
+  </div>
+
+  <!-- GONE -->
+  <div class="pane" id="gone">
+    <div class="warn"><b>Do these in order.</b> Each step is reversible until the last one. Tap a step to tick it off as you go.</div>
+
+    <div class="step" data-s="0">
+      <div class="s-top"><span class="s-n"><i>1</i></span><span class="s-b"><span class="s-t">Lock it remotely</span><span class="s-w">Blocks use immediately, shows a message and a contact number on the screen, and keeps reporting location. Reversible if it turns up in a coat pocket.</span></span></div>
+      <div class="s-more"><ul>
+        <li><b>iPhone:</b> icloud.com/find → select the device → Mark As Lost</li>
+        <li><b>Android:</b> android.com/find → select the device → Secure Device</li>
+        <li>Add a number where you can be reached — most phones handed in are handed in by someone ordinary</li>
+      </ul></div>
+    </div>
+
+    <div class="step" data-s="1">
+      <div class="s-top"><span class="s-n"><i>2</i></span><span class="s-b"><span class="s-t">Tell whoever needs to know</span><span class="s-w">If the phone has work accounts on it, IT can cut its access from their side — which is faster and broader than anything you can do alone.</span></span></div>
+      <div class="s-more"><ul>
+        <li>IT or security, for a work phone or any phone with work email on it</li>
+        <li>Your mobile provider, to block the SIM so it cannot receive your confirmation texts</li>
+        <li>Say when and where you last had it — it matters for both of them</li>
+      </ul></div>
+    </div>
+
+    <div class="step" data-s="2">
+      <div class="s-top"><span class="s-n"><i>3</i></span><span class="s-b"><span class="s-t">Change the passwords that matter</span><span class="s-w">Start with email, then banking, then anything else that was signed in. Email first, because it is the route back into the rest.</span></span></div>
+      <div class="s-more"><ul>
+        <li>Do it from a different device, not from a borrowed phone</li>
+        <li>If your second factor was on the lost phone, use the recovery codes</li>
+        <li>Sign out of all sessions where the account offers it — this kicks out anyone already in</li>
+      </ul></div>
+    </div>
+
+    <div class="step" data-s="3">
+      <div class="s-top"><span class="s-n"><i>4</i></span><span class="s-b"><span class="s-t">Erase it — only when you are sure</span><span class="s-w">A wipe is permanent. It ends location reporting, so you give up any chance of getting the phone back. Do it when it is clearly stolen rather than mislaid.</span></span></div>
+      <div class="s-more"><ul>
+        <li>Same screens as step 1: Erase This Device on iPhone, Erase Device on Android</li>
+        <li>On most phones the device stays locked to your account after a wipe, so it is still not usable by whoever has it</li>
+        <li>If it is a work phone, let IT make this call</li>
+      </ul></div>
+    </div>
+
+    <div class="note"><span>📄</span><div><b>Write down what happened while it is fresh.</b> When you last had it, where, what was signed in, and what you have done since. If this turns into an insurance claim or an incident report, that note is what it gets built from.</div></div>
+  </div>
+
+  <div class="foot">Part of Defence Lab · pairs with the course <i>What Your Phone Can Reach</i>. Steps differ slightly between phone models and between Android versions — if a menu is not where it says, search the setting by name.</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+
+/* tabs */
+document.querySelector('.tabs').addEventListener('click',e=>{
+  const t=e.target.closest('.tab'); if(!t)return;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id===t.dataset.pane));
+});
+
+/* prepare list */
+document.querySelectorAll('.prep .p-top').forEach(el=>{
+  el.addEventListener('click',()=>{el.parentElement.classList.toggle('on');updateProg();save();});
+});
+function updateProg(){
+  const n=document.querySelectorAll('.prep.on').length;
+  const p=$('prog'); if(p)p.textContent=n+' of 3 set up';
+}
+
+/* emergency steps */
+document.querySelectorAll('.step .s-top').forEach(el=>{
+  el.addEventListener('click',()=>{el.parentElement.classList.toggle('done');save();});
+});
+
+/* persistence — survives closing the tab */
+async function save(){
+  try{
+    if(!window.storage)return;
+    const prep=[...document.querySelectorAll('.prep')].map(x=>x.classList.contains('on')?1:0);
+    const done=[...document.querySelectorAll('.step')].map(x=>x.classList.contains('done')?1:0);
+    await window.storage.set('lost-phone',JSON.stringify({prep,done}));
+  }catch(e){}
+}
+async function load(){
+  try{
+    if(!window.storage)return;
+    const r=await window.storage.get('lost-phone'); if(!r||!r.value)return;
+    const d=JSON.parse(r.value);
+    (d.prep||[]).forEach((v,i)=>{const el=document.querySelector(`.prep[data-p="${i}"]`); if(el&&v)el.classList.add('on');});
+    (d.done||[]).forEach((v,i)=>{const el=document.querySelector(`.step[data-s="${i}"]`); if(el&&v)el.classList.add('done');});
+    updateProg();
+  }catch(e){}
+}
+load();
+</script>
+</body></html>
