@@ -592,6 +592,7 @@ a scene-2 checklist that assembles the learner's personal action plan.
 | Course 5 | MFA: The Second Step | — | **Dropped.** Course 4 covers passwords and the second step in one pass; splitting them would mean either removing MFA from Course 4 or repeating it. |
 | Course 6 | Phishing: Spot, Check, Report | `courses/06-the-447-email.html` | Built as *Spotting a Fake Email*, cold-open email pick. ~6 min base, ~7 with deep dives |
 | Byte 1b | Tools Worth Knowing About | `bytes/01b-security-toolkit.html` | Built |
+| Course 7 | Laptop Security Settings | `courses/07-laptop-security.html` | Built as *What Runs on Your Laptop*, opens with a myth-buster. ~5 min |
 | Byte 2a | Your Verification Card | `bytes/02a-verification-card.html` | Built — adapts to org size; `ORG` block at the top lets a client pre-fill their own details |
 | Byte 6b | Link Inspector | `bytes/06b-link-inspector.html` | Built |
 
@@ -611,6 +612,7 @@ learning path use the same opening.
 | 3 | Self-audit — look at the room you are in |
 | 4 | Story — the domino effect |
 | 6 | Challenge / cold open — two emails, pick the fake |
+| 7 | Myth-buster — three beliefs about laptops, true or false |
 
 ### Length and optional depth
 
