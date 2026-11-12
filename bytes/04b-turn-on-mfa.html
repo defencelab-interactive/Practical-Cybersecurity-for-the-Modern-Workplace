@@ -28,6 +28,7 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
 .prog-bar i{display:block;height:100%;width:0;background:var(--ac);border-radius:6px;transition:width .35s ease}
 
 /* tiers */
+.howto{font-size:14px;line-height:1.65;color:var(--tb);background:rgba(78,124,168,.06);border:1.5px solid rgba(78,124,168,.2);border-radius:13px;padding:14px 17px;margin-top:14px;max-width:none}
 .tier{margin-top:30px}
 .tier-h{display:flex;align-items:baseline;gap:11px;margin-bottom:5px}
 .tier-n{font:700 12px var(--mono);color:var(--acd);background:rgba(52,183,125,.12);border-radius:7px;padding:3px 8px;flex:none}
@@ -54,6 +55,8 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
 a.acct-go{color:#fff;background:var(--blue)}
 a.acct-go:hover{background:#3F688F}
 span.acct-go{color:var(--mu);background:var(--paper2);border:1.5px solid var(--line)}
+.empty{font-size:14px;line-height:1.6;color:var(--mu);padding:3px 2px 2px}
+.acct.nolink .acct-term b{color:var(--acd)}
 .own{display:flex;gap:9px;margin-top:11px}
 .own input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:11px;padding:12px 14px;
   font:500 15px var(--body);color:var(--td);background:#fff;outline:none;transition:border .15s}
@@ -104,12 +107,13 @@ h2{font-family:var(--disp);font-weight:600;font-size:23px;letter-spacing:-.015em
     <div>
       <div class="eyebrow">Security Byte 4b</div>
       <h1>Turn On MFA</h1>
-      <div class="lede">Your accounts in the order that actually matters, with what each company calls the setting. Tick them off as you go — this page remembers.</div>
+      <div class="lede">Your accounts in the order that actually matters, with what each company calls the setting. Tick them off as you go — this browser remembers where you got to, so you can come back and finish.</div>
     </div>
     <div class="chip">~3 min + the doing</div>
   </div>
 
   <div class="prog"><span class="prog-n" id="pn">0 of 0 done</span><span class="prog-bar"><i id="pb"></i></span></div>
+  <div class="howto">Each account shows the company’s own name for the setting — that is the phrase that finds the current instructions. Where there is a button, the link to their guide was confirmed. Where there is not, the term is right but the address was not confirmed, so search it on the company’s own site rather than trusting a stranger’s walkthrough.</div>
 
   <div id="tiers"></div>
 
@@ -141,8 +145,9 @@ h2{font-family:var(--disp);font-weight:600;font-size:23px;letter-spacing:-.015em
   </div>
 
   <div class="stale">
-    <b>On the links.</b> Menu paths and screenshots go out of date within months, so this page does not use them. Each account shows <b>the company's own term</b> — which is what finds the current instructions in their help search — and links straight to the vendor's own page where that link was confirmed. Where it says <i>search their help</i>, the term is right and the link was not confirmed, so look it up on the company's own site rather than trusting a third-party walkthrough.
-    <br><br>Links confirmed November 2026. If one has moved since, search the term on the company's own help site; the term changes far less often than the address.
+    <b>Why there are no screenshots.</b> Menu paths and screenshots go out of date within months — vendors move things, the web and the app differ, and on a managed account the option may not be where anyone else sees it. Terms change far more slowly than addresses, so this page gives you the term.
+    <br><br>Links confirmed November 2026. If one has moved since, search the term on the company’s own help site.
+    <br><br><b>What gets saved.</b> Your ticks and anything you add stay in this browser on this device. They are not sent anywhere and will not follow you to your phone. Clearing site data clears them.
   </div>
 </div>
 
@@ -176,13 +181,16 @@ const TIERS=[
 let own=[];
 
 function rowHTML(a,isOwn){
+  let line;
+  if(isOwn) line='In its settings, look for <b>two-factor authentication</b> or <b>two-step verification</b>';
+  else if(a.url) line='They call it <b>'+a.term+'</b>';
+  else line='In their own help centre, search <b>'+a.term+'</b>';
   const go = a.url
-    ? `<a class="acct-go" href="${a.url}" target="_blank" rel="noopener">Open guide</a>`
-    : `<span class="acct-go">Search their help</span>`;
-  return `<div class="acct" data-id="${a.id}">
+    ? `<a class="acct-go" href="${a.url}" target="_blank" rel="noopener">Open their guide</a>` : '';
+  return `<div class="acct${a.url?'':' nolink'}" data-id="${a.id}">
     <button class="tick" data-tick="${a.id}" aria-label="Mark ${a.n} done">${TICK}</button>
     <div class="acct-b"><div class="acct-n">${a.n}</div>
-      <div class="acct-term">${isOwn?'Search: <b>two-factor authentication</b>':'Their term: <b>'+a.term+'</b>'}</div></div>
+      <div class="acct-term">${line}</div></div>
     ${isOwn?'<button class="acct-x" data-rm="'+a.id+'" aria-label="Remove">&times;</button>':go}
   </div>`;
 }
@@ -195,7 +203,7 @@ function render(){
   });
   h+=`<div class="tier"><div class="tier-h"><span class="tier-n">+</span><span class="tier-t">Anything else you use</span></div>
     <div class="tier-w">Add the accounts this list does not know about — your own, your team's, the one you keep meaning to get to.</div>
-    <div id="ownlist">${own.map(a=>rowHTML(a,true)).join('')}</div>
+    <div id="ownlist">${own.length?own.map(a=>rowHTML(a,true)).join(''):'<div class="empty">Nothing added yet. Whatever you type here is saved in this browser along with the ticks.</div>'}</div>
     <div class="own"><input id="ownin" placeholder="Account name" maxlength="46">
       <button id="ownadd">Add</button></div></div>`;
   document.getElementById('tiers').innerHTML=h;
@@ -233,19 +241,29 @@ function addOwn(){
   const ni=document.getElementById('ownin'); if(ni)ni.focus();
 }
 
+/* storage: the Defence Lab host provides window.storage; standalone falls back
+   to localStorage. Both can fail (private window, blocked site data), so every
+   call is wrapped and the page works with none of it. */
+const DL={
+  async get(k){try{
+    if(window.storage){const r=await window.storage.get(k);return r&&r.value?r.value:null;}
+    return localStorage.getItem(k);
+  }catch(e){return null}},
+  async set(k,v){try{
+    if(window.storage)return await window.storage.set(k,v);
+    localStorage.setItem(k,v);
+  }catch(e){}},
+  async del(k){try{
+    if(window.storage)return await window.storage.delete(k);
+    localStorage.removeItem(k);
+  }catch(e){}}
+};
 /* persistence — survives closing the tab */
-async function save(){
-  try{
-    if(!window.storage)return;
-    await window.storage.set('turn-on-mfa',JSON.stringify({ticked,own}));
-  }catch(e){}
-}
+async function save(){ await DL.set('turn-on-mfa',JSON.stringify({ticked,own})); }
 async function load(){
   try{
-    if(window.storage){
-      const r=await window.storage.get('turn-on-mfa');
-      if(r&&r.value){const d=JSON.parse(r.value); ticked=d.ticked||{}; own=d.own||[];}
-    }
+    const v=await DL.get('turn-on-mfa');
+    if(v){const d=JSON.parse(v); ticked=d.ticked||{}; own=d.own||[];}
   }catch(e){}
   render();
 }

@@ -191,20 +191,35 @@ document.querySelectorAll('.step .s-top').forEach(el=>{
   el.addEventListener('click',()=>{el.parentElement.classList.toggle('done');save();});
 });
 
+/* storage: the Defence Lab host provides window.storage; standalone falls back
+   to localStorage. Both can fail (private window, blocked site data), so every
+   call is wrapped and the page works with none of it. */
+const DL={
+  async get(k){try{
+    if(window.storage){const r=await window.storage.get(k);return r&&r.value?r.value:null;}
+    return localStorage.getItem(k);
+  }catch(e){return null}},
+  async set(k,v){try{
+    if(window.storage)return await window.storage.set(k,v);
+    localStorage.setItem(k,v);
+  }catch(e){}},
+  async del(k){try{
+    if(window.storage)return await window.storage.delete(k);
+    localStorage.removeItem(k);
+  }catch(e){}}
+};
 /* persistence — survives closing the tab */
 async function save(){
   try{
-    if(!window.storage)return;
     const prep=[...document.querySelectorAll('.prep')].map(x=>x.classList.contains('on')?1:0);
     const done=[...document.querySelectorAll('.step')].map(x=>x.classList.contains('done')?1:0);
-    await window.storage.set('lost-phone',JSON.stringify({prep,done}));
+    await DL.set('lost-phone',JSON.stringify({prep,done}));
   }catch(e){}
 }
 async function load(){
   try{
-    if(!window.storage)return;
-    const r=await window.storage.get('lost-phone'); if(!r||!r.value)return;
-    const d=JSON.parse(r.value);
+    const v=await DL.get('lost-phone'); if(!v)return;
+    const d=JSON.parse(v);
     (d.prep||[]).forEach((v,i)=>{const el=document.querySelector(`.prep[data-p="${i}"]`); if(el&&v)el.classList.add('on');});
     (d.done||[]).forEach((v,i)=>{const el=document.querySelector(`.step[data-s="${i}"]`); if(el&&v)el.classList.add('done');});
     updateProg();

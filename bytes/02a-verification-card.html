@@ -265,20 +265,37 @@ $('edit').addEventListener('click',()=>{$('s3').classList.add('hide');showFields
 $('print').addEventListener('click',()=>window.print());
 $('reset').addEventListener('click',()=>{
  ctx=null;vals={};
- try{window.storage&&window.storage.delete('verification-card');}catch(e){}
+ DL.del('verification-card');
  $('s3').classList.add('hide');$('s2').classList.add('hide');$('s1').classList.remove('hide');
  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('on'));
  window.scrollTo({top:0,behavior:'smooth'});
 });
 
 /* ── persistence: survives closing the tab ── */
+/* storage: the Defence Lab host provides window.storage; standalone falls back
+   to localStorage. Both can fail (private window, blocked site data), so every
+   call is wrapped and the page works with none of it. */
+const DL={
+  async get(k){try{
+    if(window.storage){const r=await window.storage.get(k);return r&&r.value?r.value:null;}
+    return localStorage.getItem(k);
+  }catch(e){return null}},
+  async set(k,v){try{
+    if(window.storage)return await window.storage.set(k,v);
+    localStorage.setItem(k,v);
+  }catch(e){}},
+  async del(k){try{
+    if(window.storage)return await window.storage.delete(k);
+    localStorage.removeItem(k);
+  }catch(e){}}
+};
 async function save(){
- try{ if(window.storage) await window.storage.set('verification-card',JSON.stringify({ctx,vals})); }catch(e){}
+ await DL.set('verification-card',JSON.stringify({ctx,vals}));
 }
 async function load(){
  try{
-  if(!window.storage)return;
-  const r=await window.storage.get('verification-card');
+  const v=await DL.get('verification-card'); if(!v)return;
+  const r={value:v};
   if(!r||!r.value)return;
   const d=JSON.parse(r.value);
   if(d&&d.ctx&&CONTEXTS[d.ctx]){ctx=d.ctx;vals=d.vals||{};render();}
