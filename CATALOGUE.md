@@ -9,7 +9,7 @@ Cybersecurity awareness training for non-technical employees. Two content format
 
 Courses build understanding. Bytes build habits. Both work independently. Both stack into learning paths.
 
-**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 16 built, 8 to build.
+**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 17 built, 7 to build.
 
 ---
 
@@ -61,7 +61,7 @@ Each course follows a consistent structure: story → content with interactive e
 | # | Course | Hook | AI Buddy | Time |
 |---|---|---|---|---|
 | 11 | **What Counts as Confidential** | One file, three places it went this week, three different exposures. Then the PSNI spreadsheet. | 🏋️ Describe a file → AI classifies with reasoning | ~5 min | **Built** |
-| 12 | **File Sharing & Access** | "Anyone with the link" is almost never the right setting for confidential data. | 📨 Describe sharing setup → AI checks | ~6 min |
+| 12 | **Who Else Can Open This** | Set the sharing on a real file yourself, then the Microsoft link that opened a whole storage account for three years. | 📨 Describe sharing setup → AI checks | ~5 min | **Built** |
 
 ### 🚨 Incident Response
 
@@ -87,6 +87,7 @@ No two courses open the same way. Spot types built to date:
 | 9 | Guess how much the post gives away | `estimate` |
 | 10 | Sort six things into fine / not mine | `sort` |
 | 11 | Follow one file through three places | `trace` |
+| 12 | Set the sharing yourself, then see what each choice permits | `share` |
 
 Other spot types available mid-course: `quiz`, `predict`, `experience`, `checklist`, `takeaways`, `slider`, `flags`, `scan`.
 
