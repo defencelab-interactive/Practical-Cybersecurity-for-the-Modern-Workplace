@@ -9,7 +9,7 @@ Cybersecurity awareness training for non-technical employees. Two content format
 
 Courses build understanding. Bytes build habits. Both work independently. Both stack into learning paths.
 
-**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 17 built, 7 to build.
+**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 18 built, 6 to build. **All 12 courses are built;** the remainder are Bytes.
 
 ---
 
@@ -67,7 +67,7 @@ Each course follows a consistent structure: story → content with interactive e
 
 | # | Course | Hook | AI Buddy | Time |
 |---|---|---|---|---|
-| 13 | **Incident Response: First 30 Minutes** | The difference between a $0 incident and a $280K loss is 30 seconds of action. STOP · DOCUMENT · REPORT. | 🏋️ Describe incident → AI coaches through STOP/DOC/REPORT | ~7 min |
+| 13 | **Disconnect, Report, Write It Down** | Order the first four actions yourself, then the reason most of the damage happens while nobody has said anything. | 🏋️ Describe incident → AI coaches the four steps | ~5 min | **Built** |
 
 **Total: 12 courses, ~87 min**
 
@@ -91,6 +91,16 @@ different sections, it is not a heading yet.
 
 Watch the set, not the single title: five of eleven courses opened with “What…”, which is why
 courses 2 and 12 took noun-phrase names instead.
+
+### Why the order is STOP · REPORT · DOCUMENT
+
+The original plan called Byte 13a “STOP · DOCUMENT · REPORT”. Course 13 puts reporting second
+instead, and the byte follows it. The reason is in the sources: CISA sequences containment first
+and says to move through the first steps in order, and the NCSC’s point is that the costly thing
+is the delay before anyone is told — “the stigma of clicking can prevent people reporting it, which
+then delays the incident response.” Documenting first is the version that feels responsible and
+spends the minutes that matter. The course says in its sources note that this differs from some
+published mnemonics.
 
 ### Quiz-writing rule
 
@@ -126,6 +136,7 @@ No two courses open the same way. Spot types built to date:
 | 10 | Sort six things into fine / not mine | `sort` |
 | 11 | Follow one file through three places | `trace` |
 | 12 | Set the sharing yourself, then see what each choice permits | `share` |
+| 13 | Put the first four actions into sequence | `order` |
 
 Other spot types available mid-course: `quiz`, `predict`, `experience`, `checklist`, `takeaways`, `slider`, `flags`, `scan`.
 
@@ -215,7 +226,7 @@ belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.h
 | 9a | **Clean Up What's Public About You** | LinkedIn settings, old accounts, searching for yourself *(merges the old 9a, 9b)* | 3 min | Course 9 | To build |
 | 10a | **Anonymise an AI Prompt** | Paste a prompt; names, companies and project details are highlighted with suggested replacements | 2 min | Course 10 | To build |
 | 11b | **Is This PII?** | Eight examples to sort, including the edge cases that catch people | 2 min | Course 11 | To build |
-| 13a | **STOP · DOCUMENT · REPORT** | A card you fill in once, save and print | 2 min | Course 13 | To build |
+| 13a | **Disconnect, Report, Write It Down** | The four steps and your own who-to-tell, on one card. Ordering per Course 13 — report comes second, not last. | 2 min | Course 13 | To build |
 
 **Total Security Bytes: 12 items (6 built, 6 to build)**
 
@@ -275,8 +286,8 @@ The complete curriculum. Recommended deployment: one item per 1-2 weeks over 6 m
 | 20 | Course | 11 | What Counts as Confidential | Data | 5 min |
 | 21 | Byte | 11b | Is This PII? | Data | 2 min |
 | 22 | Course | 12 | Share Links, Folders and Old Access | Data | 5 min |
-| 23 | Course | 13 | The First 30 Minutes | Incident | 6 min |
-| 24 | Byte | 13a | STOP · DOCUMENT · REPORT | Incident | 2 min |
+| 23 | Course | 13 | Disconnect, Report, Write It Down | Incident | 5 min |
+| 24 | Byte | 13a | Disconnect, Report, Write It Down — the card | Incident | 2 min |
 
 **Total: 24 items, ~99 min.** One per week is 24 weeks; one per fortnight is about 11 months.
 
