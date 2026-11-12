@@ -1,0 +1,228 @@
+import io
+words=io.open('build/words512.js',encoding='utf-8').read().strip()
+
+HTML = """<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Defence Lab · Build a Passphrase</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#34B77D;--acd:#2A9A66;--gr:#2EAD6B;--td:#1A1A1A;--tb:#4A4844;--mu:#8a8884;--paper:#F2F5F2;--paper2:#E8EEEC;--line:#dce4e0;
+  --sh:0 3px 8px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);
+  --blue:#4E7CA8;--rd:#C0392B;--rdl:rgba(192,57,43,.09);--am:#B07A1E;--aml:rgba(176,122,30,.12);
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);color:var(--td);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background:radial-gradient(70% 50% at 12% 6%,rgba(52,183,125,.16),transparent 52%),
+    radial-gradient(80% 60% at 92% 30%,rgba(78,124,168,.14),transparent 58%),
+    radial-gradient(60% 45% at 55% 40%,rgba(255,255,255,.5),transparent 60%),
+    linear-gradient(160deg,#eef2ee,#e4ebeb)}
+.wrap{max-width:1000px;margin:0 auto;padding:40px 36px 80px}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.eyebrow{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acd);margin-bottom:12px}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-height:1.06;letter-spacing:-.02em;margin-bottom:14px}
+.lede{font-size:17px;line-height:1.6;color:var(--tb)}
+.chip{font:700 12px var(--mono);color:var(--acd);background:rgba(52,183,125,.12);border-radius:20px;padding:6px 13px;white-space:nowrap;flex:none}
+
+.gen{background:#fff;border:1.5px solid var(--line);border-radius:17px;padding:25px 27px;box-shadow:var(--sh);margin-top:26px}
+.phrase{font:700 clamp(19px,3.4vw,30px)/1.35 var(--mono);color:var(--td);word-break:break-word;letter-spacing:-.01em;
+  background:var(--paper);border:1.5px dashed var(--line);border-radius:13px;padding:19px 21px;text-align:center}
+.ctrls{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}
+.btn{border:1.5px solid var(--line);background:#fff;color:var(--tb);border-radius:10px;padding:10px 16px;
+  font:700 13px var(--body);cursor:pointer;transition:all .15s}
+.btn:hover{border-color:var(--blue);color:var(--blue)}
+.btn.main{background:var(--ac);border-color:var(--ac);color:#08301F}
+.btn.main:hover{background:var(--acd);border-color:var(--acd);color:#fff}
+
+.opts{display:flex;gap:22px;flex-wrap:wrap;margin-top:19px;padding-top:17px;border-top:1px solid var(--line)}
+.opt{flex:1;min-width:195px}
+.opt-l{font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:9px}
+.seg{display:flex;gap:6px}
+.sg{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 4px;cursor:pointer;
+  font:600 13.5px var(--body);color:var(--tb);transition:all .14s}
+.sg:hover{border-color:var(--blue)}
+.sg.on{border-color:var(--acd);background:rgba(52,183,125,.09);color:var(--td)}
+
+.ent{margin-top:22px;padding-top:19px;border-top:1px solid var(--line)}
+.ent-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.ent-n{font:700 30px var(--mono);color:var(--acd);line-height:1}
+.ent-u{font:700 13px var(--body);color:var(--tb)}
+.ent-m{font-size:13.5px;color:var(--mu);margin-left:auto}
+.bars{margin-top:15px;display:flex;flex-direction:column;gap:9px}
+.bar{display:flex;align-items:center;gap:11px}
+.bar-l{width:188px;flex:none;font-size:13px;color:var(--tb);line-height:1.35}
+.bar-t{flex:1;height:9px;border-radius:9px;background:var(--paper2);overflow:hidden;min-width:60px}
+.bar-t i{display:block;height:100%;border-radius:9px;transition:width .4s ease}
+.bar-v{width:52px;flex:none;text-align:right;font:700 12.5px var(--mono);color:var(--tb)}
+.bar.me .bar-t i{background:var(--ac)}
+.bar.me .bar-l,.bar.me .bar-v{color:var(--acd);font-weight:700}
+.bar.ref .bar-t i{background:#c3cdc8}
+
+.math{margin-top:17px;font-size:13.5px;line-height:1.65;color:var(--tb);background:var(--paper);border-radius:11px;padding:14px 16px}
+.math b{color:var(--td)}
+.math code{font:600 12.5px var(--mono);background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+
+.note{background:var(--aml);border:1.5px solid rgba(176,122,30,.32);border-radius:16px;padding:21px 24px;margin-top:24px}
+.note h3{font-family:var(--disp);font-weight:600;font-size:19px;margin-bottom:9px;color:#8A5E12}
+.note p{font-size:14.5px;line-height:1.65;color:var(--tb)}
+.note p+p{margin-top:9px}
+.note b{color:var(--td)}
+
+.where{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:21px 24px;margin-top:16px;box-shadow:var(--sh)}
+.where h3{font-family:var(--disp);font-weight:600;font-size:19px;margin-bottom:11px}
+.where ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.where li{display:flex;gap:11px;font-size:14.5px;line-height:1.6;color:var(--tb)}
+.where li b{color:var(--td)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ac);flex:none;margin-top:8px}
+
+.foot{margin-top:28px;border-top:1px solid var(--line);padding-top:16px;font-size:13.5px;line-height:1.7;color:var(--mu)}
+.foot b{color:var(--tb)}
+.foot a{color:var(--acd);text-decoration:none;border-bottom:1px solid rgba(52,183,125,.35)}
+
+@media (max-width:620px){
+  .wrap{padding:26px 18px 60px}
+  .head{flex-direction:column;gap:12px}
+  .gen{padding:19px 17px}
+  .bar-l{width:122px;font-size:12.5px}
+}
+</style>
+</head><body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Security Byte 4a</div>
+      <h1>Build a Passphrase</h1>
+      <div class="lede">Words picked by the machine, not by you — which is the part that makes it strong. The strength is shown in bits, because bits are a fact about the passphrase; how long it would take to crack is a guess about somebody else’s hardware.</div>
+    </div>
+    <div class="chip">~2 min</div>
+  </div>
+
+  <div class="gen">
+    <div class="phrase" id="phrase">—</div>
+    <div class="ctrls">
+      <button class="btn main" id="again">Generate another</button>
+      <button class="btn" id="copy">Copy</button>
+    </div>
+
+    <div class="opts">
+      <div class="opt">
+        <div class="opt-l">Words</div>
+        <div class="seg" id="segWords"></div>
+      </div>
+      <div class="opt">
+        <div class="opt-l">Separator</div>
+        <div class="seg" id="segSep"></div>
+      </div>
+    </div>
+
+    <div class="ent">
+      <div class="ent-top">
+        <span class="ent-n" id="bits">—</span><span class="ent-u">bits of entropy</span>
+        <span class="ent-m" id="guesses"></span>
+      </div>
+      <div class="bars" id="bars"></div>
+      <div class="math" id="math"></div>
+    </div>
+  </div>
+
+  <div class="note">
+    <h3>Why you must not pick the words</h3>
+    <p>A passphrase you compose yourself is not random, and the gap is enormous. People reach for words that go together, names they like, and things in the room — which is exactly the space a cracking tool searches first. <b>Four words you chose are worth far less than four words chosen for you</b>, and there is no way to tell by looking.</p>
+    <p>That is the whole reason this page generates rather than checks. The numbers below are honest only because the selection above is: every word comes from <code>crypto.getRandomValues</code>, uniformly from a list of exactly 512, with no modulo bias — so each word contributes precisely 9 bits.</p>
+    <p>If you swap a word for one you prefer, or reorder them so they tell a story, you have taken the randomness back out. Generate again instead.</p>
+  </div>
+
+  <div class="where">
+    <h3>Where a passphrase is actually the right tool</h3>
+    <ul>
+      <li><span class="dot"></span><span><b>The master password for your password manager.</b> The one you cannot store anywhere, and the one worth making long — in the 2022 LastPass breach, stolen vaults were attacked offline, and weak master passwords were the ones that gave way.</span></li>
+      <li><span class="dot"></span><span><b>Unlocking your laptop and your phone.</b> Typed often, so it has to be memorable; protects everything else, so it has to be strong.</span></li>
+      <li><span class="dot"></span><span><b>The two or three accounts you must reach without the manager.</b> Your main email, usually, and whatever you would need if the laptop were the thing that broke.</span></li>
+      <li><span class="dot"></span><span><b>Not for everything else.</b> For ordinary accounts, let the manager generate something random and never learn it. A passphrase is for the handful you have to carry in your head.</span></li>
+    </ul>
+  </div>
+
+  <div class="foot">
+    <b>On the numbers.</b> Entropy here is the size of the space the passphrase was drawn from: <code>words × 9 bits</code>, because this list holds 512 words and 2⁹ = 512. It is a property of how the phrase was made, so it stays true whatever an attacker owns. <b>Crack time is not shown</b>, because it depends on how the site stored your password and what hardware is pointed at it — the same phrase can be minutes or centuries, and a confident figure would be invented.
+    <br><br>Comparison bars use the same measure: a random 8-character password from the 94 printable ASCII characters is log₂(94⁸) ≈ 52 bits. Guidance favouring length over composition rules is in <a href="https://pages.nist.gov/800-63-4/sp800-63b/authenticators" target="_blank" rel="noopener">NIST SP 800-63B</a>, which also says verifiers “SHALL NOT impose other composition rules”. Nothing you generate here leaves the page.
+  </div>
+</div>
+
+<script>
+__WORDS__
+const BITS_PER_WORD = Math.log2(WORDS.length);   // exactly 9 for a 512-word list
+const SEPS = [{k:'-',n:'word-word'},{k:'.',n:'word.word'},{k:' ',n:'word word'}];
+const REF = [
+  {l:'A random 8-character password', bits: Math.log2(Math.pow(94,8))},
+  {l:'A random 12-character password', bits: Math.log2(Math.pow(94,12))},
+  {l:'\\u201CTr0pical!2024\\u201D \\u2014 one word, four tweaks', bits: 14, note:1}
+];
+let nWords = 5, sep = '-';
+const $ = id => document.getElementById(id);
+
+function pick(n){
+  const out=[];
+  const need=Math.ceil(Math.log2(WORDS.length)/8)+1;
+  while(out.length<n){
+    const buf=new Uint8Array(need*2);
+    crypto.getRandomValues(buf);
+    for(let i=0;i+1<buf.length && out.length<n;i+=2){
+      const v=((buf[i]<<8)|buf[i+1]) & (WORDS.length-1);  // list is a power of two: no bias
+      out.push(WORDS[v]);
+    }
+  }
+  return out;
+}
+
+function render(){
+  const words=pick(nWords);
+  $('phrase').textContent = words.join(sep);
+  const bits = nWords * BITS_PER_WORD;
+  $('bits').textContent = bits.toFixed(0);
+  $('guesses').textContent = 'one of 512^' + nWords + ' equally likely phrases';
+
+  const rows=[{l:'This passphrase \\u2014 '+nWords+' words', bits, me:1}].concat(REF);
+  const max=Math.max(...rows.map(r=>r.bits), 80);
+  $('bars').innerHTML = rows.map(r=>`
+    <div class="bar ${r.me?'me':'ref'}">
+      <span class="bar-l">${r.l}</span>
+      <span class="bar-t"><i style="width:${Math.min(100,Math.round(r.bits/max*100))}%"></i></span>
+      <span class="bar-v">${r.bits.toFixed(0)} b</span>
+    </div>`).join('');
+
+  $('math').innerHTML = `<b>${nWords} words \\u00d7 9 bits = ${bits.toFixed(0)} bits.</b> Each word is one of `
+    + `<code>512</code>, so each adds exactly 9 bits \\u2014 and every extra word adds another 9, which is why `
+    + `word count is the dial that matters. The separator changes nothing: <code>${sep===' '?'space':sep}</code> `
+    + `is known to an attacker and adds no entropy, so pick whichever a login box will accept.`;
+}
+
+$('segWords').innerHTML=[4,5,6,7].map(n=>`<button class="sg${n===nWords?' on':''}" data-w="${n}">${n}</button>`).join('');
+$('segSep').innerHTML=SEPS.map(s=>`<button class="sg${s.k===sep?' on':''}" data-s="${s.k}">${s.n}</button>`).join('');
+
+document.addEventListener('click',e=>{
+  const w=e.target.closest('[data-w]');
+  if(w){ nWords=+w.dataset.w;
+    document.querySelectorAll('[data-w]').forEach(x=>x.classList.toggle('on',x===w)); render(); return; }
+  const s=e.target.closest('[data-s]');
+  if(s){ sep=s.dataset.s;
+    document.querySelectorAll('[data-s]').forEach(x=>x.classList.toggle('on',x===s)); render(); return; }
+  if(e.target.id==='again'){ render(); return; }
+  if(e.target.id==='copy'){
+    const btn=$('copy'), txt=$('phrase').textContent;
+    navigator.clipboard.writeText(txt).then(()=>{
+      btn.textContent='Copied'; setTimeout(()=>btn.textContent='Copy',1600);
+    }).catch(()=>{
+      const r=document.createRange(); r.selectNodeContents($('phrase'));
+      const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      btn.textContent='Selected \\u2014 copy it yourself'; setTimeout(()=>btn.textContent='Copy',2600);
+    });
+  }
+});
+
+render();
+</script>
+</body></html>
+"""
+HTML = HTML.replace('__WORDS__', words)
+io.open('bytes/04a-build-a-passphrase.html','w',encoding='utf-8').write(HTML)
+print('written, bytes:', len(HTML))

@@ -9,7 +9,7 @@ Cybersecurity awareness training for non-technical employees. Two content format
 
 Courses build understanding. Bytes build habits. Both work independently. Both stack into learning paths.
 
-**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 21 built, 3 to build. **All 12 courses are built;** the remainder are Bytes.
+**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 22 built, 2 to build. **All 12 courses are built;** the remainder are Bytes.
 
 ---
 
@@ -213,6 +213,16 @@ for something only the new version contains. The tell when this goes wrong is th
 old content while the repository holds the new — compare against `raw.githubusercontent.com` to
 separate a delivery failure from a code problem.
 
+**Show a number only where it can be computed, and keep estimates off the chart.** Byte 4a reports
+entropy in bits rather than crack time, because bits are a property of how the phrase was generated
+while time depends on the defender’s hashing and the attacker’s hardware. The 512-word list is a
+power of two on purpose: nine bits can be taken from `crypto.getRandomValues` with no modulo bias,
+so “nine bits per word” is exact rather than approximate.
+
+A first draft put a human-chosen password on the comparison chart at “14 bits” — a figure I estimated
+and then displayed beside two exact ones, where the juxtaposition made it read as measured. It now
+sits in prose with its assumptions stated and no bar.
+
 **Do not hand the reader a way to count the answers.** Byte 11b opened with “two of them are not
 personal data; the other six are”, which lets anyone score well by tallying rather than thinking —
 the same family of defect as the correct answer being the longest option. Reworded to say that most
@@ -249,7 +259,7 @@ belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.h
 |---|---|---|---|---|---|
 | 1b | **Tools Worth Knowing About** | Filterable rundown of security tools by OS, browser and phone | ~4 min | Course 1 | Built |
 | 2a | **Your Verification Card** | Three questions about where you work, then a card naming who confirms what. Saves and prints. | ~3 min | Course 2 | Built |
-| 4a | **Build a Passphrase** | Generator: four words, separators, strength shown as you go | 2 min | Course 4 | To build |
+| 4a | **Build a Passphrase** | Generator: `crypto.getRandomValues` over a 512-word list, so each word is exactly 9 bits. Strength in bits, never crack time. | ~2 min | Course 4 | Built |
 | 4b | **Turn On MFA** | Your accounts in the order that matters, each with the company's own term for the setting and a link where one was confirmed. A reference, not a worklist — no ticks, nothing stored. | ~3 min | Course 4 | Built |
 | 6b | **Link Inspector** | Paste a URL and see where it really goes — domain, @ trick, punycode, lookalikes. Runs in the browser. | ~3 min | Course 6 | Built |
 | 7b | **Your Home Network** | Paste your WiFi name and see what it gives away (surname, address, router model, ISP default), then three router settings | 2 min | Course 7 | Built |
@@ -260,7 +270,7 @@ belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.h
 | 11b | **Is This Personal Data?** | Eight examples to sort. Built on the GDPR definition with sources per answer — swap the definition if a client works to another regime. | ~2 min | Course 11 | Built |
 | 13a | **The First Four Actions** | Pick the situation — clicked a link, machine misbehaving, device gone, sent to the wrong person, money moved — and see what the same four steps mean in that one. | ~2 min | Course 13 | Built |
 
-**Total Security Bytes: 12 items (9 built, 3 to build)**
+**Total Security Bytes: 12 items (10 built, 2 to build)**
 
 ### Retired
 
