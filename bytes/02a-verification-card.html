@@ -88,7 +88,7 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
     <div class="chip">~3 min</div>
   </div>
 
-  <div class="note"><span>🔒</span><div><b>Saved on this device only.</b> What you type stays in this browser and is never sent anywhere. If you clear your browser data it goes with it — so print the card or photograph it once it's done.</div></div>
+  <div class="note"><span>🔒</span><div><b>Saved on this device only.</b> What you type stays in this browser and is never sent anywhere. If you clear your browser data it goes with it — so photograph the card once it's done. That copy works on any phone, and it works when the page does not.</div></div>
 
   <!-- step 1: context -->
   <div class="step" id="s1">
@@ -255,7 +255,7 @@ function render(){
 
  h+='</div>';
  $('card').innerHTML=h;
- $('saveline').innerHTML=`Saved in this browser. <b>Print it, or photograph it</b> \u2014 a card you cannot reach when your laptop is the problem isn\u2019t much use.`;
+ $('saveline').innerHTML=`<b>Photograph it now.</b> A card you cannot reach when your laptop is the problem isn\u2019t much use \u2014 and if the Print button does nothing, the page is inside something that blocks printing, which is common.`;
  $('s2').classList.add('hide'); $('s3').classList.remove('hide');
  save();
  window.scrollTo({top:0,behavior:'smooth'});

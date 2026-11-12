@@ -29,13 +29,10 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
 
 /* tiers */
 .howto{font-size:14px;line-height:1.65;color:var(--tb);background:rgba(78,124,168,.06);border:1.5px solid rgba(78,124,168,.2);border-radius:13px;padding:14px 17px;margin-top:14px;max-width:none}
-.print{flex:none;border:1.5px solid var(--line);background:#fff;color:var(--tb);border-radius:10px;
-  padding:9px 15px;font:700 12.5px var(--body);cursor:pointer;transition:all .15s;box-shadow:var(--sh)}
-.print:hover{border-color:var(--acd);color:var(--acd)}
 @media print{
   body{background:#fff}
   .wrap{max-width:none;padding:0}
-  .chip,.print,.howto,.stale,.acct-go{display:none!important}
+  .chip,.howto,.stale,.acct-go{display:none!important}
   .acct{break-inside:avoid;box-shadow:none;border-color:#bbb;padding:9px 12px;margin-bottom:5px}
   .acct.on{background:#fff}
   .tick{border-color:#555}
@@ -46,10 +43,7 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
   .tier{margin-top:18px;break-inside:avoid}
   h1{font-size:26px}.lede{font-size:13.5px}
   .prog{margin:14px 0 4px}.prog-bar{display:none}
-  .printonly{display:block!important;margin-top:9px;border-top:1px dashed #bbb;padding-top:9px}
-  .printonly i{display:block;height:17px;border-bottom:1px solid #ccc;margin-bottom:7px}
 }
-.printonly{display:none}
 .tier{margin-top:30px}
 .tier-h{display:flex;align-items:baseline;gap:11px;margin-bottom:5px}
 .tier-n{font:700 12px var(--mono);color:var(--acd);background:rgba(52,183,125,.12);border-radius:7px;padding:3px 8px;flex:none}
@@ -119,13 +113,12 @@ h2{font-family:var(--disp);font-weight:600;font-size:23px;letter-spacing:-.015em
     <div>
       <div class="eyebrow">Security Byte 4b</div>
       <h1>Turn On MFA</h1>
-      <div class="lede">Your accounts in the order that actually matters, with what each company calls the setting. Work down it now if you can — and take it with you, because the ones you do not get to today are the ones that need the list.</div>
+      <div class="lede">Your accounts in the order that actually matters, with what each company calls the setting. The first three are the ones worth doing before you close this — they take about a minute each, and everything below them depends on them.</div>
     </div>
     <div class="chip">~3 min + the doing</div>
   </div>
 
-  <div class="prog"><span class="prog-n" id="pn">0 of 0 done</span><span class="prog-bar"><i id="pb"></i></span>
-    <button class="print" id="print">Print or save as PDF</button></div>
+  <div class="prog"><span class="prog-n" id="pn">0 of 0 done</span><span class="prog-bar"><i id="pb"></i></span></div>
   <div class="howto">Each account shows the company’s own name for the setting — that is the phrase that finds the current instructions. Where there is a button, the link to their guide was confirmed. Where there is not, the term is right but the address was not confirmed, so search it on the company’s own site rather than trusting a stranger’s walkthrough.</div>
 
   <div id="tiers"></div>
@@ -160,7 +153,7 @@ h2{font-family:var(--disp);font-weight:600;font-size:23px;letter-spacing:-.015em
   <div class="stale">
     <b>Why there are no screenshots.</b> Menu paths and screenshots go out of date within months — vendors move things, the web and the app differ, and on a managed account the option may not be where anyone else sees it. Terms change far more slowly than addresses, so this page gives you the term.
     <br><br>Links confirmed November 2026. If one has moved since, search the term on the company’s own help site.
-    <br><br><b>Take it with you.</b> The ticks are here to keep your place while you work down the list; they live in this browser on this device and nowhere else, so do not count on them. Anything you have not done by the time you close the tab should be on paper or in a PDF — that is what the button at the top is for.
+    <br><br><b>The ticks.</b> They keep your place while you work down the list, and that is all they do — they live in this browser on this device, so do not count on finding them again. Nothing here is worth coming back for: the value is in the three at the top, done now.
   </div>
 </div>
 
@@ -212,8 +205,8 @@ function render(){
       <div class="tier-w">${t.w}</div>${t.items.map(rowHTML).join('')}</div>`;
   });
   h+=`<div class="tier"><div class="tier-h"><span class="tier-n">+</span><span class="tier-t">Whatever this list does not know about</span></div>
-    <div class="tier-w">Your own accounts, your team's tools, the one you keep meaning to get to. Same order applies: whatever holds the most, first. Write them on the printout.</div>
-    <div class="printonly"><i></i><i></i><i></i><i></i></div></div>`;
+    <div class="tier-w">Your own accounts, your team's tools, the one you keep meaning to get to. Same order applies: whatever opens the most, first — and anything that can reset another account counts as opening it.</div>
+</div>`;
   document.getElementById('tiers').innerHTML=h;
   applyTicks(); updateProg();
 }
@@ -234,7 +227,6 @@ function updateProg(){
 document.addEventListener('click',e=>{
   const t=e.target.closest('[data-tick]');
   if(t){const id=t.dataset.tick; ticked[id]=!ticked[id]; applyTicks(); updateProg(); save(); return;}
-  if(e.target.id==='print'){window.print(); return;}
 });
 
 /* storage: the Defence Lab host provides window.storage; standalone falls back
