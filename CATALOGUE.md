@@ -92,6 +92,23 @@ different sections, it is not a heading yet.
 Watch the set, not the single title: five of eleven courses opened with “What…”, which is why
 courses 2 and 12 took noun-phrase names instead.
 
+### Quiz-writing rule
+
+**The correct answer must not be the longest option.** Length is a tell: a reader who knows nothing
+can score above chance by picking the fullest-looking answer, and every question that rewards that
+is measuring reading tactics instead of the thing the course taught. It creeps in because the
+correct answer is the one you are trying to be accurate about, so it accumulates qualifiers while
+the distractors stay stubs.
+
+The fix is usually not to pad the distractors. It is to move the nuance into the feedback, where
+it belongs anyway, and make each distractor specific enough to be a real option. A measured pass
+over the 33 questions found the correct answer longest in 30% of them; after rewriting it is 9%,
+with correct answers now marginally shorter on average than wrong ones (46 vs 47 characters).
+
+Check it by measurement, not by eye: `build/optlen2.py` renders every question and reports the
+gap. Watch the distractors for contradictions afterwards — shortening one answer here created a
+distractor that the feedback directly denied.
+
 ### Opening mechanics used so far
 
 No two courses open the same way. Spot types built to date:

@@ -522,7 +522,7 @@ const NODES=[
   spot:{type:'quiz',topic:'exports',q:'You need to send a client a summary built from an internal export. What gets sent?',
     opts:[
      ['The working file, with the internal sheets deleted',0],
-     ['A new file containing only the summary, pasted in as values',1],
+     ['A new file with only the summary, pasted as values',1],
      ['The working file as a PDF, since a PDF cannot be edited',0],
      ['The working file with the internal sheets hidden',0]],
     fb:'A new file. Deleting is what the PSNI analysts did, and the data they meant to remove was still in the file when it went out.<br><br>Hiding is worse — hidden is a display setting, and the data is one click from view. A PDF is better than the others and still carries more than it looks like: it keeps document properties, and anything cropped or covered rather than removed may still be in the file.<br><br>Starting a new file is the only one of these where you are deciding what goes in, rather than hoping you took everything out.'}},
@@ -534,7 +534,7 @@ const NODES=[
   spot:{type:'quiz',topic:'levels',q:'What decides a file’s level?',
     opts:[
      ['How senior the person who wrote it is',0],
-     ['How much harm would follow if the wrong people had it',1],
+     ['How much harm if the wrong people had it',1],
      ['Whether it is marked confidential in the footer',0],
      ['Which folder it is currently stored in',0]],
     fb:'The harm. Everything else follows from it — who may open it, where it may be stored, whether it may leave the organisation.<br><br>Seniority is the common wrong answer: a junior analyst’s export of customer records is more sensitive than most of what a director writes. The footer and the folder are consequences of the level, not evidence of it — and a file in the wrong folder is exactly the case classification exists to catch.'}},

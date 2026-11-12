@@ -458,8 +458,8 @@ const NODES=[
   body:'Windows Defender and the protection built into macOS are solid defaults for most people, and keeping the built-in one is a perfectly good answer.<br><br>What matters more than which one you run is what you do when it misbehaves.',
   spot:{type:'predict',topic:'av',q:'Your antivirus shows “protection is off”. You turn it back on and it disables itself again. Most likely cause?',
     opts:[
-     ['A subscription that needs renewing',0],
-     ['Malware already on the machine, switching it off',1],
+     ['An antivirus subscription that has expired',0],
+     ['Malware on the machine, switching it off',1],
      ['A recent update that broke compatibility',0]],
     fb:'Assume malware until someone qualified says otherwise. Disabling protection is one of the first things malicious software does, precisely so it can keep working unnoticed.<br><br>Expired subscriptions and broken updates do happen, and they announce themselves differently — a licence warning, an error message. Protection that silently refuses to stay on is the one to treat as an incident: disconnect from the network and tell IT.'}},
 
@@ -468,9 +468,9 @@ const NODES=[
   spot:{type:'quiz',topic:'network',q:'You are on hotel WiFi, about to log into your work email. HTTPS is on. Do you still need a VPN?',
     opts:[
      ['No — HTTPS already encrypts everything that matters',0],
-     ['Yes — it hides which services you are using, and covers anything not on HTTPS',1],
-     ['Only if the hotel network has no password',0],
-     ['Only for banking, not for work email',0]],
+     ['Yes — it also hides which services you are using',1],
+     ['Only if the hotel network has no password on it',0],
+     ['Only for banking, not for everyday work email',0]],
     fb:'Use it. HTTPS protects the contents of each connection, but the network still sees which services you connect to, and not everything on a laptop speaks HTTPS. A password on the hotel WiFi means nothing — everyone in the building has it.<br><br>If your company provides a VPN, that is the one to use.'}},
 
  {scene2:1,date:'Your settings',crit:0,beat:'Three things to check on your laptop',
