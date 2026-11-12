@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Defence Lab · The Sticky Note in the Photo</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+@property --mood{syntax:'<number>';inherits:true;initial-value:0}
+:root{
+  --ac:#34B77D;--acd:#2A9A66;--ac-soft:rgba(52,183,125,.12);
+  --gr:#2EAD6B;--gl:rgba(46,173,107,.14);--rd:#E0574F;--rl:rgba(224,87,79,.12);
+  --tw:#EDEFEC;--tm:rgba(237,239,236,.66);--tf:rgba(237,239,236,.36);
+  --paper:#FCFCFB;--ink:#1A1A1A;--ink-m:#55605A;--ink-f:#8A938E;--line:#E4E7E3;
+  --blue:#4E7CA8;
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smoothing:antialiased}
+.app{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden}
+/* top chrome */
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;flex:none;z-index:30}
+.brand{font-family:var(--disp);font-size:18px;font-weight:600}.brand span{color:var(--ac)}
+.chip{font:700 12px var(--mono);color:var(--ac);background:var(--ac-soft);border-radius:20px;padding:6px 13px}
+.top-right{display:flex;gap:10px;align-items:center}
+.fs-btn{width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:var(--tm);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.fs-btn svg{width:15px;height:15px}
+/* body: rail (fixed) + scroll area */
+.stage{flex:1;min-height:0;display:grid;grid-template-columns:250px 1fr}
+.rail{padding:0 30px 0 40px;display:flex;flex-direction:column;justify-content:center;
+  background:radial-gradient(120% 70% at -10% 22%,rgba(52,183,125,.22),transparent 60%),radial-gradient(90% 60% at 0% 100%,rgba(78,124,168,.14),transparent 62%),#1a2620}
+.rail .eyebrow{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ac);margin-bottom:14px}
+.rail h1{font-family:var(--disp);font-weight:600;font-size:clamp(26px,2.4vw,36px);line-height:1.08;letter-spacing:-.02em;margin-bottom:16px}
+.rail .r-sub{font-size:14px;line-height:1.55;color:var(--tm);margin-bottom:26px}
+.rail .sh{width:46px;height:auto;margin-bottom:12px}
+/* scroll area */
+.scroll{position:relative;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;--mood:0;
+  background:
+    radial-gradient(80% 55% at 12% 4%,rgba(52,183,125,calc(0.30 - var(--mood)*0.14)),transparent 52%),
+    radial-gradient(90% 70% at 88% calc(70% + var(--mood)*30%),rgba(78,124,168,calc(0.16 + var(--mood)*0.24)),transparent 58%),
+    radial-gradient(60% 45% at 60% 32%,rgba(255,255,255,calc(0.10 - var(--mood)*0.05)),transparent 60%),
+    linear-gradient(165deg,#1c2a22,#1a2430 calc(55% + var(--mood)*10%),#182430);
+  transition:--mood .25s linear}
+.scroll::-webkit-scrollbar{width:8px}.scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:4px}
+.track{position:relative;max-width:1340px;margin:0;padding:10vh 3vw 40vh 3vw}
+/* the vertical spine */
+.spine{position:absolute;left:calc(3vw + 10px);top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.14) 6%,rgba(255,255,255,.14) 94%,transparent)}
+.spine-fill{position:absolute;left:calc(3vw + 10px);top:0;width:2px;background:var(--ac);height:0;transition:height .3s ease;box-shadow:0 0 10px rgba(52,183,125,.5)}
+/* nodes on the spine */
+.node{position:relative;padding-left:calc(3vw + 46px);margin-bottom:64px;opacity:.5;transform:translateY(0);transition:opacity .5s}
+.node.seen{opacity:1}
+.node .dot{position:absolute;left:3vw;top:2px;width:20px;height:20px;border-radius:50%;background:#2a332e;border:2px solid rgba(255,255,255,.25);transition:all .35s;z-index:2}
+.node.seen .dot{background:var(--ac);border-color:var(--ac);box-shadow:0 0 0 5px rgba(52,183,125,.15)}
+.node.crit.seen .dot{background:var(--rd);border-color:var(--rd);box-shadow:0 0 0 5px rgba(224,87,79,.15)}
+.node .date{font:700 11px var(--mono);letter-spacing:.06em;color:var(--ac);text-transform:uppercase;margin-bottom:6px}
+.node.crit .date{color:var(--rd)}
+.node .beat{font-family:var(--disp);font-size:clamp(19px,1.7vw,24px);font-weight:600;color:var(--tw);line-height:1.3;margin-bottom:8px}
+.node .body{font-size:16.5px;line-height:1.72;color:var(--tm);max-width:980px}
+/* SPOT — interactive point that opens a question */
+.spot{margin-top:18px;max-width:980px}
+.spot-trigger{display:inline-flex;align-items:center;gap:10px;background:rgba(52,183,125,.1);border:1px solid rgba(52,183,125,.4);color:var(--ac);
+  font:600 14px var(--body);padding:11px 18px;border-radius:12px;cursor:pointer;transition:all .18s}
+.spot-trigger:hover{background:rgba(52,183,125,.18);transform:translateY(-1px)}
+.spot-trigger .pulse{width:9px;height:9px;border-radius:50%;background:var(--ac);animation:sppulse 1.8s ease-in-out infinite}
+@keyframes sppulse{0%,100%{opacity:.5;box-shadow:0 0 0 0 rgba(52,183,125,.5)}50%{opacity:1;box-shadow:0 0 0 6px rgba(52,183,125,0)}}
+.spot-trigger.q-exp{background:rgba(78,124,168,.1);border-color:rgba(78,124,168,.5);color:#7ba7d4}
+.spot-trigger.q-exp .pulse{background:#7ba7d4;box-shadow:none;animation:none}
+.spot-card{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:0 16px 40px rgba(0,0,0,.28);
+  max-height:0;opacity:0;overflow:hidden;transition:max-height .45s ease,opacity .35s ease,padding .3s;padding-top:0;padding-bottom:0}
+.spot-card.open{max-height:900px;opacity:1;padding-top:24px;padding-bottom:26px}
+.spot-q{font-family:var(--disp);font-size:19px;font-weight:600;color:var(--ink);line-height:1.35;margin-bottom:16px}
+.spot-opts{display:flex;flex-direction:column;gap:10px}
+.spot-opt{background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:13px 16px;font-size:15px;color:var(--ink);cursor:pointer;text-align:left;font-family:var(--body);transition:all .16s}
+.spot-opt:hover{border-color:var(--acd)}
+.spot-opt.correct{border-color:var(--gr);background:var(--gl)}
+.spot-opt.wrong{border-color:var(--rd);background:var(--rl)}
+.spot-fb{margin-top:14px;font-size:14.5px;line-height:1.6;color:var(--ink-m);border-top:1px solid var(--line);padding-top:14px;display:none}
+.spot-fb.show{display:block;animation:rise .4s}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.spot-fb .xpb{display:inline-block;font:700 11px var(--mono);color:var(--acd);background:rgba(46,173,107,.12);border-radius:20px;padding:3px 10px;margin-bottom:8px}
+.spot-fb b.v-ok{color:var(--gr)}.spot-fb b.v-no{color:var(--rd)}
+/* experience (reflection) spot */
+.spot-card.exp{border-color:rgba(78,124,168,.35);background:linear-gradient(180deg,#fbfcfd,#f6f9fc)}
+.exp-scale{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+.exp-btn{flex:1;min-width:90px;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:11px;font:600 13px var(--body);color:var(--ink-m);cursor:pointer;transition:all .15s}
+.exp-btn:hover{border-color:var(--blue)}.exp-btn.sel{border-color:var(--blue);background:rgba(78,124,168,.08);color:var(--blue)}
+.exp-note{margin-top:14px;font-size:14.5px;line-height:1.6;color:var(--ink-m);display:none}.exp-note.show{display:block;animation:rise .4s}
+/* scroll hint */
+.scroll-hint{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font:600 12px var(--body);color:var(--tf);display:flex;flex-direction:column;align-items:center;gap:4px;animation:bob 2s ease-in-out infinite;pointer-events:none;z-index:5}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(5px)}}
+.scroll-hint.hide{opacity:0;transition:opacity .4s}
+/* end card */
+/* takeaways */
+/* risk slider */
+.slider-spot{max-width:760px}
+.rslider{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px 24px;box-shadow:0 14px 36px rgba(0,0,0,.26)}
+.rslider-q{font-family:var(--disp);font-size:18px;font-weight:600;color:var(--ink);margin-bottom:18px;line-height:1.35}
+.rslider-row{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.rslider-label{width:60px;font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-f);flex:none}
+.rslider-input{flex:1;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:var(--line);outline:none;cursor:pointer}
+.rslider-input::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--acd);border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;transition:transform .1s}
+.rslider-input::-webkit-slider-thumb:hover{transform:scale(1.12)}
+.rslider-input::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--acd);border:3px solid #fff;cursor:pointer}
+.rslider-val{width:34px;font:700 16px var(--mono);color:var(--ink);text-align:center;flex:none}
+.rslider-result{display:flex;flex-direction:column;gap:8px;padding:18px 20px;border-radius:12px;border:2px solid var(--line);transition:all .3s}
+.rslider-result.lvl-crit{border-color:var(--rd);background:var(--rl)}
+.rslider-result.lvl-high{border-color:#c8781e;background:rgba(200,120,30,.08)}
+.rslider-result.lvl-med{border-color:#c8a13e;background:rgba(200,161,62,.1)}
+.rslider-result.lvl-low{border-color:var(--gr);background:var(--gl)}
+.rslider-score{font:700 26px var(--mono);transition:color .3s}
+.lvl-crit .rslider-score{color:var(--rd)}.lvl-high .rslider-score{color:#b8690f}.lvl-med .rslider-score{color:#a8862e}.lvl-low .rslider-score{color:var(--gr)}
+.rslider-info{flex:1}
+.rslider-level{font:700 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px;transition:color .3s}
+.lvl-crit .rslider-level{color:var(--rd)}.lvl-high .rslider-level{color:#b8690f}.lvl-med .rslider-level{color:#a8862e}.lvl-low .rslider-level{color:var(--gr)}
+.rslider-explain{font-size:13px;color:var(--ink-m);line-height:1.5}
+.rslider-bar{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--rd) 0%,#c8781e 30%,#c8a13e 55%,var(--gr) 100%);margin-top:16px;position:relative}
+.rslider-marker{position:absolute;top:-5px;width:4px;height:16px;background:#fff;border-radius:2px;box-shadow:0 1px 4px rgba(0,0,0,.4);transition:left .15s;left:16%}
+.rslider-eg{margin-top:14px;font-size:13.5px;color:var(--ink-m);line-height:1.5}
+.rslider-eg b{color:var(--ink)}
+.rslider-src{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;line-height:1.5;color:var(--ink-f)}
+.rslider-src a{color:var(--acd);text-decoration:none;border-bottom:1px solid rgba(46,173,107,.4)}
+.rslider-src a:hover{border-color:var(--acd)}
+
+.takeaways{max-width:880px}
+.tk-list{display:flex;flex-direction:column;gap:14px}
+.tk{display:flex;gap:16px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 22px;box-shadow:0 6px 18px rgba(0,0,0,.14)}
+.tk-ic{font-size:26px;flex:none;line-height:1}
+.tk-t{font-family:var(--disp);font-size:19px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.tk-b{font-size:15.5px;line-height:1.6;color:var(--ink-m)}
+/* your plan (in end card) */
+.yourplan{margin:4px 0 18px;text-align:left}
+.yp-title{font:700 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ac);margin-bottom:8px}
+.yp-sub{font-size:14px;color:var(--tm);margin-bottom:10px}
+.yp-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:7px}
+.yp-list li{font-size:15px;color:var(--tw);padding-left:26px;position:relative;line-height:1.45}
+.yp-list li::before{content:"\2713";position:absolute;left:0;top:0;color:var(--ac);font-weight:700}
+
+/* Scene 2 checklist + personal feedback */
+.node.s2 .date{color:var(--blue)}
+.node.s2 .dot{border-color:var(--blue)}.node.s2.seen .dot{background:var(--blue);border-color:var(--blue);box-shadow:0 0 0 5px rgba(78,124,168,.15)}
+.checklist-spot{max-width:820px}
+.personal{background:linear-gradient(180deg,rgba(78,124,168,.14),rgba(78,124,168,.05));border:1px solid rgba(78,124,168,.35);border-radius:16px;padding:20px 24px;margin-bottom:18px}
+.personal .p-title{font:700 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#8fb4d6;margin-bottom:10px}
+.personal .p-line{font-size:16px;line-height:1.6;color:var(--tw);margin-bottom:8px}
+.personal .p-weak{margin:6px 0 4px;padding-left:20px}
+.personal .p-weak li{font-size:15.5px;line-height:1.6;color:var(--tw);font-weight:600}
+.personal .p-strong{font-size:14px;color:var(--tm);margin-top:8px}
+.checklist{display:flex;flex-direction:column;gap:11px}
+.cl-item{background:var(--paper);border:1.5px solid var(--line);border-radius:13px;padding:6px 18px 6px;transition:all .16s;position:relative;overflow:hidden}
+.cl-row{display:flex;align-items:center;gap:14px;padding:10px 0;cursor:default}
+.cl-box{width:24px;height:24px;border-radius:7px;border:2px solid #cdd3ce;flex:none;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:14px;color:transparent;cursor:pointer}
+.cl-item.on .cl-box{background:var(--acd);border-color:var(--acd);color:#fff}
+.cl-item.on{border-color:var(--acd);background:var(--gl)}
+.cl-t{font-size:16px;color:var(--ink);flex:1}
+.cl-flag{display:none;font:700 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--blue);border-radius:20px;padding:4px 10px;flex:none}
+.cl-item.focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(78,124,168,.12)}
+.cl-item.focus .cl-flag{display:block}
+.cl-item.focus.on .cl-flag{background:var(--acd)}
+.cl-toggle{background:none;border:1px solid var(--line);border-radius:8px;color:var(--ink-m);font:600 12px var(--body);padding:6px 12px;cursor:pointer;flex:none;transition:all .15s}
+.cl-toggle:hover{border-color:var(--acd);color:var(--acd)}
+.cl-how{max-height:0;opacity:0;overflow:hidden;transition:max-height .4s ease,opacity .3s ease}
+.cl-how.open{max-height:400px;opacity:1;padding:4px 0 14px}
+.cl-how .chow{font-size:14.5px;line-height:1.55;color:var(--ink-m);margin-bottom:10px}
+.cl-how .csteps{margin:0 0 12px;padding-left:20px}
+.cl-how .csteps li{font-size:14.5px;line-height:1.6;color:var(--ink);margin-bottom:4px}
+.cl-how .clinks{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.cl-how .clinks a{font:600 13px var(--body);color:var(--acd);text-decoration:none;background:var(--gl);border:1px solid rgba(46,173,107,.3);border-radius:9px;padding:8px 12px;transition:all .15s}
+.cl-how .clinks a:hover{background:var(--acd);color:#fff}
+.cl-itnote{font-size:13px;line-height:1.5;color:var(--ink-f);background:rgba(78,124,168,.08);border-radius:9px;padding:9px 12px;margin-bottom:12px}
+.cl-done{background:var(--acd);color:#fff;border:none;border-radius:9px;font:600 13px var(--body);padding:9px 16px;cursor:pointer}
+.cl-done:hover{background:var(--gr)}
+.cl-gate{margin-top:14px;font:600 13px var(--body);color:var(--tf);display:flex;align-items:center;gap:8px}
+.cl-gate.done{color:var(--ac)}
+
+/* gating: locked nodes are a blurred teaser, unreadable + non-interactive until unlocked */
+
+/* glossary hover terms */
+.gloss{border-bottom:1.5px dotted var(--ac);cursor:help;color:inherit;transition:color .15s}
+.gloss:hover{color:var(--ac)}
+#gloss-tip{position:fixed;z-index:200;max-width:320px;background:#0f1613;color:#EDEFEC;border:1px solid rgba(52,183,125,.4);
+  border-radius:11px;padding:12px 15px;font:400 13.5px/1.55 var(--body);box-shadow:0 12px 34px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(4px);pointer-events:none;transition:opacity .18s,transform .18s}
+#gloss-tip.on{opacity:1;transform:translateY(0)}
+#gloss-tip b{color:var(--ac)}
+
+.node{transition:opacity .55s ease,filter .55s ease,transform .55s ease}
+.node.locked{filter:blur(7px);opacity:.4;pointer-events:none;user-select:none}
+.node.locked .spot-trigger{opacity:.5}
+.node.unlocking{filter:blur(0);opacity:1}
+.lock-hint{display:inline-flex;align-items:center;gap:8px;margin-top:2px;font:600 13px var(--body);color:var(--tf)}
+.lock-hint svg{width:14px;height:14px}
+/* end card also gated */
+.endcard.locked{filter:blur(7px);opacity:.4;pointer-events:none}
+
+.endcard{padding-left:calc(3vw + 46px);margin-top:20px}
+.endcard .ec{background:linear-gradient(170deg,rgba(52,183,125,.12),rgba(52,183,125,.04));border:1px solid rgba(52,183,125,.3);border-radius:16px;padding:24px 28px;max-width:820px}
+.endcard .ec h3{font-family:var(--disp);font-size:22px;font-weight:600;margin-bottom:10px}
+.endcard .ec p{font-size:15px;line-height:1.6;color:var(--tm);margin-bottom:16px}
+
+/* ── email mock: shared ── */
+.mail{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,.22);transition:border-color .2s,box-shadow .2s}
+.mail-hd{padding:13px 17px;border-bottom:1px solid var(--line);background:#F5F7F4}
+.mail-row{display:flex;gap:8px;font-size:13px;line-height:1.5;color:var(--ink-m);margin-bottom:3px}
+.mail-row .ml{font:700 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-f);width:52px;flex:none;padding-top:2px}
+.mail-subj{font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.4}
+.mail-bd{padding:15px 17px;font-size:14px;line-height:1.65;color:var(--ink-m)}
+.mail-bd p{margin-bottom:9px}
+.mail-link{font:500 13px var(--mono);color:#3f6ea3;word-break:break-all;margin-bottom:11px}
+.mail-btn{display:inline-block;background:#e8ece7;color:var(--ink-m);border-radius:8px;padding:8px 15px;font:600 13px var(--body)}
+.mail-foot{padding:10px 17px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink-f)}
+
+/* ── cold open: two emails side by side ── */
+.compare-spot{max-width:1060px}
+.cmp-q{font-family:var(--disp);font-size:19px;font-weight:600;color:var(--tw);margin-bottom:14px}
+.mailgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:1100px){.mailgrid{grid-template-columns:1fr}}
+.mailwrap{display:flex;flex-direction:column}
+.mailwrap .mail{flex:1;display:flex;flex-direction:column}
+.mailwrap .mail-bd{flex:1}
+.mail-pick{margin-top:10px;background:rgba(52,183,125,.1);border:1px solid rgba(52,183,125,.45);color:var(--ac);font:600 14px var(--body);padding:11px;border-radius:11px;cursor:pointer;transition:all .16s}
+.mail-pick:hover{background:rgba(52,183,125,.2)}
+.mailwrap.picked .mail-pick{opacity:.35;pointer-events:none}
+.mail-verdict{display:none;margin-top:10px;font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:9px;border-radius:9px;text-align:center}
+.mailwrap.revealed .mail-pick{display:none}
+.mailwrap.revealed .mail-verdict{display:block}
+.mailwrap.is-fake .mail{border-color:var(--rd);box-shadow:0 0 0 3px rgba(224,87,79,.16),0 10px 28px rgba(0,0,0,.22)}
+.mailwrap.is-fake .mail-verdict{background:var(--rl);color:#ff9d96}
+.mailwrap.is-real .mail{border-color:var(--gr);box-shadow:0 0 0 3px rgba(46,173,107,.16),0 10px 28px rgba(0,0,0,.22)}
+.mailwrap.is-real .mail-verdict{background:var(--gl);color:#6fd6a3}
+.cmp-fb{margin-top:16px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px 22px;font-size:14.5px;line-height:1.65;color:var(--ink-m);display:none}
+.cmp-fb.show{display:block;animation:rise .4s}
+.cmp-fb b{color:var(--ink)}
+.cmp-fb .xpb{display:inline-block;font:700 11px var(--mono);color:var(--acd);background:rgba(46,173,107,.12);border-radius:20px;padding:3px 10px;margin-bottom:9px}
+.cmp-fb .v-ok{color:var(--gr);font-weight:700}.cmp-fb .v-no{color:var(--rd);font-weight:700}
+
+/* ── spot the threat: clickable segments ── */
+.flags-spot{max-width:880px}
+.flags-hint{font:600 13px var(--body);color:var(--tf);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.fseg{background:rgba(26,26,26,.045);border-bottom:1.5px solid rgba(26,26,26,.12);border-radius:3px;padding:0 2px;cursor:pointer;transition:all .15s}
+.fseg:hover{background:rgba(26,26,26,.09);border-color:rgba(26,26,26,.3)}
+.fseg.hit{background:var(--rl);border-color:var(--rd);color:#a8332b;font-weight:600;cursor:default}
+.fseg.okhit{background:rgba(46,173,107,.14);border-color:var(--gr);color:#1f7a4d;cursor:default}
+.fseg.missed{background:rgba(224,87,79,.14);border-color:var(--rd);border-bottom-style:dashed;color:#a8332b;cursor:default}
+.flags-bar{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}
+.flags-count{font:700 13px var(--mono);color:var(--ac)}
+.flags-show{background:none;border:1px solid rgba(255,255,255,.2);border-radius:9px;color:var(--tm);font:600 13px var(--body);padding:8px 14px;cursor:pointer;transition:all .15s}
+.flags-show:hover{border-color:var(--ac);color:var(--ac)}
+.flags-list{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+.fl{display:flex;gap:12px;background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--rd);border-radius:11px;padding:13px 16px;font-size:14px;line-height:1.6;color:var(--ink-m);animation:rise .35s}
+.fl.decoy{border-left-color:var(--gr)}
+.fl b{color:var(--ink)}
+.fl .fl-ic{flex:none;font:700 11px var(--mono);color:var(--rd);padding-top:2px}
+.fl.decoy .fl-ic{color:var(--gr)}
+.flags-fb{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:17px 20px;font-size:14.5px;line-height:1.65;color:var(--ink-m);display:none}
+.flags-fb.show{display:block;animation:rise .4s}
+
+
+/* ── self-audit ── */
+.audit-spot{max-width:820px}
+.aud-q{font-family:var(--disp);font-size:19px;font-weight:600;color:var(--tw);margin-bottom:14px}
+.aud{display:flex;flex-direction:column;gap:9px}
+.aud-i{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:0;overflow:hidden;box-shadow:var(--sh)}
+.aud-r{display:flex;gap:13px;align-items:flex-start;padding:14px 17px;cursor:pointer;transition:background .15s}
+.aud-r:hover{background:#f7f9f6}
+.aud-b{width:20px;height:20px;flex:none;border:2px solid #c3ccc6;border-radius:6px;margin-top:1px;transition:all .15s;position:relative}
+.aud-i.on .aud-b{background:var(--acd);border-color:var(--acd)}
+.aud-i.on .aud-b::after{content:'\2713';position:absolute;inset:0;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.aud-t{font-size:15px;line-height:1.5;color:var(--ink)}
+.aud-w{max-height:0;overflow:hidden;transition:max-height .3s ease;font-size:14px;line-height:1.6;color:var(--ink-m);background:#fff;border-top:1px solid transparent}
+.aud-i.on .aud-w{max-height:260px;border-top-color:var(--line);padding:13px 17px 15px}
+.aud-bar{display:flex;align-items:center;gap:14px;margin-top:15px;flex-wrap:wrap}
+.aud-n{font:700 13px var(--mono);color:var(--ac)}
+.aud-go{background:rgba(52,183,125,.12);border:1px solid rgba(52,183,125,.45);color:var(--ac);border-radius:10px;padding:10px 20px;font:600 14px var(--body);cursor:pointer;transition:all .15s}
+.aud-go:hover{background:rgba(52,183,125,.22)}
+.aud-fb{margin-top:15px;background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:18px 21px;font-size:14.5px;line-height:1.65;color:var(--ink-m);display:none}
+.aud-fb.show{display:block;animation:rise .4s}
+
+
+/* ── optional depth ── */
+.more{margin-top:15px;max-width:980px}
+.more-t{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.14);
+  color:var(--tm);font:600 13.5px var(--body);padding:9px 15px;border-radius:11px;cursor:pointer;transition:all .18s}
+.more-t:hover{border-color:rgba(255,255,255,.3);color:var(--tw)}
+.more-t .cv{width:8px;height:8px;border-right:2px solid var(--tf);border-bottom:2px solid var(--tf);transform:rotate(45deg) translateY(-2px);transition:transform .25s}
+.more.open .more-t .cv{transform:rotate(225deg) translateY(-1px)}
+.more.open .more-t{color:var(--tw);border-color:rgba(255,255,255,.26)}
+.more-b{max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .3s ease,margin .3s}
+.more.open .more-b{max-height:1200px;opacity:1;margin-top:12px}
+.more-in{background:rgba(255,255,255,.04);border-left:2px solid rgba(255,255,255,.18);border-radius:0 12px 12px 0;
+  padding:16px 20px;font-size:15px;line-height:1.7;color:var(--tm)}
+.more-in b{color:var(--tw)}
+@media (max-width:820px){.more-in{padding:14px 16px;font-size:14.5px}}
+
+.endcard .ec-tk{display:flex;flex-direction:column;gap:11px;margin:4px 0 18px}
+.endcard .ec-t{display:flex;gap:12px;font-size:14.5px;line-height:1.6;color:var(--tm)}
+.endcard .ec-t span{font-size:17px;flex:none;line-height:1.4}
+.endcard .ec-t b{color:var(--tw);font-weight:600}
+.endcard .ec .nextbtn{background:var(--ac);color:#08130d;border:none;border-radius:11px;padding:12px 22px;font:600 15px var(--body);cursor:pointer}
+
+/* ══ mobile: rail becomes a compact header, content takes the full width ══ */
+@media (max-width:820px){
+  .stage{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
+  .rail{padding:14px 20px 16px;justify-content:flex-start;border-bottom:1px solid rgba(255,255,255,.09)}
+  .rail .sh{width:30px;margin-bottom:8px}
+  .rail .eyebrow{font-size:10.5px;letter-spacing:.13em;margin-bottom:7px}
+  .rail h1{font-size:23px;margin-bottom:0;line-height:1.12}
+  .rail .r-sub{display:none}
+  .top{padding:12px 20px}
+  .brand{font-size:16px}
+  .chip{font-size:11px;padding:5px 11px}
+  .track{padding:22px 4vw 34vh 4vw;max-width:100%}
+  .spine,.spine-fill{left:calc(4vw + 8px)}
+  .node{padding-left:calc(4vw + 30px);margin-bottom:44px}
+  .node .dot{left:4vw;width:17px;height:17px}
+  .node .beat{font-size:20px}
+  .node .body{font-size:15.5px;line-height:1.65}
+  .spot-card{padding-left:17px;padding-right:17px}
+  .spot-card.open{padding-top:18px;padding-bottom:20px;max-height:2400px}
+  .spot-q{font-size:17px}
+  .spot-opt{padding:12px 14px;font-size:14.5px}
+  .mailgrid{grid-template-columns:1fr}
+  .mail-bd,.mail-hd{padding-left:14px;padding-right:14px}
+  .cl-item,.f,.fl{padding-left:15px;padding-right:15px}
+  .aud-r{padding:12px 14px}
+  .aud-i.on .aud-w{padding-left:14px;padding-right:14px}
+  .flags-bar,.aud-bar{gap:10px}
+  .ec{padding:24px 20px}
+  .endcard .ec h3{font-size:23px}
+}
+@media (max-width:820px) and (orientation:landscape){
+  .rail{padding:10px 20px 11px}
+  .rail h1{font-size:19px}
+  .rail .sh{display:none}
+  .track{padding-top:16px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><div class="brand">Defence<span>Lab</span></div>
+    <div class="top-right"><div class="chip" id="xp">0 XP</div>
+      <button class="fs-btn" onclick="fsT()"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="1,5 1,1 5,1"/><polyline points="9,1 13,1 13,5"/><polyline points="13,9 13,13 9,13"/><polyline points="5,13 1,13 1,9"/></svg></button>
+    </div>
+  </div>
+  <div class="stage">
+    <div class="rail">
+      <svg class="sh" viewBox="0 0 120 124"><path d="M60 6 L106 24 L106 66 Q106 104 60 120 Q14 104 14 66 L14 24 Z" fill="rgba(52,183,125,.06)" stroke="var(--ac)" stroke-width="3"/><path d="M60 30 L52 54 L66 62 L54 92" fill="none" stroke="var(--rd)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="eyebrow">Course 3 · Physical Security · light</div>
+      <h1>The Sticky Note in the Photo</h1>
+      <div class="r-sub">Start by looking at the room you are in. Then work through screens, paper and devices — and the two settings that do most of the work.</div>
+
+    </div>
+    <div class="scroll" id="scroll">
+      <div class="track" id="track">
+        <div class="spine"></div><div class="spine-fill" id="spineFill"></div>
+        <!-- nodes injected -->
+      </div>
+      <div class="scroll-hint" id="hint">scroll<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+  </div>
+</div>
+<script>
+const XPW={sure:3,pretty:2,guess:1};
+/* ===== SCENE 1 as a vertical timeline with spots ===== */
+const NODES=[
+ {date:'Start here',crit:0,beat:'Look up for a second',
+  body:'Before this becomes theory, check the room you are actually in. Tick anything true right now — if you are at home today, answer for the last place you worked around other people. Nothing is scored. Most of these stay invisible until you deliberately look, which is why they persist.',
+  spot:{type:'audit',topic:'space',q:'True in your space right now?',
+    items:[
+     {t:'Someone walking past could read my screen',why:'The least noticed one, because you cannot see your own screen from behind. Readable distance is further than people assume.'},
+     {t:'There is paper on my desk with work information on it',why:'Paper does not lock, does not log who read it, and never tells you it was photographed.'},
+     {t:'A password or code is written somewhere visible',why:'A rational response to eleven passwords. The problem is not the person — it is that everyone in the room inherits the access.'},
+     {t:'My laptop would stay here if I stepped out for ten minutes',why:'Whether that matters depends entirely on whether the screen locks itself, which most people have never checked.'},
+     {t:'I have left something in a printer tray and collected it later',why:'Everyone walks past the tray, nobody owns it, and what sits there was important enough to print.'},
+     {t:'People can get into this space without a badge or a key',why:'Not automatically a problem. It just means the door is not doing the work you might assume.'}],
+    fb:'Whatever you ticked, none of it makes you careless. You print because paper is easier to read, you write the code down because there are eleven of them, you leave the laptop because you are coming straight back. Physical security fails through convenience, not negligence — which is why telling people to be more careful has never worked.<br><br>It matters because physical access skips everything else. Encryption, MFA and the security team all assume the attacker is somewhere else, coming down a wire. Someone standing behind you is subject to none of it — and does not need to be clever.'}},
+
+ {date:'July 2017',crit:1,beat:'The password was in the photograph',
+  body:'The Associated Press ran a routine story about Hawaii’s emergency management agency, with a photo of an employee at his workstation. On the monitor, on a yellow sticky note, was a password — legible in the published picture. The agency confirmed it was real and changed it. Nobody broke in and nobody was tricked.<br><br>The lesson is about backgrounds rather than cameras. People compose themselves for a photo and forget what is behind them: open mail, dashboards, whiteboards, notes stuck to a monitor. The same happens on video calls and conference livestreams. Faces are usually fine. The background is what nobody checks.'},
+
+ {date:'Screens',crit:0,beat:'Further away than you think',
+  body:'On a train, laptop text is readable from the seat behind and often across the aisle. In an open-plan office, anyone heading to the kitchen passes several screens at reading distance. At home there are fewer strangers but more people covered by nothing you signed — flatmates, family, someone doing repairs — and a video call broadcasts whatever is behind you. What leaks is rarely dramatic: a customer name, a salary line, a supplier’s bank details. Two fixes cover most of it. Sit with your back to a wall rather than a walkway, and learn the lock shortcut — <b>Win+L</b>, or <b>Ctrl+Cmd+Q</b> on a Mac — until you do it without thinking every time you stand up.',
+  spot:{type:'quiz',topic:'screens',q:'You are on a train working on something confidential. The best available protection is:',
+    opts:[
+     ['Turning the screen brightness right down',0],
+     ['Sitting where the wall is behind your screen',1],
+     ['Working quickly so it is on screen for less time',0],
+     ['Angling the laptop lid slightly away from the aisle',0]],
+    fb:'Position, not settings. If nobody can get behind the screen, nothing else is needed. Dimming makes it unreadable for you first; angling helps against one seat and not the one opposite. A privacy filter is worth having if you travel often — it makes the screen look black from the side. And auto-lock after two to five minutes removes the question of what is readable while you are away from the desk at all.'}},
+
+ {date:'Paper',crit:0,beat:'The tray nobody owns',
+  body:'Paper is the format with no access control. Once printed, a document can be read, photographed or carried out by anyone passing, with no record that it happened. Shared printers add a specific gap: the minutes between pressing print and collecting. <b>Secure print</b> — also called pull print — holds the job until you enter a PIN or tap a badge at the machine, which closes it. And if something you printed is not where you left it, that gets reported rather than quietly reprinted: a confidential document nobody can account for is a potential incident, and reprinting is the one response that guarantees nobody finds out where the first copy went. Whiteboards deserve the same thought — they are built to be read across a room, and they end up in the background of photographs.',
+  more:{t:'What counts as an incident, and why the timing matters',
+    body:'Under GDPR and most equivalent rules, the reporting clock starts when someone becomes <i>aware</i> of a possible loss — not when it is confirmed, and not when the investigation finishes. Organisations generally have 72 hours to notify a regulator once that threshold is crossed. That is why security teams would rather hear about a missing printout that turns up an hour later than find out about it three weeks on, and why "I assumed a colleague tidied it away" is a worse answer than it sounds.'}},
+
+ {date:'Devices',crit:0,beat:'Three minutes is enough',
+  body:'A laptop left on a café table while you order, a bag in a car boot, a phone face-up in a meeting room. A stolen laptop that is locked and encrypted is a bad afternoon and an insurance claim. An unencrypted one is a data breach. Two settings decide which you are in: <b>full-disk encryption</b> and a short <b>auto-lock</b>. Both are free, both are on by default on recent phones, and both are often off on laptops that have had several owners.',
+  more:{t:'Why the login screen stops mattering',
+    body:'A password protects the operating system, and the operating system is only involved if the thief boots your machine normally. Remove the drive, connect it to another computer as external storage, and there is no login to pass — the files are simply there.<br><br>Encryption changes the shape of the problem: the disk contents are scrambled with a key derived from your credentials, so an attacker holding the physical drive sees noise. Remote wipe is genuinely useful but conditional — the device has to power on and reach the network, and anyone who steals hardware for the data will not oblige.'},
+  spot:{type:'predict',topic:'devices',q:'Your work laptop is stolen. Which single fact most determines how bad this gets?',
+    opts:[
+     ['Whether the disk was encrypted',1],
+     ['How strong your login password was',0],
+     ['Whether you can wipe it remotely',0]],
+    fb:'Encryption. It is the one that holds regardless of what anyone does next, which makes it the first thing to check rather than the last.'}},
+
+ {date:'Look at someone else’s',crit:0,beat:'A desk, five minutes after its owner left',
+  body:'Here is a colleague’s desk as a visitor would find it — someone in the building legitimately, passing on their own for a couple of minutes. Click whatever is worth having. Some of it genuinely is not, and knowing which is which matters as much as spotting the rest.',
+  spot:{type:'flags',topic:'paper',
+    mail:[
+      {label:'Screen',parts:[[0,'Email client open, inbox visible'],' · ',[1,'screen not locked']]},
+      {label:'On the desk',parts:[[2,'A sticky note on the monitor reading “VPN: Summer2024!”']]},
+      {body:1,parts:[[3,'A printed spreadsheet titled “Q3 headcount — salary bands”']]},
+      {body:1,parts:[[4,'The building access badge, still on its lanyard']]},
+      {body:1,parts:[[5,'A phone, face up, showing message previews']]},
+      {body:1,parts:['A mug, a plant, and ',[6,'a framed photo of two children']]},
+      {body:1,parts:[[7,'A notebook, closed'],', and ',[8,'a whiteboard showing a system diagram with server names']]},
+      {foot:1,parts:['Owner: away from desk, coat still on the chair']}],
+    flags:[
+      {ok:0,why:'<b>An open inbox</b> — subject lines alone give away current projects, who talks to whom, and which suppliers are in play. No access needed; it is already on screen.'},
+      {ok:0,why:'<b>Unlocked</b> — this turns everything else from a look into a session. Two minutes is enough to send mail as this person, which is far harder to unpick afterwards.'},
+      {ok:0,why:'<b>A password on the monitor</b> — the Hawaii photograph, minus the newspaper. Worth treating as a symptom: people write passwords down when there are too many to hold.'},
+      {ok:0,why:'<b>Salary bands on paper</b> — personal data about named colleagues, unattended and easy to photograph. The item here most likely to become a formal privacy incident.'},
+      {ok:0,why:'<b>The badge</b> — the physical key, left with the door. Cloneable in seconds with cheap equipment, and its design shows a forger what a convincing one looks like.'},
+      {ok:0,why:'<b>Message previews</b> — a lock screen showing content leaks one-time codes, which completes an account takeover that already has the password. One setting to turn off.'},
+      {ok:1,why:'<b>A family photo</b> is not a security problem, and treating it as one is how these lists lose people. Nothing follows from a stranger seeing it.'},
+      {ok:1,why:'<b>A closed notebook</b> is fine as it sits. Worth locking away overnight rather than during a coffee break.'},
+      {ok:0,why:'<b>The whiteboard</b> — server names and system layout are reconnaissance that would otherwise take weeks. Also the thing most often captured by accident in the background of a photo.'}],
+    fb:'Seven things worth having, two that only look like it. Nothing here required breaking anything, and every item was left by someone doing ordinary work. Two decisions would have removed most of it: locking the screen, and not printing what did not need printing.'}},
+
+ {scene2:1,date:'Your settings',crit:0,beat:'Four things to sort out',
+  body:'Two settings and two habits. The settings take about a minute each and then work permanently, which makes them the better use of your attention. Open each for the steps, then mark it once you intend to do it.',
+  spot:{type:'checklist',
+    items:[
+      {topic:'devices',t:'Check encryption and auto-lock on your laptop',
+       how:'These two decide whether a stolen device is an inconvenience or an incident, and both are set once.',
+       steps:['Windows: search “Device encryption” or BitLocker and confirm it is on. macOS: System Settings → Privacy & Security → FileVault','Set the screen to lock after two to five minutes, and require the password on wake','Learn the manual lock shortcut — Win+L, or Ctrl+Cmd+Q on a Mac'],
+       itnote:'On a managed work laptop these may be set centrally. If encryption appears to be off, raise it — usually a misconfiguration rather than a decision.'},
+      {topic:'screens',t:'Turn off message previews on your lock screen',
+       how:'A locked phone that displays message content will show a verification code to whoever is holding it.',
+       steps:['iPhone: Settings → Notifications → Show Previews → When Unlocked','Android: Settings → Notifications → Lock screen → hide sensitive content','Check the same on your laptop, where banners can appear over a locked screen'],
+       itnote:''},
+      {topic:'paper',t:'Find out how printing works where you work',
+       how:'Secure print closes the gap between sending a document and collecting it, which is where most paper goes missing.',
+       steps:['Ask whether your printers support secure or pull print — collection by PIN or badge','If they do, make it the default rather than something you remember','Anything with personal or financial data gets collected immediately, or not printed'],
+       itnote:'If secure print is not available, ask what the expectation is for confidential documents — and where the shredding actually happens.'}
+    ]}}
+
+];
+
+const scroll=document.getElementById('scroll'),track=document.getElementById('track'),spineFill=document.getElementById('spineFill');
+let xp=0;const addXP=n=>{xp+=n;document.getElementById('xp').textContent=xp+' XP';};
+
+// build nodes
+NODES.forEach((n,i)=>{
+  const el=document.createElement('div');el.className='node'+(n.crit?' crit':'')+(n.scene2?' s2':'');el.dataset.i=i;
+  let h=`<div class="dot"></div><div class="date">${n.date}</div><div class="beat">${n.beat}</div><div class="body">${n.body}</div>`;
+  if(n.more){
+    h+=`<div class="more" id="more-${i}"><button class="more-t" data-more="${i}"><span class="cv"></span>${n.more.t}</button>
+      <div class="more-b"><div class="more-in">${n.more.body}</div></div></div>`;
+  }
+  if(n.spot){
+    const s=n.spot;const isExp=s.type==='experience';const isCheck=s.type==='checklist';
+    if(isCheck){
+      h+=`<div class="spot checklist-spot"><div class="personal" id="personal-${i}"></div><div class="checklist" id="cl-${i}">`;
+      s.items.forEach((it,j)=>{
+        h+=`<div class="cl-item" data-cl="${i}" data-idx="${j}" data-topic="${it.topic}">
+          <div class="cl-row"><div class="cl-box" data-check="${i}-${j}">\u2713</div><div class="cl-t">${it.t}</div><div class="cl-flag">start here</div><button class="cl-toggle" data-how="${i}-${j}">How ▾</button></div>`;
+        h+=`<div class="cl-how" id="how-${i}-${j}"><p class="chow">${it.how}</p>`;
+        if(it.steps){h+='<ol class="csteps">'+it.steps.map(x=>`<li>${x}</li>`).join('')+'</ol>';}
+        if(it.itnote){h+=`<div class="cl-itnote">\u2139\uFE0F ${it.itnote}</div>`;}
+        h+=`<button class="cl-done" data-done="${i}-${j}">I\u2019ll do this \u2713</button></div></div>`;
+      });
+      h+=`</div><div class="cl-gate" id="gate-${i}">Mark whichever you mean to do — they go into your plan below.</div></div>`;
+    } else if(s.type==='audit'){
+      h+=`<div class="spot audit-spot"><div class="aud-q">${s.q}</div><div class="aud">`;
+      s.items.forEach((it,j)=>{
+        h+=`<div class="aud-i" id="aud-${i}-${j}"><div class="aud-r" data-aud="${i}-${j}"><span class="aud-b"></span><span class="aud-t">${it.t}</span></div><div class="aud-w">${it.why}</div></div>`;
+      });
+      h+=`</div><div class="aud-bar"><span class="aud-n" id="an-${i}">0 ticked</span><button class="aud-go" data-audgo="${i}">Done \u2014 show me why these matter</button></div><div class="aud-fb" id="afb-${i}"></div></div>`;
+    } else if(s.type==='compare'){
+      h+=`<div class="spot compare-spot"><div class="cmp-q">${s.q}</div><div class="mailgrid">`;
+      s.mails.forEach((m,j)=>{
+        h+=`<div class="mailwrap" data-cmp="${i}" data-j="${j}">
+          <div class="mail">
+            <div class="mail-hd">
+              <div class="mail-row"><span class="ml">From</span><span>${m.from} &lt;${m.addr}&gt;</span></div>
+              <div class="mail-row"><span class="ml">Subject</span><span class="mail-subj">${m.subj}</span></div>
+            </div>
+            <div class="mail-bd">${m.lines.map(l=>`<p>${l}</p>`).join('')}
+              <div class="mail-link">${m.link}</div>
+              <div class="mail-btn">${m.btn}</div>
+            </div>
+          </div>
+          <button class="mail-pick" data-pick="${i}-${j}">This one\u2019s fake</button>
+          <div class="mail-verdict"></div>
+        </div>`;
+      });
+      h+=`</div><div class="cmp-fb" id="cfb-${i}"></div></div>`;
+    } else if(s.type==='flags'){
+      const total=s.flags.filter(f=>!f.ok).length;
+      h+=`<div class="spot flags-spot"><div class="flags-hint">Click whatever is worth having \u2014 some of it genuinely isn\u2019t.</div><div class="mail">`;
+      s.mail.forEach(row=>{
+        const inner=row.parts.map(p=>typeof p==='string'?p:`<span class="fseg" data-fseg="${i}-${p[0]}">${p[1]}</span>`).join('');
+        if(row.label){h+=`<div class="mail-hd" style="border-bottom:${row.label==='Subject'?'1px solid var(--line)':'none'};padding-bottom:${row.label==='Subject'?'12px':'4px'}"><div class="mail-row"><span class="ml">${row.label}</span><span${row.label==='Subject'?' class="mail-subj"':''}>${inner}</span></div></div>`;}
+        else if(row.link){h+=`<div class="mail-bd" style="padding-top:0;padding-bottom:6px"><div class="mail-link">${inner}</div></div>`;}
+        else if(row.foot){h+=`<div class="mail-foot">${inner}</div>`;}
+        else{h+=`<div class="mail-bd" style="padding-top:6px;padding-bottom:6px"><p style="margin:0">${inner}</p></div>`;}
+      });
+      h+=`</div><div class="flags-bar"><span class="flags-count" id="fc-${i}">Found 0 of ${total}</span><button class="flags-show" data-fshow="${i}">Show what I missed</button></div>
+        <div class="flags-list" id="flist-${i}"></div><div class="flags-fb" id="ffb-${i}"></div></div>`;
+    } else if(s.type==='takeaways'){
+      h+=`<div class="spot takeaways"><div class="tk-list">`;
+      s.items.forEach(t=>h+=`<div class="tk"><div class="tk-ic">${t[0]}</div><div><div class="tk-t">${t[1]}</div><div class="tk-b">${t[2]}</div></div></div>`);
+      h+=`</div></div>`;
+    } else if(s.type==='slider'){
+      h+=`<div class="spot slider-spot"><div class="rslider">
+        <div class="rslider-q">Drag to set the password length — watch how long it takes to crack.</div>
+        <div class="rslider-row"><span class="rslider-label">Length</span>
+          <input type="range" class="rslider-input" id="rs-${i}" min="6" max="30" value="10" oninput="updateSlider(${i})">
+          <span class="rslider-val" id="rsv-${i}">10</span></div>
+        <div class="rslider-result" id="rsr-${i}">
+          <div class="rslider-score" id="rss-${i}">—</div>
+          <div class="rslider-info"><div class="rslider-level" id="rsl-${i}"></div><div class="rslider-explain" id="rse-${i}"></div></div>
+        </div>
+        <div class="rslider-bar"><div class="rslider-marker" id="rsm-${i}"></div></div>
+        <div class="rslider-eg" id="rseg-${i}"></div>
+        <div class="rslider-src">Illustrative estimate — real crack times depend on the attacker\u2019s hardware and method. Orders of magnitude follow the <a href="https://www.hivesystems.com/password" target="_blank" rel="noopener">Hive Systems password table</a>; official guidance favouring passphrases is in <a href="https://pages.nist.gov/800-63-4/sp800-63b.html" target="_blank" rel="noopener">NIST SP 800-63B</a>.</div>
+      </div></div>`;
+    } else {
+      h+=`<div class="spot"><button class="spot-trigger${isExp?' q-exp':''}" data-spot="${i}"><span class="pulse"></span>${isExp?'Your experience':(s.type==='quiz'?'Your call':'What happens next?')}</button>
+        <div class="spot-card${isExp?' exp':''}" id="card-${i}"><div class="spot-q">${s.q}</div>`;
+      if(isExp){
+        h+=`<div class="exp-scale">`+s.scale.map((x,j)=>`<button class="exp-btn" data-exp="${i}" data-j="${j}">${x}</button>`).join('')+`</div><div class="exp-note" id="note-${i}">${s.note}</div>`;
+      }else{
+        h+=`<div class="spot-opts">`+s.opts.map((o,j)=>`<button class="spot-opt" data-opt="${i}" data-j="${j}">${o[0]}</button>`).join('')+`</div>
+          <div class="spot-fb" id="fb-${i}"><span class="xpb" id="xpb-${i}"></span><div id="fbt-${i}"></div></div>`;
+      }
+      h+=`</div></div>`;
+    }
+  }
+  el.innerHTML=h;track.appendChild(el);
+});
+// track answers by topic for personalization
+const topicResults={}; // topic -> {right:n, wrong:n}
+function recordAnswer(topic,ok){if(!topic)return;if(!topicResults[topic])topicResults[topic]={right:0,wrong:0};topicResults[topic][ok?'right':'wrong']++;}
+
+// end card
+const end=document.createElement('div');end.className='endcard';
+end.innerHTML=`<div class="ec"><h3>That\u2019s the course.</h3>
+  <p>You looked at your own space, then at someone else\u2019s. Three things worth keeping:</p>
+  <div class="ec-tk">
+    <div class="ec-t"><span>\ud83d\udc40</span><div><b>Physical access ignores your other defences.</b> Encryption and MFA assume the attacker is elsewhere. Someone reading your screen or taking a printout is covered by none of it.</div></div>
+    <div class="ec-t"><span>\u2328\ufe0f</span><div><b>Two settings beat any amount of vigilance.</b> Full-disk encryption and a short auto-lock keep working on the days you are tired and not thinking about security.</div></div>
+    <div class="ec-t"><span>\ud83d\uddc2\ufe0f</span><div><b>Paper has no access control.</b> Once printed it can be read, photographed or removed with no record. Collect it immediately, or do not print it.</div></div>
+  </div>
+  <div class="yourplan" id="yourplan"></div><button class="nextbtn">Finish Scene \u2192</button></div>`;
+track.appendChild(end);
+
+// spot open/close
+track.addEventListener('click',e=>{
+  const trig=e.target.closest('.spot-trigger');
+  if(trig){const i=trig.dataset.spot;const card=document.getElementById('card-'+i);card.classList.toggle('open');
+    if(card.classList.contains('open'))setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),120);return;}
+  const opt=e.target.closest('.spot-opt');
+  if(opt){const i=opt.dataset.opt,j=+opt.dataset.j;const s=NODES[i].spot;const fb=document.getElementById('fb-'+i);
+    if(fb.classList.contains('show'))return;
+    const ci=s.opts.findIndex(o=>o[1]===1);const ok=j===ci;
+    [...document.querySelectorAll('[data-opt="'+i+'"]')].forEach((o,m)=>{o.style.pointerEvents='none';if(m===ci)o.classList.add('correct');else if(m===j)o.classList.add('wrong');});
+    const g=ok?3:1;addXP(g);document.getElementById('xpb-'+i).textContent='+'+g+' XP';
+    document.getElementById('fbt-'+i).innerHTML=(ok?'<b class="v-ok">\u2713 That\u2019s right.</b> ':'<b class="v-no">\u2717 Not quite.</b> ')+s.fb;
+    fb.classList.add('show');recordAnswer(s.topic,ok);markSeen(i);return;}
+  const mt=e.target.closest('[data-more]');
+  if(mt){document.getElementById('more-'+mt.dataset.more).classList.toggle('open');return;}
+  // self-audit: tick an observation
+  const ar=e.target.closest('[data-aud]');
+  if(ar){const[i,j]=ar.dataset.aud.split('-').map(Number);
+    const el=document.getElementById('aud-'+i+'-'+j);
+    el.classList.toggle('on');
+    const n=document.querySelectorAll('.audit-spot .aud-i.on').length;
+    const c=document.getElementById('an-'+i); if(c)c.textContent=n+' ticked';
+    return;}
+  const ag=e.target.closest('[data-audgo]');
+  if(ag){const i=+ag.dataset.audgo;const s=NODES[i].spot;
+    const n=document.querySelectorAll('.audit-spot .aud-i.on').length;
+    addXP(2);
+    const fb=document.getElementById('afb-'+i);
+    fb.innerHTML=(n?`<b>${n} of ${s.items.length}.</b> `:'<b>Nothing ticked.</b> ')+s.fb;
+    fb.classList.add('show');ag.remove();
+    recordAnswer(s.topic,true);markSeen(i);return;}
+  // cold open: pick the fake
+  const pick=e.target.closest('.mail-pick');
+  if(pick){const[i,j]=pick.dataset.pick.split('-').map(Number);const s=NODES[i].spot;
+    const ok=!!s.mails[j].fake;
+    document.querySelectorAll('[data-cmp="'+i+'"]').forEach(w=>{
+      const m=s.mails[+w.dataset.j];
+      w.classList.add('revealed',m.fake?'is-fake':'is-real');
+      w.querySelector('.mail-verdict').textContent=m.fake?'Fake':'Genuine';
+    });
+    const g=ok?3:1;addXP(g);
+    const fb=document.getElementById('cfb-'+i);
+    fb.innerHTML=`<span class="xpb">+${g} XP</span><div>`+(ok?'<span class="v-ok">\u2713 That\u2019s the one.</span> ':'<span class="v-no">\u2717 Not that one.</span> ')+s.fb+'</div>';
+    fb.classList.add('show');recordAnswer(s.topic,ok);markSeen(i);return;}
+  // spot the threat: click a segment
+  const seg=e.target.closest('.fseg');
+  if(seg&&!seg.classList.contains('hit')&&!seg.classList.contains('okhit')&&!seg.classList.contains('missed')){
+    const[i,fi]=seg.dataset.fseg.split('-').map(Number);const s=NODES[i].spot;const f=s.flags[fi];
+    seg.classList.add(f.ok?'okhit':'hit');
+    const list=document.getElementById('flist-'+i);
+    const row=document.createElement('div');row.className='fl'+(f.ok?' decoy':'');
+    row.innerHTML=`<span class="fl-ic">${f.ok?'MINOR':'USEFUL'}</span><span>${f.why}</span>`;
+    list.appendChild(row);
+    if(!f.ok){addXP(1);}
+    updateFlagCount(i);return;}
+  // spot the threat: reveal the rest
+  const fshow=e.target.closest('[data-fshow]');
+  if(fshow){const i=+fshow.dataset.fshow;const s=NODES[i].spot;const list=document.getElementById('flist-'+i);
+    s.flags.forEach((f,fi)=>{
+      if(f.ok)return;
+      const el=document.querySelector('[data-fseg="'+i+'-'+fi+'"]');
+      if(el&&!el.classList.contains('hit')){el.classList.add('missed');
+        const row=document.createElement('div');row.className='fl';
+        row.innerHTML=`<span class="fl-ic">MISSED</span><span>${f.why}</span>`;list.appendChild(row);}
+    });
+    fshow.remove();updateFlagCount(i,true);return;}
+  const eb=e.target.closest('.exp-btn');
+  if(eb){const i=eb.dataset.exp;[...document.querySelectorAll('[data-exp="'+i+'"]')].forEach(x=>x.classList.remove('sel'));eb.classList.add('sel');
+    document.getElementById('note-'+i).classList.add('show');if(!eb.dataset.c){eb.dataset.c=1;addXP(2);}markSeen(i);return;}
+  // checklist: expand how-to
+  const tog=e.target.closest('.cl-toggle');
+  if(tog){const id=tog.dataset.how;const how=document.getElementById('how-'+id);const open=how.classList.toggle('open');tog.textContent=open?'How \u25B4':'How \u25BE';return;}
+  // checklist: mark item done (checks the box)
+  const done=e.target.closest('.cl-done');
+  if(done){const id=done.dataset.done;const item=done.closest('.cl-item');
+    if(!item.classList.contains('on')){item.classList.add('on');item.dataset.c=1;addXP(1);}
+    const how=document.getElementById('how-'+id);how.classList.remove('open');const tg=item.querySelector('.cl-toggle');if(tg)tg.textContent='Planned \u2713';
+    checkChecklistDone(item.dataset.cl);return;}
+  // clicking the box itself also toggles done (quick check)
+  const box=e.target.closest('.cl-box');
+  if(box){const item=box.closest('.cl-item');item.classList.toggle('on');if(item.classList.contains('on')&&!item.dataset.c){item.dataset.c=1;addXP(1);}checkChecklistDone(item.dataset.cl);return;}
+});
+
+function updateFlagCount(i,forced){
+  const s=NODES[i].spot;const total=s.flags.filter(f=>!f.ok).length;
+  const found=document.querySelectorAll('[data-fseg^="'+i+'-"].hit').length;
+  const c=document.getElementById('fc-'+i);
+  if(c)c.textContent='Found '+found+' of '+total;
+  if(found===total||forced){
+    const fb=document.getElementById('ffb-'+i);
+    if(fb&&!fb.classList.contains('show')){fb.innerHTML=s.fb;fb.classList.add('show');
+      recordAnswer(s.topic,found>=Math.ceil(total/2));markSeen(i);}
+    const btn=document.querySelector('[data-fshow="'+i+'"]');if(btn)btn.remove();
+  }
+}
+
+// personalized checklist header + flags, built when the checklist node unlocks
+const TOPIC_LABEL={space:'Your working space',screens:'Screens and what they show',paper:'Paper and printers',devices:'Laptops and phones'};
+function buildPersonal(i){
+  const box=document.getElementById('personal-'+i);if(!box||box.dataset.built)return;box.dataset.built=1;
+  const weak=[],strong=[];
+  Object.keys(topicResults).forEach(t=>{const r=topicResults[t];if(r.wrong>0)weak.push(t);else if(r.right>0)strong.push(t);});
+  let h='<div class="p-title">Your personal focus</div>';
+  if(weak.length){
+    h+='<p class="p-line">You had it mostly down, but a couple of moments tripped you up — so start with these:</p><ul class="p-weak">';
+    weak.forEach(t=>h+=`<li>${TOPIC_LABEL[t]||t}</li>`);h+='</ul>';
+  }else{
+    h+='<p class="p-line">You made the right call every time — nice. Lock it in for real by doing these now:</p>';
+  }
+  if(strong.length){h+=`<p class="p-strong">You were solid on: ${strong.map(t=>TOPIC_LABEL[t]||t).join(', ')}.</p>`;}
+  box.innerHTML=h;
+  // flag the checklist items whose topic you got wrong
+  document.querySelectorAll('[data-cl="'+i+'"]').forEach(it=>{
+    if(weak.includes(it.dataset.topic))it.classList.add('focus');
+  });
+}
+function checkChecklistDone(i){
+  const items=[...document.querySelectorAll('[data-cl="'+i+'"]')];
+  const done=items.filter(x=>x.classList.contains('on')).length;
+  const gate=document.getElementById('gate-'+i);
+  if(gate){
+    if(done){gate.textContent='\u2713 '+done+' added to your plan below.';gate.classList.add('done');}
+    else{gate.textContent='Mark whichever you mean to do — they go into your plan below.';gate.classList.remove('done');}
+  }
+  buildPlan();
+  unlockNext(+i,true);
+}
+
+const nodesEls=[...document.querySelectorAll('.node')];
+const endEl=document.querySelector('.endcard');
+let unlockedUpTo=0; // highest node index currently readable
+
+function buildPlan(){
+  const box=document.getElementById('yourplan');if(!box)return;
+  const committed=[...document.querySelectorAll('.cl-item.on .cl-t')].map(x=>x.textContent);
+  if(!committed.length){box.innerHTML='';return;}
+  box.innerHTML='<div class="yp-title">Your plan</div><p class="yp-sub">You said you\u2019ll do these:</p><ul class="yp-list">'+committed.map(t=>`<li>${t}</li>`).join('')+'</ul>';
+}
+
+function lockState(){
+  nodesEls.forEach((n,idx)=>{
+    const locked=idx>unlockedUpTo;
+    n.classList.toggle('locked',locked);
+    n.classList.toggle('seen',!locked);
+    // when a checklist node becomes unlocked, build its personalized header
+    if(!locked&&NODES[idx].spot&&NODES[idx].spot.type==='checklist')buildPersonal(idx);
+    if(!locked&&NODES[idx].spot&&NODES[idx].spot.type==='slider'&&document.getElementById('rs-'+idx)&&!document.getElementById('rs-'+idx).dataset.init){document.getElementById('rs-'+idx).dataset.init=1;updateSlider(idx);}
+  });
+  if(endEl){const locked=unlockedUpTo<nodesEls.length;endEl.classList.toggle('locked',locked);if(!locked)buildPlan();}
+}
+function softReveal(el){
+  if(!el)return;
+  const sr=scroll.getBoundingClientRect(),vh=scroll.clientHeight;
+  const rel=el.getBoundingClientRect().top-sr.top;   // node top, relative to the scroll area
+  const anchor=vh*0.70;                              // land it low in the view
+  if(rel<anchor)return;                              // already comfortably in view — don't jump
+  scroll.scrollTo({top:scroll.scrollTop+(rel-anchor),behavior:'smooth'});
+}
+function unlockNext(fromIdx,quiet){
+  if(fromIdx<unlockedUpTo)return;            // already past
+  unlockedUpTo=Math.max(unlockedUpTo,fromIdx+1);
+  lockState();
+  // reveal the next node at the BOTTOM of the view, so the feedback you just
+  // read stays on screen instead of being scrolled away above you
+  const nxt=nodesEls[unlockedUpTo]||endEl;
+  if(nxt&&!quiet)setTimeout(()=>softReveal(nxt),520);
+  // if the newly unlocked node has NO spot (pure narrative), chain-unlock the one after it
+  const nd=NODES[unlockedUpTo];
+  if(nd&&(!nd.spot||nd.spot.type==='takeaways'||nd.spot.type==='checklist'))setTimeout(()=>unlockNext(unlockedUpTo,true),700);
+}
+function markSeen(i){ unlockNext(+i); }   // answering spot i unlocks i+1
+
+// spine fill follows scroll (visual only)
+scroll.addEventListener('scroll',()=>{
+  const st=scroll.scrollTop,vh=scroll.clientHeight;
+  const mood=Math.min(1,st/Math.max(1,(scroll.scrollHeight-vh)));scroll.style.setProperty('--mood',mood.toFixed(3));
+  document.getElementById('hint').classList.toggle('hide',st>60);
+  spineFill.style.height=Math.min(track.scrollHeight,(st+vh*0.5))+'px';
+});
+// initial: only first node readable
+lockState();
+// if the very first node has no spot, unlock forward
+if(NODES[0]&&!NODES[0].spot)unlockNext(0);
+function fsT(){const el=document.documentElement;if(!document.fullscreenElement){el.requestFullscreen&&el.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();}}
+
+(function(){
+  const tip=document.createElement('div');tip.id='gloss-tip';document.body.appendChild(tip);
+  let cur=null;
+  function place(el){
+    tip.innerHTML=el.getAttribute('data-def')||'';
+    tip.style.left='0px';tip.style.top='0px';
+    const r=el.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight;
+    let left=r.left;if(left+tw>window.innerWidth-8)left=window.innerWidth-tw-8;if(left<8)left=8;
+    let top=r.top-th-10;if(top<8)top=r.bottom+10;
+    tip.style.left=left+'px';tip.style.top=top+'px';tip.classList.add('on');cur=el;
+  }
+  function hide(){tip.classList.remove('on');cur=null}
+  document.addEventListener('mouseover',e=>{const g=e.target.closest('.gloss');if(g&&g!==cur)place(g)});
+  document.addEventListener('mouseout',e=>{const g=e.target.closest('.gloss');if(g)hide()});
+  document.addEventListener('click',e=>{const g=e.target.closest('.gloss');if(g&&matchMedia('(hover:none)').matches){cur===g?hide():place(g);e.preventDefault();return}if(!g)hide()});
+  document.addEventListener('scroll',hide,true);
+})();
+
+/* password crack-time model (illustrative): ~26 lowercase+ charset, 1e11 guesses/sec */
+function crackTime(len){
+  const charset=45; // mixed but memorable
+  const combos=Math.pow(charset,len);
+  const seconds=combos/1e11; // 100 billion guesses/sec
+  return seconds;
+}
+function fmtTime(sec){
+  if(sec<1)return['instant','instant'];
+  const yr=31557600;
+  if(sec>=yr*1e12)return['trillions of years','centuries'];
+  if(sec>=yr*1e9)return['billions of years','centuries'];
+  if(sec>=yr*1e6)return['millions of years','centuries'];
+  if(sec>=yr*1e3)return['thousands of years','centuries'];
+  const u=[['second',1],['minute',60],['hour',3600],['day',86400],['year',yr]];
+  let val=sec,name='seconds';
+  for(let k=u.length-1;k>=0;k--){if(sec>=u[k][1]){val=sec/u[k][1];name=u[k][0];break;}}
+  const r=val<10?val.toFixed(1):Math.round(val).toLocaleString();
+  return[r+' '+name+(parseFloat(r)===1?'':'s'),name];
+}
+window.updateSlider=function(i){
+  const len=+document.getElementById('rs-'+i).value;
+  document.getElementById('rsv-'+i).textContent=len;
+  const marker=document.getElementById('rsm-'+i);marker.style.left=((len-6)/(30-6)*100)+'%';
+  const sec=crackTime(len);const[label]=fmtTime(sec);
+  const res=document.getElementById('rsr-'+i);
+  let lvl,lname,expl;
+  if(sec<3600){lvl='lvl-crit';lname='Cracked instantly';expl='Short passwords fall in seconds to minutes. This is where a \u201Ccomplex\u201D short password like Xy7#2! lives.';}
+  else if(sec<31557600*10){lvl='lvl-high';lname='Weak';expl='Hours to a few years \u2014 not enough. Tr0pical!2024 sits around here despite looking clever.';}
+  else if(sec<31557600*1e6){lvl='lvl-med';lname='Getting strong';expl='Now we\u2019re into many years. Each extra character multiplies the time.';}
+  else{lvl='lvl-low';lname='Very strong';expl='Centuries and beyond. This is passphrase territory \u2014 Penguin-Carpet-Thunder-Mango lives here.';}
+  res.className='rslider-result '+lvl;
+  document.getElementById('rss-'+i).textContent=label;
+  document.getElementById('rsl-'+i).textContent=lname;
+  document.getElementById('rse-'+i).textContent=expl;
+  const eg=document.getElementById('rseg-'+i);
+  if(len<=8)eg.innerHTML='At this length even random characters aren\u2019t safe. <b>Length is the lever.</b>';
+  else if(len>=24)eg.innerHTML='<b>This is why passphrases win:</b> four random words easily reach this length, and you can actually remember them.';
+  else eg.innerHTML='Keep dragging \u2014 notice the jump from years to centuries as you add characters.';
+  // first interaction unlocks the next node
+  if(!document.getElementById('rs-'+i).dataset.moved){document.getElementById('rs-'+i).dataset.moved=1;addXP(2);unlockNext(+i);}
+};
+</script>
+</body></html>
