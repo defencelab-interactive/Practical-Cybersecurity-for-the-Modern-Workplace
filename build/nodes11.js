@@ -1,0 +1,66 @@
+const NODES=[
+ {date:'Start here',crit:0,beat:'One file, three places it went this week',
+  body:'A spreadsheet: <b>Q1 headcount plan</b>. Names, roles, salary bands, and which two posts are being closed in March.<br><br>It did not change at any point this week. Follow where it went, and watch who could reach it.',
+  spot:{type:'trace',topic:'reach',
+    file:'Q1-headcount-plan.xlsx',
+    q:'Tap each stop to see who could reach it there.',
+    stops:[
+     {ic:'💻',t:'Monday — saved on your laptop',
+      reach:'You',level:1,
+      who:'You, and anyone who can get into the laptop. If the disk is encrypted and it locks itself, that is a short list.'},
+     {ic:'✉️',t:'Wednesday — emailed to two colleagues for comment',
+      reach:'Five or six, and no way back',level:2,
+      who:'You, two colleagues, and every copy that now exists: their inboxes, their phones, their downloads folders, the drafts of anyone who hits forward. You cannot recall it and you cannot count it. The file is no longer somewhere — it is in several places at once.'},
+     {ic:'📂',t:'Friday — dropped in the team folder to “keep it together”',
+      reach:'Everyone the folder is shared with',level:3,
+      who:'Whoever that folder is shared with, which is usually more people than the person dropping the file has checked — and in this case it very likely includes at least one of the people named in it.'}],
+    fb:'Three different exposures, one unchanged file.<br><br>That is what makes this hard to handle case by case. On Wednesday you were being collaborative. On Friday you were being tidy. Neither moment felt like a decision about risk, and by Friday the Monday version of the question had been forgotten.<br><br>Classifying a file is how you make that decision <b>once</b>, at the start, and attach the answer to the file — so the person who moves it on Friday does not have to work it out again.'}},
+
+ {date:'August 2023',crit:1,beat:'An internal spreadsheet answered a public request',
+  body:'Here is what the Friday version of this looks like at full scale.<br><br>The Police Service of Northern Ireland received a freedom of information request asking how many officers it had at each rank. A fair question with a short answer. Staff pulled the figures from the HR system, built the summary, and published the file.<br><br>The summary was correct. What went with it were the surnames, initials, ranks, roles and locations of all <b>9,483</b> officers and staff — in a police service where that information puts people in danger. The file was live for under three hours. The Information Commissioner fined the PSNI £750,000.',
+  more:{t:'How the personal data got into a file nobody meant to send',
+    body:'The data came out of the HR system as a single worksheet. To build the answer, analysts added their own worksheets alongside it and worked from there. Then they deleted the sheets they had added — and the original worksheet, the one holding the personal details, stayed in the file. Quality assurance did not catch it.<br><br>Nothing about that is exotic. It is how most people build a summary from an export, and the thing that made it dangerous was that <i>what you can see on screen is not what the file contains</i>.<br><br>The same gap exists in ordinary office files: hidden rows and columns, filtered-out data that is still there, extra tabs, tracked changes, comments, document properties with the author’s name, and the full-resolution original behind a cropped image. A file sent outside the organisation is worth rebuilding — new file, paste in only the values you mean to send — rather than cleaned up.<br><br>The £750,000 was itself reduced. The Commissioner applies a lower figure to public bodies; the stated amount otherwise would have been £5.6 million.'},
+  spot:{type:'quiz',topic:'exports',q:'You need to send a client a summary built from an internal export. What gets sent?',
+    opts:[
+     ['The working file, with the internal sheets deleted',0],
+     ['A new file containing only the summary, pasted in as values',1],
+     ['The working file as a PDF, since a PDF cannot be edited',0],
+     ['The working file with the internal sheets hidden',0]],
+    fb:'A new file. Deleting is what the PSNI analysts did, and the data they meant to remove was still in the file when it went out.<br><br>Hiding is worse — hidden is a display setting, and the data is one click from view. A PDF is better than the others and still carries more than it looks like: it keeps document properties, and anything cropped or covered rather than removed may still be in the file.<br><br>Starting a new file is the only one of these where you are deciding what goes in, rather than hoping you took everything out.'}},
+
+ {date:'The levels',crit:1,beat:'How many levels there are, and why yours may differ',
+  body:'So the file needs a label. Which one?<br><br>There is no universal set. ISO 27001 requires an organisation to classify its information, and deliberately leaves the levels to the organisation. UK government uses three — OFFICIAL, SECRET, TOP SECRET. Plenty of companies use four. The names differ too: Internal, Private, Restricted and Confidential all mean different things in different places.<br><br>What is consistent is the <b>question</b> the level answers: how much harm would be done if this got out to the wrong people?',
+  more:{t:'The shape most schemes share, whatever they call the levels',
+    body:'Read as degrees of harm rather than as names, nearly all schemes line up:<br><br><b>Public.</b> Already released, or could be, with no harm. Published prices, the careers page, a press release.<br><br><b>Internal.</b> Not secret, not for outside. Team plans, process documents, the internal org chart. Embarrassing rather than damaging if it leaked.<br><br><b>Confidential.</b> Real harm to the organisation or to a person if it got out. Contracts, unreleased financials, personal data about staff or customers, anything commercially sensitive.<br><br><b>Restricted.</b> Severe harm, often to named individuals, and access is limited to a short list rather than to a department. Some schemes do not have this level and fold it into the one above.<br><br>Knowing the shape is useful; it is not a substitute for your own organisation’s scheme, because the labels have to match the ones your colleagues and your systems already use. If yours has no scheme at all, the shape above is a reasonable place to start.'},
+  spot:{type:'quiz',topic:'levels',q:'What decides a file’s level?',
+    opts:[
+     ['How senior the person who wrote it is',0],
+     ['How much harm would follow if the wrong people had it',1],
+     ['Whether it is marked confidential in the footer',0],
+     ['Which folder it is currently stored in',0]],
+    fb:'The harm. Everything else follows from it — who may open it, where it may be stored, whether it may leave the organisation.<br><br>Seniority is the common wrong answer: a junior analyst’s export of customer records is more sensitive than most of what a director writes. The footer and the folder are consequences of the level, not evidence of it — and a file in the wrong folder is exactly the case classification exists to catch.'}},
+
+ {date:'Personal data',crit:0,beat:'Data about people follows its own rules',
+  body:'One category does not fit neatly on the harm scale, and it is the one most people handle daily.<br><br>Personal data — anything that identifies a living person — carries legal obligations regardless of how sensitive it feels. A list of customer email addresses is not dramatic. It is still personal data, and the rules about keeping it, sharing it and deleting it apply to it exactly as they apply to something that feels more serious.<br><br>A narrower set carries more: under the GDPR, data revealing racial or ethnic origin, political opinions, religious beliefs, trade union membership, genetic and biometric data, health, and sex life or sexual orientation are <b>special categories</b>, with tighter restrictions on processing them at all.',
+  spot:{type:'experience',topic:'personal',q:'Think about the files you personally touch in a week. How many contain data about identifiable people?',
+    scale:['None, I think','A few','More than I had counted'],
+    note:'“More than I had counted” is the usual answer once people look, because personal data arrives in shapes that do not announce themselves: a meeting attendee list, a CV in an inbox, a spreadsheet of survey responses with free-text comments, a screenshot with a name in the corner.<br><br>This is not a reason to treat every file as high risk. It is a reason to know which of your regular files contain it, so that the question gets asked at the point where you choose where to put something — not afterwards.'}},
+
+ {scene2:1,date:'Your files',crit:0,beat:'Three things to do with the files you handle',
+  body:'Mark whichever you mean to do.',
+  spot:{type:'checklist',
+    items:[
+      {topic:'levels',t:'Find out what your organisation’s levels are called',
+       how:'A label only works if it means the same thing to the person who receives the file.',
+       steps:['Look for an information classification or data handling policy','Note the level names and what each one allows — where it may be stored, whether it may leave the organisation','If there is no scheme, use Public / Internal / Confidential and say so when you share something'],
+       itnote:'If someone owns security or compliance where you work, this is a two-minute question for them rather than a search.'},
+      {topic:'reach',t:'Check the sharing on one folder you use often',
+       how:'Folders accumulate access. The list is almost never the one you would choose today.',
+       steps:['Open the sharing settings and read the list of who has access','Look for “anyone with the link” and for people who have changed teams or left','Remove what no longer belongs, and decide whether that folder is the right place for the sensitive files in it'],
+       itnote:''},
+      {topic:'exports',t:'Rebuild rather than clean up anything leaving the organisation',
+       how:'Deleting sheets, hiding rows and cropping images leave the data in the file.',
+       steps:['Start a new file and paste in only the values you mean to send','Check document properties for author names and internal paths','For a PDF, confirm nothing is merely covered or cropped rather than removed'],
+       itnote:''}
+    ]}}
+];
