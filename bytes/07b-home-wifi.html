@@ -71,7 +71,7 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
     <div>
       <div class="eyebrow">Security Byte · Device Security</div>
       <h1>Your Home Network</h1>
-      <p class="lede">Your router is the gateway for every device in the house, and most are still running the settings they shipped with. Start with the one thing visible from the street — the network name.</p>
+      <p class="lede">Your network name is broadcast to everyone in range — neighbours, the street, anyone passing. Below is what a name can give away about you. Replace the example with your own to see what yours says.</p>
     </div>
     <div class="chip">2 min</div>
   </div>
@@ -79,14 +79,14 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
   <div class="note"><span>🔒</span><div><b>Nothing leaves this page.</b> The name is checked by code already in this file — nothing is sent anywhere, and nothing is stored.</div></div>
 
   <div class="panel">
-    <label class="flab" for="ssid">Your WiFi network name</label>
-    <input class="inp" id="ssid" placeholder="The name you pick from the list when you connect" autocomplete="off" spellcheck="false">
-    <div class="hint">Anyone within range sees this — neighbours, people in the street, anyone passing.</div>
-    <button class="go" id="go">Check it</button>
+    <label class="flab" for="ssid">Try it on your own network name</label>
+    <input class="inp" id="ssid" value="Smith_Family_5G" placeholder="The name you pick from the list when you connect" autocomplete="off" spellcheck="false">
+    <div class="hint">It is the name you pick from the list when you connect. Nothing is sent anywhere — the check runs in this page.</div>
+    <button class="go" id="go">See what it gives away</button>
   </div>
 
   <div class="egs">
-    <span class="flab">Or try one of these</span>
+    <span class="flab">Or try another example</span>
     <div class="egrow" id="egrow"></div>
   </div>
 
@@ -213,5 +213,6 @@ async function save(){try{if(!window.storage)return;
 async function load(){try{if(!window.storage)return;const r=await window.storage.get('home-wifi');if(!r||!r.value)return;
   JSON.parse(r.value).forEach((v,i)=>{const el=document.querySelector(`.step[data-s="${i}"]`); if(el&&v)el.classList.add('on');});}catch(e){}}
 load();
+run();          // show a worked example straight away, so the page explains itself
 </script>
 </body></html>
