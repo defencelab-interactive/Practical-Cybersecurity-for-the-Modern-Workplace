@@ -1,0 +1,77 @@
+const NODES=[
+ {date:'Start here',crit:0,beat:'Six things people paste, and where the line actually is',
+  body:'Six real-shaped requests, the kind that get typed into an AI tool on an ordinary Tuesday. Put each one on the side you think it belongs.<br><br>Nothing here is a trick. The question is only whether the text is yours to hand over.',
+  spot:{type:'sort',topic:'paste',
+    q:'Fine to paste, or not?',
+    buckets:['Fine to paste','Not mine to paste'],
+    items:[
+     {t:'“Reword this job ad to sound less corporate.” <span class="so-sub">+ the ad, already live on the careers page</span>',right:0,
+      why:'Already public, and it is your company’s own text. Nothing leaves that had not left already.'},
+     {t:'“Summarise this thread and draft a reply.” <span class="so-sub">+ a client email chain</span>',right:1,
+      why:'The words are the client’s, and so is the decision about where they go. You can agree to your own data being processed by a third party; you cannot agree on someone else’s behalf.'},
+     {t:'“What does this error mean?” <span class="so-sub">ConnectionRefused — srv-payroll-02:5432</span>',right:1,
+      why:'That one line names an internal server, says what it is for, and gives the port — which identifies the database software. It reads like nothing. It is a small map.'},
+     {t:'“Write a polite decline to a vendor pitch.”',right:0,
+      why:'No company data in the request at all. This is the shape most AI use at work should have.'},
+     {t:'“Write the commentary for this.” <span class="so-sub">+ Q3 revenue by region, before results day</span>',right:1,
+      why:'Unpublished financials. For a listed company this is also the kind of information that has rules of its own about who may hold it before release.'},
+     {t:'“Draft a LinkedIn post about our new office.” <span class="so-sub">announced publicly yesterday</span>',right:0,
+      why:'Announced means public. The AI is being asked to rephrase something the world already has.'}],
+    fb:'The line is not <i>secret</i> versus <i>not secret</i>. Two of these were ordinary work text, and they still should not go.<br><br>A more useful test is two questions. <b>Is this mine to hand over?</b> Client emails, colleagues’ messages and supplier documents belong to someone who did not get asked. And <b>would I be relaxed if this came back out with my name on it?</b> Not because that is likely — because it is the only version of the question you can answer without reading anyone’s terms of service.'}},
+
+ {date:'Where it goes',crit:1,beat:'What happens to the text after you send it',
+  body:'So where does the not-fine column actually end up?<br><br>On someone else’s servers, first of all. After that it depends on the account you are signed into, and that is where people guess.<br><br>In April 2023 a Samsung engineer pasted internal source code into ChatGPT to get help with it. Within weeks Samsung banned generative AI tools on company devices outright. Nobody had been careless in the ordinary sense — he was debugging, and the tool was good at it.',
+  more:{t:'Why you have to look at the setting rather than remember it',
+    body:'Two different things get confused here, and they have separate switches.<br><br><b>Retention</b> is whether your conversation is stored at all, and for how long. <b>Training</b> is whether it is used to improve the model. A tool can store without training, and the controls sit in different places.<br><br>As a rule of thumb, consumer tiers have tended to use conversations for training unless you turn it off, and paid business and enterprise tiers have tended not to. But that is a rule of thumb and not a fact you can rely on: Anthropic changed its consumer default in 2025, and others have moved in both directions. The honest answer to “does this tool train on my chats?” is <i>open its settings and read today’s answer</i>.<br><br>Which is why the action at the end of this course is to look, not to memorise.'},
+  spot:{type:'quiz',topic:'where',q:'You need help with a work problem and the only AI tool you have is your personal account. What is the workable move?',
+    opts:[
+     ['Use it — you will delete the conversation afterwards',0],
+     ['Use it, but strip the names, systems and figures out first',1],
+     ['Use it and tell nobody, since nothing confidential is involved',0],
+     ['Never use AI for anything work-related',0]],
+    fb:'Strip it down. Most work questions survive losing the specifics — “how do I phrase a firm but polite chase for an overdue invoice” needs no client name, no amount and no dates, and gets you the same answer.<br><br>Deleting afterwards is not a fix: deletion policies vary, and a copy may already have been retained. Refusing to use AI at all is not realistic either — people will use it, and a rule nobody follows protects nothing.'}},
+
+ {date:'The ones already on',crit:0,beat:'The AI features you did not switch on',
+  body:'That covers what you type. The harder part is what you never typed at all.<br><br>AI is now switched on inside tools you already use — note-takers that join meetings, assistants that summarise your inbox, features that read a document to answer a question about it. Most were enabled by an update, not by you.<br><br>A note-taker is the clearest case. It records the meeting. It usually keeps recording through the part after “thanks everyone”, when two people stay on and talk about something else entirely. Then it emails the transcript to everyone who was invited.',
+  spot:{type:'experience',topic:'ambient',q:'Think about your last week of meetings. How many had something recording or transcribing them?',
+    scale:['None that I know of','One or two','Most of them'],
+    note:'“None that I know of” is the answer worth sitting with, because note-takers are often added by whoever set up the invite rather than by the host, and they appear in the participant list rather than announcing themselves.<br><br>Two habits cover most of it. Look at the participant list before the conversation gets sensitive — the bot is usually sitting in it under a name like <i>Notetaker</i>. And when a meeting ends, end it, rather than letting it run while the last two people talk.'}},
+
+ {date:'What comes back',crit:1,beat:'The output arrives with your name on it',
+  body:'Everything so far has been about what goes in. This is the half that actually reaches people.<br><br>In 2023 two New York lawyers filed a brief citing six court decisions that did not exist. ChatGPT had produced them, complete with quotes and citation numbers, and had confirmed they were real when asked. The judge fined the lawyers $5,000 — not for using the tool, but for filing what it wrote without checking.<br><br>Fluent, confident and specific is what these systems produce whether or not the underlying thing is true. That is the failure mode, and it does not look like a failure while you are reading it.',
+  more:{t:'“The chatbot said it, not us” — tried, and it did not work',
+    body:'Jake Moffatt asked Air Canada’s website chatbot about bereavement fares. It told him he could book now and apply for the reduced rate within 90 days. That was wrong — the airline’s actual policy did not allow a claim after travel. When he asked for the difference back, Air Canada refused.<br><br>Its argument at the British Columbia Civil Resolution Tribunal was that the chatbot was, in effect, a separate entity responsible for its own answers. The tribunal did not accept it: the chatbot was part of Air Canada’s website, and the company owed a duty of care to make sure what it said was accurate. Having the correct policy elsewhere on the site made no difference. Air Canada paid, in February 2024.<br><br>The sum was small — about CAD $650. The principle is not. An organisation is answerable for what its AI tells people, and inside an organisation, so is the person who sent it on.'},
+  spot:{type:'predict',topic:'output',q:'An AI drafts a client-facing summary that reads well and cites a regulation by number. What has to happen before it goes out?',
+    opts:[
+     ['Check the regulation actually says that, then send',1],
+     ['Send it — citing a specific number means it looked it up',0],
+     ['Ask the AI whether it is sure',0]],
+    fb:'Open the regulation. A specific number is not evidence of anything — fabricated citations come out looking exactly like real ones, which is precisely what caught the lawyers.<br><br>Asking the model whether it is sure is the weakest check available: it will often say yes, and in the Avianca case it did.<br><br>The practical rule: use AI for anything you can verify or would have written yourself anyway. Be slow with anything you would be repeating on trust.'}},
+
+ {date:'When it reads for you',crit:1,beat:'Text the AI reads can give it instructions',
+  body:'One more, because it is the newest and the least intuitive.<br><br>When an assistant summarises an email, a document or a web page for you, it cannot fully separate <i>the content it is reading</i> from <i>the instructions it is following</i>. So text placed in that content — by someone who wants it there — can act as an instruction.<br><br>It is called prompt injection, and it sits first on OWASP’s Top 10 list of risks for AI applications. The practical version: an email can contain a line, in white text or buried at the bottom, aimed not at you but at the assistant that will summarise it.',
+  spot:{type:'predict',topic:'injection',q:'Your email assistant summarises a message as: “Routine supplier notice, no action needed.” The real message was an invoice dispute. Most useful response?',
+    opts:[
+     ['Open the original message and read it yourself',1],
+     ['Ask the assistant to summarise it again more carefully',0],
+     ['Trust the summary — assistants do not simply invent a category',0]],
+    fb:'Open it. A summary that does not match is the one signal you get, and it costs thirty seconds to check.<br><br>Re-summarising uses the same text that produced the wrong answer the first time. And the reason this matters beyond ordinary error: if someone did plant an instruction, the summary is exactly where it would show.<br><br>None of this means do not use summaries. It means a summary is a convenience, not a record — and anything you are going to act on gets opened.'}},
+
+ {scene2:1,date:'Your settings',crit:0,beat:'Three things to do with the AI tools you use',
+  body:'Mark whichever you mean to do.',
+  spot:{type:'checklist',
+    items:[
+      {topic:'where',t:'Open the data settings of the AI tool you use most',
+       how:'Not to memorise the answer — to find out what today’s answer is, and where the switch lives.',
+       steps:['Find the privacy or data controls in that tool’s settings','Look for two separate things: how long conversations are kept, and whether they are used for training','Check which account you are signed in with while you are there'],
+       itnote:'If your organisation provides an AI tool, use that one for work. A provided tool usually comes with an agreement about data that a personal account does not.'},
+      {topic:'paste',t:'Decide your own two or three never-paste items',
+       how:'A general rule gets argued with in the moment. A short specific list does not.',
+       steps:['Write down two or three things you handle that should never go into an AI tool','Make them concrete — “client emails”, “anything before it is announced”, “anything with a colleague’s name in it”','Keep the habit of stripping names, figures and system names out of everything else'],
+       itnote:'Some organisations already have an AI use policy. Worth reading once rather than guessing — and if there is none, your two or three items are the policy.'},
+      {topic:'ambient',t:'Check the participant list before the real conversation starts',
+       how:'A note-taker records everything after the meeting “ends”, and then sends it to everyone.',
+       steps:['Look at who is in the meeting, including anything that is not a person','If one is recording and the next part should not be, say so — people stop it without argument','End meetings properly rather than letting them run on'],
+       itnote:''}
+    ]}}
+];

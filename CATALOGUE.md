@@ -9,7 +9,7 @@ Cybersecurity awareness training for non-technical employees. Two content format
 
 Courses build understanding. Bytes build habits. Both work independently. Both stack into learning paths.
 
-**Total library:** 24 items (12 courses + 12 bytes), ~95 min combined. 12 built, 12 to build.
+**Total library:** 25 items (13 courses + 12 bytes), ~100 min combined. 14 built, 11 to build.
 
 ---
 
@@ -55,7 +55,7 @@ Each course follows a consistent structure: story → content with interactive e
 
 | # | Course | Hook | AI Buddy | Time |
 |---|---|---|---|---|
-| 10 | **AI Tools: Safe Use at Work** | A deepfake video call cost $25M. And 57% of employees paste sensitive data into public AI tools. | 📨 Paste prompt → billboard test + anonymized version | ~7 min |
+| 10 | **What You Paste Into AI** | Six things people paste, and where the line actually is. Then what comes back, and who answers for it. | 📨 Paste prompt → billboard test + anonymized version | ~6 min | **Built** |
 
 ### 📂 Data Protection
 
@@ -71,6 +71,28 @@ Each course follows a consistent structure: story → content with interactive e
 | 13 | **Incident Response: First 30 Minutes** | The difference between a $0 incident and a $280K loss is 30 seconds of action. STOP · DOCUMENT · REPORT. | 🏋️ Describe incident → AI coaches through STOP/DOC/REPORT | ~7 min |
 
 **Total: 13 courses, ~94 min**
+
+### Opening mechanics used so far
+
+No two courses open the same way. Spot types built to date:
+
+| Course | Opening | Mechanic |
+|---|---|---|
+| 1 | Story — how a breach unfolds | narrative + `predict` |
+| 2 | The attacker's side of the call | narrative + `predict` |
+| 3 | Audit your own desk right now | `audit` |
+| 4 | One forum password, then the cascade | narrative + `quiz` |
+| 6 | Two emails, one is fake | `compare` |
+| 7 | Three things people believe | `myths` |
+| 8 | Which would hurt more to lose | `weigh` |
+| 9 | Guess how much the post gives away | `estimate` |
+| 10 | Sort six things into fine / not mine | `sort` |
+
+Other spot types available mid-course: `quiz`, `predict`, `experience`, `checklist`, `takeaways`, `slider`, `flags`, `scan`.
+
+### Accuracy rule
+
+Every factual claim is sourced before it is written, not after. A claim that cannot be shown with a quote is either cut or labelled as a composed scenario in the text itself. Each course carries a **Sources and what is not sourced** block in its end card. The register of what was checked, what needs human confirmation and what is uncertain lives in `FACT-CHECK.md`.
 
 ### Course structure (per course)
 
