@@ -151,6 +151,11 @@ none of them did anything a reader would miss once the return visit stopped bein
 Printing is not the escape hatch either: `window.print()` can be refused by an LMS iframe sandbox
 and then does nothing at all, so no Byte offers it as the way its content leaves.
 
+**Width:** one column for every Byte — `max-width:1000px`, 36px side padding — and no per-element
+`max-width:Nch` on block prose. A reading-measure cap on paragraphs while the cards beside them run
+the full column is what made the old bytes look ragged down the right edge. The one exception is
+Byte 1b, whose filterable tool grid is a different layout and stays wider.
+
 **Storage:** `window.storage` exists only inside the Defence Lab host. Standalone pages must fall
 back to `localStorage`, wrapped, and work with neither. Every Byte that stores anything gets a
 reload test before it ships.
