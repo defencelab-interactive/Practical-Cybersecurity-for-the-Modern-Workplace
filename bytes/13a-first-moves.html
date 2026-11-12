@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Defence Lab · The First Four Actions</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#34B77D;--acd:#2A9A66;--td:#1A1A1A;--tb:#4A4844;--mu:#8a8884;--paper:#F2F5F2;--paper2:#E8EEEC;--line:#dce4e0;
+  --sh:0 3px 8px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);
+  --blue:#4E7CA8;--rd:#C0392B;--rdl:rgba(192,57,43,.09);--am:#B07A1E;--aml:rgba(176,122,30,.1);
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);color:var(--td);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background:radial-gradient(70% 50% at 12% 6%,rgba(52,183,125,.16),transparent 52%),
+    radial-gradient(80% 60% at 92% 30%,rgba(78,124,168,.14),transparent 58%),
+    radial-gradient(60% 45% at 55% 40%,rgba(255,255,255,.5),transparent 60%),
+    linear-gradient(160deg,#eef2ee,#e4ebeb)}
+.wrap{max-width:1000px;margin:0 auto;padding:40px 36px 80px}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.eyebrow{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acd);margin-bottom:12px}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-height:1.06;letter-spacing:-.02em;margin-bottom:14px}
+.lede{font-size:17px;line-height:1.6;color:var(--tb)}
+.chip{font:700 12px var(--mono);color:var(--acd);background:rgba(52,183,125,.12);border-radius:20px;padding:6px 13px;white-space:nowrap;flex:none}
+
+/* the spine */
+.spine{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:26px 0 8px;
+  background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:14px 17px;box-shadow:var(--sh)}
+.sp-s{display:flex;align-items:center;gap:8px;font:700 13.5px var(--body);color:var(--td)}
+.sp-n{width:21px;height:21px;border-radius:7px;background:var(--acd);color:#fff;display:grid;place-items:center;font:700 11px var(--mono);flex:none}
+.sp-arr{color:var(--mu);font-size:14px}
+.spine-note{font-size:13.5px;line-height:1.6;color:var(--tb);margin-bottom:26px}
+.spine-note b{color:var(--td)}
+
+/* situation picker */
+.pick-lab{font:700 11px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--mu);margin-bottom:11px}
+.sits{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:9px;margin-bottom:22px}
+.sit{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;cursor:pointer;
+  text-align:left;font-family:var(--body);transition:all .15s;box-shadow:var(--sh);display:flex;gap:10px;align-items:flex-start}
+.sit:hover{border-color:var(--blue)}
+.sit.on{border-color:var(--acd);background:rgba(52,183,125,.08)}
+.sit-ic{font-size:17px;flex:none;line-height:1.2}
+.sit-t{font-size:14px;font-weight:600;line-height:1.4;color:var(--td)}
+
+/* the steps */
+.panel{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:var(--sh)}
+.panel h2{font-family:var(--disp);font-weight:600;font-size:22px;letter-spacing:-.015em;margin-bottom:5px}
+.panel .ctx{font-size:14.5px;line-height:1.6;color:var(--tb);margin-bottom:20px}
+.steps{display:flex;flex-direction:column;gap:14px}
+.st{display:flex;gap:14px;align-items:flex-start}
+.st-n{width:28px;height:28px;border-radius:9px;background:var(--acd);color:#fff;flex:none;
+  display:grid;place-items:center;font:700 13px var(--mono);margin-top:1px}
+.st-b{flex:1;min-width:0}
+.st-t{font-size:15.5px;font-weight:600;line-height:1.45;margin-bottom:3px}
+.st-w{font-size:14px;line-height:1.6;color:var(--tb)}
+.never{display:flex;gap:12px;align-items:flex-start;margin-top:20px;padding-top:17px;border-top:1px solid var(--line)}
+.never-tag{font:700 10.5px var(--mono);letter-spacing:.07em;text-transform:uppercase;background:var(--rdl);color:var(--rd);
+  padding:5px 10px;border-radius:20px;flex:none;margin-top:1px}
+.never-t{font-size:14.5px;line-height:1.6;color:var(--tb)}
+.never-t b{color:var(--td)}
+
+/* closing */
+.now{background:rgba(78,124,168,.07);border:1.5px solid rgba(78,124,168,.25);border-radius:16px;padding:22px 26px;margin-top:26px}
+.now h3{font-family:var(--disp);font-weight:600;font-size:19px;margin-bottom:9px;color:#36587A}
+.now p{font-size:14.5px;line-height:1.65;color:var(--tb)}
+.now p+p{margin-top:9px}
+.now b{color:var(--td)}
+.foot{margin-top:30px;border-top:1px solid var(--line);padding-top:16px;font-size:13.5px;line-height:1.7;color:var(--mu)}
+.foot b{color:var(--tb)}
+.foot a{color:var(--acd);text-decoration:none;border-bottom:1px solid rgba(52,183,125,.35)}
+
+@media (max-width:620px){
+  .wrap{padding:26px 18px 60px}
+  .head{flex-direction:column;gap:12px}
+  .panel{padding:20px 17px}
+  .spine{gap:7px;padding:13px 14px}
+  .sp-s{font-size:12.5px}
+}
+</style>
+</head><body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Security Byte 13a</div>
+      <h1>The First Four Actions</h1>
+      <div class="lede">Five things that actually happen, and what the same four steps look like in each. The order never changes; what each step <i>means</i> does.</div>
+    </div>
+    <div class="chip">~2 min</div>
+  </div>
+
+  <div class="spine">
+    <span class="sp-s"><span class="sp-n">1</span>Stop the spread</span><span class="sp-arr">→</span>
+    <span class="sp-s"><span class="sp-n">2</span>Tell someone</span><span class="sp-arr">→</span>
+    <span class="sp-s"><span class="sp-n">3</span>Write it down</span><span class="sp-arr">→</span>
+    <span class="sp-s"><span class="sp-n">4</span>Keep the evidence</span>
+  </div>
+  <div class="spine-note">Ordered by what each step stops you losing. <b>Telling someone comes second, not last</b> — the hours of silence cost more than the mistake, and you do not need to be certain before you speak.</div>
+
+  <div class="pick-lab">Which one is happening?</div>
+  <div class="sits" id="sits"></div>
+  <div class="panel" id="panel"></div>
+
+  <div class="now">
+    <h3>The one thing worth settling before any of this</h3>
+    <p><b>Who would you tell, and how would you reach them?</b> Not a process document — one name and a phone number. It needs to be a number rather than a chat handle, because the thing that broke may be the laptop or the email account you would normally message from.</p>
+    <p>If nobody at your work handles this, the answer is still a name: whoever decides, plus the outside numbers that matter — your bank’s, printed on your card, and the client’s if you work inside their systems. Finding those out is a job for a quiet afternoon, not for the afternoon it happens.</p>
+  </div>
+
+  <div class="foot">
+    <b>Why this order.</b> Isolating the affected machine first, and powering down only when you cannot disconnect it, follows <a href="https://www.cisa.gov/stopransomware/ive-been-hit-ransomware" target="_blank" rel="noopener">CISA’s ransomware guidance</a>, which warns that powering off loses “potential evidence stored in volatile memory”. Reporting sits second because the <a href="https://www.ncsc.gov.uk/sites/default/files/2026-08/Telling-users-to-%E2%80%98avoid-clicking-bad-links%E2%80%99-still-isn%E2%80%99t-working.pdf" target="_blank" rel="noopener">NCSC</a> finds that “the stigma of clicking can prevent people reporting it, which then delays the incident response”. Some published mnemonics put documenting before reporting; this one does not, for that reason.
+    <br><br>Where personal data may be involved there is often a legal reporting deadline — 72 hours from awareness under the GDPR, and something comparable elsewhere. Your own jurisdiction and your organisation’s process decide the specifics; this card decides nothing for you except the order.
+  </div>
+</div>
+
+<script>
+const SITS=[
+ {ic:'🎣',t:'I clicked a link and typed my password',
+  h:'You entered credentials on a page that turned out to be fake',
+  ctx:'Nothing looks broken, and that is normal — a stolen password is used later, not while you watch. There is nothing to disconnect here, so step one becomes the password itself.',
+  steps:[
+   {t:'Change that password now, from a different device',w:'Different device, because if anything was installed you do not want to type the new one into it. Change it anywhere else you used the same password — that is where this spreads.'},
+   {t:'Tell whoever handles this, uncertainty included',w:'“I think I may have put my password into a fake page, I am not sure” is a complete report. They can see sign-in activity that you cannot.'},
+   {t:'Write down the time, the sender and what the page asked for',w:'You are the only person who saw it. Five minutes later you will have forgotten whether it asked for the code as well as the password — and that detail changes what happens next.'},
+   {t:'Leave the email exactly where it is',w:'Its headers are how anyone works out where it came from and who else received it.'}],
+  never:'<b>Do not delete the email</b>, and do not forward it to colleagues as a warning — that spreads a live link. A warning that quotes the subject line does the same job safely.'},
+
+ {ic:'⚠️',t:'My machine is behaving strangely',
+  h:'Files renaming themselves, unexpected windows, things you did not start',
+  ctx:'This is the one where seconds matter, because whatever is running can reach the shared drive and your colleagues while you are deciding.',
+  steps:[
+   {t:'Disconnect from the network — WiFi off, or cable out',w:'The only step that stops it spreading. Everything else can wait sixty seconds; this cannot.'},
+   {t:'Tell someone, and say the machine is still on',w:'So they know to come to it rather than ask you to restart.'},
+   {t:'Write down what you opened and when',w:'Which attachment, which sender, what time — the three things that let someone find out whether anyone else got the same message.'},
+   {t:'Hand it over still running',w:'Disconnected and powered on is exactly what is wanted.'}],
+  never:'<b>Do not shut it down or restart it.</b> That feels like stopping it and instead throws away evidence held in memory, which will not exist again. Do not run a scan to “see how bad it is” either — that changes the machine before anyone has looked at it.'},
+
+ {ic:'📱',t:'A laptop or phone is lost or stolen',
+  h:'Left somewhere, taken, or simply not where it should be',
+  ctx:'Here “stop the spread” means locking the device, and the order protects your chance of getting it back as well as your accounts.',
+  steps:[
+   {t:'Lock it remotely',w:'Blocks use immediately, keeps location reporting alive, and is reversible if it turns up in a coat pocket. This only works if Find My Device was already on.'},
+   {t:'Tell whoever handles this — and your bank if cards are on it',w:'A work device may be remotely wiped by IT; a personal one with banking apps is a call to the bank on the number printed on your card.'},
+   {t:'Change the passwords for anything that was signed in',w:'Start with the email account, because everything else resets through it.'},
+   {t:'Wipe it only once you are sure it is gone',w:'A wipe is permanent and ends any chance of finding it. Misplaced and stolen look identical for the first hour.'}],
+  never:'<b>Do not wipe first.</b> It feels decisive, protects nothing that locking has not already protected, and throws away the recovery.'},
+
+ {ic:'✉️',t:'I sent something to the wrong person',
+  h:'Wrong recipient, wrong attachment, reply-all with something that was not for everyone',
+  ctx:'The most common incident of all, and the one people are most tempted to handle quietly. If it contained data about other people, a clock may already be running.',
+  steps:[
+   {t:'Ask the recipient to delete it, and keep their reply',w:'The nearest thing to stopping the spread. Their confirmation is also the record that it was dealt with. Try recall if your email offers it, but treat it as a bonus — it often fails silently.'},
+   {t:'Tell whoever handles this',w:'Especially if it held personal data or anything about a client. The deadline, if there is one, starts when someone becomes aware — not when it is confirmed.'},
+   {t:'Write down what went, to whom, and when',w:'Exactly which file or which text, the full address it reached, and the time. Guessing later is worse than useless.'},
+   {t:'Keep your copy of what you sent',w:'The sent message is the evidence of what was actually disclosed, which is rarely quite what you remember.'}],
+  never:'<b>Do not quietly resend the correct version and hope.</b> It leaves the wrong one sitting in someone’s inbox with nobody aware of it, and it is how a five-minute problem becomes a reportable one.'},
+
+ {ic:'💳',t:'Money has moved that should not have',
+  h:'A payment you authorised that now looks wrong, or one you did not make',
+  ctx:'The only situation where the first call is outward rather than inward, because recovery depends on how fast the receiving bank can be reached — measured in hours.',
+  steps:[
+   {t:'Ring the bank on the number printed on your card, and say “fraud”',w:'The number on the card, never one from the message that caused this. The word matters — it routes you to the people who can act rather than to general enquiries.'},
+   {t:'Tell whoever handles this at work',w:'If it was a work payment, the people who can check whether other invoices were altered need to know within minutes, not at the end of the day.'},
+   {t:'Write down times, amounts and the account details you were given',w:'The receiving account number is the single most useful thing you can hand over, and it is usually sitting in the message that asked for the payment.'},
+   {t:'Keep every message involved',w:'The request, the invoice, the thread it arrived in. Do not clean up the mailbox.'}],
+  never:'<b>Do not ring a number from the message</b>, and do not reply to the thread to ask whether it was genuine. If the account is compromised, you are asking the attacker.'}
+];
+
+const sits=document.getElementById('sits'), panel=document.getElementById('panel');
+sits.innerHTML=SITS.map((s,i)=>
+  `<button class="sit${i===0?' on':''}" data-sit="${i}">
+     <span class="sit-ic">${s.ic}</span><span class="sit-t">${s.t}</span></button>`).join('');
+
+function show(i){
+  const s=SITS[i];
+  panel.innerHTML=`<h2>${s.h}</h2><div class="ctx">${s.ctx}</div>
+    <div class="steps">${s.steps.map((st,k)=>
+      `<div class="st"><span class="st-n">${k+1}</span>
+        <span class="st-b"><div class="st-t">${st.t}</div><div class="st-w">${st.w}</div></span></div>`).join('')}</div>
+    <div class="never"><span class="never-tag">Not this</span><span class="never-t">${s.never}</span></div>`;
+  document.querySelectorAll('.sit').forEach(b=>b.classList.toggle('on',+b.dataset.sit===i));
+}
+sits.addEventListener('click',e=>{
+  const b=e.target.closest('[data-sit]'); if(b)show(+b.dataset.sit);
+});
+show(0);
+</script>
+</body></html>

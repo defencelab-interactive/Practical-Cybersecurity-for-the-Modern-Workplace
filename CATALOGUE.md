@@ -9,7 +9,7 @@ Cybersecurity awareness training for non-technical employees. Two content format
 
 Courses build understanding. Bytes build habits. Both work independently. Both stack into learning paths.
 
-**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 18 built, 6 to build. **All 12 courses are built;** the remainder are Bytes.
+**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 19 built, 5 to build. **All 12 courses are built;** the remainder are Bytes.
 
 ---
 
@@ -245,9 +245,9 @@ belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.h
 | 9a | **Clean Up What's Public About You** | LinkedIn settings, old accounts, searching for yourself *(merges the old 9a, 9b)* | 3 min | Course 9 | To build |
 | 10a | **Anonymise an AI Prompt** | Paste a prompt; names, companies and project details are highlighted with suggested replacements | 2 min | Course 10 | To build |
 | 11b | **Is This PII?** | Eight examples to sort, including the edge cases that catch people | 2 min | Course 11 | To build |
-| 13a | **Disconnect, Report, Write It Down** | The four steps and your own who-to-tell, on one card. Ordering per Course 13 — report comes second, not last. | 2 min | Course 13 | To build |
+| 13a | **The First Four Actions** | Pick the situation — clicked a link, machine misbehaving, device gone, sent to the wrong person, money moved — and see what the same four steps mean in that one. | ~2 min | Course 13 | Built |
 
-**Total Security Bytes: 12 items (6 built, 6 to build)**
+**Total Security Bytes: 12 items (7 built, 5 to build)**
 
 ### Retired
 
@@ -306,7 +306,7 @@ The complete curriculum. Recommended deployment: one item per 1-2 weeks over 6 m
 | 21 | Byte | 11b | Is This PII? | Data | 2 min |
 | 22 | Course | 12 | Share Links, Folders and Old Access | Data | 5 min |
 | 23 | Course | 13 | Disconnect, Report, Write It Down | Incident | 5 min |
-| 24 | Byte | 13a | Disconnect, Report, Write It Down — the card | Incident | 2 min |
+| 24 | Byte | 13a | The First Four Actions | Incident | 2 min |
 
 **Total: 24 items, ~99 min.** One per week is 24 weeks; one per fortnight is about 11 months.
 
