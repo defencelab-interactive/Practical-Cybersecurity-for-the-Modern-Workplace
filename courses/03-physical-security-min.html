@@ -362,7 +362,7 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 const XPW={sure:3,pretty:2,guess:1};
 /* ===== SCENE 1 as a vertical timeline with spots ===== */
 const NODES=[
- {date:'Start here',crit:0,beat:'Look up for a second',
+ {date:'Start here',crit:0,beat:'Check the room you are in right now',
   body:'Tick anything true in the room you are in right now. At home today? Answer for the last place you worked around other people.',
   spot:{type:'audit',topic:'space',q:'True in your space right now?',
     items:[
@@ -374,12 +374,12 @@ const NODES=[
      {t:'People can get into this space without a badge or a key',why:'Not automatically a problem — it just means the door is not doing the work you assume.'}],
     fb:'None of this makes you careless. You print because paper is easier to read, you leave the laptop because you are coming straight back.<br><br>That is the whole problem: physical security fails through convenience, not negligence.'}},
 
- {date:'July 2017',crit:1,beat:'The password was in the photograph',
+ {date:'July 2017',crit:1,beat:'A password published in a news photo',
   body:'A news agency ran a routine story about an emergency management agency in Hawaii, with a photo of an employee at his desk. On the monitor, on a yellow sticky note, was a password. Legible in the published picture.<br><br>Nobody broke in. Somebody photographed a desk.',
   more:{t:'The same thing happens on video calls',
     body:'People compose themselves for a camera and forget what is behind them — open mail, dashboards, a whiteboard, notes stuck to a monitor.<br><br>In 2015 a French broadcaster gave an interview in an office where passwords were visible on the wall behind the presenter, including one for a social media account. Conference livestreams and screen shares have the same problem: the content you chose to show is fine, and the thing beside it is not.'}},
 
- {date:'Screens',crit:0,beat:'Further away than you think',
+ {date:'Screens',crit:0,beat:'Who can read your screen, and from how far',
   body:'On a train, your screen is readable from the seat behind. In an open-plan office, everyone walking to the kitchen passes it at reading distance.<br><br>What leaks is rarely dramatic — a customer name, a salary line, a supplier’s bank details.',
   spot:{type:'quiz',topic:'screens',q:'On a train with something confidential open. Best protection available?',
     opts:[
@@ -389,7 +389,7 @@ const NODES=[
      ['Angling the lid slightly away from the aisle',0]],
     fb:'Position. If nobody can get behind the screen, nothing else is needed. Dimming makes it unreadable for you first; angling helps against one seat and not the one opposite.'}},
 
- {date:'What you leave behind',crit:0,beat:'Paper, and the laptop on the table',
+ {date:'Paper and devices',crit:0,beat:'Printouts in trays, laptops on tables',
   body:'Printed pages have no access control: once out, they can be read, photographed or carried off with no record. The gap is between pressing print and collecting.<br><br>A stolen laptop is an insurance claim if it is encrypted, and a data breach if it is not. Two settings decide which: <b>full-disk encryption</b> and a short <b>auto-lock</b>.',
   more:{t:'Why the login screen stops mattering, and when a printout becomes an incident',
     body:'<b>The laptop.</b> A password protects the operating system, and the operating system only matters if the thief boots the machine normally. Remove the drive, connect it to another computer as external storage, and the files are simply there. Encryption scrambles the disk with a key derived from your credentials, so the drive on its own is noise. Remote wipe is useful but conditional — the device has to power on and reach the network.<br><br><b>The printout.</b> A confidential document you cannot account for is a potential data breach. Under GDPR the clock starts when someone becomes <i>aware</i> of a possible loss, not when it is confirmed, and there are generally 72 hours to notify a regulator. Reprinting quietly removes the only chance of finding out where the first copy went.<br><br><b>Secure print</b> — also called pull print — holds the job until you enter a PIN at the machine. That closes the gap entirely, and most offices that have it have it switched off by default.'},
@@ -400,7 +400,7 @@ const NODES=[
      ['Whether you can wipe it remotely',0]],
     fb:'Encryption. It holds regardless of what anyone does next — which makes it the thing to check first rather than last.'}},
 
- {date:'Someone else’s desk',crit:0,beat:'Five minutes after its owner left',
+ {date:'A colleague’s desk',crit:0,beat:'What two minutes alone would give a visitor',
   body:'A visitor walks past this desk alone for two minutes. Click whatever is worth having — some of it genuinely is not.',
   spot:{type:'flags',topic:'paper',
     mail:[
@@ -424,7 +424,7 @@ const NODES=[
       {ok:0,why:'<b>The whiteboard</b> — server names and layout are reconnaissance that would otherwise take weeks.'}],
     fb:'Seven worth having, two that only look like it. Nothing here needed breaking into anything, and every item was left by someone doing ordinary work.'}},
 
- {scene2:1,date:'Your settings',crit:0,beat:'Three things, about a minute each',
+ {scene2:1,date:'Your settings',crit:0,beat:'Three settings to change on your own devices',
   body:'Mark whichever you mean to do.',
   spot:{type:'checklist',
     items:[
