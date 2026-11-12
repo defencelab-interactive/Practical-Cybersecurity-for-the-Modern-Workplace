@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Defence Lab · Who Else Can Open This</title>
+<title>Defence Lab · Share Links, Folders and Old Access</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 @property --mood{syntax:'<number>';inherits:true;initial-value:0}
@@ -506,7 +506,7 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
     <div class="rail">
       <svg class="sh" viewBox="0 0 120 124"><path d="M60 6 L106 24 L106 66 Q106 104 60 120 Q14 104 14 66 L14 24 Z" fill="rgba(52,183,125,.06)" stroke="var(--ac)" stroke-width="3"/><path d="M60 30 L52 54 L66 62 L54 92" fill="none" stroke="var(--rd)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <div class="eyebrow">Course 12 · Data Protection</div>
-      <h1>Who Else Can Open This</h1>
+      <h1>Share Links, Folders and Old Access</h1>
       <div class="r-sub">What the sharing settings actually decide, and why access outlasts the reason for it.</div>
 
     </div>
@@ -523,7 +523,7 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 const XPW={sure:3,pretty:2,guess:1};
 /* ===== SCENE 1 as a vertical timeline with spots ===== */
 const NODES=[
- {date:'Start here',crit:0,beat:'Set the sharing on this one yourself',
+ {date:'Start here',crit:0,beat:'Set the sharing on this contract yourself',
   body:'The signed contract has to go to the client’s lawyer. She works at the client, not at your company. She needs to <b>read</b> it, not change it, and only until the deal closes next month.<br><br>Set all three and share it. Everything you need to get it right is in that paragraph.',
   spot:{type:'share',topic:'scope',
     file:'Hartwell-contract-signed.pdf',
@@ -556,7 +556,7 @@ const NODES=[
 
  {date:'2020–2023',crit:1,beat:'A link to one folder that opened the whole account',
   body:'Now the version where somebody got it wrong at scale.<br><br>Microsoft researchers published open-source AI models on GitHub and included a link so people could download them. Reasonable. The link was supposed to point at the folder holding the models.<br><br>It did not. It had been created with access to <b>the entire storage account</b>, and with permission not just to read but to write and delete. Alongside the models sat 38TB of other data: backups of two employees’ machines, containing passwords, keys, and more than 30,000 internal Teams messages.',
-  more:{t:'The part that turned a mistake into three years',
+  more:{t:'The expiry that was extended to 2051',
     body:'The link was published in July 2020 with an expiry of October 2021 — so it would have closed itself after fifteen months. In October 2021, rather than reissuing it, someone extended the expiry. The new date was <b>October 2051</b>.<br><br>It was found by outside researchers in June 2023 and revoked two days later. Nearly three years, and nothing in between would have surfaced it: a link that works is indistinguishable from a link that works correctly. No alert fires because nothing is going wrong, as far as the system is concerned. Permission is being used exactly as granted.<br><br>Two things to take from it. Scope and permission are decided once, when the link is made, and nobody re-reads them afterwards. And an expiry is the only part of a share that fails <i>safe</i> — which is why extending one to thirty years undoes more than it looks like.'},
   spot:{type:'quiz',topic:'scope',q:'Why did this run for nearly three years without anyone noticing?',
     opts:[
@@ -575,7 +575,7 @@ const NODES=[
      ['Put it in the team folder and tell people not to open it',0]],
     fb:'A new place with the right people on it. It takes about twenty seconds and it is the only option here where the access list matches who should see it.<br><br>The other two are the common ones, and they share a flaw: both leave the file reachable by everyone the folder reaches, and rely on those people choosing not to look. An obscure filename is not an access control — and it fails worst against the person who is searching for exactly that word.'}},
 
- {date:'Afterwards',crit:1,beat:'Access outlasts the reason it was granted',
+ {date:'Months later',crit:1,beat:'Access outlasts the reason it was granted',
   body:'The last part is time, and it is the one no process covers.<br><br>People change teams, projects end, contractors finish, agencies get replaced. What ends is the reason for the access. The access itself does not end — it has no idea the project is over, and nothing prompts anyone to remove it.<br><br>This is how a folder arrives at a list of forty people that nobody chose. Each addition was correct on the day it was made.',
   spot:{type:'experience',topic:'review',q:'Think of a shared folder you use most. If you opened its access list right now, how many names would surprise you?',
     scale:['None, I know who is on it','One or two','I have genuinely no idea'],
