@@ -9,7 +9,7 @@ Cybersecurity awareness training for non-technical employees. Two content format
 
 Courses build understanding. Bytes build habits. Both work independently. Both stack into learning paths.
 
-**Total library:** 24 items (12 courses + 12 bytes), ~95 min combined. 8 built, 16 to build.
+**Total library:** 24 items (12 courses + 12 bytes), ~95 min combined. 12 built, 12 to build.
 
 ---
 
@@ -129,15 +129,15 @@ belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.h
 | 4a | **Build a Passphrase** | Generator: four words, separators, strength shown as you go | 2 min | Course 4 | To build |
 | 5a | **Set Up MFA — Step by Step** | The settings path in each major account, with screenshots. The course says turn it on; this shows where. | 3 min | Course 4 | To build |
 | 6b | **Link Inspector** | Paste a URL and see where it really goes — domain, @ trick, punycode, lookalikes. Runs in the browser. | ~3 min | Course 6 | Built |
-| 7b | **Secure Your Home WiFi** | Router password, encryption type, network name. The one topic no course covers. | 2 min | Course 7 | To build |
+| 7b | **Your Home Network** | Paste your WiFi name and see what it gives away (surname, address, router model, ISP default), then three router settings | 2 min | Course 7 | Built |
 | 7f | **Working Away From the Office** | Laptop settings, cafés and travel in one reference *(merges the old 7a, 7c, 7e)* | 3 min | Courses 7–8 | To build |
-| 8b | **When You Lose Your Phone** | Lock, wipe, notify, in order. Written for someone in a panic. | 2 min | Course 8 | To build |
+| 8b | **When Your Phone Goes Missing** | Two tabs: the three settings that only work beforehand, and the lock→notify→passwords→wipe order for when it is gone | ~2 min | Course 8 | Built |
 | 9a | **Clean Up What's Public About You** | LinkedIn settings, old accounts, searching for yourself *(merges the old 9a, 9b)* | 3 min | Course 9 | To build |
 | 10a | **Anonymise an AI Prompt** | Paste a prompt; names, companies and project details are highlighted with suggested replacements | 2 min | Course 10 | To build |
 | 11b | **Is This PII?** | Eight examples to sort, including the edge cases that catch people | 2 min | Course 11 | To build |
 | 13a | **STOP · DOCUMENT · REPORT** | A card you fill in once, save and print | 2 min | Course 13 | To build |
 
-**Total Security Bytes: 12 items (3 built, 9 to build)**
+**Total Security Bytes: 12 items (5 built, 7 to build)**
 
 ### Retired
 
