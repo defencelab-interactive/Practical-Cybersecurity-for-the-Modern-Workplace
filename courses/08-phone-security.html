@@ -445,17 +445,17 @@ const XPW={sure:3,pretty:2,guess:1};
 /* ===== SCENE 1 as a vertical timeline with spots ===== */
 const NODES=[
  {date:'Start here',crit:0,beat:'Which one would hurt more to lose?',
-  body:'Both are taken on the same afternoon. Before you pick, read what is actually on each.',
+  body:'Both are taken on the same afternoon. Whether either belongs to your employer changes who pays for it, not which one is worse \u2014 so read what is on each and pick.',
   spot:{type:'weigh',topic:'reach',q:'Stolen on the same day — which costs you more?',
     sides:[
-     {ic:'💻',t:'Your work laptop',
-      items:['Work files and email','Access to the company network','Saved browser passwords','Documents you were drafting'],
+     {ic:'💻',t:'The laptop',
+      items:['Files and email','Access to whatever it is signed into','Saved browser passwords','Whatever you were working on'],
       pick:'The laptop'},
-     {ic:'📱',t:'Your phone',
-      items:['Work and personal email','Banking apps, already signed in','Your authenticator codes','Messages, photos, location history','The number your bank texts for confirmation'],
+     {ic:'📱',t:'The phone',
+      items:['Email \u2014 which is how most accounts get reset','Apps already signed in','Your authenticator codes','Messages, photos, location history','The number services text to confirm it is you'],
       pick:'The phone'}],
     right:1,
-    fb:'The phone, and it is not close.<br><br>A laptop holds work. A phone holds the <b>means of getting back into everything else</b> — your authenticator codes, your email for password resets, and the number used to confirm it is really you. Someone holding an unlocked phone can often reset accounts that were never on the phone at all.<br><br>Which is why a phone deserves at least the care people give a laptop, and usually gets less.'}},
+    fb:'The phone, and it is not close.<br><br>A laptop holds work. A phone holds the <b>means of getting back into everything else</b> — your authenticator codes, your email for password resets, and the number used to confirm it is really you. Someone holding an unlocked phone can often reset accounts that were never on the phone at all.<br><br>Which is why a phone deserves at least the care people give a laptop, and usually gets less.<br><br>This holds whichever device belongs to your employer. A work phone still carries the codes for work accounts; a personal phone still carries the email that resets them. If both are company-issued, the loss is the company\u2019s rather than yours \u2014 the shape of it does not change.'}},
 
  {date:'Permissions',crit:0,beat:'What your apps can see when you are not looking',
   body:'Start with what is already installed. Apps ask for permissions at install and keep them indefinitely — location, microphone, camera, contacts — whether or not they still need them.<br><br>In 2021 a flashlight app with tens of millions of downloads was found requesting contacts, location, camera and microphone. A flashlight needs a torch and nothing else.',
