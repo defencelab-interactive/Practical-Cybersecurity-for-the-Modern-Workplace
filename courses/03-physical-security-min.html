@@ -261,6 +261,30 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 .flags-rest .fr-h{font:700 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--tf);margin-bottom:8px}
 .flags-rest .fr{font-size:13.5px;line-height:1.55;color:var(--tm);padding:6px 0 6px 13px;border-left:2px solid rgba(255,255,255,.14)}
 .flags-rest .fr b{color:var(--tw);font-weight:600}
+/* ── desk scan: items you tap, explanation opens underneath ── */
+.scan-spot{max-width:880px}
+.scan{display:flex;flex-direction:column;gap:8px}
+.sc-i{background:var(--paper);border:1.5px solid var(--line);border-radius:13px;overflow:hidden;box-shadow:var(--sh);transition:border-color .18s}
+.sc-r{width:100%;display:flex;align-items:center;gap:13px;padding:14px 17px;background:none;border:none;cursor:pointer;text-align:left;font-family:var(--body);transition:background .15s}
+.sc-r:hover{background:#f6f8f5}
+.sc-i.on .sc-r{cursor:default}
+.sc-ic{font-size:19px;flex:none;line-height:1}
+.sc-t{flex:1;font-size:15px;line-height:1.45;color:var(--ink)}
+.sc-m{flex:none;font:700 10px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:transparent}
+.sc-i.bad{border-color:var(--rd)}
+.sc-i.bad .sc-m{color:var(--rd)}
+.sc-i.fine{border-color:var(--gr)}
+.sc-i.fine .sc-m{color:var(--gr)}
+.sc-i.left{opacity:.82;border-style:dashed}
+.sc-w{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.sc-i.on .sc-w{max-height:320px}
+.sc-wi{padding:0 17px 15px 49px;font-size:14px;line-height:1.6;color:var(--ink-m)}
+.sc-wi b{color:var(--ink)}
+.scan-bar{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}
+.scan-n{font:700 13px var(--mono);color:var(--ac)}
+.scan-go{background:none;border:1px solid rgba(255,255,255,.2);border-radius:9px;color:var(--tm);font:600 13px var(--body);padding:8px 14px;cursor:pointer;transition:all .15s}
+.scan-go:hover{border-color:var(--ac);color:var(--ac)}
+@media (max-width:820px){.sc-r{padding:12px 14px;gap:11px}.sc-wi{padding:0 14px 13px 42px}}
 .flags-fb{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:17px 20px;font-size:14.5px;line-height:1.65;color:var(--ink-m);display:none}
 .flags-fb.show{display:block;animation:rise .4s}
 
@@ -412,28 +436,26 @@ const NODES=[
     fb:'Encryption. It holds regardless of what anyone does next — which makes it the thing to check first rather than last.'}},
 
  {date:'A colleague’s desk',crit:0,beat:'What two minutes alone would give a visitor',
-  body:'A visitor walks past this desk alone for two minutes. Click whatever is worth having — some of it genuinely is not.',
-  spot:{type:'flags',topic:'paper',
-    mail:[
-      {label:'Screen',parts:[[0,'Email client open, inbox visible'],' · ',[1,'screen not locked']]},
-      {label:'On the desk',parts:[[2,'A sticky note on the monitor: “VPN: Summer2024!”']]},
-      {body:1,parts:[[3,'A printed spreadsheet: “Q3 headcount — salary bands”']]},
-      {body:1,parts:[[4,'The building access badge, still on its lanyard']]},
-      {body:1,parts:[[5,'A phone, face up, showing message previews']]},
-      {body:1,parts:['A mug, a plant, and ',[6,'a framed photo of two children']]},
-      {body:1,parts:[[7,'A notebook, closed'],', and ',[8,'a whiteboard showing server names']]},
-      {foot:1,parts:['Owner: away from desk, coat still on the chair']}],
-    flags:[
-      {ok:0,why:'<b>An open inbox</b> — subject lines give away current projects, who talks to whom, which suppliers are in play. Already on screen; no access needed.'},
-      {ok:0,why:'<b>Unlocked</b> — turns everything else from a look into a session. Two minutes is enough to send mail as this person.'},
-      {ok:0,why:'<b>A password on the monitor</b> — the Hawaii photograph, minus the newspaper.'},
-      {ok:0,why:'<b>Salary bands on paper</b> — personal data about named colleagues, unattended and easy to photograph.'},
-      {ok:0,why:'<b>The badge</b> — the physical key, left beside the door. Cloneable in seconds with cheap equipment.'},
-      {ok:0,why:'<b>Message previews</b> — a lock screen showing content leaks one-time codes. One setting to turn off.'},
-      {ok:1,why:'<b>A family photo</b> is not a security problem, and treating it as one is how these lists lose people.'},
-      {ok:1,why:'<b>A closed notebook</b> is fine as it sits. Lock it away overnight, not during a coffee break.'},
-      {ok:0,why:'<b>The whiteboard</b> — server names and layout are reconnaissance that would otherwise take weeks.'}],
-    fb:'Seven worth having, two that only look like it. Nothing here needed breaking into anything, and every item was left by someone doing ordinary work.'}},
+  body:'The owner is away, coat still on the chair. Tap anything on the desk that would be worth having — some of it genuinely isn’t.',
+  spot:{type:'scan',topic:'paper',
+    items:[
+     {ic:'\ud83d\udda5',t:'Monitor — inbox open, screen not locked',flag:1,
+      why:'The screen is doing two things at once. <b>Subject lines</b> give away current projects, who talks to whom and which suppliers are in play. <b>Unlocked</b> turns that from a look into a session — two minutes is enough to send mail as this person.'},
+     {ic:'\ud83d\udcdd',t:'Sticky note on the bezel: “VPN: Summer2024!”',flag:1,
+      why:'The Hawaii photograph, minus the newspaper. Worth treating as a symptom: people write passwords down when there are too many to hold.'},
+     {ic:'\ud83d\udcc4',t:'Printout: “Q3 headcount — salary bands”',flag:1,
+      why:'Personal data about named colleagues, unattended and easy to photograph. Of everything here, the item most likely to become a formal privacy incident.'},
+     {ic:'\ud83e\udeaa',t:'Building badge, still on its lanyard',flag:1,
+      why:'The physical key, left beside the door. Cloneable in seconds with equipment that costs very little.'},
+     {ic:'\ud83d\udcf1',t:'Phone face up, message previews showing',flag:1,
+      why:'A lock screen that displays content will show a one-time code to whoever is holding it — enough to finish an account takeover that already has the password.'},
+     {ic:'\ud83d\udcca',t:'Whiteboard with server names and a system diagram',flag:1,
+      why:'Reconnaissance that would otherwise take weeks. Also the thing most often captured by accident, in the background of a photo or a call.'},
+     {ic:'\ud83d\uddbc',t:'Framed photo of two children',flag:0,
+      why:'Not a security problem, and treating it as one is how these lists lose people. Nothing follows from a stranger seeing it.'},
+     {ic:'\ud83d\udcd3',t:'Notebook, closed',flag:0,
+      why:'Fine as it sits. Worth locking away overnight rather than during a coffee break.'}],
+    fb:'Six worth having, two that only look like it. Nothing here needed breaking into anything — every item was left by someone doing ordinary work.'}},
 
  {scene2:1,date:'Your settings',crit:0,beat:'Three settings to change on your own devices',
   body:'Mark whichever you mean to do.',
@@ -478,6 +500,17 @@ NODES.forEach((n,i)=>{
         h+=`<button class="cl-done" data-done="${i}-${j}">I\u2019ll do this \u2713</button></div></div>`;
       });
       h+=`</div><div class="cl-gate" id="gate-${i}">Mark whichever you mean to do — they go into your plan below.</div></div>`;
+    } else if(s.type==='scan'){
+      const total=s.items.filter(x=>x.flag).length;
+      h+=`<div class="spot scan-spot"><div class="scan">`;
+      s.items.forEach((it,j)=>{
+        h+=`<div class="sc-i" id="sc-${i}-${j}"><button class="sc-r" data-scan="${i}-${j}">
+          <span class="sc-ic">${it.ic}</span><span class="sc-t">${it.t}</span><span class="sc-m"></span></button>
+          <div class="sc-w"><div class="sc-wi">${it.why}</div></div></div>`;
+      });
+      h+=`</div><div class="scan-bar"><span class="scan-n" id="sn-${i}">Nothing picked yet</span>
+        <button class="scan-go" data-scango="${i}">That\u2019s all I can see</button></div>
+        <div class="flags-fb" id="ffb-${i}"></div></div>`;
     } else if(s.type==='audit'){
       h+=`<div class="spot audit-spot"><div class="aud-q">${s.q}</div><div class="aud">`;
       s.items.forEach((it,j)=>{
@@ -578,6 +611,23 @@ track.addEventListener('click',e=>{
     fb.classList.add('show');recordAnswer(s.topic,ok);markSeen(i);return;}
   const mt=e.target.closest('[data-more]');
   if(mt){document.getElementById('more-'+mt.dataset.more).classList.toggle('open');return;}
+  // desk scan: tap an item
+  const sc=e.target.closest('[data-scan]');
+  if(sc){const[i,j]=sc.dataset.scan.split('-').map(Number);const s=NODES[i].spot;const it=s.items[j];
+    const el=document.getElementById('sc-'+i+'-'+j);
+    if(el.classList.contains('on'))return;
+    el.classList.add('on',it.flag?'bad':'fine');
+    el.querySelector('.sc-m').textContent=it.flag?'worth having':'fine';
+    if(it.flag)addXP(1);
+    updateScan(i);return;}
+  const sg=e.target.closest('[data-scango]');
+  if(sg){const i=+sg.dataset.scango;const s=NODES[i].spot;
+    s.items.forEach((it,j)=>{
+      const el=document.getElementById('sc-'+i+'-'+j);
+      if(it.flag&&!el.classList.contains('on')){el.classList.add('on','bad','left');
+        el.querySelector('.sc-m').textContent='worth having';}
+    });
+    sg.remove();updateScan(i,true);return;}
   // self-audit: tick an observation
   const ar=e.target.closest('[data-aud]');
   if(ar){const[i,j]=ar.dataset.aud.split('-').map(Number);
@@ -646,6 +696,19 @@ track.addEventListener('click',e=>{
   if(box){const item=box.closest('.cl-item');item.classList.toggle('on');if(item.classList.contains('on')&&!item.dataset.c){item.dataset.c=1;addXP(1);}checkChecklistDone(item.dataset.cl);return;}
 });
 
+function updateScan(i,forced){
+  const s=NODES[i].spot;const total=s.items.filter(x=>x.flag).length;
+  const got=document.querySelectorAll('#node-wrap .sc-i.bad:not(.left)').length
+          ||[...document.querySelectorAll('[id^="sc-'+i+'-"]')].filter(e=>e.classList.contains('bad')&&!e.classList.contains('left')).length;
+  const n=document.getElementById('sn-'+i);
+  if(n)n.textContent=got?got+' of '+total+' found':'Nothing picked yet';
+  if(got===total||forced){
+    const fb=document.getElementById('ffb-'+i);
+    if(fb&&!fb.classList.contains('show')){fb.innerHTML=s.fb;fb.classList.add('show');
+      recordAnswer(s.topic,got>=Math.ceil(total/2));markSeen(i);}
+    const btn=document.querySelector('[data-scango="'+i+'"]');if(btn)btn.remove();
+  }
+}
 function updateFlagCount(i,forced){
   const s=NODES[i].spot;const total=s.flags.filter(f=>!f.ok).length;
   const found=document.querySelectorAll('[data-fseg^="'+i+'-"].hit').length;
