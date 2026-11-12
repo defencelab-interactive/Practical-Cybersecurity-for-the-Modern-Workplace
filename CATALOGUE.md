@@ -201,6 +201,18 @@ none of them did anything a reader would miss once the return visit stopped bein
 Printing is not the escape hatch either: `window.print()` can be refused by an LMS iframe sandbox
 and then does nothing at all, so no Byte offers it as the way its content leaves.
 
+**A push is not a publication.** On 12 Nov the Pages deployment for a pushed commit failed with a
+502 from GitHub's own deployment API — the build succeeded and the artifact was produced, but the
+deployment never happened, so the CDN kept serving the previous version for twenty minutes while
+git looked perfectly healthy. GitHub's status page reported no incident. Re-running the failed job
+alone sat in the queue and never recovered; an empty commit, which starts a clean build and deploy,
+fixed it in under two minutes.
+
+After any push, check the deployed page rather than the build status: fetch the live URL and look
+for something only the new version contains. The tell when this goes wrong is the live page showing
+old content while the repository holds the new — compare against `raw.githubusercontent.com` to
+separate a delivery failure from a code problem.
+
 **Interactions must move what they claim to move.** The order mechanic first worked by tapping
 rows to assign them a number — the number appeared and the row stayed where it was, which reads as
 broken. It now reorders for real: pointer drag by a handle (works with a mouse and with touch,
