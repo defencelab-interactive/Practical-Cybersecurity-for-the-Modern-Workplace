@@ -146,7 +146,10 @@ through an LMS, in whatever browser is to hand, and then leave. Anything whose v
 off on a return visit — a list you build up, a profile you fill in over time — is worth nothing to
 them. In-session state (ticks that keep your place while you work down a list) is fine; promises
 that the page will remember are not. Whatever is worth keeping leaves as **print or PDF**.
-Byte 4b lost its “add your own accounts” field to this rule.
+Byte 4b lost its “add your own accounts” field, its tick boxes and its progress bar to this rule —
+none of them did anything a reader would miss once the return visit stopped being the premise.
+Printing is not the escape hatch either: `window.print()` can be refused by an LMS iframe sandbox
+and then does nothing at all, so no Byte offers it as the way its content leaves.
 
 **Storage:** `window.storage` exists only inside the Defence Lab host. Standalone pages must fall
 back to `localStorage`, wrapped, and work with neither. Every Byte that stores anything gets a
@@ -160,7 +163,7 @@ belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.h
 | 1b | **Tools Worth Knowing About** | Filterable rundown of security tools by OS, browser and phone | ~4 min | Course 1 | Built |
 | 2a | **Your Verification Card** | Three questions about where you work, then a card naming who confirms what. Saves and prints. | ~3 min | Course 2 | Built |
 | 4a | **Build a Passphrase** | Generator: four words, separators, strength shown as you go | 2 min | Course 4 | To build |
-| 4b | **Turn On MFA** | Your accounts in the order that matters, each with the company's own term for the setting, a link where one was confirmed, and a tick that saves. Add your own. | ~3 min | Course 4 | Built |
+| 4b | **Turn On MFA** | Your accounts in the order that matters, each with the company's own term for the setting and a link where one was confirmed. A reference, not a worklist — no ticks, nothing stored. | ~3 min | Course 4 | Built |
 | 6b | **Link Inspector** | Paste a URL and see where it really goes — domain, @ trick, punycode, lookalikes. Runs in the browser. | ~3 min | Course 6 | Built |
 | 7b | **Your Home Network** | Paste your WiFi name and see what it gives away (surname, address, router model, ISP default), then three router settings | 2 min | Course 7 | Built |
 | 7f | **Working Away From the Office** | Laptop settings, cafés and travel in one reference *(merges the old 7a, 7c, 7e)* | 3 min | Courses 7–8 | To build |
