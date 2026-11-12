@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Defence Lab · The Cheapest Way In</title>
+<title>Defence Lab · How People Get Talked Into It</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 @property --mood{syntax:'<number>';inherits:true;initial-value:0}
@@ -250,9 +250,56 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 .fl b{color:var(--ink)}
 .fl .fl-ic{flex:none;font:700 11px var(--mono);color:var(--rd);padding-top:2px}
 .fl.decoy .fl-ic{color:var(--gr)}
+/* ── desk scan: items you tap, explanation opens underneath ── */
+.scan-spot{max-width:880px}
+.scan{display:flex;flex-direction:column;gap:8px}
+.sc-i{background:var(--paper);border:1.5px solid var(--line);border-radius:13px;overflow:hidden;box-shadow:var(--sh);transition:border-color .18s}
+.sc-r{width:100%;display:flex;align-items:center;gap:13px;padding:14px 17px;background:none;border:none;cursor:pointer;text-align:left;font-family:var(--body);transition:background .15s}
+.sc-r:hover{background:#f6f8f5}
+.sc-i.on .sc-r{cursor:default}
+.sc-ic{font-size:19px;flex:none;line-height:1}
+.sc-t{flex:1;font-size:15px;line-height:1.45;color:var(--ink)}
+.sc-m{flex:none;font:700 10px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:transparent}
+.sc-i.bad{border-color:var(--rd)}
+.sc-i.bad .sc-m{color:var(--rd)}
+.sc-i.fine{border-color:var(--gr)}
+.sc-i.fine .sc-m{color:var(--gr)}
+.sc-i.left{opacity:.82;border-style:dashed}
+.sc-w{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.sc-i.on .sc-w{max-height:320px}
+.sc-wi{padding:0 17px 15px 49px;font-size:14px;line-height:1.6;color:var(--ink-m)}
+.sc-wi b{color:var(--ink)}
+.scan-bar{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}
+.scan-n{font:700 13px var(--mono);color:var(--ac)}
+.scan-go{background:none;border:1px solid rgba(255,255,255,.2);border-radius:9px;color:var(--tm);font:600 13px var(--body);padding:8px 14px;cursor:pointer;transition:all .15s}
+.scan-go:hover{border-color:var(--ac);color:var(--ac)}
+@media (max-width:820px){.sc-r{padding:12px 14px;gap:11px}.sc-wi{padding:0 14px 13px 42px}}
 .flags-fb{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:17px 20px;font-size:14.5px;line-height:1.65;color:var(--ink-m);display:none}
 .flags-fb.show{display:block;animation:rise .4s}
 
+/* ── optional depth ── */
+.more{margin-top:15px;max-width:980px}
+.more-t{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.14);
+  color:var(--tm);font:600 13.5px var(--body);padding:9px 15px;border-radius:11px;cursor:pointer;transition:all .18s}
+.more-t:hover{border-color:rgba(255,255,255,.3);color:var(--tw)}
+.more-t .cv{width:8px;height:8px;border-right:2px solid var(--tf);border-bottom:2px solid var(--tf);transform:rotate(45deg) translateY(-2px);transition:transform .25s}
+.more.open .more-t .cv{transform:rotate(225deg) translateY(-1px)}
+.more.open .more-t{color:var(--tw);border-color:rgba(255,255,255,.26)}
+.more-b{max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .3s ease,margin .3s}
+.more.open .more-b{max-height:1200px;opacity:1;margin-top:12px}
+.more-in{background:rgba(255,255,255,.04);border-left:2px solid rgba(255,255,255,.18);border-radius:0 12px 12px 0;
+  padding:16px 20px;font-size:15px;line-height:1.7;color:var(--tm)}
+.more-in b{color:var(--tw)}
+@media (max-width:820px){.more-in{padding:14px 16px;font-size:14.5px}}
+
+.endcard .ec-tk{display:flex;flex-direction:column;gap:11px;margin:4px 0 18px}
+.endcard .ec-t{display:flex;gap:12px;font-size:14.5px;line-height:1.6;color:var(--tm)}
+.endcard .ec-t span{font-size:17px;flex:none;line-height:1.4}
+.endcard .ec-t b{color:var(--tw);font-weight:600}
+.endcard .ec-tk{display:flex;flex-direction:column;gap:11px;margin:4px 0 18px}
+.endcard .ec-t{display:flex;gap:12px;font-size:14.5px;line-height:1.6;color:var(--tm)}
+.endcard .ec-t span{font-size:17px;flex:none;line-height:1.4}
+.endcard .ec-t b{color:var(--tw);font-weight:600}
 .endcard .ec .nextbtn{background:var(--ac);color:#08130d;border:none;border-radius:11px;padding:12px 22px;font:600 15px var(--body);cursor:pointer}
 
 /* ══ mobile: rail becomes a compact header, content takes the full width ══ */
@@ -304,8 +351,8 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
     <div class="rail">
       <svg class="sh" viewBox="0 0 120 124"><path d="M60 6 L106 24 L106 66 Q106 104 60 120 Q14 104 14 66 L14 24 Z" fill="rgba(52,183,125,.06)" stroke="var(--ac)" stroke-width="3"/><path d="M60 30 L52 54 L66 62 L54 92" fill="none" stroke="var(--rd)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <div class="eyebrow">Course 2 · Social Engineering</div>
-      <h1>The Cheapest Way In</h1>
-      <div class="r-sub">Start on the attacker’s side of the desk. Then work through how a pretext gets built, and what actually stops one.</div>
+      <h1>How People Get Talked Into It</h1>
+      <div class="r-sub">Attacks that skip the technology and go after the person operating it — how they are built, and what stops one.</div>
 
     </div>
     <div class="scroll" id="scroll">
@@ -321,116 +368,91 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 const XPW={sure:3,pretty:2,guess:1};
 /* ===== SCENE 1 as a vertical timeline with spots ===== */
 const NODES=[
- {date:'Start here',crit:0,beat:'You are the one attacking',
-  body:'For the next thirty seconds, swap sides. Your target is a mid-sized company: four hundred staff, a normal IT department, the usual mix of laptops and cloud services. You want in. You have no secret exploit, no leaked database, and a budget that would embarrass a small startup. Four routes are open to you. Only one of them is what people in this line of work actually pick, and the reason is not the one most people assume.',
+ {date:'Start here',crit:0,beat:'Pick the cheapest way into a company',
+  body:'Swap sides for thirty seconds. Your target is a company of four hundred people, normal IT department, usual mix of laptops and cloud services. You have no secret exploit and almost no budget.',
   spot:{type:'predict',topic:'pretext',q:'Which route gets you inside fastest, for the least money?',
     opts:[
      ['Hunt for an unpatched flaw in their mail server',0],
      ['Buy access from someone already inside the network',0],
      ['Run password guesses against their login page',0],
      ['Ring the help desk and say you are locked out',1]],
-    fb:'The phone call. A usable flaw in widely-deployed software is expensive, gets patched, and may not exist on the day you need it. Buying access means finding a seller and trusting a criminal. Password guessing runs into rate limits and MFA. The help desk, meanwhile, is staffed by people whose job is to be helpful to anyone who sounds like a colleague in trouble, and it is open all day. It costs nothing and it works far more often than it should.'}},
+    fb:'The phone call. A usable flaw is expensive, gets patched, and may not exist on the day you need it. Buying access means trusting a criminal. Password guessing runs into MFA.<br><br>The help desk is staffed by people whose job is to be helpful to anyone who sounds like a colleague in trouble, and it is open all day. It costs nothing.'}},
 
- {date:'Why that is the answer',crit:0,beat:'Nobody is hacking the firewall',
-  body:'Security spending goes almost entirely into systems, and it has worked: the technical side of most companies is genuinely harder to break than it was ten years ago. So attackers moved. They did not get cleverer at code, they got better at conversation. Social engineering is the whole category of attacks that skip the technology and go after the person operating it — because a person can be persuaded to open the door from the inside, and a person does not get patched. Nothing that follows is about being gullible. The techniques work on competent people at good companies, and they work because they exploit ordinary professional behaviour: being helpful, respecting authority, wanting to get on with the job.'},
-
- {date:'July 2020',crit:1,beat:'Fifteen minutes on the phone',
-  body:'Twitter employees were working from home, and the VPN was misbehaving for everyone. Someone rang a few of them claiming to be from internal IT, walked them through a fix, and asked them to log in on a page that looked exactly like the company sign-in. Enough people did. With those credentials the callers reached the internal admin tools and took over 130 accounts — Obama, Musk, Gates, Apple — and posted a bitcoin scam that collected around $118,000 before it was shut down. New York’s financial regulator later published a detailed account of how it happened. The attackers wrote no malware. They knew the VPN was flaky, which made the call plausible, and they had the patience to try several people until one helped.',
-  spot:{type:'predict',topic:'verify',q:'You get that call. The caller knows your name, your team, and that the VPN has been failing all week. What settles it?',
+ {date:'July 2020',crit:1,beat:'A phone call that reached 130 accounts',
+  body:'That is not a thought experiment. Twitter employees were working from home and the VPN was misbehaving for everyone.<br><br>Someone rang a few of them claiming to be internal IT, walked them through a fix, and asked them to log in on a page that looked exactly like the company sign-in. Enough did. With those credentials the callers reached the internal admin tools, took over 130 accounts — Obama, Musk, Gates, Apple — and posted a bitcoin scam.<br><br>They wrote no malware. They knew the VPN was flaky, and they were willing to try several people until one helped.',
+  spot:{type:'predict',topic:'verify',q:'You get that call. The caller knows your name, your team, and that the VPN has failed all week. What settles it?',
     opts:[
      ['Ask a question only real IT would know the answer to',0],
      ['Ring IT back on the number you already have',1],
      ['Check whether the caller’s number looks internal',0]],
-    fb:'Call back on a number you already had. Caller ID is trivially forged, so what shows on your screen proves nothing. Test questions sound sensible but fail in practice: a caller who has read the company’s public material and a few LinkedIn profiles can answer more than you expect, and if they cannot, they say the system is down and they will check later. Ending the call and dialling a number you already trusted is the only move that does not depend on anything the caller tells you.'}},
+    fb:'Call back on a number you already had. Caller ID is trivially forged. Test questions sound sensible but fail in practice — a caller who has read the company’s public material can answer more than you expect, and if they cannot, they say the system is down and will check later.'}},
 
- {date:'How it is built',crit:0,beat:'The story comes before the call',
-  body:'The thing being sold in these attacks is a <b>pretext</b> — a role and a reason that make the request unremarkable. New starter who cannot get into the VPN. Auditor who needs a document before a deadline. Courier with a delivery for someone on the fourth floor. Supplier chasing a changed bank detail. The pretext is assembled beforehand from material the company published itself: staff names and job titles, which tools appear in job adverts, who is at a conference this week, the format of internal email addresses. None of it is secret, and none of it is hard to gather. The convincing part is never the request. It is the three ordinary details mentioned before the request, which establish that the caller belongs.',
-  spot:{type:'quiz',topic:'pretext',q:'Someone rings reception: “Hi, it’s Daniel from the audit firm, I was in on Tuesday with Priya — she said you could print the visitor log for me?” What makes this work?',
+ {date:'The pretext',crit:0,beat:'Three true details, then the request',
+  body:'What makes those calls work is a <b>pretext</b> — a role and a reason that make the request unremarkable. New starter who cannot get into the VPN. Auditor who needs a document before a deadline. Courier with a delivery for the fourth floor.<br><br>It is assembled beforehand from material the company published itself: staff names, which tools appear in job adverts, who is at a conference this week.<br><br>The convincing part is never the request. It is the three ordinary details mentioned before it.',
+  spot:{type:'quiz',topic:'pretext',q:'“Hi, it’s Daniel from the audit firm, I was in on Tuesday with Priya — she said you could print the visitor log?” What makes this work?',
     opts:[
      ['It refers to a real visit and a real colleague',1],
      ['It sounds friendly, and reception wants to be helpful',0],
      ['It arrives during the busy part of the day',0],
      ['It asks for something that seems harmless',0]],
-    fb:'The verifiable detail does the work. A real name and a real visit — both findable, or observed from the lobby — move the caller from stranger to “someone who was here on Tuesday”, and the rest of the request rides on that. Helpfulness, timing and a low-stakes ask all matter, but they are ordinary features of most requests. What separates a pretext from a cold call is a small piece of truth placed at the front.'}},
+    fb:'The verifiable detail does the work. A real name and a real visit move the caller from stranger to “someone who was here on Tuesday”, and the rest rides on that. What separates a pretext from a cold call is a small piece of truth placed at the front.'}},
 
- {date:'In person',crit:0,beat:'Holding the door is a security decision',
-  body:'<b>Tailgating</b> is following someone through a door they have just opened, and it works because refusing feels rude in a way that nothing else on this list does. The standard versions are well-worn: arms full of boxes, a phone pressed to the ear mid-conversation, a lanyard that is the right colour at a glance, a cigarette outside the side entrance and a walk back in with the smokers. Once inside, most offices treat presence as proof — you are past the door, so you belong. From there a laptop bag, an unlocked screen or a stack of printouts left on the tray is simply available.',
+ {date:'In person',crit:0,beat:'Doors, parcels and found USB sticks',
+  body:'<b>Tailgating</b> is following someone through a door they just opened. It works because refusing feels rude. Arms full of boxes, a phone pressed to the ear, a lanyard the right colour at a glance. Once inside, most offices treat presence as proof.<br><br><b>Baiting</b> leaves something tempting where you will find it — a USB stick labelled “Salary review Q3”, a free charging cable at a conference stand. Curiosity does the rest.',
+  more:{t:'Why a spare machine is not the safe option',
+    body:'A prepared USB device does not need you to open anything. It can present itself to the computer as a keyboard and type its own commands the moment it is plugged in — which is why “I opened it on a machine with nothing important on it” does not help: that machine is still on your network, and nothing was opened.<br><br><b>Quid pro quo</b> is the same idea in a suit. Someone offers help you did not ask for, then needs something small in return — a caller who fixes a printer problem you mentioned in a public forum, and now just needs you to install a small tool. The exchange feels fair, which is the point.'},
   spot:{type:'predict',topic:'physical',q:'Someone with an armful of parcels reaches the badge door behind you. Best move?',
     opts:[
-     ['Let them in, then mention it to reception or security',0],
-     ['Hold the door and ask which floor they are heading to',0],
+     ['Let them in, then mention it to reception',0],
+     ['Hold the door and ask which floor they want',0],
      ['Ask them to badge in, and offer to hold the parcels',1]],
-    fb:'Take the parcels. It solves the problem the pretext is built on — full hands — without letting the badge check slide, and it is hard to be offended by. Asking which floor gets a confident answer from anyone who has read the company website. Letting them in and reporting it afterwards is better than nothing, but by then they are inside, and most people never make the report. Worth saying plainly: this only works if your organisation actually backs people who ask. If challenging a stranger at the door is treated as being difficult, the door is not really controlled.'}},
+    fb:'Take the parcels. It solves the problem the pretext is built on — full hands — without letting the badge check slide, and it is hard to be offended by.<br><br>This only works if your organisation actually backs people who ask. If challenging a stranger at the door is treated as being difficult, the door is not really controlled.'}},
 
- {date:'The offer',crit:0,beat:'Baiting, and the favour that is not one',
-  body:'<b>Baiting</b> leaves something tempting where you will find it. A USB stick in the car park labelled “Salary review Q3”. A free charging cable at a conference stand. Curiosity does the rest, and modern versions do not need you to open anything — a prepared USB device can present itself as a keyboard and type its own commands the moment it is plugged in. <b>Quid pro quo</b> is the same idea wearing a suit: someone offers help you did not ask for, then needs something small in return. A caller who fixes a printer problem you did mention in a public forum, and now just needs you to install a small tool. The exchange feels fair, which is the point.',
-  spot:{type:'quiz',topic:'bait',q:'You find an unlabelled USB stick in the office car park. What is the right thing to do with it?',
-    opts:[
-     ['Plug it into a spare machine that holds nothing important',0],
-     ['Hand it in to IT or security without plugging it in',1],
-     ['Open it on your own laptop to find the owner’s name',0],
-     ['Leave it where it is, since it is not your problem',0]],
-    fb:'Hand it over unopened. Looking for the owner is the natural instinct and it is exactly what the technique is designed to trigger. A spare machine is not the safe option people think it is: a device that pretends to be a keyboard runs its commands regardless of what is stored on the computer, and that machine is still on your network. Leaving it there is at least harmless to you, but it leaves the next person to find it.'}},
-
- {date:'What actually helps',crit:1,beat:'Not suspicion — permission',
-  body:'The usual advice is to be more vigilant, which is close to useless, because these attacks arrive on ordinary days aimed at people already doing four things at once. What holds up is duller and more reliable. A rule that anything touching money, credentials or access gets confirmed on a channel you chose rather than the one the request arrived on. A named person to check with who is not the CEO, because most people cannot ring the CEO. And an understood right to say “let me call you back” without it counting as obstruction. That last one is doing most of the work: nearly every technique here depends on you resolving the situation inside the conversation, while the pressure is still on. Ending the conversation is the whole defence.',
-  spot:{type:'experience',topic:'verify',q:'Think about your own workplace. If someone senior asked you to skip a step and do something urgently, how easy would it be to say you will verify first?',
+ {date:'What helps',crit:1,beat:'A rule you can point to, not more vigilance',
+  body:'“Be more vigilant” is close to useless — these arrive on ordinary days, aimed at people already doing four things at once.<br><br>What holds up is duller. A rule that anything touching money, credentials or access gets confirmed on a channel you chose. A named person to check with who is not the CEO. And an understood right to say “let me call you back” without it counting as obstruction.<br><br>That last one does most of the work: nearly every technique here needs you to resolve it inside the conversation.',
+  spot:{type:'experience',topic:'verify',q:'In your workplace, if someone senior asked you to skip a step and do it urgently, how easy would it be to say you will verify first?',
     scale:['Easy — nobody would mind','Awkward, but I would','I would probably just do it'],
-    note:'That answer says more about your organisation than about you. Where verifying is treated as friction, social engineering has a much easier time, and the people most exposed are usually the newest and the most junior — exactly who gets targeted. If your reaction was closer to the third option, the useful move is not to become braver on your own. It is to get the rule written down: which requests need a second channel, who confirms them, and that following the rule is never held against anyone. A written rule is something you can point to under pressure. Personal nerve is not.'}},
+    note:'That answer says more about your organisation than about you. Where verifying is treated as friction, social engineering has an easier time, and the people most exposed are the newest and most junior — exactly who gets targeted.<br><br>If your reaction was closer to the third option, the useful move is not to become braver on your own. It is to get the rule written down: which requests need a second channel, who confirms them, and that following the rule is never held against anyone.'}},
 
- {date:'What they read first',crit:0,beat:'A pretext, assembled from public posts',
-  body:'Below is one employee’s public professional profile and a recent post — nothing leaked, nothing private, all of it visible to anyone with an account. An attacker building a pretext reads this the way a burglar reads a street. Click the parts you think are useful to them, and see what each one turns into.',
-  spot:{type:'flags',topic:'osint',
-    mail:[
-      {label:'Name',parts:[[0,'Marcus Adeyemi'],' \u00b7 ',[1,'Financial Controller at Meridian Logistics']]},
-      {label:'Where',parts:[[2,'Manchester, UK']]},
-      {label:'Post',parts:['“Three weeks in and the ',[3,'new SAP Concur rollout'],' is finally live. Huge thanks to ',[4,'Priya Raman'],' in IT for the patience. Onwards!”']},
-      {body:1,parts:['Earlier this month:']},
-      {body:1,parts:['“Off to ',[5,'the Logistics Finance Summit in Berlin, 14\u201316 October'],' \u2014 come and say hello if you\u2019re there.”']},
-      {body:1,parts:['“Delighted to share that we\u2019re ',[6,'hiring an Accounts Payable Assistant'],' \u2014 apply via the link.”']},
-      {body:1,parts:['Profile photo: ',[7,'headshot with visitor badge visible on lanyard']]},
-      {foot:1,parts:[[8,'1,240 connections \u00b7 open to networking']]}],
-    flags:[
-      {ok:1,why:'A name on its own is not the problem — you cannot work without one being known. It only becomes useful when it sits next to a role and a system, which is what the rest of this profile supplies.'},
-      {ok:0,why:'<b>Financial Controller</b> \u2014 this decides who gets targeted. It says this person can move money, approves invoices, and is senior enough that a junior colleague would hesitate to question them. Finance roles are the most commonly impersonated in workplace fraud for exactly this reason.'},
-      {ok:1,why:'A city is standard on a professional profile and rarely the deciding detail. It sets the time zone for a well-timed call \u2014 useful, but not the piece that makes a pretext land.'},
-      {ok:0,why:'<b>The named system</b> \u2014 now the caller can say “this is about the Concur rollout” and sound internal. Knowing which tools a company runs turns a generic call into one that fits something you are genuinely dealing with this month.'},
-      {ok:0,why:'<b>A named colleague in IT</b> \u2014 the single most valuable line here. “Priya asked me to follow up” converts a stranger into a referral. Named internal contacts are what let a pretext borrow trust that was never given to the caller.'},
-      {ok:0,why:'<b>Travel dates</b> \u2014 this tells an attacker exactly when he is away and hard to reach. Requests supposedly sent by someone who is travelling are difficult to verify, and that is precisely the window these are timed to.'},
-      {ok:0,why:'<b>A live vacancy</b> \u2014 a reason to expect a new face, and cover for an unfamiliar caller: “I started Monday in AP.” Job adverts also list the systems the role uses, which is free reconnaissance.'},
-      {ok:0,why:'<b>The badge in the photo</b> \u2014 colour, layout and logo are enough to fake something that passes a glance in a lobby. Photographs of passes, lanyards and desk setups give away more than the picture is meant to be about.'},
-      {ok:1,why:'A large network and “open to networking” make a connection request unremarkable, which helps a little. But this is a normal setting on a professional profile, and turning it off is not where the risk was.'}],
-    fb:'Six pieces worth having, and none of them leaked. That is the uncomfortable part: no single post here was a mistake, and asking people to stop posting about their work is not a plan anyone follows. The realistic conclusion is not silence. It is that the details which make you findable are already public, so a caller knowing three true things about you is not evidence of anything \u2014 and verification has to happen somewhere other than inside the conversation.'}},
+ {date:'Your public profile',crit:0,beat:'What a stranger can assemble about you',
+  body:'All of that starts with reading. Below is one employee’s public professional profile — nothing leaked, all of it visible to anyone with an account.<br><br>Tap the parts that are useful to someone building a pretext. Some of it genuinely isn’t.',
+  spot:{type:'scan',topic:'osint',
+    items:[
+     {ic:'💼',t:'Financial Controller at Meridian Logistics',flag:1,
+      why:'This decides who gets targeted. It says the person can move money, approves invoices, and is senior enough that a junior colleague would hesitate to question them. Finance roles are the most commonly impersonated in workplace fraud.'},
+     {ic:'🛠',t:'Post: “The new SAP Concur rollout is finally live”',flag:1,
+      why:'Now a caller can say “this is about the Concur rollout” and sound internal. Knowing which tools a company runs turns a generic call into one that fits something you are genuinely dealing with this month.'},
+     {ic:'👤',t:'“Huge thanks to Priya Raman in IT for the patience”',flag:1,
+      why:'The most valuable line here. “Priya asked me to follow up” converts a stranger into a referral. Named internal contacts let a pretext borrow trust that was never given to the caller.'},
+     {ic:'✈️',t:'“Off to the Logistics Finance Summit in Berlin, 14–16 October”',flag:1,
+      why:'Tells an attacker exactly when he is away and hard to reach. Requests supposedly sent by someone travelling are difficult to verify, and that is the window these are timed to.'},
+     {ic:'📝',t:'“We’re hiring an Accounts Payable Assistant”',flag:1,
+      why:'A reason to expect a new face, and cover for an unfamiliar caller: “I started Monday in AP.” Job adverts also list the systems the role uses.'},
+     {ic:'📷',t:'Profile photo — headshot with visitor badge on the lanyard',flag:1,
+      why:'Colour, layout and logo are enough to fake something that passes a glance in a lobby. Photographs of passes and desk setups give away more than the picture is about.'},
+     {ic:'📍',t:'Location: Manchester, UK',flag:0,
+      why:'Standard on a professional profile and rarely the deciding detail. It sets the time zone for a well-timed call — useful, but not what makes a pretext land.'},
+     {ic:'🔗',t:'1,240 connections · open to networking',flag:0,
+      why:'Makes a connection request unremarkable, which helps a little. But this is a normal setting, and turning it off is not where the risk was.'}],
+    fb:'Six pieces worth having, and none of them leaked. That is the uncomfortable part: no single post was a mistake, and asking people to stop posting about their work is not a plan anyone follows.<br><br>The conclusion is not silence. It is that a caller knowing three true things about you is not evidence of anything.'}},
 
- {scene2:1,date:'Your settings',crit:0,beat:'Four things to sort out',
-  body:'Two of these are settings and two are agreements with other people. The agreements matter more, and they are the ones that usually never get made. Open each for the steps, then mark it once you intend to do it.',
+ {scene2:1,date:'Your settings',crit:0,beat:'Three things to sort out',
+  body:'Mark whichever you mean to do.',
   spot:{type:'checklist',
     items:[
       {topic:'verify',t:'Agree who confirms an unusual request',
-       how:'Verification only works if there is a named person and a channel decided in advance \u2014 under pressure is the wrong time to work out who to ask.',
-       steps:['Name the person you would check with about money, access or credentials \u2014 finance lead, line manager, or the help desk','Save the numbers you would use: IT support, and your bank\u2019s from the back of the card rather than from any message','Ask what your organisation\u2019s rule is for approving payments and access changes, and get it in writing'],
-       itnote:'If no rule exists and there is no obvious person to ask, say so to IT or finance. That is a gap in the process, not a failing on your part.'},
+       how:'Verification needs a named person and a channel decided in advance — under pressure is the wrong time to work out who to ask.',
+       steps:['Name who you would check with about money, access or credentials — finance lead, manager, or the help desk','Save the numbers you would use, and your bank’s from the back of the card rather than from any message'],
+       itnote:'If no rule exists and there is no obvious person, say so to IT or finance. That is a gap in the process, not a failing on your part.'},
       {topic:'osint',t:'Read your own public profile as an attacker would',
-       how:'You cannot and should not go quiet online. The point is knowing which details are already out there, so a caller who quotes them does not sound convincing.',
-       steps:['Open your public profile while signed out, and look at what a stranger sees','Note the three details most useful to someone impersonating a colleague: your role, the systems you name, and the people you tag','Check photos for badges, screens, whiteboards and desk contents before posting'],
-       itnote:'Some organisations ask staff not to name internal systems publicly. Worth checking whether yours has a position on it.'},
+       how:'You cannot and should not go quiet online. The point is knowing which details are already out there.',
+       steps:['Open your public profile while signed out and look at what a stranger sees','Note the three most useful details: your role, the systems you name, and the people you tag','Check photos for badges, screens and whiteboards before posting'],
+       itnote:'Some organisations ask staff not to name internal systems publicly — worth checking whether yours does.'},
       {topic:'physical',t:'Decide what you say at the badge door',
-       how:'Nobody improvises this well. Having one polite line ready is the difference between challenging someone and letting it go.',
-       steps:['Pick your line and keep it simple \u2014 “Let me take those, if you can badge in”','Find out where you report someone in the building without a pass, and how','Check whether your office expects visitors to be escorted, and by whom'],
-       itnote:'If challenging strangers is discouraged where you work, raise it \u2014 door controls only function if people are backed when they use them.'},
-      {topic:'bait',t:'Know the rule on found devices and unexpected help',
-       how:'Both of these arrive as something appealing. The rule needs to be settled before you are curious.',
-       steps:['Never plug in a USB device you did not buy or receive from a known colleague \u2014 hand it to IT unopened','Treat unsolicited technical help as a request, not a favour, and verify it like one','Do not install anything at the suggestion of someone who contacted you first'],
-       itnote:'Ask IT how they want found devices handed in \u2014 some teams want them for analysis rather than simply destroyed.'}
-    ]}},
-
- {scene2:1,date:'What you take away',crit:0,beat:'Three things worth remembering',
-  body:'You opened this by picking the cheapest way into a company and landing on a phone call. Three things worth keeping from what followed.',
-  spot:{type:'takeaways',items:[
-    ['\ud83d\udcde','The technology is not the target','These attacks skip the systems entirely and go after whoever is operating them, because persuasion is cheaper than an exploit and people cannot be patched. It works on competent staff at well-run companies \u2014 which is the reason it keeps working.'],
-    ['\ud83e\udde9','Knowing true things about you proves nothing','A pretext is built from public material: your role, the tools you mention, the colleagues you name, when you are away. Three accurate details at the start of a call are what makes the request afterwards sound ordinary.'],
-    ['\u23f8\ufe0f','Every version needs you to decide right now','Ending the conversation and confirming on a channel you chose defeats nearly all of it. That has to be something you are allowed to do without it looking obstructive \u2014 which makes it a rule to agree with your team, not a personal act of nerve.']
-  ]}}
+       how:'Nobody improvises this well. One polite line ready is the difference between challenging someone and letting it go.',
+       steps:['Pick your line and keep it simple — “Let me take those, if you can badge in”','Find out where you report someone in the building without a pass'],
+       itnote:'If challenging strangers is discouraged where you work, raise it — door controls only function if people are backed when they use them.'}
+    ]}}
 ];
 
 const scroll=document.getElementById('scroll'),track=document.getElementById('track'),spineFill=document.getElementById('spineFill');
@@ -440,6 +462,10 @@ let xp=0;const addXP=n=>{xp+=n;document.getElementById('xp').textContent=xp+' XP
 NODES.forEach((n,i)=>{
   const el=document.createElement('div');el.className='node'+(n.crit?' crit':'')+(n.scene2?' s2':'');el.dataset.i=i;
   let h=`<div class="dot"></div><div class="date">${n.date}</div><div class="beat">${n.beat}</div><div class="body">${n.body}</div>`;
+  if(n.more){
+    h+=`<div class="more" id="more-${i}"><button class="more-t" data-more="${i}"><span class="cv"></span>${n.more.t}</button>
+      <div class="more-b"><div class="more-in">${n.more.body}</div></div></div>`;
+  }
   if(n.spot){
     const s=n.spot;const isExp=s.type==='experience';const isCheck=s.type==='checklist';
     if(isCheck){
@@ -452,7 +478,18 @@ NODES.forEach((n,i)=>{
         if(it.itnote){h+=`<div class="cl-itnote">\u2139\uFE0F ${it.itnote}</div>`;}
         h+=`<button class="cl-done" data-done="${i}-${j}">I\u2019ll do this \u2713</button></div></div>`;
       });
-      h+=`</div><div class="cl-gate" id="gate-${i}">Mark all four to finish this scene.</div></div>`;
+      h+=`</div><div class="cl-gate" id="gate-${i}">Mark whichever you mean to do — they go into your plan below.</div></div>`;
+    } else if(s.type==='scan'){
+      const total=s.items.filter(x=>x.flag).length;
+      h+=`<div class="spot scan-spot"><div class="scan">`;
+      s.items.forEach((it,j)=>{
+        h+=`<div class="sc-i" id="sc-${i}-${j}"><button class="sc-r" data-scan="${i}-${j}">
+          <span class="sc-ic">${it.ic}</span><span class="sc-t">${it.t}</span><span class="sc-m"></span></button>
+          <div class="sc-w"><div class="sc-wi">${it.why}</div></div></div>`;
+      });
+      h+=`</div><div class="scan-bar"><span class="scan-n" id="sn-${i}">Nothing picked yet</span>
+        <button class="scan-go" data-scango="${i}">That\u2019s all I can see</button></div>
+        <div class="flags-fb" id="ffb-${i}"></div></div>`;
     } else if(s.type==='compare'){
       h+=`<div class="spot compare-spot"><div class="cmp-q">${s.q}</div><div class="mailgrid">`;
       s.mails.forEach((m,j)=>{
@@ -522,7 +559,14 @@ function recordAnswer(topic,ok){if(!topic)return;if(!topicResults[topic])topicRe
 
 // end card
 const end=document.createElement('div');end.className='endcard';
-end.innerHTML=`<div class="ec"><h3>That’s the course.</h3><p>You picked the cheapest way into a company, watched a pretext get assembled from public posts, and set up the checks that make the next call easier to end. Below is what you said you would do.</p><div class="yourplan" id="yourplan"></div><button class="nextbtn">Finish Scene →</button></div>`;
+end.innerHTML=`<div class="ec"><h3>That\u2019s the course.</h3>
+  <p>You picked the cheapest way into a company and watched a pretext get assembled from public posts. Three things worth keeping:</p>
+  <div class="ec-tk">
+    <div class="ec-t"><span>\ud83d\udcde</span><div><b>The technology is not the target.</b> These attacks skip the systems and go after whoever operates them, because persuasion is cheaper than an exploit and people cannot be patched.</div></div>
+    <div class="ec-t"><span>\ud83e\udde9</span><div><b>Knowing true things about you proves nothing.</b> A pretext is built from public material \u2014 your role, your tools, the colleagues you tag, when you are away.</div></div>
+    <div class="ec-t"><span>\u23f8\ufe0f</span><div><b>Every version needs you to decide right now.</b> Ending the conversation and confirming elsewhere defeats nearly all of it \u2014 which makes it a rule to agree with your team, not an act of personal nerve.</div></div>
+  </div>
+  <div class="yourplan" id="yourplan"></div><button class="nextbtn">Finish Scene \u2192</button></div>`;
 track.appendChild(end);
 
 // spot open/close
@@ -538,6 +582,25 @@ track.addEventListener('click',e=>{
     const g=ok?3:1;addXP(g);document.getElementById('xpb-'+i).textContent='+'+g+' XP';
     document.getElementById('fbt-'+i).innerHTML=(ok?'<b class="v-ok">\u2713 That\u2019s right.</b> ':'<b class="v-no">\u2717 Not quite.</b> ')+s.fb;
     fb.classList.add('show');recordAnswer(s.topic,ok);markSeen(i);return;}
+  const mt=e.target.closest('[data-more]');
+  if(mt){document.getElementById('more-'+mt.dataset.more).classList.toggle('open');return;}
+  // desk scan: tap an item
+  const sc=e.target.closest('[data-scan]');
+  if(sc){const[i,j]=sc.dataset.scan.split('-').map(Number);const s=NODES[i].spot;const it=s.items[j];
+    const el=document.getElementById('sc-'+i+'-'+j);
+    if(el.classList.contains('on'))return;
+    el.classList.add('on',it.flag?'bad':'fine');
+    el.querySelector('.sc-m').textContent=it.flag?'worth having':'fine';
+    if(it.flag)addXP(1);
+    updateScan(i);return;}
+  const sg=e.target.closest('[data-scango]');
+  if(sg){const i=+sg.dataset.scango;const s=NODES[i].spot;
+    s.items.forEach((it,j)=>{
+      const el=document.getElementById('sc-'+i+'-'+j);
+      if(it.flag&&!el.classList.contains('on')){el.classList.add('on','bad','left');
+        el.querySelector('.sc-m').textContent='worth having';}
+    });
+    sg.remove();updateScan(i,true);return;}
   // cold open: pick the fake
   const pick=e.target.closest('.mail-pick');
   if(pick){const[i,j]=pick.dataset.pick.split('-').map(Number);const s=NODES[i].spot;
@@ -590,6 +653,19 @@ track.addEventListener('click',e=>{
   if(box){const item=box.closest('.cl-item');item.classList.toggle('on');if(item.classList.contains('on')&&!item.dataset.c){item.dataset.c=1;addXP(1);}checkChecklistDone(item.dataset.cl);return;}
 });
 
+function updateScan(i,forced){
+  const s=NODES[i].spot;const total=s.items.filter(x=>x.flag).length;
+  const got=document.querySelectorAll('#node-wrap .sc-i.bad:not(.left)').length
+          ||[...document.querySelectorAll('[id^="sc-'+i+'-"]')].filter(e=>e.classList.contains('bad')&&!e.classList.contains('left')).length;
+  const n=document.getElementById('sn-'+i);
+  if(n)n.textContent=got?got+' of '+total+' found':'Nothing picked yet';
+  if(got===total||forced){
+    const fb=document.getElementById('ffb-'+i);
+    if(fb&&!fb.classList.contains('show')){fb.innerHTML=s.fb;fb.classList.add('show');
+      recordAnswer(s.topic,got>=Math.ceil(total/2));markSeen(i);}
+    const btn=document.querySelector('[data-scango="'+i+'"]');if(btn)btn.remove();
+  }
+}
 function updateFlagCount(i,forced){
   const s=NODES[i].spot;const total=s.flags.filter(f=>!f.ok).length;
   const found=document.querySelectorAll('[data-fseg^="'+i+'-"].hit').length;
@@ -604,7 +680,7 @@ function updateFlagCount(i,forced){
 }
 
 // personalized checklist header + flags, built when the checklist node unlocks
-const TOPIC_LABEL={pretext:'How a pretext is built',verify:'Verifying on another channel',physical:'The badge door',bait:'Found devices and offers',osint:'What your profile gives away'};
+const TOPIC_LABEL={pretext:'How a pretext is built',verify:'Verifying on another channel',physical:'Doors and found devices',osint:'What your profile gives away'};
 function buildPersonal(i){
   const box=document.getElementById('personal-'+i);if(!box||box.dataset.built)return;box.dataset.built=1;
   const weak=[],strong=[];
@@ -627,18 +703,22 @@ function checkChecklistDone(i){
   const items=[...document.querySelectorAll('[data-cl="'+i+'"]')];
   const done=items.filter(x=>x.classList.contains('on')).length;
   const gate=document.getElementById('gate-'+i);
-  if(gate){if(done===items.length){gate.textContent='\u2713 Added to your plan — scene unlocked below.';gate.classList.add('done');}else{gate.textContent=`${done} of ${items.length} added — mark all to finish this scene.`;}}
-  if(done===items.length)unlockNext(+i);
+  if(gate){
+    if(done){gate.textContent='\u2713 '+done+' added to your plan below.';gate.classList.add('done');}
+    else{gate.textContent='Mark whichever you mean to do — they go into your plan below.';gate.classList.remove('done');}
+  }
+  buildPlan();
+  unlockNext(+i,true);
 }
 const nodesEls=[...document.querySelectorAll('.node')];
 const endEl=document.querySelector('.endcard');
 let unlockedUpTo=0; // highest node index currently readable
 
 function buildPlan(){
-  const box=document.getElementById('yourplan');if(!box||box.dataset.built)return;box.dataset.built=1;
+  const box=document.getElementById('yourplan');if(!box)return;
   const committed=[...document.querySelectorAll('.cl-item.on .cl-t')].map(x=>x.textContent);
-  if(!committed.length)return;
-  box.innerHTML='<div class="yp-title">Your plan</div><p class="yp-sub">You said you\u2019ll do these — that\u2019s your commitment coming out of this scene:</p><ul class="yp-list">'+committed.map(t=>`<li>${t}</li>`).join('')+'</ul>';
+  if(!committed.length){box.innerHTML='';return;}
+  box.innerHTML='<div class="yp-title">Your plan</div><p class="yp-sub">You said you\u2019ll do these:</p><ul class="yp-list">'+committed.map(t=>`<li>${t}</li>`).join('')+'</ul>';
 }
 function lockState(){
   nodesEls.forEach((n,idx)=>{
@@ -669,7 +749,7 @@ function unlockNext(fromIdx,quiet){
   if(nxt&&!quiet)setTimeout(()=>softReveal(nxt),520);
   // if the newly unlocked node has NO spot (pure narrative), chain-unlock the one after it
   const nd=NODES[unlockedUpTo];
-  if(nd&&(!nd.spot||nd.spot.type==='takeaways'))setTimeout(()=>unlockNext(unlockedUpTo,true),700);
+  if(nd&&(!nd.spot||nd.spot.type==='takeaways'||nd.spot.type==='checklist'))setTimeout(()=>unlockNext(unlockedUpTo,true),700);
 }
 function markSeen(i){ unlockNext(+i); }   // answering spot i unlocks i+1
 

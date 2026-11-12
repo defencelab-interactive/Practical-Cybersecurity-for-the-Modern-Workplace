@@ -627,7 +627,7 @@ a scene-2 checklist that assembles the learner's personal action plan.
 | Catalogue # | Item | File | Status |
 |---|---|---|---|
 | Course 1 | Security Basics: Why One Setting Matters | `courses/01-security-basics.html` | Built |
-| Course 2 | Social Engineering: How People Get Played | `courses/02-social-engineering.html` | Built as *The Cheapest Way In*, opens attacker-side |
+| Course 2 | Social Engineering: How People Get Played | `courses/02-social-engineering.html` | Built as *How People Get Talked Into It*, opens attacker-side. ~7 min base |
 | Course 3 | Physical Security: Desks, Screens, Printers | `courses/03-physical-security.html` | Built as *Screens, Paper and Devices*, opens with a self-audit. ~4 min base, ~5 with the two deep-dive blocks expanded |
 | Course 4 | Passwords & Passphrases | `courses/04-passwords-mfa.html` | Built — currently **combined with Course 5** in one deck |
 | Course 5 | MFA: The Second Step | — | Covered by the combined deck above; not yet split out |
@@ -667,7 +667,7 @@ as optional depth rather than a truncated base layer.
 | Course | Base | With depth expanded |
 |---|---|---|
 | 1 | ~5 min | — |
-| 2 | ~12 min | — *(still to do)* |
+| 2 | ~7 min | ~7.5 min |
 | 3 | ~4 min | ~5 min |
 | 4 | ~6 min | — |
 | 6 | ~6 min | ~7 min |

@@ -1,0 +1,87 @@
+const NODES=[
+ {date:'Start here',crit:0,beat:'Pick the cheapest way into a company',
+  body:'Swap sides for thirty seconds. Your target is a company of four hundred people, normal IT department, usual mix of laptops and cloud services. You have no secret exploit and almost no budget.',
+  spot:{type:'predict',topic:'pretext',q:'Which route gets you inside fastest, for the least money?',
+    opts:[
+     ['Hunt for an unpatched flaw in their mail server',0],
+     ['Buy access from someone already inside the network',0],
+     ['Run password guesses against their login page',0],
+     ['Ring the help desk and say you are locked out',1]],
+    fb:'The phone call. A usable flaw is expensive, gets patched, and may not exist on the day you need it. Buying access means trusting a criminal. Password guessing runs into MFA.<br><br>The help desk is staffed by people whose job is to be helpful to anyone who sounds like a colleague in trouble, and it is open all day. It costs nothing.'}},
+
+ {date:'July 2020',crit:1,beat:'A phone call that reached 130 accounts',
+  body:'That is not a thought experiment. Twitter employees were working from home and the VPN was misbehaving for everyone.<br><br>Someone rang a few of them claiming to be internal IT, walked them through a fix, and asked them to log in on a page that looked exactly like the company sign-in. Enough did. With those credentials the callers reached the internal admin tools, took over 130 accounts "— Obama, Musk, Gates, Apple — and posted a bitcoin scam.<br><br>They wrote no malware. They knew the VPN was flaky, and they were willing to try several people until one helped.',
+  spot:{type:'predict',topic:'verify',q:'You get that call. The caller knows your name, your team, and that the VPN has failed all week. What settles it?',
+    opts:[
+     ['Ask a question only real IT would know the answer to',0],
+     ['Ring IT back on the number you already have',1],
+     ['Check whether the caller’s number looks internal',0]],
+    fb:'Call back on a number you already had. Caller ID is trivially forged. Test questions sound sensible but fail in practice — a caller who has read the company’s public material can answer more than you expect, and if they cannot, they say the system is down and will check later.'}},
+
+ {date:'The pretext',crit:0,beat:'Three true details, then the request',
+  body:'What makes those calls work is a <b>pretext</b> — a role and a reason that make the request unremarkable. New starter who cannot get into the VPN. Auditor who needs a document before a deadline. Courier with a delivery for the fourth floor.<br><br>It is assembled beforehand from material the company published itself: staff names, which tools appear in job adverts, who is at a conference this week.<br><br>The convincing part is never the request. It is the three ordinary details mentioned before it.',
+  spot:{type:'quiz',topic:'pretext',q:'“Hi, it’s Daniel from the audit firm, I was in on Tuesday with Priya — she said you could print the visitor log?” What makes this work?',
+    opts:[
+     ['It refers to a real visit and a real colleague',1],
+     ['It sounds friendly, and reception wants to be helpful',0],
+     ['It arrives during the busy part of the day',0],
+     ['It asks for something that seems harmless',0]],
+    fb:'The verifiable detail does the work. A real name and a real visit move the caller from stranger to “someone who was here on Tuesday”, and the rest rides on that. What separates a pretext from a cold call is a small piece of truth placed at the front.'}},
+
+ {date:'In person',crit:0,beat:'Doors, parcels and found USB sticks',
+  body:'<b>Tailgating</b> is following someone through a door they just opened. It works because refusing feels rude. Arms full of boxes, a phone pressed to the ear, a lanyard the right colour at a glance. Once inside, most offices treat presence as proof.<br><br><b>Baiting</b> leaves something tempting where you will find it — a USB stick labelled “Salary review Q3”, a free charging cable at a conference stand. Curiosity does the rest.',
+  more:{t:'Why a spare machine is not the safe option',
+    body:'A prepared USB device does not need you to open anything. It can present itself to the computer as a keyboard and type its own commands the moment it is plugged in — which is why “I opened it on a machine with nothing important on it” does not help: that machine is still on your network, and nothing was opened.<br><br><b>Quid pro quo</b> is the same idea in a suit. Someone offers help you did not ask for, then needs something small in return — a caller who fixes a printer problem you mentioned in a public forum, and now just needs you to install a small tool. The exchange feels fair, which is the point.'},
+  spot:{type:'predict',topic:'physical',q:'Someone with an armful of parcels reaches the badge door behind you. Best move?',
+    opts:[
+     ['Let them in, then mention it to reception',0],
+     ['Hold the door and ask which floor they want',0],
+     ['Ask them to badge in, and offer to hold the parcels',1]],
+    fb:'Take the parcels. It solves the problem the pretext is built on — full hands — without letting the badge check slide, and it is hard to be offended by.<br><br>This only works if your organisation actually backs people who ask. If challenging a stranger at the door is treated as being difficult, the door is not really controlled.'}},
+
+ {date:'What helps',crit:1,beat:'A rule you can point to, not more vigilance',
+  body:'“Be more vigilant” is close to useless — these arrive on ordinary days, aimed at people already doing four things at once.<br><br>What holds up is duller. A rule that anything touching money, credentials or access gets confirmed on a channel you chose. A named person to check with who is not the CEO. And an understood right to say “let me call you back” without it counting as obstruction.<br><br>That last one does most of the work: nearly every technique here needs you to resolve it inside the conversation.',
+  spot:{type:'experience',topic:'verify',q:'In your workplace, if someone senior asked you to skip a step and do it urgently, how easy would it be to say you will verify first?',
+    scale:['Easy — nobody would mind','Awkward, but I would','I would probably just do it'],
+    note:'That answer says more about your organisation than about you. Where verifying is treated as friction, social engineering has an easier time, and the people most exposed are the newest and most junior — exactly who gets targeted.<br><br>If your reaction was closer to the third option, the useful move is not to become braver on your own. It is to get the rule written down: which requests need a second channel, who confirms them, and that following the rule is never held against anyone.'}},
+
+ {date:'Your public profile',crit:0,beat:'What a stranger can assemble about you',
+  body:'All of that starts with reading. Below is one employee’s public professional profile — nothing leaked, all of it visible to anyone with an account.<br><br>Tap the parts that are useful to someone building a pretext. Some of it genuinely isn’t.',
+  spot:{type:'scan',topic:'osint',
+    items:[
+     {ic:'💼',t:'Financial Controller at Meridian Logistics',flag:1,
+      why:'This decides who gets targeted. It says the person can move money, approves invoices, and is senior enough that a junior colleague would hesitate to question them. Finance roles are the most commonly impersonated in workplace fraud.'},
+     {ic:'🛠',t:'Post: “The new SAP Concur rollout is finally live”',flag:1,
+      why:'Now a caller can say “this is about the Concur rollout” and sound internal. Knowing which tools a company runs turns a generic call into one that fits something you are genuinely dealing with this month.'},
+     {ic:'👤',t:'“Huge thanks to Priya Raman in IT for the patience”',flag:1,
+      why:'The most valuable line here. “Priya asked me to follow up” converts a stranger into a referral. Named internal contacts let a pretext borrow trust that was never given to the caller.'},
+     {ic:'✈️',t:'“Off to the Logistics Finance Summit in Berlin, 14–16 October”',flag:1,
+      why:'Tells an attacker exactly when he is away and hard to reach. Requests supposedly sent by someone travelling are difficult to verify, and that is the window these are timed to.'},
+     {ic:'📝',t:'“We’re hiring an Accounts Payable Assistant”',flag:1,
+      why:'A reason to expect a new face, and cover for an unfamiliar caller: “I started Monday in AP.” Job adverts also list the systems the role uses.'},
+     {ic:'📷',t:'Profile photo — headshot with visitor badge on the lanyard',flag:1,
+      why:'Colour, layout and logo are enough to fake something that passes a glance in a lobby. Photographs of passes and desk setups give away more than the picture is about.'},
+     {ic:'📍',t:'Location: Manchester, UK',flag:0,
+      why:'Standard on a professional profile and rarely the deciding detail. It sets the time zone for a well-timed call — useful, but not what makes a pretext land.'},
+     {ic:'🔗',t:'1,240 connections · open to networking',flag:0,
+      why:'Makes a connection request unremarkable, which helps a little. But this is a normal setting, and turning it off is not where the risk was.'}],
+    fb:'Six pieces worth having, and none of them leaked. That is the uncomfortable part: no single post was a mistake, and asking people to stop posting about their work is not a plan anyone follows.<br><br>The conclusion is not silence. It is that a caller knowing three true things about you is not evidence of anything.'}},
+
+ {scene2:1,date:'Your settings',crit:0,beat:'Three things to sort out',
+  body:'Mark whichever you mean to do.',
+  spot:{type:'checklist',
+    items:[
+      {topic:'verify',t:'Agree who confirms an unusual request',
+       how:'Verification needs a named person and a channel decided in advance — under pressure is the wrong time to work out who to ask.',
+       steps:['Name who you would check with about money, access or credentials — finance lead, manager, or the help desk','Save the numbers you would use, and your bank’s from the back of the card rather than from any message'],
+       itnote:'If no rule exists and there is no obvious person, say so to IT or finance. That is a gap in the process, not a failing on your part.'},
+      {topic:'osint',t:'Read your own public profile as an attacker would',
+       how:'You cannot and should not go quiet online. The point is knowing which details are already out there.',
+       steps:['Open your public profile while signed out and look at what a stranger sees','Note the three most useful details: your role, the systems you name, and the people you tag','Check photos for badges, screens and whiteboards before posting'],
+       itnote:'Some organisations ask staff not to name internal systems publicly — worth checking whether yours does.'},
+      {topic:'physical',t:'Decide what you say at the badge door',
+       how:'Nobody improvises this well. One polite line ready is the difference between challenging someone and letting it go.',
+       steps:['Pick your line and keep it simple — “Let me take those, if you can badge in”','Find out where you report someone in the building without a pass'],
+       itnote:'If challenging strangers is discouraged where you work, raise it — door controls only function if people are backed when they use them.'}
+    ]}}
+];
