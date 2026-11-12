@@ -81,8 +81,7 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
   <div class="panel">
     <label class="flab" for="ssid">Try it on your own network name</label>
     <input class="inp" id="ssid" value="Smith_Family_5G" placeholder="The name you pick from the list when you connect" autocomplete="off" spellcheck="false">
-    <div class="hint">It is the name you pick from the list when you connect. Nothing is sent anywhere — the check runs in this page.</div>
-    <button class="go" id="go">See what it gives away</button>
+    <div class="hint">It is the name you pick from the list when you connect. The check updates as you type, and nothing is sent anywhere.</div>
   </div>
 
   <div class="egs">
@@ -151,7 +150,7 @@ const EXAMPLES=['Smith_Family_5G','TP-Link_A4F2','Flat 3B 14 Mill Road','HomeNet
 function check(name){
   const out=[];
   const raw=name.trim();
-  if(!raw) throw new Error('Type the name of your network first.');
+  if(!raw) return [['ok','Type a network name above','The check runs as you type \u2014 nothing is sent anywhere.']];
   const n=norm(raw);
 
   if(SURNAME_HINTS.test(n)){
@@ -187,11 +186,13 @@ function check(name){
 }
 
 function render(list){
+  const empty = list.length && String(list[0][1]).startsWith('Type a network name');
+  const note = empty ? '' :
+    `<div class="f ok"><div class="f-tag">Note</div><div class="f-b"><div class="f-t">Renaming is free, and takes effect the next time each device connects</div>`
+    + `<div class="f-d">Pick something that means nothing to a stranger. You will have to reconnect each device once \u2014 that is the whole cost.</div></div></div>`;
   $('res').innerHTML = list.map(([k,t,d])=>
     `<div class="f ${k==='ok'?'ok':''}"><div class="f-tag">${k==='ok'?'Fine':'Check'}</div>
-     <div class="f-b"><div class="f-t">${t}</div><div class="f-d">${d}</div></div></div>`).join('')
-    + `<div class="f ok"><div class="f-tag">Note</div><div class="f-b"><div class="f-t">Renaming is free, and takes effect the next time each device connects</div>
-       <div class="f-d">Pick something that means nothing to a stranger. You will have to reconnect each device once — that is the whole cost.</div></div></div>`;
+     <div class="f-b"><div class="f-t">${t}</div><div class="f-d">${d}</div></div></div>`).join('') + note;
   $('res').classList.add('on');
 }
 
@@ -199,8 +200,7 @@ function run(){
   try{ render(check($('ssid').value)); }
   catch(e){ $('res').innerHTML=`<div class="f"><div class="f-tag">—</div><div class="f-b"><div class="f-d">${esc(e.message)}</div></div></div>`; $('res').classList.add('on'); }
 }
-$('go').addEventListener('click',run);
-$('ssid').addEventListener('keydown',e=>{if(e.key==='Enter')run();});
+let t; $('ssid').addEventListener('input',()=>{clearTimeout(t);t=setTimeout(run,220);});
 $('egrow').innerHTML=EXAMPLES.map((e,i)=>`<button class="eg" data-i="${i}">${esc(e)}</button>`).join('');
 $('egrow').addEventListener('click',e=>{const b=e.target.closest('.eg'); if(!b)return;
   $('ssid').value=EXAMPLES[+b.dataset.i]; run();});
