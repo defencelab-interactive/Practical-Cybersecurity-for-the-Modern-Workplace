@@ -22,14 +22,14 @@ Each course follows a consistent structure: story → content with interactive e
 | # | Course | Hook | AI Buddy | Time |
 |---|---|---|---|---|
 | 1 | **Security Basics: Why One Setting Matters** | One missing setting cost a company $2.4B. What are the basics that actually prevent this? | — | ~7 min |
-| 2 | **The Phone Call, the Door and the USB Stick** | Attackers don't hack systems — they hack people. Pretexting, tailgating, baiting, and how to see it coming. | 🎭 Role-play: AI plays social engineer | ~7 min |
+| 2 | **Social Engineering: the Phone Call, the Door and the USB Stick** | Attackers don't hack systems — they hack people. Pretexting, tailgating, baiting, and how to see it coming. | 🎭 Role-play: AI plays social engineer | ~7 min |
 | 3 | **Physical Security: Desks, Screens, Printers** | A photographer, an unlocked screen, and a $50K fine. Physical security for the modern office. | 📸 Upload desk photo → AI spots risks | ~6 min |
 
 ### 🔑 Authentication
 
 | # | Course | Hook | AI Buddy | Time |
 |---|---|---|---|---|
-| 4 | **Reused Passwords and the Second Lock** | One reused password, then account after account. Covers both passwords and MFA — the old Course 5 is folded in here. | 🔐 Describe your pattern → AI tests strength | ~7 min | **Built** |
+| 4 | **Reused Passwords, and Why MFA Stops Them** | One reused password, then account after account. Covers both passwords and MFA — the old Course 5 is folded in here. | 🔐 Describe your pattern → AI tests strength | ~7 min | **Built** |
 
 ### 🎣 Phishing & Social Engineering
 
@@ -54,20 +54,20 @@ Each course follows a consistent structure: story → content with interactive e
 
 | # | Course | Hook | AI Buddy | Time |
 |---|---|---|---|---|
-| 10 | **What You Paste Into AI** | Six things people paste, and where the line actually is. Then what comes back, and who answers for it. | 📨 Paste prompt → billboard test + anonymized version | ~6 min | **Built** |
+| 10 | **What You Paste Into AI Tools** | Six things people paste, and where the line actually is. Then what comes back, and who answers for it. | 📨 Paste prompt → billboard test + anonymized version | ~6 min | **Built** |
 
 ### 📂 Data Protection
 
 | # | Course | Hook | AI Buddy | Time |
 |---|---|---|---|---|
 | 11 | **What Counts as Confidential** | One file, three places it went this week, three different exposures. Then the PSNI spreadsheet. | 🏋️ Describe a file → AI classifies with reasoning | ~5 min | **Built** |
-| 12 | **Share Links, Folders and Old Access** | Set the sharing on a real file yourself, then the Microsoft link that opened a whole storage account for three years. | 📨 Describe sharing setup → AI checks | ~5 min | **Built** |
+| 12 | **File Sharing: Links, Folders and Old Access** | Set the sharing on a real file yourself, then the Microsoft link that opened a whole storage account for three years. | 📨 Describe sharing setup → AI checks | ~5 min | **Built** |
 
 ### 🚨 Incident Response
 
 | # | Course | Hook | AI Buddy | Time |
 |---|---|---|---|---|
-| 13 | **Disconnect, Report, Write It Down** | Order the first four actions yourself, then the reason most of the damage happens while nobody has said anything. | 🏋️ Describe incident → AI coaches the four steps | ~5 min | **Built** |
+| 13 | **After a Security Incident: Disconnect, Report, Write It Down** | Order the first four actions yourself, then the reason most of the damage happens while nobody has said anything. | 🏋️ Describe incident → AI coaches the four steps | ~5 min | **Built** |
 
 **Total: 12 courses, ~87 min**
 
@@ -77,9 +77,8 @@ A title names its subject in words the reader would use. Two failures to watch f
 late in review rather than at writing time:
 
 - **A pronoun doing the work.** “How People Get Talked Into It” and “Who Else Can Open This” both
-  passed a first read and name nothing — *it* and *this* are whatever you already assumed. Replaced
-  with the things the course is actually about: *The Phone Call, the Door and the USB Stick*, and
-  *Share Links, Folders and Old Access*.
+  passed a first read and name nothing — *it* and *this* are whatever you already assumed. Both
+  were replaced with the objects the course is actually about.
 - **The rail label repeating the heading.** “A news photo / A password published in a news photo”
   spends two lines saying one thing. The rail label is the topic or the moment (`Hawaii, 2017`,
   `Folders`, `Months later`); the heading is the claim. A label that is a shorter copy of the
@@ -107,6 +106,32 @@ Four more, each found in a later pass over the whole set:
   “Saves and prints” when the saving is browser-local and the page itself tells you to photograph
   the card; course 1’s card said *reused* password when the course says plainly that how the
   password was obtained was never made public.
+
+#### A title travels alone
+
+The rule above all the others, and the one the library failed for longest. Everything here is
+launched on its own — an LMS shows the title string in a list, with no section heading above it and
+nothing either side of it. So the title has to carry its own subject. “The First Four Actions” and
+“Tools Worth Knowing About” read perfectly well under *Incident Response* and *General Awareness*,
+and mean nothing at all in a flat list of modules. Seventeen of the twenty-four titles were
+rewritten on 13 Nov for this.
+
+Three things settled the form:
+
+- **Keep the phrase, add the subject, where the phrase is worth keeping.** *Working in Public: the
+  Café, the Train and the Airport.* Rewrite into one self-contained phrase where that comes out
+  better: *Your Home Network* → *Securing Your Home WiFi*; *Link Inspector* → *Check Where a Link
+  Really Goes*. Neither form is the house style; the choice is per title.
+- **The word *security* goes in only where the title is otherwise ambiguous.** *Spotting a Phishing
+  Email* needs no help. *Tools Worth Knowing About* did, and became *Security Tools Worth Knowing
+  About*. Twenty-four titles that all say “security” read as noise.
+- **The eyebrow is the second carrier of the domain, and it has one form.** Courses already had
+  `Course 4 · Passwords & MFA`; the bytes were a mix of `Security Byte · Device Security` and
+  `Security Byte 7f`, and a bare number tells a standalone reader nothing. All now read
+  `Byte 7f · Device Security`.
+
+When a title changes, the landing-page blurb usually has to change with it, because the blurb was
+written to complete the old title and will now repeat the new one. Eight of them did.
 
 ### Why the order is STOP · REPORT · DOCUMENT
 
@@ -295,18 +320,18 @@ belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.h
 
 | # | Byte | What it is | Time | Pairs with | Status |
 |---|---|---|---|---|---|
-| 1b | **Tools Worth Knowing About** | Filterable rundown of security tools by OS, browser and phone | ~4 min | Course 1 | Built |
-| 2a | **Your Verification Card** | Three questions about where you work, then a card naming who confirms what. Saves and prints. | ~3 min | Course 2 | Built |
+| 1b | **Security Tools Worth Knowing About** | Filterable rundown of security tools by OS, browser and phone | ~4 min | Course 1 | Built |
+| 2a | **Who to Check With Before You Act** | Three questions about where you work, then a card naming who confirms what. The card is the deliverable: you photograph it. | ~3 min | Course 2 | Built |
 | 4a | **Build a Passphrase** | Generator: `crypto.getRandomValues` over a 512-word list, so each word is exactly 9 bits. Strength in bits, never crack time. | ~2 min | Course 4 | Built |
 | 4b | **Turn On MFA** | Your accounts in the order that matters, each with the company's own term for the setting and a link where one was confirmed. A reference, not a worklist — no ticks, nothing stored. | ~3 min | Course 4 | Built |
-| 6b | **Link Inspector** | Paste a URL and see where it really goes — domain, @ trick, punycode, lookalikes. Runs in the browser. | ~3 min | Course 6 | Built |
-| 7b | **Your Home Network** | Paste your WiFi name and see what it gives away (surname, address, router model, ISP default), then three router settings | 2 min | Course 7 | Built |
-| 7f | **The Café, the Train and the Airport** | Pick the two exposures that matter most out of six, then see the honest ranking. Corrects the usual misallocation — the screen and the voice beat the WiFi *(replaces the old 7a, 7c, 7e)* | ~3 min | Courses 7–8 | Built |
+| 6b | **Check Where a Link Really Goes** | Paste a URL and see where it really goes — domain, @ trick, punycode, lookalikes. Runs in the browser. | ~3 min | Course 6 | Built |
+| 7b | **Securing Your Home WiFi** | Paste your WiFi name and see what it gives away (surname, address, router model, ISP default), then three router settings | ~2 min | Course 7 | Built |
+| 7f | **Working in Public: the Café, the Train and the Airport** | Pick the two exposures that matter most out of six, then see the honest ranking. Corrects the usual misallocation — the screen and the voice beat the WiFi *(replaces the old 7a, 7c, 7e)* | ~3 min | Courses 7–8 | Built |
 | 8b | **When Your Phone Goes Missing** | Two tabs: the three settings that only work beforehand, and the lock→notify→passwords→wipe order for when it is gone | ~2 min | Course 8 | Built |
-| 9a | **What Your Profile Gives Away** | Sort a made-up profile into keep / trim / cut, then see that the cut pile is three ordinary professional facts that assemble into a script *(replaces the old 9b, 9c)* | ~3 min | Course 9 | Built |
+| 9a | **What Your Public Profile Gives Away** | Sort a made-up profile into keep / trim / cut, then see that the cut pile is three ordinary professional facts that assemble into a script *(replaces the old 9b, 9c)* | ~3 min | Course 9 | Built |
 | 10a | **Anonymise an AI Prompt** | Paste a prompt: emails, phones, amounts, dates, IDs and internal hostnames are marked automatically; names and companies you click yourself, because no pattern gets those right. Runs entirely in the browser. | ~2 min | Course 10 | Built |
 | 11b | **Is This Personal Data?** | Eight examples to sort. Built on the GDPR definition with sources per answer — swap the definition if a client works to another regime. | ~2 min | Course 11 | Built |
-| 13a | **The First Four Actions** | Pick the situation — clicked a link, machine misbehaving, device gone, sent to the wrong person, money moved — and see what the same four steps mean in that one. | ~2 min | Course 13 | Built |
+| 13a | **The First Four Actions After a Security Incident** | Pick the situation — clicked a link, machine misbehaving, device gone, sent to the wrong person, money moved — and see what the same four steps mean in that one. | ~2 min | Course 13 | Built |
 
 **Total Security Bytes: 12 items, all built**
 
@@ -322,7 +347,7 @@ and it gets quoted as if it were a general fact.
 |---|---|
 | Check If You've Been Breached | A single instruction to visit one external site. Nothing to return to. |
 | Spot a Social Engineering Attempt | Five tactics and three examples — which is what Course 2 does, in more depth. |
-| Safe Browsing: Three Rules | What was still live in it is done better by the Link Inspector. |
+| Safe Browsing: Three Rules | What was still live in it is done better by Byte 6b, *Check Where a Link Really Goes*. |
 | Your Company's Security Policy | A template that says "ask your own company". Nothing of ours in it. |
 | The Clean Desk Checklist | Course 3 closes it in its own checklist. |
 | Secure Printing | Same — Course 3 covers it where it is relevant. |
@@ -345,29 +370,29 @@ The complete curriculum. Recommended deployment: one item per 1-2 weeks over 6 m
 | Week | Type | # | Item | Group | Time |
 |---|---|---|---|---|---|
 | 1 | Course | 1 | How a Breach Unfolds | General | 6 min |
-| 2 | Byte | 1b | Tools Worth Knowing About | General | 4 min |
-| 3 | Course | 2 | The Phone Call, the Door and the USB Stick | General | 7 min |
-| 4 | Byte | 2a | Your Verification Card | General | 3 min |
-| 5 | Course | 3 | Screens, Paper and Devices | General | 4 min |
-| 6 | Course | 4 | Reused Passwords and the Second Lock | Auth | 7 min |
+| 2 | Byte | 1b | Security Tools Worth Knowing About | General | 4 min |
+| 3 | Course | 2 | Social Engineering: the Phone Call, the Door and the USB Stick | General | 7 min |
+| 4 | Byte | 2a | Who to Check With Before You Act | General | 3 min |
+| 5 | Course | 3 | What a Visitor Can Read on Your Desk | General | 4 min |
+| 6 | Course | 4 | Reused Passwords, and Why MFA Stops Them | Auth | 7 min |
 | 7 | Byte | 4a | Build a Passphrase | Auth | 2 min |
 | 8 | Byte | 4b | Turn On MFA | Auth | 3 min |
-| 9 | Course | 6 | Spotting a Fake Email | Phishing | 6 min |
-| 10 | Byte | 6b | Link Inspector | Phishing | 3 min |
-| 11 | Course | 7 | What Runs on Your Laptop | Devices | 5 min |
-| 12 | Byte | 7b | Your Home Network | Devices | 2 min |
+| 9 | Course | 6 | Spotting a Phishing Email | Phishing | 6 min |
+| 10 | Byte | 6b | Check Where a Link Really Goes | Phishing | 3 min |
+| 11 | Course | 7 | Laptop Security: Updates, Extensions and Public WiFi | Devices | 5 min |
+| 12 | Byte | 7b | Securing Your Home WiFi | Devices | 2 min |
 | 13 | Byte | 7f | Working Away From the Office | Devices | 3 min |
-| 14 | Course | 8 | What Your Phone Can Reach | Devices | 5 min |
+| 14 | Course | 8 | Phone Security: Permissions, Charging and a Lost Phone | Devices | 5 min |
 | 15 | Byte | 8b | When Your Phone Goes Missing | Devices | 2 min |
-| 16 | Course | 9 | What You Post About Work | Online | 5 min |
+| 16 | Course | 9 | What You Post About Work, and Who Is Reading It | Online | 5 min |
 | 17 | Byte | 9a | Clean Up What's Public About You | Online | 3 min |
-| 18 | Course | 10 | What You Paste Into AI | AI | 6 min |
+| 18 | Course | 10 | What You Paste Into AI Tools | AI | 6 min |
 | 19 | Byte | 10a | Anonymise an AI Prompt | AI | 2 min |
 | 20 | Course | 11 | What Counts as Confidential | Data | 5 min |
 | 21 | Byte | 11b | Is This Personal Data? | Data | 2 min |
-| 22 | Course | 12 | Share Links, Folders and Old Access | Data | 5 min |
-| 23 | Course | 13 | Disconnect, Report, Write It Down | Incident | 5 min |
-| 24 | Byte | 13a | The First Four Actions | Incident | 2 min |
+| 22 | Course | 12 | File Sharing: Links, Folders and Old Access | Data | 5 min |
+| 23 | Course | 13 | After a Security Incident: Disconnect, Report, Write It Down | Incident | 5 min |
+| 24 | Byte | 13a | The First Four Actions After a Security Incident | Incident | 2 min |
 
 **Total: 24 items, ~99 min.** One per week is 24 weeks; one per fortnight is about 11 months.
 
@@ -383,7 +408,7 @@ Each path selects the most relevant courses and bytes for a specific role. Items
 | Type | Item | Why |
 |---|---|---|
 | Course | Security Basics: Why One Setting Matters | Foundation — sets the stakes |
-| Course | The Phone Call, the Door and the USB Stick | Social engineering — finance is a common pretexting target |
+| Course | Social Engineering: the Phone Call, the Door and the USB Stick | Social engineering — finance is a common pretexting target |
 | Course | Phishing: Spot, Check, Report | Phishing + BEC — #1 risk for finance |
 | Byte | The 5-Second Email Check | Daily habit for email-heavy role |
 | Byte | Turn On MFA | Action step — MFA on the accounts that hold money first |
@@ -435,7 +460,7 @@ Each path selects the most relevant courses and bytes for a specific role. Items
 | Byte | The 5-Second Email Check | Day 1: immediate phishing defense |
 | Byte | The Clean Desk Checklist | Day 1: physical security from the start |
 | Course | Security Basics: Why One Setting Matters | Week 1: understand why this matters |
-| Course | The Phone Call, the Door and the USB Stick | Week 1: recognize social engineering |
+| Course | Social Engineering: the Phone Call, the Door and the USB Stick | Week 1: recognize social engineering |
 | Course | Physical Security: Desks, Screens, Printers | Week 1: physical security habits |
 | Course | Phishing: Spot, Check, Report | Week 2: phishing recognition |
 | Course | Incident Response: First 30 Minutes | Week 2: know what to do if something happens |
@@ -452,7 +477,7 @@ Assign specific content automatically based on real events or simulation results
 | Failed phishing simulation | Byte: The 5-Second Email Check + Course: Phishing: Spot, Check, Report | 10 min |
 | Reported phishing (positive behavior) | Thank-you message only | 0 min |
 | Lost or stolen device | Byte: What to Do When You Lose Your Phone | 2 min |
-| Data sharing incident | Course: Share Links, Folders and Old Access + Byte: Is This PII? | 8 min |
+| Data sharing incident | Course: File Sharing: Links, Folders and Old Access + Byte: Is This PII? | 8 min |
 | AI policy violation | Course: AI Tools: Safe Use at Work + Byte: How to Anonymize a Prompt | 9 min |
 | New employee starts | Onboarding path (above) | 30 min |
 | Pre-business travel | Byte: Travel Security Checklist | 2 min |
@@ -468,7 +493,7 @@ One item per month, aligned with seasonal risk patterns.
 |---|---|---|---|
 | Jan | Course: Security Basics: Why One Setting Matters | Course | New year, fresh start |
 | Jan | Byte: Check If You've Been Breached | Byte | Immediate action after foundation |
-| Feb | Course: The Phone Call, the Door and the USB Stick | Course | Social engineering awareness |
+| Feb | Course: Social Engineering: the Phone Call, the Door and the USB Stick | Course | Social engineering awareness |
 | Mar | Course: Phishing: Spot, Check, Report | Course | Tax season = peak phishing |
 | Mar | Byte: The 5-Second Email Check | Byte | Daily habit reinforcement |
 | Apr | Course: Physical Security: Desks, Screens, Printers | Course | Spring cleaning — physical + digital |
@@ -494,7 +519,7 @@ For EU organizations subject to NIS2 Directive Article 21(2) or DORA requirement
 |---|---|
 | NIS2 Art. 21(2)(a) — Risk analysis and security policies | Course 1 (Foundation), Course 11 (Data Classification: Four Levels) |
 | NIS2 Art. 21(2)(b) — Incident handling | Course 13 (Incident Response: First 30 Minutes), Byte 13a (STOP/DOC/REPORT) |
-| NIS2 Art. 21(2)(d) — Supply chain security | Course 12 (Share Links, Folders and Old Access) |
+| NIS2 Art. 21(2)(d) — Supply chain security | Course 12 (File Sharing: Links, Folders and Old Access) |
 | NIS2 Art. 21(2)(g) — Basic cyber hygiene and training | All courses — especially General Awareness group (1-3) |
 | NIS2 Art. 21(2)(g) — Phishing awareness | Course 6 (Phishing: Spot, Check, Report), Byte 6a (5-Second Email Check), Byte 6c (Report Phishing) |
 | NIS2 Art. 21(2)(g) — Access control / credentials | Course 4 (passwords and MFA), Bytes 4a and 4b |
@@ -686,7 +711,7 @@ Student pastes real content from their work. AI analyzes and gives specific, act
 | **Phishing: Spot, Check, Report** | "Paste a suspicious email (or any email) — I'll check it" | Analyzes sender address, URLs, tone, triggers. Flags what's suspicious and why. If clean — explains what made it trustworthy. |
 | **Social Media: What You're Really Sharing** | "Paste a LinkedIn post or describe a photo you're about to share" | Shows what an attacker would extract: software names, travel plans, org structure, location data. Suggests a safer version. |
 | **AI Tools: Safe Use at Work** | "Paste your last AI prompt — I'll run the billboard test" | Checks for client names, internal data, credentials, project details. Returns an anonymized version of the same prompt that gets the same result without the exposure. |
-| **Share Links, Folders and Old Access** | "Describe how you just shared a file — who, what platform, what settings" | Checks: is the sharing method appropriate for the classification level? Flags "anyone with the link" on confidential data, missing expiry dates, folder inheritance risks. |
+| **File Sharing: Links, Folders and Old Access** | "Describe how you just shared a file — who, what platform, what settings" | Checks: is the sharing method appropriate for the classification level? Flags "anyone with the link" on confidential data, missing expiry dates, folder inheritance risks. |
 
 #### 📸 Image analysis — "upload a photo, I'll spot the risks"
 
@@ -703,7 +728,7 @@ AI plays a character. Student responds in real time. AI gives feedback on their 
 
 | Course | Scenario | What AI does |
 |---|---|---|
-| **The Phone Call, the Door and the USB Stick** | "You get a call from IT support asking for your credentials to fix a critical issue" | AI plays the social engineer — uses urgency, authority, technical jargon. Adapts based on student's responses. If student gives info → explains what went wrong. If student resists → confirms correct instinct and shows what the attacker would try next. |
+| **Social Engineering: the Phone Call, the Door and the USB Stick** | "You get a call from IT support asking for your credentials to fix a critical issue" | AI plays the social engineer — uses urgency, authority, technical jargon. Adapts based on student's responses. If student gives info → explains what went wrong. If student resists → confirms correct instinct and shows what the attacker would try next. |
 | **Phishing: Spot, Check, Report** | "Your CEO messages you on Teams asking for a quick favor" | AI plays a BEC attacker. Escalates pressure if student pushes back. Tests whether student verifies through a separate channel. |
 
 #### 🏋️ Coaching — "describe your situation, I'll walk you through it"
@@ -730,7 +755,7 @@ Student describes their approach (not actual credentials). AI evaluates and impr
 | Course | Format | AI Block |
 |---|---|---|
 | Security Basics: Why One Setting Matters | — | No AI block (foundational, no grey-zone skill) |
-| **The Phone Call, the Door and the USB Stick** | 🎭 Role-play | AI plays social engineer, student responds |
+| **Social Engineering: the Phone Call, the Door and the USB Stick** | 🎭 Role-play | AI plays social engineer, student responds |
 | **Physical Security: Desks, Screens, Printers** | 📸 Image | Upload desk photo, AI spots risks |
 | **Passwords & Passphrases** | 🔐 Strength check | Describe pattern, AI estimates crack time |
 | **Phishing: Spot, Check, Report** | 📨 Text + 🎭 Role-play | Paste email for analysis, or BEC role-play |
@@ -739,7 +764,7 @@ Student describes their approach (not actual credentials). AI evaluates and impr
 | **Social Media: What You're Really Sharing** | 📨 Text + 📸 Image | Paste post or upload photo for attacker-view analysis |
 | **AI Tools: Safe Use at Work** | 📨 Text | Paste prompt, get billboard test + anonymized version |
 | **Data Classification: Four Levels** | 🏋️ Coaching | Describe a file, AI classifies it with reasoning |
-| **Share Links, Folders and Old Access** | 📨 Text | Describe sharing setup, AI checks appropriateness |
+| **File Sharing: Links, Folders and Old Access** | 📨 Text | Describe sharing setup, AI checks appropriateness |
 | **Incident Response: First 30 Minutes** | 🏋️ Coaching | Describe incident, AI walks through STOP/DOC/REPORT |
 
 **9 out of 13 courses have AI blocks.** 4 don't need them (foundational or checklist-based).
@@ -758,17 +783,17 @@ a scene-2 checklist that assembles the learner's personal action plan.
 | Catalogue # | Item | File | Status |
 |---|---|---|---|
 | Course 1 | Security Basics: Why One Setting Matters | `courses/01-security-basics.html` | Built as *How a Breach Unfolds*, ~6 min |
-| Course 2 | The Phone Call, the Door and the USB Stick | `courses/02-social-engineering.html` | Built, opens attacker-side. ~7 min base |
-| Course 3 | Physical Security: Desks, Screens, Printers | `courses/03-physical-security.html` | Built as *Screens, Paper and Devices*, opens with a self-audit. ~4 min base, ~5 with the two deep-dive blocks expanded |
-| Course 4 | Reused Passwords and the Second Lock | `courses/04-passwords-mfa.html` | Built, ~7 min — carries both passwords and MFA; the old Course 5 is folded in |
+| Course 2 | Social Engineering: the Phone Call, the Door and the USB Stick | `courses/02-social-engineering.html` | Built, opens attacker-side. ~7 min base |
+| Course 3 | What a Visitor Can Read on Your Desk | `courses/03-physical-security.html` | Built, opens with a self-audit. ~4 min base, ~5 with the two deep-dive blocks expanded |
+| Course 4 | Reused Passwords, and Why MFA Stops Them | `courses/04-passwords-mfa.html` | Built, ~7 min — carries both passwords and MFA; the old Course 5 is folded in |
 | Course 5 | MFA: The Second Step | — | **Dropped.** Course 4 covers passwords and the second step in one pass; splitting them would mean either removing MFA from Course 4 or repeating it. |
-| Course 6 | Phishing: Spot, Check, Report | `courses/06-the-447-email.html` | Built as *Spotting a Fake Email*, cold-open email pick. ~6 min base, ~7 with deep dives |
-| Byte 1b | Tools Worth Knowing About | `bytes/01b-security-toolkit.html` | Built |
-| Course 7 | Laptop Security Settings | `courses/07-laptop-security.html` | Built as *What Runs on Your Laptop*, opens with a myth-buster. ~5 min |
-| Course 8 | Phone Security Settings | `courses/08-phone-security.html` | Built as *What Your Phone Can Reach*, opens by weighing laptop against phone. ~5 min |
-| Course 9 | Social Media: What You're Really Sharing | `courses/09-online-presence.html` | Built as *What You Post About Work*, opens by estimating how much one post gives away. ~5 min |
-| Byte 2a | Your Verification Card | `bytes/02a-verification-card.html` | Built — adapts to org size; `ORG` block at the top lets a client pre-fill their own details |
-| Byte 6b | Link Inspector | `bytes/06b-link-inspector.html` | Built |
+| Course 6 | Phishing: Spot, Check, Report | `courses/06-the-447-email.html` | Built as *Spotting a Phishing Email*, cold-open email pick. ~6 min base, ~7 with deep dives |
+| Byte 1b | Security Tools Worth Knowing About | `bytes/01b-security-toolkit.html` | Built |
+| Course 7 | Laptop Security Settings | `courses/07-laptop-security.html` | Built as *Laptop Security: Updates, Extensions and Public WiFi*, opens with a myth-buster. ~5 min |
+| Course 8 | Phone Security Settings | `courses/08-phone-security.html` | Built as *Phone Security: Permissions, Charging and a Lost Phone*, opens by weighing laptop against phone. ~5 min |
+| Course 9 | Social Media: What You're Really Sharing | `courses/09-online-presence.html` | Built as *What You Post About Work, and Who Is Reading It*, opens by estimating how much one post gives away. ~5 min |
+| Byte 2a | Who to Check With Before You Act | `bytes/02a-verification-card.html` | Built — adapts to org size; `ORG` block at the top lets a client pre-fill their own details |
+| Byte 6b | Check Where a Link Really Goes | `bytes/06b-link-inspector.html` | Built |
 
 Everything else in this catalogue is still to be produced.
 

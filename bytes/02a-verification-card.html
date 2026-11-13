@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Defence Lab · Your Verification Card</title>
+<title>Defence Lab · Who to Check With Before You Act</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{--ac:#34B77D;--acd:#2A9A66;--td:#1A1A1A;--tb:#4A4844;--mu:#8a8884;--paper:#F2F5F2;--paper2:#E8EEEC;--line:#dce4e0;
@@ -81,8 +81,8 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
 <div class="wrap">
   <div class="head">
     <div>
-      <div class="eyebrow">Security Byte · Social Engineering</div>
-      <h1>Your Verification Card</h1>
+      <div class="eyebrow">Byte 2a · Social Engineering</div>
+      <h1>Who to Check With Before You Act</h1>
       <p class="lede">Every social engineering attack needs you to settle the matter inside the conversation, while the pressure is still on. Checking somewhere else defeats nearly all of them — but only if you already know who to check with. This makes that decision now, while nobody is rushing you.</p>
     </div>
     <div class="chip">~3 min</div>
@@ -228,7 +228,7 @@ function render(){
  const blanks=c.fields.filter(f=>!vals[f[0]]);
 
  let h=`<div class="card-hd"><div class="k">Verification Card</div>
-   <h2>Check here before you act</h2>
+   <h2>Your verification card</h2>
    <div class="ctx">${esc(c.cardLabel||c.label)}${ORG.name?' \u00b7 '+esc(ORG.name):''}</div></div><div class="card-bd">`;
 
  c.fields.forEach(([k,label])=>{
