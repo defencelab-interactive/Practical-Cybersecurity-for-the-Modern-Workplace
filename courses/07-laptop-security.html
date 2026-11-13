@@ -420,17 +420,22 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 const XPW={sure:3,pretty:2,guess:1};
 /* ===== SCENE 1 as a vertical timeline with spots ===== */
 const NODES=[
- {date:'Start here',crit:0,beat:'Three things people believe about laptops',
-  body:'All three sound reasonable. All three are wrong, and each one is wrong in a way that matters. Decide on each before you open it.',
+ {date:'Start here',crit:0,beat:'Five things people believe about laptops',
+  body:'Some of these are true and some are not. The true ones are the reason the false ones survive — they sound like exactly the same kind of statement. Decide on each before you open it.',
   spot:{type:'myths',topic:'belief',
     items:[
      {t:'“My laptop has a password, so my files are safe if it is stolen.”',truth:0,
       why:'A password protects the operating system. Take the drive out, connect it to another computer, and there is no login to pass — the files are simply there. Only <b>full-disk encryption</b> changes that.'},
+     {t:'“If the disk is encrypted, a stolen laptop is a lost device rather than a data breach.”',truth:1,
+      why:'True, and it is the counterpart to the one above. Encryption scrambles the disk with a key derived from your credentials, so the drive on its own is noise. The same machine, with and without one setting, is two completely different incidents.'},
      {t:'“My antivirus will catch anything dangerous.”',truth:0,
       why:'Antivirus catches what it recognises. It is a useful floor, not a ceiling — and one of the first things malware does is switch it off. An antivirus that will not stay on is not a glitch; it is a symptom.'},
+     {t:'“Antivirus is still worth having, even though it misses things.”',truth:1,
+      why:'True — and this is the one people get wrong in the other direction. Knowing it is not perfect is not a reason to turn it off. A floor you can stand on is worth more than no floor, and the built-in one is usually enough.'},
      {t:'“Updates can wait until it is convenient.”',truth:0,
-      why:'The moment a patch is published, its contents become a public description of the hole it fixes. Attackers read patches and scan for machines that have not installed them. Waiting a week is not neutral — it is the week they are looking.'}],
-    fb:'The pattern is the same in all three: the protection people assume they have is doing something narrower than they think.<br><br>What follows is the three that actually carry weight on a laptop — and none of them need you to be technical.'}},
+      why:'The moment a patch is published, its contents become a public description of the hole it fixes. Attackers read patches and scan for machines that have not installed them. Waiting a week is not neutral — it is the week they are looking.'}
+   ],
+    fb:'Notice what separated them. The false three all claim a protection does <b>more</b> than it does; the true two say a protection is worth having while admitting what it does not cover.<br><br>That is the shape to carry: a security claim that admits a limit is usually the honest one. What follows is the three things that actually carry weight on a laptop — and none of them need you to be technical.'}},
 
  {date:'Updates',crit:1,beat:'A patch is also a map for attackers',
   body:'That last myth has a famous example. In 2017 Equifax knew about a vulnerability in software they ran, the patch existed, and it was not applied. Attackers used that exact hole, and the FTC later put the number of people whose personal information was exposed at about <b>147 million</b>.<br><br>Nobody was tricked. Nobody clicked anything. A known fix was available and sitting uninstalled.',
