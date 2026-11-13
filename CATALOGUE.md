@@ -71,6 +71,49 @@ Each course follows a consistent structure: story → content with interactive e
 
 **Total: 12 courses, ~87 min**
 
+### What the mechanics are for
+
+Reviewed on 13 November against the research rather than by taste. 71 interactive spots, 16
+mechanics — but **quiz (20), predict (16), checklist (12) and experience (10) are 82% of them**, so
+the question of whether the mechanics earn their place is mostly a question about four forms.
+
+Two findings set the rules:
+
+**Prequestions help only what they asked about.** [St. Hilaire, Chan & Ahn, *Psychonomic Bulletin &
+Review* 31 (2024)](https://par.nsf.gov/servlets/purl/10511812), 97 effect sizes and ~7,900
+participants: **g = 0.54** on the material that was prequestioned, **g = 0.04** — nothing — on
+everything else in the same lesson. And **guessing (g = 0.65) beats a prequestion you merely read
+(0.22)**. So an opening question must be about the thing the node most needs the reader to keep,
+and it has to be answered rather than skimmed. A warm-up question is wasted.
+
+**Errors help, under conditions.** [Metcalfe, *Learning from Errors*, Annual Review of Psychology
+68 (2017)](https://www.columbia.edu/cu/psychology/metcalfe/PDFs/Learning%20from%20errorsAnnual%20ReviewMetcalfe2016.pdf):
+errorful generation followed by corrective feedback beats error-free study. But the wrong options
+must be **related** to the target, the guess must be **somewhat informed**, the feedback must carry
+the correct answer (saying "wrong" does almost nothing), and — the one that changed the engine —
+**an error made confidently is corrected more durably than a hesitant one.**
+
+What that produced:
+
+- **Every quiz and predict now asks how sure you were before it reveals.** Sure / Fairly sure /
+  Guessing, and the feedback opens by naming what happened: *"You were sure, and it was wrong —
+  which is the useful kind."* The constant `XPW={sure:3,pretty:2,guess:1}` had sat declared and
+  unread in all twelve courses; it was the trace of this feature, and it is now deleted because the
+  feature exists.
+- **`myths` was rebuilt on the `scan` pattern.** It had three statements, all false, under a
+  paragraph that said so — nothing to decide, and a list of presented falsehoods, which is the form
+  Metcalfe warns can hurt rather than help. It now mixes true statements in next to their closest
+  false neighbours, so the reader discriminates instead of recognising.
+- **`scan` and `order` were already the right shape** and are the models to copy: per-item
+  verdicts, per-item explanations including for the items that are fine, and a closing note that
+  names the principle rather than the score.
+- **Giveaways are the same bug as a quiz tell.** A body that states the answer immediately above
+  the question turns a guess (0.65) into a read-through (0.22).
+
+Still open: all 36 quiz and predict spots give **one shared explanation**, not one per wrong
+option. They clear Metcalfe's bar — the correct answer and a reason are always there — but byte 6b
+and the `order` mechanic explain each wrong choice separately, and that is the better form.
+
 ### Naming rule
 
 A title names its subject in words the reader would use. Two failures to watch for, both caught
