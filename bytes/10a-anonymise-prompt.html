@@ -114,7 +114,10 @@ const RULES=[
   {k:'SYSTEM',  re:/\b(?:srv|host|db|app|web|vm|node|prod|stg|dev|sql|api)[-_][a-z0-9][a-z0-9-]*\b/gi},
   {k:'AMOUNT',  re:/[£$€]\s?\d[\d,]*(?:\.\d+)?(?:\s?[km]\b)?/gi},
   {k:'PHONE',   re:/\+\d[\d\s().-]{7,}\d|\b0\d{3,4}[\s-]?\d{3}[\s-]?\d{3,4}\b/g},
-  {k:'DATE',    re:/\b\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}\b/g},
+  /* both parts must be plausible day/month numbers, so a sort code like
+     40-47-84 is not labelled a date; the rule under it then catches it */
+  {k:'DATE',    re:/\b(0?[1-9]|[12]\d|3[01])[\/.-](0?[1-9]|[12]\d|3[01])[\/.-]\d{2,4}\b/g},
+  {k:'ACCOUNT', re:/\b\d{2}[ -]\d{2}[ -]\d{2}\b/g},
   {k:'ACCOUNT', re:/\b[A-Z]{2}\d{2}[ ]?(?:[A-Z0-9]{4}[ ]?){2,7}[A-Z0-9]{1,4}\b/g},
   {k:'ACCOUNT', re:/\b\d{2}[ -]?\d{2}[ -]?\d{2}[ ]?\d{8}\b/g},
   {k:'NUMBER',  re:/\b\d{6,}\b/g}
