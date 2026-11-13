@@ -295,7 +295,7 @@ function inspect(raw,claimText){
        check below would throw and swallow the flag pushed just above. Return
        here instead: the scheme IS the finding. */
     out.dom=scheme+':';out.sub='';out.host='';out.scheme=scheme;out.port='';
-    out.path=s.slice(scheme.length+1);out.user='';
+    out.path='';out.user='';out.opaque=true;out.rest=raw.trim().slice(scheme.length+1);
     out.ok=false;
     return out;
   }
@@ -440,6 +440,19 @@ function render(r){
   else sub='This is the site you would land on, and the address itself is built the ordinary way.';
   $('vsub').textContent=sub;
 
+  if(r.opaque){
+    /* no host to take apart: show it as typed, with the scheme carrying the point */
+    $('vsub').textContent='This is not a web address at all \u2014 it is an instruction for the browser, which is why there is no site to show.';
+    $('hostline').innerHTML='<span class="hl-scheme">'+escapeHtml(r.scheme)+':</span>'
+      +'<span class="hl-path">'+escapeHtml(r.rest)+'</span>';
+    const ord0={flag:0,warn:1,ok:2};
+    const l0=[...r.finds].sort((a,b)=>ord0[a[0]]-ord0[b[0]]);
+    $('findh').textContent='What stands out';
+    $('finds').innerHTML=l0.map(f=>
+      `<div class="f ${f[0]}"><div class="f-tag">${escapeHtml(f[1])}</div><div class="f-body"><div class="f-t">${escapeHtml(f[2])}</div><div class="f-d">${f[3]}</div></div></div>`).join('');
+    $('res').classList.add('on');
+    return;
+  }
   // host breakdown
   let h='<span class="hl-scheme">'+escapeHtml(r.scheme)+'://</span>';
   if(r.user)h+='<span class="hl-user">'+escapeHtml(r.user)+'@</span>';
