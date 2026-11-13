@@ -25,6 +25,42 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(28px,4vw,42px);line-h
 .note{display:flex;gap:11px;align-items:flex-start;background:rgba(78,124,168,.09);border:1px solid rgba(78,124,168,.25);border-radius:13px;padding:14px 18px;margin:22px 0 26px;font-size:14.5px;line-height:1.55;color:var(--tb)}
 .note b{color:var(--td)}
 /* input */
+/* ── find-it-yourself drill ─────────────────────────────────────── */
+.drill{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px;box-shadow:var(--sh),var(--hi);margin-bottom:26px}
+.d-top{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:14px}
+.d-count{font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+.d-url{background:var(--paper);border:1.5px solid var(--line);border-radius:11px;padding:14px 16px;
+  font:500 15px/1.5 var(--mono);color:var(--td);word-break:break-all;margin-bottom:14px}
+.d-q{font-size:15.5px;line-height:1.5;color:var(--tb);margin-bottom:13px}
+.d-q b{color:var(--td)}
+.d-opts{display:grid;gap:9px}
+.d-o{text-align:left;width:100%;background:var(--paper);border:1.5px solid var(--line);border-radius:11px;
+  padding:12px 15px;font:500 14.5px var(--mono);color:var(--td);cursor:pointer;transition:all .14s;line-height:1.45;word-break:break-all}
+.d-o:hover:not(:disabled){border-color:var(--ac);background:#fff}
+.d-o:disabled{cursor:default}
+.d-o.right{border-color:var(--acd);background:rgba(52,183,125,.1);color:var(--acd);font-weight:700}
+.d-o.wrong{border-color:var(--rd);background:var(--rdl);color:var(--rd);font-weight:700}
+.d-o.dim{opacity:.45}
+.d-fb{margin-top:14px;border-left:3px solid var(--line);padding:2px 0 2px 15px;font-size:14.5px;line-height:1.65;color:var(--tb);display:none}
+.d-fb.on{display:block}
+.d-fb.ok{border-left-color:var(--acd)}
+.d-fb.no{border-left-color:var(--rd)}
+.d-fb b{color:var(--td)}
+.d-fb code{font-family:var(--mono);font-size:13.5px;background:var(--paper2);border-radius:4px;padding:1px 5px}
+.d-next{margin-top:15px;background:var(--acd);color:#fff;border:none;border-radius:11px;padding:11px 24px;
+  font:600 14.5px var(--body);cursor:pointer;display:none}
+.d-next.on{display:inline-block}
+.d-done{display:none}
+.d-done.on{display:block}
+.d-score{font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.d-done h3{font-family:var(--disp);font-weight:600;font-size:19px;margin-bottom:10px}
+.d-done p{font-size:14.5px;line-height:1.65;color:var(--tb)}
+.d-done p+p{margin-top:10px}
+.d-done b{color:var(--td)}
+.d-again{margin-top:14px;background:none;border:1.5px solid var(--line);border-radius:11px;padding:9px 18px;
+  font:600 14px var(--body);color:var(--tb);cursor:pointer}
+@media(max-width:620px){.drill{padding:18px 17px}.d-url{font-size:13.5px}.d-o{font-size:13.5px}}
+
 .panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px;box-shadow:var(--sh),var(--hi)}
 .flab{font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mu);display:block;margin-bottom:7px}
 .inp{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:13px 15px;font:500 15px var(--mono);color:var(--td);background:var(--paper);outline:none;transition:border .15s}
@@ -97,14 +133,37 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(28px,4vw,42px);line-h
     <div>
       <div class="eyebrow">Byte · Phishing</div>
       <h1>Check Where a Link Really Goes</h1>
-      <p class="lede">Paste a link you are unsure about. The address bar hides the part that matters, and most link tricks work by putting a name you trust somewhere it has no authority.</p>
+      <p class="lede">Most link tricks work by putting a name you trust somewhere it has no authority. Six addresses below: find the real site in each one yourself, because that turns out to be the part that sticks. The tool that reads an address for you is underneath.</p>
     </div>
     <div class="chip">~3 min</div>
   </div>
 
   <div class="note"><span>🔒</span><div><b>Nothing leaves this page.</b> The link is taken apart in your browser using code that is already in this file. No request is made, the page is not opened, and nothing is logged or sent anywhere — so a link from a work inbox is safe to paste here.</div></div>
 
+
+  <div class="drill" id="drill">
+    <div class="d-top">
+      <span class="flab" style="margin:0">Find the site yourself</span>
+      <span class="d-count" id="dcount"></span>
+    </div>
+    <div class="d-url" id="durl"></div>
+    <div class="d-q">Which of these is <b>the site</b> &mdash; the part that decides who controls this address?</div>
+    <div class="d-opts" id="dopts"></div>
+    <div class="d-fb" id="dfb"></div>
+    <button class="d-next" id="dnext">Next</button>
+
+    <div class="d-done" id="ddone">
+      <div class="d-score" id="dscore"></div>
+      <h3>Why you were made to do that</h3>
+      <p>Being <i>told</i> how to read a domain changes almost nothing: the large workplace studies find no difference in click rates between people who sat through phishing training and people who did not. <b>Doing the reading yourself, on the link in front of you, is the part that works.</b> In a 2 673-person study, people who had to pick the domain out of the address before continuing fell for the link less than half as often as the control group &mdash; and on lookalike domains the drop was 79% to 17%.</p>
+      <p>It costs about seven seconds, and it is the same seven seconds whether the link turns out to be real or not. The tool below does this for you, which is useful when you are already suspicious &mdash; but the habit above is the one that catches the link you were not suspicious about.</p>
+      <button class="d-again" id="dagain">Run through them again</button>
+    </div>
+  </div>
+
   <div class="panel">
+    <div class="flab">Now take one apart in full</div>
+    <div class="hintline" style="margin:-2px 0 11px">Paste anything you want checked. This does the reading for you and names every trick it finds in the address.</div>
     <label class="flab" for="u">The link</label>
     <input class="inp" id="u" placeholder="Paste or type a URL — right-click a link and choose Copy link address" autocomplete="off" spellcheck="false">
     <div class="optional">
@@ -486,6 +545,107 @@ $('go').addEventListener('click',run);
 $('u').addEventListener('keydown',e=>{if(e.key==='Enter')run();});
 $('t').addEventListener('keydown',e=>{if(e.key==='Enter')run();});
 $('clr').addEventListener('click',()=>{$('u').value='';$('t').value='';$('res').classList.remove('on');$('err').classList.remove('on');$('u').focus();});
+
+/* ── find-it-yourself drill ──────────────────────────────────────────────
+   The analyser below does the reading for the reader. Lain et al. (USENIX
+   Security 2025, n=2673) measured what happens when the reader does it
+   instead: victimisation 74.5% -> 35.0%, and 79.2% -> 17.1% on typosquats.
+   So the drill comes first and the tool second.                        */
+const DRILL=[
+ {u:'https://login.microsoftonline.com.verify-id.co/signin', a:1,
+  o:['microsoftonline.com','verify-id.co','login.microsoftonline.com','com.verify-id.co'],
+  w:['The most common wrong answer, and the reason the trick works at all. <code>microsoftonline.com</code> is in the address, just not in the position that decides. Read right to left: the last two parts before the first single slash are <code>verify-id.co</code>, and everything to the left of them was typed by whoever owns it.',
+     '',
+     'Three labels of someone else&rsquo;s choosing, arranged to be read as a name you know. They are subdomains of <code>verify-id.co</code>, and subdomains are free to say anything.',
+     'You read from the right, which is the habit that works &mdash; one label too far. <code>com</code> here is not a suffix, it is just another label somebody typed. The site is the last two: <code>verify-id.co</code>.'],
+  ok:'Read right to left: the last two parts before the first single slash. This address belongs to whoever registered <code>verify-id.co</code>, and every label to the left of that they chose themselves &mdash; including one that reads like Microsoft.'},
+
+ {u:'https://www.paypa1.com/account/verify', a:1,
+  o:['paypal.com','paypa1.com','www.paypa1.com','account.paypa1.com'],
+  w:['There is no <code>paypal.com</code> in this address. You read an <b>l</b> where the address has the digit <b>1</b> &mdash; and almost everyone does, the first time. That is the whole attack: it defeats recognising, and only reading beats it.',
+     '',
+     'You spotted the <b>1</b>, which is the hard part. <code>www</code> is a subdomain though; the site is the last two labels, <code>paypa1.com</code>.',
+     '<code>account</code> is in the path, after the slash, not in the domain. The path is written by whoever owns the site and decides nothing.'],
+  ok:'<code>paypa1.com</code>, with the digit one. Nothing here is malformed &mdash; the address is perfectly well-built, and the only thing wrong with it is a single character.'},
+
+ {u:'https://paypal.com@account-verify.ru/login', a:1,
+  o:['paypal.com','account-verify.ru','paypal.com@account-verify.ru','verify.ru'],
+  w:['Everything before the <code>@</code> is read by the browser as a username and thrown away. It is there to be read by you, not by the browser. You would land on <code>account-verify.ru</code>.',
+     '',
+     'The <code>@</code> splits the address in two: what is before it is discarded, what is after it is where you go. Only the second half is the site.',
+     'Not in the address &mdash; <code>account-verify</code> is one label joined by a hyphen, not two separated by a dot. Hyphens join; dots divide.'],
+  ok:'Everything before the <code>@</code> is a username as far as the browser is concerned, and has no effect whatever on the destination.'},
+
+ {u:'https://support.google.com/accounts/answer/185839?hl=en', a:1,
+  o:['support.google.com','google.com','accounts.google.com','the whole address'],
+  w:['Where you land, yes &mdash; and not a careless answer. But the question is who <i>controls</i> it, and <code>support</code> is a subdomain, typed by whoever owns the domain. That owner is <code>google.com</code>, which is exactly what makes this address safe.',
+     '',
+     '<code>accounts</code> is in the path, after the first slash, not in the domain. Path and domain are made of the same kind of words and are not the same thing.',
+     'The commonest mistake on addresses that turn out to be fine. The domain is a particular part of a URL, not the URL: find the first single slash, then take the two labels immediately before it.'],
+  ok:'An ordinary address, built the ordinary way. <code>support</code> is a subdomain Google controls and <code>/accounts/answer/185839</code> is a path. Not everything with many parts is a trick.'},
+
+ {u:'https://secure-files.ru/dropbox.com/shared/Q3-budget.xlsx', a:1,
+  o:['dropbox.com','secure-files.ru','secure-files.ru/dropbox.com','shared.dropbox.com'],
+  w:['<code>dropbox.com</code> is in the address, but after the first slash &mdash; so it is a folder name on somebody else&rsquo;s site, and anyone can name a folder anything at all.',
+     '',
+     'The first single slash ends the site. Everything after it is a path on that site, invented by its owner.',
+     'Not in this address: <code>shared</code> appears in the path, not as a subdomain.'],
+  ok:'The first single slash ends the domain, and everything after it &mdash; including a folder called <code>dropbox.com</code> &mdash; was named by whoever owns <code>secure-files.ru</code>.'},
+
+ {u:'https://login.microsoftonline.com/common/oauth2/authorize', a:0,
+  o:['microsoftonline.com','login.microsoftonline.com','microsoft.com','common.microsoftonline.com'],
+  w:['',
+     'Where you land, but <code>login</code> is a subdomain. What decides ownership is the last two labels, <code>microsoftonline.com</code> &mdash; which is Microsoft&rsquo;s, and is why this one is fine.',
+     'A fair guess at the wrong string: this address says <code>microsoftonline.com</code>, which is also Microsoft&rsquo;s and is the domain its sign-in genuinely uses. Worth knowing, because &ldquo;it does not say microsoft.com&rdquo; is not on its own a reason to distrust an address.',
+     '<code>common</code> is in the path, after the slash.'],
+  ok:'And this one is genuinely Microsoft&rsquo;s. Same shape as the first address you saw, and completely legitimate: <code>login</code> is a subdomain Microsoft controls, <code>/common/oauth2/authorize</code> is a path. The shape is never the tell. The position is.'}
+];
+
+let dI=0, dRight=0, dAnswered=false;
+function dRender(){
+  dAnswered=false;
+  const q=DRILL[dI];
+  $('dcount').textContent=(dI+1)+' of '+DRILL.length;
+  $('durl').textContent=q.u;
+  $('dopts').innerHTML=q.o.map((t,i)=>
+    `<button class="d-o" data-i="${i}">${escapeHtml(t)}</button>`).join('');
+  $('dfb').className='d-fb'; $('dfb').innerHTML='';
+  $('dnext').className='d-next';
+  $('dnext').textContent = dI===DRILL.length-1 ? 'See what that was for' : 'Next';
+}
+$('dopts').addEventListener('click',e=>{
+  const b=e.target.closest('.d-o'); if(!b||dAnswered)return;
+  dAnswered=true;
+  const q=DRILL[dI], pick=+b.dataset.i, ok=pick===q.a;
+  if(ok)dRight++;
+  [...$('dopts').children].forEach((el,i)=>{
+    el.disabled=true;
+    if(i===q.a)el.classList.add('right');
+    else if(i===pick)el.classList.add('wrong');
+    else el.classList.add('dim');
+  });
+  $('dfb').className='d-fb on '+(ok?'ok':'no');
+  $('dfb').innerHTML = ok
+    ? '<b>Yes &mdash; <code>'+escapeHtml(q.o[q.a])+'</code>.</b> '+q.ok
+    : q.w[pick]+'<br><br><b>The site is <code>'+escapeHtml(q.o[q.a])+'</code>.</b> '+q.ok;
+  $('dnext').classList.add('on');
+});
+$('dnext').addEventListener('click',()=>{
+  if(dI<DRILL.length-1){ dI++; dRender(); $('drill').scrollIntoView({behavior:'smooth',block:'nearest'}); return; }
+  $('dscore').textContent=dRight+' of '+DRILL.length+' found';
+  ['dcount','durl','dopts','dfb','dnext'].forEach(id=>$(id).style.display='none');
+  document.querySelector('.d-q').style.display='none';
+  $('ddone').classList.add('on');
+});
+$('dagain').addEventListener('click',()=>{
+  dI=0; dRight=0;
+  ['dcount','durl','dopts','dfb','dnext'].forEach(id=>$(id).style.display='');
+  document.querySelector('.d-q').style.display='';
+  $('ddone').classList.remove('on');
+  dRender(); $('drill').scrollIntoView({behavior:'smooth',block:'start'});
+});
+dRender();
+
 $('egrow').innerHTML=EXAMPLES.map((e,i)=>`<button class="eg" data-i="${i}">${escapeHtml(e[0])}</button>`).join('');
 $('egrow').addEventListener('click',e=>{const b=e.target.closest('.eg');if(!b)return;
   const ex=EXAMPLES[+b.dataset.i];$('u').value=ex[1];$('t').value=ex[2]||'';run();});
