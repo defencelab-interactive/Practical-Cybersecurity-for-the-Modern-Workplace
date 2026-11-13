@@ -73,6 +73,13 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
 .spot-opt:hover{border-color:var(--acd)}
 .spot-opt.correct{border-color:var(--gr);background:var(--gl)}
 .spot-opt.wrong{border-color:var(--rd);background:var(--rl)}
+.spot-opt.picked{border-color:var(--acd);background:rgba(52,183,125,.08)}
+.spot-conf{display:none;margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+.spot-conf.show{display:block;animation:rise .35s}
+.spot-conf-q{font-size:14px;color:var(--ink-m);margin-bottom:9px}
+.spot-conf-row{display:flex;gap:8px;flex-wrap:wrap}
+.conf-b{background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:8px 14px;font:600 14px var(--body);color:var(--ink);cursor:pointer;transition:all .16s}
+.conf-b:hover{border-color:var(--acd)}
 .spot-fb{margin-top:14px;font-size:14.5px;line-height:1.6;color:var(--ink-m);border-top:1px solid var(--line);padding-top:14px;display:none}
 .spot-fb.show{display:block;animation:rise .4s}
 @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -553,7 +560,6 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
   </div>
 </div>
 <script>
-const XPW={sure:3,pretty:2,guess:1};
 /* ===== SCENE 1 as a vertical timeline with spots ===== */
 const NODES=[
  {date:'Start here',crit:0,beat:'Put the first four actions in order',
@@ -794,6 +800,12 @@ NODES.forEach((n,i)=>{
         h+=`<div class="exp-scale">`+s.scale.map((x,j)=>`<button class="exp-btn" data-exp="${i}" data-j="${j}">${x}</button>`).join('')+`</div><div class="exp-note" id="note-${i}">${s.note}</div>`;
       }else{
         h+=`<div class="spot-opts">`+s.opts.map((o,j)=>`<button class="spot-opt" data-opt="${i}" data-j="${j}">${o[0]}</button>`).join('')+`</div>
+          <div class="spot-conf" id="conf-${i}"><div class="spot-conf-q">Before the answer \u2014 how sure were you?</div>
+          <div class="spot-conf-row">
+            <button class="conf-b" data-conf="${i}" data-c="sure">Sure</button>
+            <button class="conf-b" data-conf="${i}" data-c="pretty">Fairly sure</button>
+            <button class="conf-b" data-conf="${i}" data-c="guess">Guessing</button>
+          </div></div>
           <div class="spot-fb" id="fb-${i}"><span class="xpb" id="xpb-${i}"></span><div id="fbt-${i}"></div></div>`;
       }
       h+=`</div></div>`;
@@ -801,6 +813,25 @@ NODES.forEach((n,i)=>{
   }
   el.innerHTML=h;track.appendChild(el);
 });
+const pending={};
+const CONF_LINE={
+  sure:   {ok:'<b>You were sure, and you were right.</b> ',
+           no:'<b>You were sure, and it was wrong \u2014 which is the useful kind.</b> An answer you held confidently is the one that actually gets replaced once you see why. '},
+  pretty: {ok:'<b>Fairly sure, and right.</b> ',
+           no:'<b>Fairly sure, and not quite.</b> '},
+  guess:  {ok:'<b>A guess that landed.</b> Worth reading why anyway, because next time it may not. ',
+           no:'<b>A guess, and not this one.</b> Guessing first is not a waste \u2014 it is what makes the answer stick. '}
+};
+function reveal(i,j,conf){
+  const s=NODES[i].spot;const fb=document.getElementById('fb-'+i);
+  const ci=s.opts.findIndex(o=>o[1]===1);const ok=j===ci;
+  [...document.querySelectorAll('[data-opt="'+i+'"]')].forEach((o,m)=>{o.style.pointerEvents='none';o.classList.remove('picked');if(m===ci)o.classList.add('correct');else if(m===j)o.classList.add('wrong');});
+  const g=ok?3:1;addXP(g);document.getElementById('xpb-'+i).textContent='+'+g+' XP';
+  const lead=conf&&CONF_LINE[conf]?CONF_LINE[conf][ok?'ok':'no']
+           :(ok?'<b class="v-ok">\u2713 That\u2019s right.</b> ':'<b class="v-no">\u2717 Not quite.</b> ');
+  document.getElementById('fbt-'+i).innerHTML=lead+s.fb;
+  fb.classList.add('show');recordAnswer(s.topic,ok);markSeen(i);
+}
 // track answers by topic for personalization
 const topicResults={}; // topic -> {right:n, wrong:n}
 function recordAnswer(topic,ok){if(!topic)return;if(!topicResults[topic])topicResults[topic]={right:0,wrong:0};topicResults[topic][ok?'right':'wrong']++;}
@@ -833,11 +864,24 @@ track.addEventListener('click',e=>{
   const opt=e.target.closest('.spot-opt');
   if(opt){const i=opt.dataset.opt,j=+opt.dataset.j;const s=NODES[i].spot;const fb=document.getElementById('fb-'+i);
     if(fb.classList.contains('show'))return;
-    const ci=s.opts.findIndex(o=>o[1]===1);const ok=j===ci;
-    [...document.querySelectorAll('[data-opt="'+i+'"]')].forEach((o,m)=>{o.style.pointerEvents='none';if(m===ci)o.classList.add('correct');else if(m===j)o.classList.add('wrong');});
-    const g=ok?3:1;addXP(g);document.getElementById('xpb-'+i).textContent='+'+g+' XP';
-    document.getElementById('fbt-'+i).innerHTML=(ok?'<b class="v-ok">\u2713 That\u2019s right.</b> ':'<b class="v-no">\u2717 Not quite.</b> ')+s.fb;
-    fb.classList.add('show');recordAnswer(s.topic,ok);markSeen(i);return;}
+    /* Ask how sure before revealing. An error made confidently is the one that
+       gets corrected and stays corrected (Metcalfe, Learning from Errors, 2017),
+       and the reader only notices the gap if they committed to it first. */
+    const conf=document.getElementById('conf-'+i);
+    if(conf&&!conf.dataset.answered){
+      pending[i]=j;
+      [...document.querySelectorAll('[data-opt="'+i+'"]')].forEach(o=>{o.style.pointerEvents='none';});
+      opt.classList.add('picked');
+      conf.classList.add('show');
+      setTimeout(()=>conf.scrollIntoView({behavior:'smooth',block:'nearest'}),120);
+      return;
+    }
+    reveal(i,j,null);return;}
+  const cb=e.target.closest('[data-conf]');
+  if(cb){const i=cb.dataset.conf;const conf=document.getElementById('conf-'+i);
+    if(conf.dataset.answered)return;
+    conf.dataset.answered='1';conf.classList.remove('show');
+    reveal(i,pending[i],cb.dataset.c);return;}
   const mt=e.target.closest('[data-more]');
   if(mt){document.getElementById('more-'+mt.dataset.more).classList.toggle('open');return;}
   // weigh: pick a side
