@@ -55,16 +55,14 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
 .note b{color:var(--td)}
 /* prepare list */
 .prep{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:11px;box-shadow:var(--sh);overflow:hidden}
-.p-top{display:flex;gap:13px;align-items:flex-start;padding:15px 18px;cursor:pointer}
-.p-box{flex:none;width:21px;height:21px;border:2px solid #c3ccc6;border-radius:6px;margin-top:1px;position:relative;transition:all .15s}
-.prep.on .p-box{background:var(--acd);border-color:var(--acd)}
-.prep.on .p-box::after{content:'\2713';position:absolute;inset:0;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.p-top{display:flex;gap:13px;align-items:flex-start;padding:15px 18px}
+.p-n{flex:none;width:21px;height:21px;border-radius:50%;background:rgba(52,183,125,.13);color:var(--acd);
+  font:700 12px var(--mono);display:flex;align-items:center;justify-content:center;margin-top:1px}
 .p-t{flex:1;font-size:15.5px;line-height:1.4;font-weight:600}
 .p-w{padding:0 18px 16px 52px;font-size:14px;line-height:1.6;color:var(--tb)}
 .p-w ul{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:7px}
 .p-w li{padding-left:15px;position:relative}
 .p-w li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:#c3ccc6}
-.prog{font:700 13px var(--mono);color:var(--acd);margin-top:14px}
 .foot{margin-top:32px;font-size:13px;color:var(--mu);line-height:1.65;border-top:1px solid var(--line);padding-top:18px}
 @media(max-width:620px){.wrap{padding:28px 18px 60px}.s-more{padding-left:19px}.p-w{padding-left:18px}}
 </style>
@@ -87,8 +85,8 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
 
   <!-- PREPARE -->
   <div class="pane on" id="prep">
-    <div class="prep" data-p="0">
-      <div class="p-top"><span class="p-box"></span><span class="p-t">Turn on Find My Device — and test that it works</span></div>
+    <div class="prep">
+      <div class="p-top"><span class="p-n">1</span><span class="p-t">Turn on Find My Device — and test that it works</span></div>
       <div class="p-w">It cannot be switched on once the phone is gone, and an untested setting is a guess.
         <ul>
           <li><b>iPhone:</b> Settings → your name → Find My → turn on all three options</li>
@@ -97,8 +95,8 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
         </ul>
       </div>
     </div>
-    <div class="prep" data-p="1">
-      <div class="p-top"><span class="p-box"></span><span class="p-t">Back up your authenticator, and keep recovery codes elsewhere</span></div>
+    <div class="prep">
+      <div class="p-top"><span class="p-n">2</span><span class="p-t">Back up your authenticator, and keep recovery codes elsewhere</span></div>
       <div class="p-w">If your second factor lives only on the phone, losing it locks you out of the accounts you would use to recover everything else — including your email.
         <ul>
           <li>Google Authenticator: profile icon → "Use on multiple devices"</li>
@@ -107,8 +105,8 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
         </ul>
       </div>
     </div>
-    <div class="prep" data-p="2">
-      <div class="p-top"><span class="p-box"></span><span class="p-t">Write down who you would call, and from what</span></div>
+    <div class="prep">
+      <div class="p-top"><span class="p-n">3</span><span class="p-t">Write down who you would call, and from what</span></div>
       <div class="p-w">Your contacts are in the phone. If it is gone, so are the numbers.
         <ul>
           <li>Your IT or security team, if the phone has work accounts on it</li>
@@ -118,7 +116,6 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
         </ul>
       </div>
     </div>
-    <div class="prog" id="prog">0 of 3 set up</div>
 
     <div class="note"><span>🔒</span><div><b>Nothing here is sent anywhere.</b> Ticks keep your place while you work through it — they live in this browser only, so do not count on finding them again. The left-hand tab is the part to act on now: the day you need the right-hand one is the day you will not have this page either.</div></div>
   </div>
@@ -177,54 +174,11 @@ document.querySelector('.tabs').addEventListener('click',e=>{
   document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id===t.dataset.pane));
 });
 
-/* prepare list */
-document.querySelectorAll('.prep .p-top').forEach(el=>{
-  el.addEventListener('click',()=>{el.parentElement.classList.toggle('on');updateProg();save();});
-});
-function updateProg(){
-  const n=document.querySelectorAll('.prep.on').length;
-  const p=$('prog'); if(p)p.textContent=n+' of 3 set up';
-}
-
-/* emergency steps */
+/* The emergency list marks where you are while you work down it. Nothing is
+   stored: in a real emergency, last month's ticks would make you skip a step. */
 document.querySelectorAll('.step .s-top').forEach(el=>{
-  el.addEventListener('click',()=>{el.parentElement.classList.toggle('done');save();});
+  el.addEventListener('click',()=>{el.parentElement.classList.toggle('done');});
 });
 
-/* storage: the Defence Lab host provides window.storage; standalone falls back
-   to localStorage. Both can fail (private window, blocked site data), so every
-   call is wrapped and the page works with none of it. */
-const DL={
-  async get(k){try{
-    if(window.storage){const r=await window.storage.get(k);return r&&r.value?r.value:null;}
-    return localStorage.getItem(k);
-  }catch(e){return null}},
-  async set(k,v){try{
-    if(window.storage)return await window.storage.set(k,v);
-    localStorage.setItem(k,v);
-  }catch(e){}},
-  async del(k){try{
-    if(window.storage)return await window.storage.delete(k);
-    localStorage.removeItem(k);
-  }catch(e){}}
-};
-/* persistence — survives closing the tab */
-async function save(){
-  try{
-    const prep=[...document.querySelectorAll('.prep')].map(x=>x.classList.contains('on')?1:0);
-    const done=[...document.querySelectorAll('.step')].map(x=>x.classList.contains('done')?1:0);
-    await DL.set('lost-phone',JSON.stringify({prep,done}));
-  }catch(e){}
-}
-async function load(){
-  try{
-    const v=await DL.get('lost-phone'); if(!v)return;
-    const d=JSON.parse(v);
-    (d.prep||[]).forEach((v,i)=>{const el=document.querySelector(`.prep[data-p="${i}"]`); if(el&&v)el.classList.add('on');});
-    (d.done||[]).forEach((v,i)=>{const el=document.querySelector(`.step[data-s="${i}"]`); if(el&&v)el.classList.add('done');});
-    updateProg();
-  }catch(e){}
-}
-load();
 </script>
 </body></html>
