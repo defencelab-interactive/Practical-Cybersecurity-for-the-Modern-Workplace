@@ -410,7 +410,7 @@ The complete curriculum. Recommended deployment: one item per 1-2 weeks over 6 m
 | 6 | Course | 4 | Reused Passwords, and Why MFA Stops Them | Auth | 7 min |
 | 7 | Byte | 4a | Build a Passphrase | Auth | 2 min |
 | 8 | Byte | 4b | Turn On MFA | Auth | 3 min |
-| 9 | Course | 6 | Spotting a Phishing Email | Phishing | 6 min |
+| 9 | Course | 6 | Why Phishing Works, and What Stops It | Phishing | 7 min |
 | 10 | Byte | 6b | Check Where a Link Really Goes | Phishing | 3 min |
 | 11 | Course | 7 | Laptop Security: Updates, Extensions and Public WiFi | Devices | 5 min |
 | 12 | Byte | 7b | Securing Your Home WiFi | Devices | 2 min |
@@ -820,7 +820,7 @@ a scene-2 checklist that assembles the learner's personal action plan.
 | Course 3 | What a Visitor Can Read on Your Desk | `courses/03-physical-security.html` | Built, opens with a self-audit. ~4 min base, ~5 with the two deep-dive blocks expanded |
 | Course 4 | Reused Passwords, and Why MFA Stops Them | `courses/04-passwords-mfa.html` | Built, ~7 min — carries both passwords and MFA; the old Course 5 is folded in |
 | Course 5 | MFA: The Second Step | — | **Dropped.** Course 4 covers passwords and the second step in one pass; splitting them would mean either removing MFA from Course 4 or repeating it. |
-| Course 6 | Phishing: Spot, Check, Report | `courses/06-the-447-email.html` | Built as *Spotting a Phishing Email*, cold-open email pick. ~6 min base, ~7 with deep dives |
+| Course 6 | Why Phishing Works, and What Stops It | `courses/06-the-447-email.html` | Built, cold-open email pick. ~7 min base, ~8 with deep dives. Re-pointed 13 Nov around the evidence — see the naming and evidence notes above |
 | Byte 1b | Security Tools Worth Knowing About | `bytes/01b-security-toolkit.html` | Built |
 | Course 7 | Laptop Security Settings | `courses/07-laptop-security.html` | Built as *Laptop Security: Updates, Extensions and Public WiFi*, opens with a myth-buster. ~5 min |
 | Course 8 | Phone Security Settings | `courses/08-phone-security.html` | Built as *Phone Security: Permissions, Charging and a Lost Phone*, opens by weighing laptop against phone. ~5 min |

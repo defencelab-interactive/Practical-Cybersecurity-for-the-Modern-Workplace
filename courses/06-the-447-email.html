@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Defence Lab · Spotting a Phishing Email</title>
+<title>Defence Lab · Why Phishing Works, and What Stops It</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 @property --mood{syntax:'<number>';inherits:true;initial-value:0}
@@ -363,8 +363,8 @@ body{font-family:var(--body);background:#18231d;color:var(--tw);-webkit-font-smo
     <div class="rail">
       <svg class="sh" viewBox="0 0 120 124"><path d="M60 6 L106 24 L106 66 Q106 104 60 120 Q14 104 14 66 L14 24 Z" fill="rgba(52,183,125,.06)" stroke="var(--ac)" stroke-width="3"/><path d="M60 30 L52 54 L66 62 L54 92" fill="none" stroke="var(--rd)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <div class="eyebrow">Course · Phishing</div>
-      <h1>Spotting a Phishing Email</h1>
-      <div class="r-sub">How a convincing message is put together, and the three checks that catch one in about five seconds.</div>
+      <h1>Why Phishing Works, and What Stops It</h1>
+      <div class="r-sub">How a convincing message is built, what looking at it can and cannot do, and what the measurements say about both.</div>
 
     </div>
     <div class="scroll" id="scroll">
@@ -415,8 +415,8 @@ const NODES=[
      ['Familiarity and habit — it copies a routine',0]],
     fb:'“Today” and “5pm” are the deadline; “lose access” is the consequence. Real IT departments give notice. The deadline is nearly always invented, because the whole approach needs you moving before you think.'}},
 
- {date:'The three checks',crit:0,beat:'Sender, link, tone — about five seconds',
-  body:'Against all four of those, the same three checks.<br><br><b>The sender.</b> The display name is free text and can say anything. The address behind it has to be real.<br><br><b>The link.</b> Hover on a desktop, long-press on a phone. The true destination appears without opening it.<br><br><b>The tone.</b> Generic greetings, invented deadlines, a department that does not exist. None is proof alone. Two or three together is different.<br><br>Below is a message with several problems in it. Click anything you think is wrong — and see what you make of the parts that turn out to be fine.',
+ {date:'The three checks',crit:0,beat:'One of these carries most of the weight',
+  body:'Against all four of those, the same three checks.<br><br><b>The sender.</b> The display name is free text and can say anything. The address behind it has to be real.<br><br><b>The link.</b> Hover on a desktop, long-press on a phone. The true destination appears without opening it.<br><br><b>The tone.</b> Generic greetings, invented deadlines, a department that does not exist. None is proof alone. Two or three together is different.<br><br>Of the three, <b>the link is the one that has actually been measured</b> — and the measurement is in the next node. The other two are context: useful for deciding whether to look harder, not evidence on their own.<br><br>Below is a message with several problems in it. Click anything you think is wrong — and see what you make of the parts that turn out to be fine.',
   spot:{type:'flags',topic:'spot',
     mail:[
       {label:'From',parts:[[0,'Amazon Security'],' <',[1,'security@arnazon.com'],'>']},
@@ -455,16 +455,28 @@ const NODES=[
      ['Message her on chat and ask if she sent it',1]],
     fb:'Ask her somewhere else. If her mailbox is compromised, your reply lands with whoever is sitting in it — and they will happily confirm she sent it. A chat message answers it in ten seconds.'}},
 
+ {date:'What the measurements say',crit:1,beat:'You will click one eventually, and the plan has to assume it',
+  body:'Everything above is worth knowing. None of it is the defence, and there is now enough data to say that plainly.<br><br>Two large workplace studies tested the usual approach. A hospital system randomised <b>19 789 staff</b> over eight months: recent annual training had <b>no measurable effect</b> on who fell for a simulated phish, and training shown straight after a click moved failure by about <b>1.7 percentage points</b>. Between 37% and 51% of those training sessions lasted zero seconds. A second study, <b>14 733 employees over fifteen months</b>, found the group shown training after clicking went on to click <i>more</i> than the group shown nothing.<br><br><b>But one thing did work, and it is the thing you just did.</b> When 2 673 people were made to identify the domain in an address before they could continue, falling for the link dropped from <b>74% to 35%</b> — and against lookalike domains, from <b>79% to 17%</b>. It cost seven to ten seconds.<br><br>The difference is not what people were told. It is whether they were made to look.',
+  more:{t:'Why this course is built the way it is',
+    body:'Reading the finding carefully changes what a module like this should contain.<br><br><b>Being told does not transfer.</b> So the parts of this course that are prose exist to explain <i>why</i> something works, not to install a habit. Prose is not where the habit comes from.<br><br><b>Being made to look does transfer, for a while.</b> Every node here that asks you to pick, click or sort is doing that job, and the opening comparison and the flagged message are the two that matter most. The same review that found training generally helpful also found the effect <b>declines significantly after about five months</b>, which is an argument for short and repeated rather than annual and thorough.<br><br><b>And some of it should not depend on you at all.</b> The authors of the 19 789-person trial recommend spending on technical measures instead: hardware multi-factor, and password managers that fill credentials <i>only</i> on the correct domain. That is the last node of this course, and it is there for a reason — it is the only part that still works on the day you are tired and do not look.'},
+  spot:{type:'predict',topic:'spot',q:'A hospital system ran phishing training across 19 789 staff for eight months. How much did it change how often they fell for one?',
+    opts:[['Almost nothing — about two percentage points',1],['Cut it roughly in half',0],['Cut it by about three quarters',0]],
+    fb:'About two points, and the annual training showed no measurable effect at all.<br><br>This is not an argument that people are careless. It is an argument that <b>knowing</b> and <b>catching it at 4:47 on a Friday</b> are different problems, and that only the second one matters. What follows is built on that.'}},
+
  {date:'If you already clicked',crit:0,beat:'What to do in the first few minutes',
   body:'Which means some of them get through, to people who were paying attention.<br><br>Entered a password? Change it now, and anywhere else you used it. Turn on multi-factor on that account.<br><br>Downloaded a file? Do not open it. Disconnect from the network and tell IT.<br><br>Sent money or data? Contact the bank and your security team immediately, and write down what you sent and when.<br><br>What decides how bad it gets is how quickly someone else finds out.',
   spot:{type:'experience',topic:'report',q:'Say you typed your password in before realising. How quickly would you tell IT?',
     scale:['Straight away','After checking myself first','Honestly, I might not'],
-    note:'The gap between “straight away” and “after I check” is where the damage settles in. In that window a security team can reset sessions, block the domain and warn everyone else who got the same message.<br><br>Reporting something that turns out to be nothing costs a few minutes of someone’s time. If reporting feels like admitting failure where you work, that is a problem with the process rather than with you.'}},
+    note:'The gap between “straight away” and “after I check” is where the damage settles in. In that window a security team can reset sessions, block the domain and warn everyone else who got the same message.<br><br>This is the part of the whole subject with the best evidence behind it. In the fifteen-month study of 14 733 employees, people reported <b>18 476</b> suspicious messages; about a tenth arrived within five minutes, and roughly 68% of reports were right. Those reports surfaced <b>252 real phishing campaigns</b> and over 1 500 malware emails, at a handling cost of about <b>1.5 messages a day</b>. The reporting rate did not fall off over the fifteen months — the feared flood of nonsense did not arrive.<br><br>Reporting something that turns out to be nothing costs a few minutes of someone’s time. If reporting feels like admitting failure where you work, that is a problem with the process rather than with you.'}},
 
  {scene2:1,date:'Your settings',crit:0,beat:'Three things to set up on your own accounts',
   body:'Mark whichever you mean to do.',
   spot:{type:'checklist',
     items:[
+      {topic:'verify',t:'Let your password manager do the checking for you',
+       how:'It matches the domain exactly and will simply not offer to fill on a lookalike. That is the one check that still runs when you are tired, distracted, or certain the message is real — and it is what the authors of the 19 789-person trial recommend spending on instead of more training.',
+       steps:['Use the manager\u2019s autofill rather than copy-paste, so the domain check actually happens','Treat “it did not offer to fill” as a reason to stop and look, not as a glitch to work around','Where a service offers passkeys, turn them on — the key is bound to the domain, so a lookalike site cannot use it at all'],
+       itnote:'If your workplace supplies a password manager, use that one; your IT team may also be able to turn on passkeys for work accounts.'},
       {topic:'spot',t:'Set your mail app to show full sender addresses',
        how:'Most clients show only the display name, which can say anything. Seeing the real address turns the most useful check into a glance.',
        steps:['On desktop, expand the header on any message or look for a “show sender address” setting','On your phone, tap the sender name once so you know where the real address appears'],
@@ -586,8 +598,12 @@ end.innerHTML=`<div class="ec"><h3>That\u2019s the course.</h3>
   <ol>
 <li>Arup, Hong Kong, early 2024 — 15 transfers totalling HK$200 million (about US$25m) after a video call; Hong Kong police said the other participants were fake. Reported: <a href="https://www.insurancebusinessmag.com/asia/news/cyber/deepfake-video-conference-sees-criminals-escape-with-hk200-million-489791.aspx" target="_blank" rel="noopener">Insurance Business Asia</a>.</li>
 <li>Dropbox's own list of domains it sends from, including dropboxmail.com: <a href="https://help.dropbox.com/accounts-billing/security/official-domains" target="_blank" rel="noopener">Dropbox Help Centre</a>.</li>
+<li>The 19 789-employee trial, eight months at a hospital system: Ho, Mirian, Luo et al., <i>Understanding the Efficacy of Phishing Training in Practice</i>, IEEE Symposium on Security and Privacy 2025 — <a href="https://sysnet.ucsd.edu/~voelker/pubs/phishtrain-oakland25.pdf" target="_blank" rel="noopener">paper (PDF)</a>. Annual training: no significant association with failure. Training after a click: about 1.7 percentage points absolute. The recommendation to spend on hardware MFA and domain-matching password managers is the authors’ own.</li>
+<li>The 14 733-employee study over fifteen months, including the reporting figures and the finding that the trained group clicked more: Lain, Kostiainen and Capkun, <i>Phishing in Organizations</i>, ETH Zurich — <a href="https://arxiv.org/abs/2112.07498" target="_blank" rel="noopener">arXiv 2112.07498</a>.</li>
+<li>Identifying the domain before continuing — 74% to 35%, and 79% to 17% on lookalikes, at 7–10 seconds: Lain, Nakatsuka, Kostiainen, Tsudik and Capkun, <i>URL Inspection Tasks: Helping Users Detect Phishing Links in Emails</i>, <a href="https://www.usenix.org/conference/usenixsecurity25/presentation/lain" target="_blank" rel="noopener">USENIX Security 2025</a> (n = 2 673).</li>
+<li>The decline in effect after about five months: Jampen, Gür, Sutter and Tellenbach, <i>Don’t click: towards an effective anti-phishing training</i>, <a href="https://link.springer.com/article/10.1186/s13673-020-00237-7" target="_blank" rel="noopener">Hum. Cent. Comput. Inf. Sci. 10:33 (2020)</a> — a review that finds training generally positive, and so sits against the two trials above rather than with them.</li>
   </ol>
-  <div class="ec-src-note">Tom and the $280,000 transfer are a composed scenario, not a reported case. How the Arup deepfakes were produced was not disclosed.</div></details>
+  <div class="ec-src-note">Tom and the $280,000 transfer are a composed scenario, not a reported case. How the Arup deepfakes were produced was not disclosed. The two large trials and the 2020 review disagree about whether phishing training helps; this course follows the distinction that separates them — being told versus being made to look — rather than treating the question as settled.</div></details>
   <div class="yourplan" id="yourplan"></div><button class="nextbtn">Finish Scene \u2192</button></div>`;
 track.appendChild(end);
 
