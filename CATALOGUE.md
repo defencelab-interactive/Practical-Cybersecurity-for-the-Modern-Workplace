@@ -213,6 +213,13 @@ for something only the new version contains. The tell when this goes wrong is th
 old content while the repository holds the new — compare against `raw.githubusercontent.com` to
 separate a delivery failure from a code problem.
 
+**A merge of three lists is still a list.** Byte 7f was planned as “laptop settings, cafés and travel
+in one reference” — which is the shape that got twelve bytes retired in the first place. Rebuilt as a
+diagnostic: six things that are true while you work in public, pick the two that expose you most,
+then the ranking. The content is the correction rather than the advice, and the three topics the
+old bytes covered are named only to put them in proportion, with pointers to where each is handled
+properly.
+
 **Show a number only where it can be computed, and keep estimates off the chart.** Byte 4a reports
 entropy in bits rather than crack time, because bits are a property of how the phrase was generated
 while time depends on the defender’s hashing and the attacker’s hardware. The 512-word list is a
@@ -263,7 +270,7 @@ belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.h
 | 4b | **Turn On MFA** | Your accounts in the order that matters, each with the company's own term for the setting and a link where one was confirmed. A reference, not a worklist — no ticks, nothing stored. | ~3 min | Course 4 | Built |
 | 6b | **Link Inspector** | Paste a URL and see where it really goes — domain, @ trick, punycode, lookalikes. Runs in the browser. | ~3 min | Course 6 | Built |
 | 7b | **Your Home Network** | Paste your WiFi name and see what it gives away (surname, address, router model, ISP default), then three router settings | 2 min | Course 7 | Built |
-| 7f | **Working Away From the Office** | Laptop settings, cafés and travel in one reference *(merges the old 7a, 7c, 7e)* | 3 min | Courses 7–8 | To build |
+| 7f | **The Café, the Train and the Airport** | Pick the two exposures that matter most out of six, then see the honest ranking. Corrects the usual misallocation — the screen and the voice beat the WiFi *(replaces the old 7a, 7c, 7e)* | ~3 min | Courses 7–8 | Built |
 | 8b | **When Your Phone Goes Missing** | Two tabs: the three settings that only work beforehand, and the lock→notify→passwords→wipe order for when it is gone | ~2 min | Course 8 | Built |
 | 9a | **Clean Up What's Public About You** | LinkedIn settings, old accounts, searching for yourself *(merges the old 9a, 9b)* | 3 min | Course 9 | To build |
 | 10a | **Anonymise an AI Prompt** | Paste a prompt: emails, phones, amounts, dates, IDs and internal hostnames are marked automatically; names and companies you click yourself, because no pattern gets those right. Runs entirely in the browser. | ~2 min | Course 10 | Built |
