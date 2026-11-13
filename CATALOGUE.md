@@ -133,6 +133,17 @@ Three things settled the form:
 When a title changes, the landing-page blurb usually has to change with it, because the blurb was
 written to complete the old title and will now repeat the new one. Eight of them did.
 
+**No numbering reaches the learner.** The same rule, carried through: if every item is launched on
+its own and there is no order to work through, then “Course 7” and “Byte 13a” promise a sequence
+that does not exist, and a learner who gets Byte 13a on its own is left wondering what the other
+twelve were. The eyebrows read `Course · Device Security` and `Byte · Device Security`, the landing
+cards show only `Course` or `Byte` beside the time, and the landing note that existed purely to
+explain the numbering scheme now says instead that each item stands on its own.
+
+The numbers stay in two places, both of them ours and neither of them learner-facing: the filenames
+(`bytes/13a-first-moves.html`), because the URLs are deployed and may already be linked, and the
+tables in this document, where `4b` is how we refer to an item in conversation.
+
 ### Why the order is STOP · REPORT · DOCUMENT
 
 The original plan called Byte 13a “STOP · DOCUMENT · REPORT”. Course 13 puts reporting second
