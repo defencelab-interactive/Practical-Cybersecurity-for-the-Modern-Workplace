@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Defence Lab · What Your Profile Gives Away</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#34B77D;--acd:#2A9A66;--gr:#2EAD6B;--td:#1A1A1A;--tb:#4A4844;--mu:#8a8884;--paper:#F2F5F2;--paper2:#E8EEEC;--line:#dce4e0;
+  --sh:0 3px 8px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);
+  --blue:#4E7CA8;--rd:#C0392B;--rdl:rgba(192,57,43,.09);--am:#B07A1E;--aml:rgba(176,122,30,.12);
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);color:var(--td);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background:radial-gradient(70% 50% at 12% 6%,rgba(52,183,125,.16),transparent 52%),
+    radial-gradient(80% 60% at 92% 30%,rgba(78,124,168,.14),transparent 58%),
+    radial-gradient(60% 45% at 55% 40%,rgba(255,255,255,.5),transparent 60%),
+    linear-gradient(160deg,#eef2ee,#e4ebeb)}
+.wrap{max-width:1000px;margin:0 auto;padding:40px 36px 80px}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.eyebrow{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acd);margin-bottom:12px}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(26px,3.8vw,38px);line-height:1.08;letter-spacing:-.02em;margin-bottom:14px}
+.lede{font-size:17px;line-height:1.6;color:var(--tb)}
+.chip{font:700 12px var(--mono);color:var(--acd);background:rgba(52,183,125,.12);border-radius:20px;padding:6px 13px;white-space:nowrap;flex:none}
+
+.how{background:#fff;border:1.5px solid var(--line);border-radius:15px;padding:17px 20px;margin:26px 0 16px;box-shadow:var(--sh)}
+.how-q{font-size:15.5px;line-height:1.6;color:var(--td);margin-bottom:13px}
+.how-q b{color:var(--acd)}
+.keys{display:flex;gap:9px;flex-wrap:wrap}
+.k{display:flex;align-items:center;gap:8px;font:600 13px var(--body);color:var(--tb);
+   border:1.5px solid var(--line);border-radius:9px;padding:7px 12px;background:var(--paper)}
+.sw{width:11px;height:11px;border-radius:4px;flex:none}
+.sw-keep{background:var(--gr)}.sw-trim{background:#D9A441}.sw-cut{background:var(--rd)}
+
+.prof{background:#fff;border:1.5px solid var(--line);border-radius:17px;overflow:hidden;box-shadow:var(--sh)}
+.prof-band{height:62px;background:linear-gradient(110deg,#d9e4ec,#e6edea)}
+.prof-body{padding:0 23px 22px;margin-top:-26px}
+.avatar{width:62px;height:62px;border-radius:50%;background:var(--paper2);border:3px solid #fff;
+  display:grid;place-items:center;font:700 22px var(--disp);color:var(--mu);margin-bottom:11px}
+.el{position:relative;border:1.5px solid transparent;border-radius:10px;padding:7px 10px;margin:0 -10px 3px;
+  cursor:pointer;transition:all .14s}
+.el:hover{background:rgba(78,124,168,.07);border-color:rgba(78,124,168,.3)}
+#els.locked .el{cursor:default}
+#els.locked .el:hover{background:none;border-color:transparent}
+#els.locked .el.set-keep:hover{border-color:var(--gr);background:rgba(46,173,107,.08)}
+#els.locked .el.set-trim:hover{border-color:#D9A441;background:rgba(217,164,65,.1)}
+#els.locked .el.set-cut:hover{border-color:var(--rd);background:var(--rdl)}
+.el.set-keep{border-color:var(--gr);background:rgba(46,173,107,.08)}
+.el.set-trim{border-color:#D9A441;background:rgba(217,164,65,.1)}
+.el.set-cut{border-color:var(--rd);background:var(--rdl)}
+.el-name{font:700 20px var(--disp);letter-spacing:-.01em}
+.el-head{font-size:15.5px;font-weight:600;line-height:1.45}
+.el-meta{font-size:13.5px;color:var(--mu)}
+.el-p{font-size:14.5px;line-height:1.6;color:var(--tb)}
+.el-lab{font:700 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:3px}
+.el-badge{position:absolute;top:50%;right:8px;transform:translateY(-50%);font:700 10px var(--mono);
+  letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:20px;display:none}
+.el.set-keep .el-badge{display:block;background:rgba(46,173,107,.17);color:var(--gr)}
+.el.set-trim .el-badge{display:block;background:rgba(217,164,65,.2);color:#8A5E12}
+.el.set-cut .el-badge{display:block;background:rgba(192,57,43,.14);color:var(--rd)}
+.sect{margin-top:17px;padding-top:15px;border-top:1px solid var(--line)}
+
+.bar{display:flex;align-items:center;gap:13px;margin-top:17px;flex-wrap:wrap}
+.go{border:0;border-radius:11px;padding:11px 20px;background:var(--ac);color:#08301F;font:700 14px var(--body);cursor:pointer}
+.go:disabled{opacity:.4;cursor:default}
+.bn{font:600 12.5px var(--body);color:var(--tb)}
+
+.res{margin-top:24px;display:none;flex-direction:column;gap:10px}
+.res.show{display:flex}
+.r{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:15px 18px;box-shadow:var(--sh)}
+.r-top{display:flex;align-items:center;gap:11px;margin-bottom:7px;flex-wrap:wrap}
+.r-t{font-size:15px;font-weight:600;flex:1;min-width:0}
+.r-ans{font:700 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:20px;flex:none}
+.a-keep{background:rgba(46,173,107,.17);color:var(--gr)}
+.a-trim{background:rgba(217,164,65,.2);color:#8A5E12}
+.a-cut{background:rgba(192,57,43,.14);color:var(--rd)}
+.r-you{font:700 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mu);flex:none}
+.r-w{font-size:14px;line-height:1.65;color:var(--tb)}
+.r-w b{color:var(--td)}
+
+.fin{background:rgba(78,124,168,.07);border:1.5px solid rgba(78,124,168,.25);border-radius:16px;padding:22px 25px;margin-top:20px;display:none}
+.fin.show{display:block}
+.fin h3{font-family:var(--disp);font-weight:600;font-size:19px;margin-bottom:10px;color:#36587A}
+.fin p{font-size:14.5px;line-height:1.65;color:var(--tb)}
+.fin p+p{margin-top:10px}
+.fin b{color:var(--td)}
+
+.foot{margin-top:30px;border-top:1px solid var(--line);padding-top:16px;font-size:13.5px;line-height:1.7;color:var(--mu)}
+.foot b{color:var(--tb)}
+
+@media (max-width:620px){
+  .wrap{padding:26px 18px 60px}
+  .head{flex-direction:column;gap:12px}
+  .prof-body{padding:0 15px 18px}
+  .el{margin:0 -6px 3px;padding:7px 7px}
+  .el-badge{position:static;transform:none;display:none!important}
+  .el.set-keep,.el.set-trim,.el.set-cut{border-left-width:4px}
+}
+</style>
+</head><body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Security Byte 9a</div>
+      <h1>What Your Profile Gives Away</h1>
+      <div class="lede">Not an argument for going quiet. A public professional profile is part of most jobs — the question is which parts of it are load-bearing for someone planning an approach.</div>
+    </div>
+    <div class="chip">~3 min</div>
+  </div>
+
+  <div class="how">
+    <div class="how-q">Here is a profile that could belong to any of us. <b>Tap each part to sort it</b> — tapping again moves it on to the next bucket.</div>
+    <div class="keys">
+      <span class="k"><span class="sw sw-keep"></span>Keep — necessary, and harmless</span>
+      <span class="k"><span class="sw sw-trim"></span>Trim — fine alone, useful in combination</span>
+      <span class="k"><span class="sw sw-cut"></span>Cut — this is what turns a profile into a plan</span>
+    </div>
+  </div>
+
+  <div class="prof">
+    <div class="prof-band"></div>
+    <div class="prof-body">
+      <div class="avatar">MD</div>
+      <div id="els"></div>
+    </div>
+  </div>
+
+  <div class="bar">
+    <button class="go" id="go" disabled>Show the answers</button>
+    <span class="bn" id="bn">Sort all eight</span>
+  </div>
+
+  <div class="res" id="res"></div>
+  <div class="fin" id="fin"></div>
+
+  <div class="foot">
+    <b>This profile is made up</b>, and so is Mark Dalton — it is the same composed scenario the course <i>What You Post About Work</i> uses, not a real person’s account. Nothing here is drawn from anyone’s profile, and the byte stores nothing: refresh the page and it starts over.
+    <br><br><b>Deliberately not included:</b> the settings paths for LinkedIn, Facebook or anywhere else. Those move every few months, and the course already gives the three that matter — your connection list, your post rule, and the apps you connected years ago. What this byte adds is the judgement that has to come first, because “make everything private” is not a decision anyone with a career can actually follow.
+  </div>
+</div>
+
+<script>
+const BUCKETS=['keep','trim','cut'];
+const LABELS={keep:'Keep',trim:'Trim',cut:'Cut'};
+
+const ELS=[
+ {cls:'el-name', html:'Mark Dalton', ans:'keep',
+  w:'<b>Keep.</b> Your name on a professional profile is the profile. There is no version of this where hiding it helps and a career survives.'},
+ {cls:'el-head', html:'Senior Financial Analyst at Hartwell Group', ans:'keep',
+  w:'<b>Keep.</b> Role and employer are the two things a professional profile exists to state, and both are usually discoverable anyway — from the company site, from a conference programme, from a colleague’s post.<br><br>People often try to hide here, and it costs them opportunities while protecting nothing.'},
+ {cls:'el-meta', html:'Berlin, Germany · 412 connections', ans:'trim',
+  w:'<b>Trim — the connection count is fine, the connection <i>list</i> is not.</b> A public list maps your colleagues, your suppliers and who reports to whom in a single click, which is the research step done for free.<br><br>City is ordinary and usually necessary. Making the list private is the one change here, and nobody will notice you made it.'},
+ {lab:'About', cls:'el-p', html:'Leading our migration from SAP ECC 6.0 to S/4HANA, due to complete in Q2.', ans:'cut',
+  w:'<b>Cut.</b> This names the system, the version, and when the change happens. A version number tells an attacker which known weaknesses to try; “mid-migration” tells them the period when things are half-configured and everyone expects odd requests.<br><br>“Leading a large finance systems programme” says the same thing about you professionally and none of it about the estate.'},
+ {lab:'About', cls:'el-p', html:'Working with the team at TechBridge Consulting on delivery.', ans:'cut',
+  w:'<b>Cut.</b> This is the single most useful line on the page for someone planning a call. It hands over a real supplier whose name opens doors, a plausible reason to be in touch, and vocabulary that will sound right to your colleagues.<br><br>Naming suppliers publicly is so normal that it never reads as a disclosure. It is the one most frequently used.'},
+ {lab:'Recent activity', cls:'el-p', html:'“Three weeks of chaos, but we shipped it! Huge props to the team 🎉” — posted Friday', ans:'trim',
+  w:'<b>Trim.</b> Nothing here is secret, and the instinct to celebrate your team is a good one. What it leaks is timing: a rushed delivery, just finished, going into a weekend — which is the window when mistakes are freshest and nobody is checking.<br><br>The same post a fortnight later costs nothing. Delay is usually the whole fix.'},
+ {lab:'Comment on your post', cls:'el-p', html:'Priya Raman: “Sorry to miss the celebration — at the FinTech Summit in Denver all week!”', ans:'cut',
+  w:'<b>Cut — and you did not write it.</b> It says a senior colleague is away and for how long, which is what makes an urgent request hard to verify in the moment.<br><br>Your own privacy settings do not cover what other people write under your posts. Asking is the fix, and it works: most people take it down straight away and are glad to be told, because they had not thought about it either.'},
+ {lab:'Profile', cls:'el-p', html:'Open to consulting work · Contact: mark.dalton@hartwellgroup.com', ans:'trim',
+  w:'<b>Trim.</b> Being reachable is the point of being open to work, so this is a real trade rather than a mistake. A work address on a public profile does mean more phishing, aimed at you by name and role.<br><br>If the openness is worth it, keep it and treat anything arriving there as unverified by default. If it is not, a contact form costs you nothing.'}
+];
+
+const $=id=>document.getElementById(id);
+let state={};
+
+$('els').innerHTML=ELS.map((e,i)=>`
+  <div class="${e.lab?'sect':''}">
+    ${e.lab?`<div class="el-lab">${e.lab}</div>`:''}
+    <div class="el ${e.cls}" data-el="${i}">${e.html}<span class="el-badge"></span></div>
+  </div>`).join('');
+
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-el]');
+  if(el && !$('res').classList.contains('show')){
+    const i=+el.dataset.el;
+    const cur=state[i];
+    const next = !cur ? BUCKETS[0]
+               : (BUCKETS.indexOf(cur)===BUCKETS.length-1 ? null : BUCKETS[BUCKETS.indexOf(cur)+1]);
+    BUCKETS.forEach(bk=>el.classList.remove('set-'+bk));
+    if(next){ state[i]=next; el.classList.add('set-'+next); el.querySelector('.el-badge').textContent=LABELS[next]; }
+    else delete state[i];
+    const n=Object.keys(state).length;
+    $('go').disabled = n!==ELS.length;
+    $('bn').textContent = n===ELS.length ? '' : (ELS.length-n)+' still to sort';
+    return;
+  }
+  if(e.target.id==='go') reveal();
+});
+
+function reveal(){
+  $('go').remove(); $('bn').textContent='';
+  let hits=0;
+  $('res').innerHTML=ELS.map((e,i)=>{
+    const yours=state[i];
+    const ok=(yours===e.ans); if(ok)hits++;
+    return `<div class="r">
+      <div class="r-top">
+        <span class="r-t">${e.lab?e.lab+' — ':''}${e.html.replace(/<[^>]+>/g,'').slice(0,64)}${e.html.length>64?'…':''}</span>
+        <span class="r-ans a-${e.ans}">${LABELS[e.ans]}</span>
+        ${ok?'':`<span class="r-you">you said ${LABELS[yours]}</span>`}
+      </div>
+      <div class="r-w">${e.w}</div></div>`;
+  }).join('');
+  $('res').classList.add('show');
+
+  $('fin').innerHTML=`<h3>${hits} of ${ELS.length} matched — but the count is not the point</h3>
+    <p>Look at what sits in <b>Cut</b>. Not a home address, not a birthday, nothing a privacy setting is designed to hide. A system and its version, a supplier’s name, and a colleague saying where she is this week — three ordinary professional facts, each of them fine on its own.</p>
+    <p>Together they are a script: who to be, what to talk about, and the week nobody senior is available to check. <b>That is the thing worth noticing</b> — not any single line, but that a profile assembles into something none of its parts are.</p>
+    <p>So the useful habit is not deleting your history. It is leaving out <b>system names, supplier names, and timing</b> — and asking a colleague to edit a comment when they post one of them for you.</p>`;
+  $('fin').classList.add('show');
+  $('els').classList.add('locked');
+}
+</script>
+</body></html>
