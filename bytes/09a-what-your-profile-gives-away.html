@@ -79,6 +79,7 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(26px,3.8vw,38px);line
 .fin{background:rgba(78,124,168,.07);border:1.5px solid rgba(78,124,168,.25);border-radius:16px;padding:22px 25px;margin-top:20px;display:none}
 .fin.show{display:block}
 .fin h3{font-family:var(--disp);font-weight:600;font-size:19px;margin-bottom:10px;color:#36587A}
+.fin-score{font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:7px}
 .fin p{font-size:14.5px;line-height:1.65;color:var(--tb)}
 .fin p+p{margin-top:10px}
 .fin b{color:var(--td)}
@@ -203,7 +204,8 @@ function reveal(){
   }).join('');
   $('res').classList.add('show');
 
-  $('fin').innerHTML=`<h3>${hits} of ${ELS.length} matched — but the count is not the point</h3>
+  $('fin').innerHTML=`<div class="fin-score">${hits} of ${ELS.length} matched</div>
+    <h3>What the Cut pile adds up to</h3>
     <p>Look at what sits in <b>Cut</b>. Not a home address, not a birthday, nothing a privacy setting is designed to hide. A system and its version, a supplier’s name, and a colleague saying where she is this week — three ordinary professional facts, each of them fine on its own.</p>
     <p>Together they are a script: who to be, what to talk about, and the week nobody senior is available to check. <b>That is the thing worth noticing</b> — not any single line, but that a profile assembles into something none of its parts are.</p>
     <p>So the useful habit is not deleting your history. It is leaving out <b>system names, supplier names, and timing</b> — and asking a colleague to edit a comment when they post one of them for you.</p>`;

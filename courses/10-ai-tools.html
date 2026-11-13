@@ -516,7 +516,7 @@ const NODES=[
      ['Ask the AI whether it is sure',0]],
     fb:'Open the regulation. A specific number is not evidence of anything — fabricated citations come out looking exactly like real ones, which is precisely what caught the lawyers.<br><br>Asking the model whether it is sure is the weakest check available: it will often say yes, and in the Avianca case it did.<br><br>The practical rule: use AI for anything you can verify or would have written yourself anyway. Be slow with anything you would be repeating on trust.'}},
 
- {date:'Summaries',crit:1,beat:'Text the AI reads can act on it like an instruction',
+ {date:'What it reads',crit:1,beat:'The AI can treat text it reads as an instruction',
   body:'One more, because it is the newest and the least intuitive.<br><br>When an assistant summarises an email, a document or a web page for you, it cannot fully separate <i>the content it is reading</i> from <i>the instructions it is following</i>. So text placed in that content — by someone who wants it there — can act as an instruction.<br><br>It is called prompt injection, and it sits first on OWASP’s Top 10 list of risks for AI applications. The practical version: an email can contain a line, in white text or buried at the bottom, aimed not at you but at the assistant that will summarise it.',
   spot:{type:'predict',topic:'injection',q:'Your email assistant summarises a message as: “Routine supplier notice, no action needed.” The real message was an invoice dispute. Most useful response?',
     opts:[
