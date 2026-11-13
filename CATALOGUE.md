@@ -92,6 +92,22 @@ different sections, it is not a heading yet.
 Watch the set, not the single title: five of eleven courses opened with “What…”, which is why
 courses 2 and 12 took noun-phrase names instead.
 
+Four more, each found in a later pass over the whole set:
+
+- **“Your” has to mean the reader’s own thing.** Course 2’s rail said `Your public profile` above a
+  spot showing *someone else’s* profile. Now `What is already public`.
+- **A heading does not argue with itself, and does not carry a score.** Byte 9a closed with
+  “*N* of 8 matched — but the count is not the point”. The score moved to a small label above;
+  the heading became *What the Cut pile adds up to*.
+- **A count in a heading must match the sections under it.** Byte 4b’s “Two decisions people get
+  wrong” had three `h3`s beneath it; the third was a caveat about work accounts, so it was
+  promoted to its own `h2`. Same family as the quiz tell: never hand the reader a count that is
+  wrong.
+- **The landing card is a heading too, and must not claim more than the page.** Byte 2a’s card said
+  “Saves and prints” when the saving is browser-local and the page itself tells you to photograph
+  the card; course 1’s card said *reused* password when the course says plainly that how the
+  password was obtained was never made public.
+
 ### Why the order is STOP · REPORT · DOCUMENT
 
 The original plan called Byte 13a “STOP · DOCUMENT · REPORT”. Course 13 puts reporting second
