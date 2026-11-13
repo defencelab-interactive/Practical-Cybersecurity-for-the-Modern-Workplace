@@ -558,7 +558,7 @@ const DRILL=[
      '',
      'Three labels of someone else&rsquo;s choosing, arranged to be read as a name you know. They are subdomains of <code>verify-id.co</code>, and subdomains are free to say anything.',
      'You read from the right, which is the habit that works &mdash; one label too far. <code>com</code> here is not a suffix, it is just another label somebody typed. The site is the last two: <code>verify-id.co</code>.'],
-  ok:'Read right to left: the last two parts before the first single slash. This address belongs to whoever registered <code>verify-id.co</code>, and every label to the left of that they chose themselves &mdash; including one that reads like Microsoft.'},
+  ok:'A name you already trust, parked to the left of the real one, is the commonest shape in phishing &mdash; because putting it there costs the sender nothing and no rule stops them.'},
 
  {u:'https://www.paypa1.com/account/verify', a:1,
   o:['paypal.com','paypa1.com','www.paypa1.com','account.paypa1.com'],
@@ -566,7 +566,7 @@ const DRILL=[
      '',
      'You spotted the <b>1</b>, which is the hard part. <code>www</code> is a subdomain though; the site is the last two labels, <code>paypa1.com</code>.',
      '<code>account</code> is in the path, after the slash, not in the domain. The path is written by whoever owns the site and decides nothing.'],
-  ok:'<code>paypa1.com</code>, with the digit one. Nothing here is malformed &mdash; the address is perfectly well-built, and the only thing wrong with it is a single character.'},
+  ok:'Note that nothing about this address is malformed: it is built correctly, nothing is hidden, and the only thing wrong with it is one character. There is no tell here except reading it.'},
 
  {u:'https://paypal.com@account-verify.ru/login', a:1,
   o:['paypal.com','account-verify.ru','paypal.com@account-verify.ru','verify.ru'],
@@ -574,7 +574,7 @@ const DRILL=[
      '',
      'The <code>@</code> splits the address in two: what is before it is discarded, what is after it is where you go. Only the second half is the site.',
      'Not in the address &mdash; <code>account-verify</code> is one label joined by a hyphen, not two separated by a dot. Hyphens join; dots divide.'],
-  ok:'Everything before the <code>@</code> is a username as far as the browser is concerned, and has no effect whatever on the destination.'},
+  ok:'Nothing here is hidden or encoded either. The browser is simply following a rule about <code>@</code> that almost nobody has been told, in an address that was written to exploit exactly that.'},
 
  {u:'https://support.google.com/accounts/answer/185839?hl=en', a:1,
   o:['support.google.com','google.com','accounts.google.com','the whole address'],
