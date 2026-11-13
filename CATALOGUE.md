@@ -217,6 +217,21 @@ none of them did anything a reader would miss once the return visit stopped bein
 Printing is not the escape hatch either: `window.print()` can be refused by an LMS iframe sandbox
 and then does nothing at all, so no Byte offers it as the way its content leaves.
 
+The line between the two is whether the mark is *live* or *remembered*, and bytes 7b and 8b were
+brought onto the right side of it on 13 Nov:
+
+- **7b** had tick boxes on three router settings, saved to storage. Ticking a reference list is not
+  an interaction — it changes nothing on the page — so the boxes became plain numbered markers and
+  the storage went. The page's own note that “nothing is stored” became true for the first time.
+- **8b** lost the three prep tick boxes and the “0 of 3 set up” counter for the same reason, but
+  **kept** the marker on the emergency list: when the phone is already gone you are working down an
+  ordered list under stress, and marking where you are is the point. Its persistence still had to
+  go, and not merely as dead weight — *in a real emergency, last month's ticks would make you skip
+  a step you had not done.* A remembered mark on an emergency list is a bug.
+
+2a is the one Byte that still stores, because the card it builds is the deliverable, it says on the
+page that the saving is browser-local, and it tells you to photograph the card.
+
 **A push is not a publication.** On 12 Nov the Pages deployment for a pushed commit failed with a
 502 from GitHub's own deployment API — the build succeeded and the artifact was produced, but the
 deployment never happened, so the CDN kept serving the previous version for twenty minutes while
