@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Defence Lab · The Café, the Train and the Airport</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ac:#34B77D;--acd:#2A9A66;--gr:#2EAD6B;--td:#1A1A1A;--tb:#4A4844;--mu:#8a8884;--paper:#F2F5F2;--paper2:#E8EEEC;--line:#dce4e0;
+  --sh:0 3px 8px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);
+  --blue:#4E7CA8;--rd:#C0392B;--rdl:rgba(192,57,43,.09);--am:#B07A1E;--aml:rgba(176,122,30,.12);
+  --disp:'Fraunces',Georgia,serif;--body:'DM Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);color:var(--td);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background:radial-gradient(70% 50% at 12% 6%,rgba(52,183,125,.16),transparent 52%),
+    radial-gradient(80% 60% at 92% 30%,rgba(78,124,168,.14),transparent 58%),
+    radial-gradient(60% 45% at 55% 40%,rgba(255,255,255,.5),transparent 60%),
+    linear-gradient(160deg,#eef2ee,#e4ebeb)}
+.wrap{max-width:1000px;margin:0 auto;padding:40px 36px 80px}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.eyebrow{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acd);margin-bottom:12px}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(26px,3.7vw,38px);line-height:1.08;letter-spacing:-.02em;margin-bottom:14px}
+.lede{font-size:17px;line-height:1.6;color:var(--tb)}
+.chip{font:700 12px var(--mono);color:var(--acd);background:rgba(52,183,125,.12);border-radius:20px;padding:6px 13px;white-space:nowrap;flex:none}
+
+.setup{background:#fff;border:1.5px solid var(--line);border-radius:15px;padding:18px 21px;margin:26px 0 15px;box-shadow:var(--sh)}
+.setup-l{font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.setup-q{font-size:16px;line-height:1.55;color:var(--td)}
+.setup-q b{color:var(--acd)}
+
+.picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:10px}
+.p{background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:15px 16px;cursor:pointer;text-align:left;
+  font-family:var(--body);box-shadow:var(--sh);transition:all .15s;display:flex;gap:11px;align-items:flex-start}
+.p:hover{border-color:var(--blue)}
+.p.on{border-color:var(--acd);background:rgba(52,183,125,.08)}
+.p-box{width:20px;height:20px;border-radius:6px;border:2px solid var(--line);flex:none;margin-top:1px;display:grid;place-items:center}
+.p.on .p-box{background:var(--ac);border-color:var(--ac)}
+.p.on .p-box::after{content:'\2713';color:#fff;font-size:12px;font-weight:700;line-height:1}
+.p-t{font-size:14.5px;line-height:1.5;color:var(--td)}
+.picks.locked .p{cursor:default}
+.picks.locked .p:hover{border-color:var(--line)}
+.picks.locked .p.on:hover{border-color:inherit}
+.picks.locked .p:not(.on){opacity:.45}
+.p.on.miss{border-color:#D9A441;background:rgba(217,164,65,.11)}
+.p.on.miss .p-box{background:#D9A441;border-color:#D9A441}
+.p-rank{margin-left:auto;flex:none;font:700 10.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:20px;background:var(--paper2);color:var(--tb)}
+.p.on .p-rank{background:rgba(52,183,125,.2);color:var(--acd)}
+.p.on.miss .p-rank{background:rgba(217,164,65,.22);color:#8A5E12}
+
+.bar{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
+.go{border:0;border-radius:11px;padding:11px 20px;background:var(--ac);color:#08301F;font:700 14px var(--body);cursor:pointer}
+.go:disabled{opacity:.4;cursor:default}
+.bar-n{font:600 12.5px var(--body);color:var(--tb)}
+
+.rank{margin-top:22px;display:none;flex-direction:column;gap:10px}
+.rank.show{display:flex}
+.r{background:#fff;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--sh)}
+.r-top{display:flex;align-items:center;gap:13px;padding:14px 17px}
+.r-n{width:28px;height:28px;border-radius:9px;flex:none;display:grid;place-items:center;font:700 13px var(--mono);color:#fff}
+.r-1 .r-n,.r-2 .r-n{background:var(--rd)}
+.r-3 .r-n{background:#D9A441}
+.r-4 .r-n,.r-5 .r-n,.r-6 .r-n{background:#9aa8a2}
+.r-t{flex:1;min-width:0;font-size:15px;font-weight:600;line-height:1.45}
+.r-tag{flex:none;font:700 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:var(--paper2);color:var(--tb)}
+.r.yours .r-tag{background:rgba(52,183,125,.16);color:var(--acd)}
+.r-w{padding:0 17px 16px 58px;font-size:14px;line-height:1.65;color:var(--tb)}
+.r-w b{color:var(--td)}
+
+.verdict{background:rgba(78,124,168,.07);border:1.5px solid rgba(78,124,168,.25);border-radius:16px;padding:21px 24px;margin-top:20px;display:none}
+.verdict.show{display:block}
+.verdict h3{font-family:var(--disp);font-weight:600;font-size:19px;margin-bottom:9px;color:#36587A}
+.verdict p{font-size:14.5px;line-height:1.65;color:var(--tb)}
+.verdict p+p{margin-top:9px}
+.verdict b{color:var(--td)}
+
+h2{font-family:var(--disp);font-weight:600;font-size:24px;letter-spacing:-.015em;margin:36px 0 7px}
+.sub{font-size:15px;line-height:1.62;color:var(--tb);margin-bottom:16px}
+
+.tcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:12px}
+.t{background:#fff;border:1.5px solid var(--line);border-radius:15px;padding:19px 21px;box-shadow:var(--sh)}
+.t h4{font-family:var(--disp);font-weight:600;font-size:17px;margin-bottom:9px}
+.t p{font-size:14px;line-height:1.65;color:var(--tb)}
+.t p+p{margin-top:8px}
+.t b{color:var(--td)}
+.t .src{display:block;margin-top:9px;font-size:12.5px;line-height:1.55;color:var(--mu)}
+.t .src a{color:var(--acd);text-decoration:none;border-bottom:1px solid rgba(52,183,125,.35)}
+
+.foot{margin-top:30px;border-top:1px solid var(--line);padding-top:16px;font-size:13.5px;line-height:1.7;color:var(--mu)}
+.foot b{color:var(--tb)}
+.foot a{color:var(--acd);text-decoration:none;border-bottom:1px solid rgba(52,183,125,.35)}
+
+@media (max-width:620px){
+  .wrap{padding:26px 18px 60px}
+  .head{flex-direction:column;gap:12px}
+  .r-w{padding-left:17px}
+}
+</style>
+</head><body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Security Byte 7f</div>
+      <h1>The Café, the Train and the Airport</h1>
+      <div class="lede">Working somewhere you do not control. Most people guard the wrong thing here — so this starts by finding out whether you do.</div>
+    </div>
+    <div class="chip">~3 min</div>
+  </div>
+
+  <div class="setup">
+    <div class="setup-l">Three hours in a café</div>
+    <div class="setup-q">All six of these are true while you work. <b>Pick the two that expose you most.</b></div>
+  </div>
+
+  <div class="picks" id="picks"></div>
+  <div class="bar">
+    <button class="go" id="go" disabled>Show the ranking</button>
+    <span class="bar-n" id="bn">Pick two</span>
+  </div>
+
+  <div class="rank" id="rank"></div>
+  <div class="verdict" id="verdict"></div>
+
+  <h2>What changes when you are travelling</h2>
+  <div class="sub">The café list still applies — on a train it applies more, because people sit behind you by design. Two things are genuinely different once you are moving.</div>
+
+  <div class="tcards">
+    <div class="t">
+      <h4>The device leaves your hands</h4>
+      <p>The one rule worth carrying: <b>devices go in the bag you keep, not the bag you hand over.</b> Checked luggage is out of your sight and out of your control, and the realistic outcome is not an intelligence operation — it is that the bag and everything in it does not arrive.</p>
+      <p>Hotel rooms are the same question in slower motion. A room safe is a deterrent against an opportunist, not against the staff who can open it, so the calculation is simply whether you would mind losing what is inside.</p>
+    </div>
+    <div class="t">
+      <h4>Borders, kept in proportion</h4>
+      <p>Device searches at a border get talked about far more than they happen. US Customs and Border Protection describes them as rare and puts them at about <b>0.01% of arriving travellers</b> — roughly one in ten thousand.</p>
+      <p>Which does not make it nothing, and if you carry client material into a country whose rules you have not read, that is worth a conversation with whoever handles this where you work — <b>before</b> the trip. It is a question about policy and law rather than about settings, and it has a different answer for every organisation.</p>
+      <span class="src">CBP describes searches as affecting around 0.01% of over 400 million arriving travellers in the last full fiscal year.</span>
+    </div>
+  </div>
+
+  <div class="foot">
+    <b>What this byte deliberately leaves out.</b> Public WiFi, charging from strange USB sockets, and what to do when a device goes missing each have their own place in the library — the course <i>What Runs on Your Laptop</i>, the course <i>What Your Phone Can Reach</i>, and the byte <i>When Your Phone Goes Missing</i>. They are named in the ranking above only to put them in proportion, because over-weighting them is the usual reason the screen and the voice go unguarded.
+    <br><br>Border search figures: <a href="https://cbp.gov/newsroom/national-media-release/cbp-releases-statistics-electronic-device-searches-0" target="_blank" rel="noopener">CBP</a> and subsequent reporting of its published data. Those figures are US-specific; other countries publish little or nothing comparable, so treat the proportion as an illustration of scale rather than a number that travels.
+  </div>
+</div>
+
+<script>
+const ITEMS=[
+ {t:'You are on the café WiFi, which anyone can join', rank:5,
+  w:'<b>Lower than its reputation.</b> Nearly everything you use is encrypted in transit now, so a stranger on the same network sees which services you connect to, not what you do inside them. It is worth a VPN if you have one, and it is not the thing on this list most likely to cost you anything today.'},
+ {t:'The person at the next table can read your screen', rank:1,
+  w:'<b>The highest, and the one almost nobody picks.</b> It needs no skill, no equipment and no luck — it is simply happening, continuously, for three hours. Whatever is on your screen is being published to whoever is behind you, including the client name in the document title and the subject lines in your inbox.<br><br>A privacy filter costs less than lunch. Sitting with your back to a wall costs nothing.'},
+ {t:'You take a client call at your table', rank:2,
+  w:'<b>Second, and for the same reason.</b> You cannot see who is listening and you will not find out. Names, amounts, which deal is wobbling, who is being let go — all of it carries further than people think, and a train carriage is the worst room you will ever hold a confidential call in.<br><br>If it cannot wait, step outside and drop the names.'},
+ {t:'You leave the laptop on the table to collect your coffee', rank:3,
+  w:'<b>Third. The realistic outcome is theft</b>, which is a bad afternoon if the disk is encrypted and it locks itself, and a far worse one if it was sitting unlocked. The machine is replaceable; the unlocked session is not.<br><br>Take it with you, or close the lid. Ninety seconds is long enough.'},
+ {t:'You charge the laptop from a USB socket at the table', rank:6,
+  w:'<b>Lowest on this list.</b> The warnings are real and no confirmed real-world case has been reported; researchers have shown it can be done. Your own adapter in a wall socket removes the question entirely and costs you nothing, so do that — but do not spend worry here that the screen needs.'},
+ {t:'Your work email is signed in on your phone as well', rank:4,
+  w:'<b>Not really an exposure by itself</b> — that is how work gets done. It matters because it doubles what a single theft reaches, which is an argument for the phone being locked and findable rather than for signing out.'}
+];
+const BEST=[1,2];   // indexes of the two that actually rank highest
+
+const $=id=>document.getElementById(id);
+let picked=[];
+
+$('picks').innerHTML=ITEMS.map((it,i)=>
+  `<button class="p" data-p="${i}"><span class="p-box"></span><span class="p-t">${it.t}</span></button>`).join('');
+
+document.addEventListener('click',e=>{
+  const p=e.target.closest('[data-p]');
+  if(p && !$('picks').classList.contains('locked')){
+    const i=+p.dataset.p;
+    if(picked.includes(i)) picked=picked.filter(x=>x!==i);
+    else if(picked.length<2) picked.push(i);
+    else return;
+    document.querySelectorAll('[data-p]').forEach(b=>b.classList.toggle('on',picked.includes(+b.dataset.p)));
+    $('go').disabled = picked.length!==2;
+    $('bn').textContent = picked.length===2 ? '' : (picked.length===1 ? 'Pick one more' : 'Pick two');
+    return;
+  }
+  if(e.target.id==='go') reveal();
+});
+
+function reveal(){
+  $('picks').classList.add('locked');
+  // a pick that was not in the top two keeps its own colour, not the accent
+  document.querySelectorAll('[data-p]').forEach(b=>{
+    const i=+b.dataset.p;
+    if(picked.includes(i) && !BEST.includes(i)) b.classList.add('miss');
+    const r=document.createElement('span');
+    r.className='p-rank'; r.textContent='#'+ITEMS[i].rank;
+    b.appendChild(r);
+  });
+  $('go').remove();
+  const order=ITEMS.map((it,i)=>({...it,i})).sort((a,b)=>a.rank-b.rank);
+  $('rank').innerHTML=order.map(o=>`
+    <div class="r r-${o.rank} ${picked.includes(o.i)?'yours':''}">
+      <div class="r-top"><span class="r-n">${o.rank}</span><span class="r-t">${o.t}</span>
+        ${picked.includes(o.i)?'<span class="r-tag">You picked this</span>':''}</div>
+      <div class="r-w">${o.w}</div>
+    </div>`).join('');
+  $('rank').classList.add('show');
+
+  const hits=picked.filter(i=>BEST.includes(i)).length;
+  const msg = hits===2
+    ? 'You picked both. That is unusual — most people reach for the WiFi first, because it is the one that sounds technical.'
+    : hits===1
+      ? 'You had one of the two. The other is the same shape: no attacker, no equipment, just someone present while you work.'
+      : 'Neither — which is the common answer, and the reason this exercise exists rather than a list of tips.';
+  $('bn').textContent='';
+  $('verdict').innerHTML=`<h3>${msg}</h3>
+    <p>The two at the top have something the other four do not: they are <b>certainties rather than risks</b>. The WiFi might be hostile. The USB socket is almost certainly fine. But the person behind you <i>can</i> read your screen, and the carriage <i>can</i> hear your call — no attacker required, no luck involved, happening the whole time you sit there.</p>
+    <p>Which is why the habits that help are dull and physical: <b>sit with your back to something</b>, get a privacy filter if you work in public often, and <b>take the call outside</b>. None of them is a setting, which is probably why they get skipped.</p>`;
+  $('verdict').classList.add('show');
+}
+</script>
+</body></html>

@@ -9,7 +9,7 @@ Cybersecurity awareness training for non-technical employees. Two content format
 
 Courses build understanding. Bytes build habits. Both work independently. Both stack into learning paths.
 
-**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 22 built, 2 to build. **All 12 courses are built;** the remainder are Bytes.
+**Total library:** 24 items (12 courses + 12 bytes), ~100 min combined. 23 built, 1 to build. **All 12 courses are built;** one Byte remains.
 
 ---
 
@@ -270,7 +270,7 @@ belongs with Course 6. Files follow the same scheme (`bytes/06b-link-inspector.h
 | 11b | **Is This Personal Data?** | Eight examples to sort. Built on the GDPR definition with sources per answer — swap the definition if a client works to another regime. | ~2 min | Course 11 | Built |
 | 13a | **The First Four Actions** | Pick the situation — clicked a link, machine misbehaving, device gone, sent to the wrong person, money moved — and see what the same four steps mean in that one. | ~2 min | Course 13 | Built |
 
-**Total Security Bytes: 12 items (10 built, 2 to build)**
+**Total Security Bytes: 12 items (11 built, 1 to build)**
 
 ### Retired
 
