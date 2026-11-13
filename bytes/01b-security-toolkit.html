@@ -100,7 +100,7 @@ const CATS=[
  {ic:'🔑',name:'Password managers',sub:'Generate and store a unique password for every account, so one leak can\u2019t unlock the rest. The single highest-impact habit here.',
   tools:[
    {n:'Bitwarden',cost:'freemium',does:'Open-source password manager. Works on every OS, browser, and phone. Free tier covers most personal use.',os:['win','mac','linux'],br:['chrome','firefox','safari'],ph:['ios','android'],home:1,url:'https://bitwarden.com'},
-   {n:'KeePassXC',cost:'free',does:'Fully offline, open-source vault — your data stays in a local file you control. Great if you don\u2019t want anything in the cloud.',os:['win','mac','linux'],br:['chrome','firefox'],ph:[],home:1,url:'https://keepassxc.org'},
+   {n:'KeePassXC',cost:'free',does:'Fully offline, open-source vault — your data stays in a local file you control. Great if you don\u2019t want anything in the cloud. <i>Autofill in the browser is a Chrome and Firefox add-on; the app itself works whatever you browse with.</i>',os:['win','mac','linux'],br:[],brNote:1,ph:[],home:1,url:'https://keepassxc.org'},
    {n:'1Password',cost:'paid',does:'Polished password manager with strong sharing features. Popular in workplaces; paid only.',os:['win','mac','linux'],br:['chrome','firefox','safari'],ph:['ios','android'],home:1,url:'https://1password.com'},
    {n:'Built-in (iCloud Keychain / Google)',cost:'free',does:'Your phone and browser already have a basic password manager built in. Not as full-featured, but far better than reusing passwords.',os:['win','mac'],br:['chrome','safari'],ph:['ios','android'],home:1,url:''}
   ]},
@@ -138,7 +138,7 @@ const CATS=[
  {ic:'\uD83C\uDFAD',name:'Email aliases',sub:'Give each site a throwaway address that forwards to your real inbox. If one leaks or starts spamming, you shut off that alias \u2014 and your real address stays clean.',
   tools:[
    {n:'SimpleLogin',cost:'freemium',does:'Open-source alias service. Create unlimited forwarding addresses; disable any one that starts getting spam or shows up in a breach.',os:['win','mac','linux'],br:['chrome','firefox','safari'],ph:['ios','android'],home:1,url:'https://simplelogin.io'},
-   {n:'Firefox Relay',cost:'freemium',does:'Email (and phone-number) masking from Mozilla, built into Firefox. A few free aliases, more on the paid tier.',os:['win','mac','linux'],br:['firefox'],ph:['ios','android'],home:1,url:'https://relay.firefox.com'},
+   {n:'Firefox Relay',cost:'freemium',does:'Email (and phone-number) masking from Mozilla. A few free aliases, more on the paid tier. <i>Aliases are made on its website from any browser; only the one-click integration is Firefox-only.</i>',os:['win','mac','linux'],br:[],brNote:1,ph:['ios','android'],home:1,url:'https://relay.firefox.com'},
    {n:'Apple Hide My Email',cost:'freemium',does:'Built into iPhone and Safari for iCloud+ users \u2014 generates a random address that forwards to your inbox. No extra app needed.',os:['mac'],br:['safari'],ph:['ios'],home:1,url:''}
   ]},
  {ic:'\uD83D\uDD2C',name:'Check a link or file',sub:'Got something you\u2019re not sure about? Scan it before you open it \u2014 without running it on your own machine.',

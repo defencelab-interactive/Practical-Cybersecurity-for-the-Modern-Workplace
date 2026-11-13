@@ -133,8 +133,8 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 const SURNAME_HINTS=/\b(family|familie|famille|haus|residence|household)\b/i;
-const ROUTER_BRANDS=/\b(tp ?link|netgear|asus|linksys|d ?link|zyxel|huawei|xiaomi|mikrotik|ubiquiti|tenda|belkin|sagemcom|technicolor|fritz ?box|archer|orbi|nighthawk|deco|keenetic)\b/i;
-const ISP_DEFAULT=/\b(bt|sky|virgin|vodafone|orange|telekom|movistar|upc|ziggo|kpn|telenet|altice|sfr|plusnet|talktalk|eir|magenta|vivacom)\b[ ]?(hub|wifi|box|fibre|fiber|net|home)?[ ]?\d{2,}/i;
+const ROUTER_BRANDS=/\b(tp ?link|netgear|asus|linksys|d ?link|zyxel|huawei|xiaomi|mikrotik|ubiquiti|tenda|belkin|sagemcom|technicolor|fritz ?box|archer|orbi|nighthawk|deco|keenetic|zte|cudy|totolink|edimax|trendnet|netis|asuswrt|telus|arris|motorola)(?![a-z])/i;
+const ISP_DEFAULT=/\b(bt|sky|virgin|vodafone|orange|telekom|movistar|upc|ziggo|kpn|telenet|altice|sfr|plusnet|talktalk|eir|magenta|vivacom|kyivstar|volia|lifecell|a1|yettel)(?![a-z])[ _-]?(hub|wifi|box|fibre|fiber|net|home)?[ _-]?\d{2,}/i;
 const ADDRESSY=/\b\d{1,4}[a-z]?\b[^,]{0,18}\b(street|road|avenue|lane|drive|close|court|terrace|st|rd|ave|ln|dr)\b|\b(flat|apt|apartment|unit)\b[ ]?\d/i;
 const GENERIC=/^(wifi|internet|home ?net|home ?wifi|router|wireless|my ?wifi|default)\b/i;
 const BAND=/\b(5 ?g|2 ?4 ?g|5 ?ghz|2 ?4 ?ghz)\b$/i;
@@ -176,8 +176,8 @@ function check(name){
       'A <code>5G</code> or <code>2.4G</code> ending marks which radio band it is, and tells nobody anything about you.']);
   }
   if(!out.some(x=>x[0]==='flag')&&!out.length){
-    out.unshift(['ok','Nothing in this name points at you',
-      'It does not name a person, a place, or the hardware. That is all a network name needs to do.']);
+    out.unshift(['ok','No pattern matched — but read it once yourself',
+      'This check recognises shapes: the word <code>Family</code>, a street or flat number, a router brand, a provider default. It has no way of knowing that <code>Kovalenko</code> is your surname or that <code>Olena</code> is your daughter, and a name on its own is one of the most common things a home network is called. So the question it cannot answer for you: <b>would a neighbour reading this learn who lives here?</b>']);
   }
   return out;
 }

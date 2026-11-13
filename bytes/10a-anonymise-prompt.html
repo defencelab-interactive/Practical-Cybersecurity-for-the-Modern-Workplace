@@ -94,7 +94,7 @@ textarea:focus{border-color:var(--acd)}
   </div>
 
   <div class="foot">
-    <b>Pairs with the course <i>What You Paste Into AI</i>.</b> The test it gives is two questions: is this mine to hand over, and would I be relaxed if it came back out with my name on it. This page helps with the first one only.
+    <b>Pairs with the course <i>What You Paste Into AI Tools</i>.</b> The test it gives is two questions: is this mine to hand over, and would I be relaxed if it came back out with my name on it. This page helps with the first one only.
   </div>
 </div>
 
@@ -112,9 +112,11 @@ const RULES=[
   {k:'EMAIL',   re:/\b[\w.+-]+@[\w-]+\.[\w.-]+\b/gi},
   {k:'IP',      re:/\b\d{1,3}(?:\.\d{1,3}){3}\b/g},
   {k:'SYSTEM',  re:/\b(?:srv|host|db|app|web|vm|node|prod|stg|dev|sql|api)[-_][a-z0-9][a-z0-9-]*\b/gi},
-  {k:'AMOUNT',  re:/[£$€]\s?\d[\d,]*(?:\.\d+)?\s?[km]?\b/gi},
+  {k:'AMOUNT',  re:/[£$€]\s?\d[\d,]*(?:\.\d+)?(?:\s?[km]\b)?/gi},
   {k:'PHONE',   re:/\+\d[\d\s().-]{7,}\d|\b0\d{3,4}[\s-]?\d{3}[\s-]?\d{3,4}\b/g},
   {k:'DATE',    re:/\b\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}\b/g},
+  {k:'ACCOUNT', re:/\b[A-Z]{2}\d{2}[ ]?(?:[A-Z0-9]{4}[ ]?){2,7}[A-Z0-9]{1,4}\b/g},
+  {k:'ACCOUNT', re:/\b\d{2}[ -]?\d{2}[ -]?\d{2}[ ]?\d{8}\b/g},
   {k:'NUMBER',  re:/\b\d{6,}\b/g}
 ];
 const CYCLE=['NAME','COMPANY','PROJECT'];

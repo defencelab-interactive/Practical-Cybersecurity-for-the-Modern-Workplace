@@ -250,7 +250,13 @@ function render(){
  }
 
  h+=`<div class="lines-say"><span class="flab" style="margin-bottom:9px">Ways to end the conversation</span>`;
- SAY.forEach(s=>h+=`<div class="say">\u201c${esc(s)}\u201d</div>`);
+ /* the line is said out loud, so it carries the name they just gave rather than
+    a bracket they would have to fill in at the moment they are least able to */
+ const whoName=['money','second','it','who','bank','sec','client'].map(k=>(vals[k]||'').trim()).find(v=>v)||'';
+ SAY.forEach(line=>{
+   const t=whoName? line.replace('[name]',whoName) : line;
+   h+=`<div class="say">\u201c${esc(t)}\u201d</div>`;
+ });
  h+=`<div class="hint" style="margin-top:10px">None of these are rude, and none of them require you to accuse anyone of anything. That matters: most people skip verifying because refusing feels confrontational, not because they don\u2019t know they should.</div></div>`;
 
  h+='</div>';

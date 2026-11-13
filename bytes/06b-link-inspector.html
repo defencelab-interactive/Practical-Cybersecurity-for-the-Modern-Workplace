@@ -145,6 +145,11 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(28px,4vw,42px);line-h
       </ul>
     </div>
     <div class="card">
+      <h3>What this cannot tell you</h3>
+      <p>It reads the address and nothing else. A perfectly ordinary address can still open a page built to rob you: a real site that was broken into, a lookalike domain registered this morning that breaks none of the rules above, or a genuine Google, Dropbox or Microsoft link hosting a document that is the lure. None of those leaves a mark in the address.</p>
+      <p><b>So a clean result means the address is honest about where it goes — not that the page is safe.</b> What still decides it: were you expecting this, from this person, through this channel. If the answer is no, the address being tidy changes nothing.</p>
+    </div>
+    <div class="card">
       <h3>Where the name goes</h3>
       <p>In <code style="font-family:var(--mono);font-size:13px">dropbox.secure-files.com</code> the site is <b>secure-files.com</b>. In <code style="font-family:var(--mono);font-size:13px">www.dropbox.com/share</code> the site is <b>dropbox.com</b>. Same word, completely different owner — the only thing that changed is which side of the last dot it sits on.</p>
     </div>
@@ -285,6 +290,15 @@ function inspect(raw,claimText){
   }
 
   const host=u.hostname.toLowerCase();
+  if(!['http','https'].includes(scheme)&&!host.includes('.')){
+    /* javascript:, data:, file: and friends carry no host at all, so the domain
+       check below would throw and swallow the flag pushed just above. Return
+       here instead: the scheme IS the finding. */
+    out.dom=scheme+':';out.sub='';out.host='';out.scheme=scheme;out.port='';
+    out.path=s.slice(scheme.length+1);out.user='';
+    out.ok=false;
+    return out;
+  }
   if(!looksLikeIP(host)&&!host.includes('.'))throw new Error('That does not look like a web address — there is no domain in it. Copy the link itself rather than the text around it.');
   const {dom,sub}=registrable(host);
   out.dom=dom;out.sub=sub;out.host=host;out.scheme=scheme;out.port=u.port;
@@ -382,8 +396,17 @@ function inspect(raw,claimText){
     let ct=claimText.trim();
     if(!/^[a-z][a-z0-9+.-]*:/i.test(ct))ct='http://'+ct;
     let cdom='';
-    try{cdom=registrable(new URL(ct).hostname.toLowerCase()).dom;}catch(e){}
-    if(cdom&&cdom!==dom){
+    try{
+      const ch=new URL(ct).hostname.toLowerCase();
+      /* only treat it as an address if it actually looks like one: free text
+         such as "microsoft login" parses to a percent-encoded host and must
+         never be shown back to the reader in that form */
+      if(ch.includes('.')&&!ch.includes('%'))cdom=registrable(ch).dom;
+    }catch(e){}
+    if(!cdom){
+      out.finds.push(['ok','Note','The visible text names no address',
+        'What you typed is wording rather than a web address, so there is nothing to compare it against. That is worth knowing in itself: link text is free-form writing and can say anything, which is why the destination above is the only part that decides where you land.']);
+    }else if(cdom!==dom){
       out.finds.push(['flag','Flag','The text and the destination disagree',
         `The link presents itself as <b>${escapeHtml(cdom)}</b> but goes to <b>${escapeHtml(dom)}</b>. Link text is free-form writing; it has no connection to where the link points.`]);
     }else if(cdom&&cdom===dom){
