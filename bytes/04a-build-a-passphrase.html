@@ -153,7 +153,11 @@ const REF = [
   {l:'A random 8-character password', bits: Math.log2(Math.pow(94,8))},
   {l:'A random 12-character password', bits: Math.log2(Math.pow(94,12))},
 ];
-let nWords = 5, sep = '-';
+/* six, not five: this page recommends a passphrase for the master password and
+   for unlocking a device, and most readers take whatever the page opened with.
+   Six words is 54 bits, which is a defensible floor for those two jobs; five is
+   45 and sits on the edge. */
+let nWords = 6, sep = '-';
 const $ = id => document.getElementById(id);
 
 function pick(n){
