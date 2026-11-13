@@ -49,10 +49,9 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
 /* steps */
 .sect{font-family:var(--disp);font-size:20px;font-weight:600;margin:30px 0 12px}
 .step{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;box-shadow:var(--sh);overflow:hidden}
-.s-top{display:flex;gap:13px;align-items:flex-start;padding:15px 18px;cursor:pointer}
-.s-box{flex:none;width:21px;height:21px;border:2px solid #c3ccc6;border-radius:6px;margin-top:1px;position:relative;transition:all .15s}
-.step.on .s-box{background:var(--acd);border-color:var(--acd)}
-.step.on .s-box::after{content:'\2713';position:absolute;inset:0;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.s-top{display:flex;gap:13px;align-items:flex-start;padding:15px 18px}
+.s-n{flex:none;width:21px;height:21px;border-radius:50%;background:rgba(52,183,125,.13);color:var(--acd);
+  font:700 12px var(--mono);display:flex;align-items:center;justify-content:center;margin-top:1px}
 .s-t{flex:1;display:block;font-size:15.5px;line-height:1.4;font-weight:600}
 .s-w{padding:0 18px 16px 52px;font-size:14px;line-height:1.6;color:var(--tb)}
 .s-w ul{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:7px}
@@ -93,8 +92,8 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
 
   <div class="sect">Three settings to change on your router</div>
 
-  <div class="step" data-s="0">
-    <div class="s-top"><span class="s-box"></span><span class="s-t">Change the router's admin password</span></div>
+  <div class="step">
+    <div class="s-top"><span class="s-n">1</span><span class="s-t">Change the router's admin password</span></div>
     <div class="s-w">This is not the WiFi password — it is the one that gets into the router's own settings. On a lot of routers it is still <code>admin</code>.
       <ul>
         <li>Type <b>192.168.1.1</b> or <b>192.168.0.1</b> into a browser on your home network</li>
@@ -104,8 +103,8 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
     </div>
   </div>
 
-  <div class="step" data-s="1">
-    <div class="s-top"><span class="s-box"></span><span class="s-t">Check the encryption is WPA2 or WPA3</span></div>
+  <div class="step">
+    <div class="s-top"><span class="s-n">2</span><span class="s-t">Check the encryption is WPA2 or WPA3</span></div>
     <div class="s-w">In the same settings, find the wireless security section.
       <ul>
         <li><b>WPA3</b> is best, <b>WPA2</b> is fine</li>
@@ -115,8 +114,8 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
     </div>
   </div>
 
-  <div class="step" data-s="2">
-    <div class="s-top"><span class="s-box"></span><span class="s-t">Update the router, and turn on automatic updates if it offers them</span></div>
+  <div class="step">
+    <div class="s-top"><span class="s-n">3</span><span class="s-t">Update the router, and turn on automatic updates if it offers them</span></div>
     <div class="s-w">Routers get security patches like everything else, and almost nobody installs them.
       <ul>
         <li>Look for Firmware, Update, or System in the settings</li>
@@ -203,30 +202,6 @@ $('egrow').innerHTML=EXAMPLES.map((e,i)=>`<button class="eg" data-i="${i}">${esc
 $('egrow').addEventListener('click',e=>{const b=e.target.closest('.eg'); if(!b)return;
   $('ssid').value=EXAMPLES[+b.dataset.i]; run();});
 
-document.querySelectorAll('.step .s-top').forEach(el=>{
-  el.addEventListener('click',()=>{el.parentElement.classList.toggle('on');save();});
-});
-/* storage: the Defence Lab host provides window.storage; standalone falls back
-   to localStorage. Both can fail (private window, blocked site data), so every
-   call is wrapped and the page works with none of it. */
-const DL={
-  async get(k){try{
-    if(window.storage){const r=await window.storage.get(k);return r&&r.value?r.value:null;}
-    return localStorage.getItem(k);
-  }catch(e){return null}},
-  async set(k,v){try{
-    if(window.storage)return await window.storage.set(k,v);
-    localStorage.setItem(k,v);
-  }catch(e){}},
-  async del(k){try{
-    if(window.storage)return await window.storage.delete(k);
-    localStorage.removeItem(k);
-  }catch(e){}}
-};
-async function save(){await DL.set('home-wifi',JSON.stringify([...document.querySelectorAll('.step')].map(x=>x.classList.contains('on')?1:0)));}
-async function load(){try{const v=await DL.get('home-wifi');if(!v)return;const r={value:v};
-  JSON.parse(r.value).forEach((v,i)=>{const el=document.querySelector(`.step[data-s="${i}"]`); if(el&&v)el.classList.add('on');});}catch(e){}}
-load();
 run();          // show a worked example straight away, so the page explains itself
 </script>
 </body></html>
