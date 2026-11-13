@@ -80,12 +80,18 @@ h2{font-family:var(--disp);font-weight:600;font-size:23px;letter-spacing:-.015em
 .stale{margin-top:34px;border-top:1px solid var(--line);padding-top:17px;font-size:13.5px;line-height:1.7;color:var(--mu)}
 .stale b{color:var(--tb)}
 
-@media (max-width:620px){
+@media (max-width:620px), (pointer:coarse) and (max-width:1200px){
   .wrap{padding:26px 18px 60px}
   .head{flex-direction:column;gap:12px}
   .acct{flex-wrap:wrap;gap:11px}
   .acct-b{flex:1 1 100%;order:2}
   .acct-go{order:1;margin-left:auto}
+}
+
+/* coarse-read: a touch device that reports a desktop-width viewport still has a
+   physically small screen, so cap the measure instead of running 76 characters */
+@media (pointer:coarse) and (min-width:621px) and (max-width:1200px){
+  .wrap{max-width:720px}
 }
 </style>
 </head><body>

@@ -54,10 +54,16 @@ textarea:focus{border-color:var(--acd)}
 .foot{margin-top:28px;border-top:1px solid var(--line);padding-top:16px;font-size:13.5px;line-height:1.7;color:var(--mu)}
 .foot b{color:var(--tb)}
 
-@media (max-width:620px){
+@media (max-width:620px), (pointer:coarse) and (max-width:1200px){
   .wrap{padding:26px 18px 60px}
   .head{flex-direction:column;gap:12px}
   .out{padding:16px 15px}
+}
+
+/* coarse-read: a touch device that reports a desktop-width viewport still has a
+   physically small screen, so cap the measure instead of running 76 characters */
+@media (pointer:coarse) and (min-width:621px) and (max-width:1200px){
+  .wrap{max-width:720px}
 }
 </style>
 </head><body>

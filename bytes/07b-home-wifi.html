@@ -61,7 +61,13 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
 .warnbox{background:var(--aml);border:1px solid rgba(176,122,30,.3);border-radius:13px;padding:15px 19px;margin-top:16px;font-size:14.5px;line-height:1.6;color:var(--tb)}
 .warnbox b{color:var(--td)}
 .foot{margin-top:32px;font-size:13px;color:var(--mu);line-height:1.65;border-top:1px solid var(--line);padding-top:18px}
-@media(max-width:620px){.head{flex-direction:column;gap:12px}.wrap{padding:28px 18px 60px}.s-w{padding-left:18px}}
+@media (max-width:620px), (pointer:coarse) and (max-width:1200px){.head{flex-direction:column;gap:12px}.wrap{padding:28px 18px 60px}.s-w{padding-left:18px}}
+
+/* coarse-read: a touch device that reports a desktop-width viewport still has a
+   physically small screen, so cap the measure instead of running 76 characters */
+@media (pointer:coarse) and (min-width:621px) and (max-width:1200px){
+  .wrap{max-width:720px}
+}
 </style>
 </head>
 <body>

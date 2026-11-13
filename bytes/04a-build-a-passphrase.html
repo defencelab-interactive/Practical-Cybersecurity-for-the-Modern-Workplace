@@ -76,11 +76,17 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4vw,40px);line-h
 .foot b{color:var(--tb)}
 .foot a{color:var(--acd);text-decoration:none;border-bottom:1px solid rgba(52,183,125,.35)}
 
-@media (max-width:620px){
+@media (max-width:620px), (pointer:coarse) and (max-width:1200px){
   .wrap{padding:26px 18px 60px}
   .head{flex-direction:column;gap:12px}
   .gen{padding:19px 17px}
   .bar-l{width:122px;font-size:12.5px}
+}
+
+/* coarse-read: a touch device that reports a desktop-width viewport still has a
+   physically small screen, so cap the measure instead of running 76 characters */
+@media (pointer:coarse) and (min-width:621px) and (max-width:1200px){
+  .wrap{max-width:720px}
 }
 </style>
 </head><body>

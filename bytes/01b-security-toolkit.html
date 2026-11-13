@@ -56,7 +56,7 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(28px,4vw,42px);line-h
 .tool-link:hover{border-color:var(--acd)}
 .empty{grid-column:1/-1;text-align:center;color:var(--mu);font-size:14.5px;padding:20px}
 .foot{margin-top:30px;font-size:13px;color:var(--mu);line-height:1.6;border-top:1px solid var(--line);padding-top:18px}
-@media(max-width:620px){
+@media (max-width:620px), (pointer:coarse) and (max-width:1200px){
   .wrap{padding:26px 18px 60px}
   .head{flex-direction:column;gap:12px}
   .tools{grid-template-columns:1fr;gap:12px}
@@ -67,6 +67,12 @@ h1{font-family:var(--disp);font-weight:600;font-size:clamp(28px,4vw,42px);line-h
   .frow .fbtn{display:inline-block;margin:0 6px 6px 0}
   .fcount{display:inline-block;margin-left:0 !important;margin-top:2px}
   .fbtn{padding:7px 12px;font-size:13px}
+}
+
+/* coarse-read: a touch device that reports a desktop-width viewport still has a
+   physically small screen, so cap the measure instead of running 76 characters */
+@media (pointer:coarse) and (min-width:621px) and (max-width:1200px){
+  .wrap{max-width:720px}
 }
 </style>
 </head>
