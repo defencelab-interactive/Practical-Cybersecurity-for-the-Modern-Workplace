@@ -43,7 +43,6 @@ a.card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.1)}
 .card.soon{opacity:.62;background:#f3f1ec;box-shadow:none;border-left-style:dashed;cursor:default}
 .card.soon.byte{background:#f0eee8}
 .card.soon h3{color:#5c5a56}
-.num{font:700 10px var(--mono);color:var(--mu);opacity:.75}
 .note{margin-top:42px;font-size:12.5px;color:var(--mu);line-height:1.7;border-top:1px solid var(--line);padding-top:20px}
 .note b{color:var(--mu2)}
 @media(max-width:620px){
@@ -80,7 +79,7 @@ a.card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.1)}
   <div id="lib"></div>
 
   <div class="note">
-    <b>This is a live preview.</b> Bytes are numbered after the course they pair with — Byte 6b belongs with Course 6 — so each one sits next to the material it extends. Items marked <i>planned</i> are written into the catalogue but not built yet. Content and design are in active development.
+    <b>This is a live preview.</b> Each Byte sits next to the Course it extends, and every item stands on its own — there is no order to work through. Items marked <i>planned</i> are written into the catalogue but not built yet. Content and design are in active development.
   </div>
 </div>
 
@@ -132,7 +131,7 @@ const lib=document.getElementById('lib');
 function card(it){
   const[type,num,title,time,blurb,href]=it;
   const kind=type==='course'?'Course':'Byte';
-  const inner=`<div class="tag"><span>${kind} <span class="num">${num}</span></span><span>${esc(href?time:'planned')}</span></div>
+  const inner=`<div class="tag"><span>${kind}</span><span>${esc(href?time:'planned')}</span></div>
     <h3>${esc(title)}</h3><p>${esc(blurb)}</p>`;
   return href
     ? `<a class="card ${type}" data-type="${type}" data-ready="1" href="${href}">${inner}</a>`
