@@ -310,6 +310,28 @@ reads as a filter, because someone will paste the “cleaned” text trusting it
 their own panel, not a footnote, and the hard class is handed back to the reader: names are marked
 by clicking, not guessed.
 
+Clicking through all twelve bytes on 13 Nov showed the rule had only ever been applied to 10a, and
+that two other detectors were quietly failing it:
+
+- **A clean result is not a verdict.** 6b read an address and said the address was built the
+  ordinary way — true, and a reader takes it as "safe". A broken-into site, a lookalike registered
+  this morning and a real Dropbox link hosting the lure all pass a clean read. It now has the same
+  panel 10a has.
+- **Never say "nothing points at you" about something you cannot see.** 7b told anyone whose
+  network is called `Kovalenko` or `Olena` that nothing in the name pointed at them — a name on its
+  own being the single most common thing a home network is called. It now names what it recognises
+  and hands the rest back.
+- **A detector that ships with a list will be judged on the list.** 7b's router-brand regex ended
+  in `\b`, which cannot match a brand followed straight by digits, so `NETGEAR57`, `Linksys00231`
+  and `Orbi22` — the exact shape of a factory SSID — came back clean while `TP-Link_A4F2` was
+  caught. An inconsistent detector teaches worse than no detector.
+- **Test it with the thing it exists to catch.** 10a is a byte about not pasting sensitive data
+  into AI, and an IBAN went straight through: the all-digit rule never saw it because it starts
+  with letters.
+- **Good copy can be unreachable.** 6b's explanation of `javascript:` and `data:` links was written
+  and correct, and a check one line below it threw first, so no reader ever saw it. Every branch
+  worth writing is worth clicking once.
+
 **Interactions must move what they claim to move.** The order mechanic first worked by tapping
 rows to assign them a number — the number appeared and the row stayed where it was, which reads as
 broken. It now reorders for real: pointer drag by a handle (works with a mouse and with touch,
