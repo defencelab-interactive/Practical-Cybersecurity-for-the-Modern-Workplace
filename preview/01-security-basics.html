@@ -463,9 +463,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 .railowl .say b{font-weight:500}
 
 /* ---------- gating ---------- */
-.scene.locked{opacity:.17;filter:blur(1.6px);pointer-events:none;user-select:none;
- transition:opacity .6s,filter .6s}
-.scene.locked *{animation-play-state:paused!important}
+
 .go-on{appearance:none;cursor:pointer;font:inherit;font-size:15.5px;width:100%;max-width:600px;margin-bottom:6px;
  background:rgba(52,183,125,.16);color:var(--tw);border:1px solid rgba(52,183,125,.6);
  border-radius:10px;padding:11px 14px;margin-top:11px;text-align:left;
@@ -598,6 +596,37 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 .introgo:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
 .introgo i{font-style:normal;color:var(--ac)}
 body.started .intro{display:none}
+
+/* ---------- one step at a time ----------
+   The course advances by the button rather than by scrolling, so a question and
+   the owl's passage beside it are always the same pair. A step taller than the
+   window still scrolls inside itself; nothing else does. */
+.step{display:none}
+.step.on{display:block;animation:stepin .46s cubic-bezier(.25,.8,.3,1)}
+@keyframes stepin{from{opacity:0;transform:translateX(42px)}to{opacity:1;transform:none}}
+main{padding-top:34px}
+
+/* she is never still for long */
+.owlaside .owl,.introowl .owl{animation:bob 5.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.owl.sway .head{animation:sway 2.6s ease-in-out}
+@keyframes sway{0%,100%{transform:rotate(0)}25%{transform:rotate(-7deg)}70%{transform:rotate(5deg)}}
+
+/* she arrives at the introduction, round the text and up to her perch */
+.introowl{opacity:0}
+.introowl.flyin{opacity:1;animation:arrive 3.4s cubic-bezier(.4,.1,.35,1) forwards}
+@keyframes arrive{
+  0%  {transform:translate(-78vw,-30vh) scale(.42) rotate(14deg);opacity:0}
+  8%  {opacity:1}
+  26% {transform:translate(-16vw,6vh) scale(.72) rotate(9deg)}
+  42% {transform:translate(14vw,20vh) scale(.86) rotate(-4deg)}
+  58% {transform:translate(2vw,30vh) scale(.92) rotate(-9deg)}
+  74% {transform:translate(-14vw,18vh) scale(.96) rotate(-4deg)}
+  88% {transform:translate(-3vw,-4vh) scale(1.04) rotate(3deg)}
+  100%{transform:translate(0,0) scale(1) rotate(0);opacity:1}
+}
+.introsay,.introgo{opacity:0;transition:opacity .5s}
+.introsay.up,.introgo.up{opacity:1}
 </style>
 </head><body>
 
@@ -728,7 +757,7 @@ body.started .intro{display:none}
 <main>
 
   <!-- ENTRANCE -->
-  <section class="gate" id="gate">
+  <section class="gate step" id="gate">
     <div class="tag"><b>DefenceLab</b> &middot; before we start</div>
     <h1>Think of your work password.</h1>
     <p class="sub">A stranger types it, correctly, into the page you use to log into work from home.</p>
@@ -746,7 +775,7 @@ body.started .intro{display:none}
   </section>
 
   <!-- 1 -->
-  <section class="scene" data-stage="12 February &middot; the way in">
+  <section class="scene step" data-stage="12 February &middot; the way in">
     <div class="beat"><i></i>12 February &middot; the way in</div>
     <div class="art" data-bldg data-anim data-owl="roof"></div>
     <p class="sit"><b>Change Healthcare</b> moves the paperwork between your doctor, your pharmacy and whoever pays. About a third of American patient records go through it.</p>
@@ -773,7 +802,7 @@ body.started .intro{display:none}
   </section>
 
   <!-- 2 -->
-  <section class="scene" data-stage="Nine days &middot; unseen">
+  <section class="scene step" data-stage="Nine days &middot; unseen">
     <div class="beat"><i></i>Nine days &middot; unseen</div>
     <div class="counter" id="daycount"><b>1</b><span>day inside</span></div>
     <div class="art" data-bldg="days" data-anim></div>
@@ -793,7 +822,7 @@ body.started .intro{display:none}
   </section>
 
   <!-- 3 -->
-  <section class="scene" data-stage="21 February &middot; the lock">
+  <section class="scene step" data-stage="21 February &middot; the lock">
     <div class="beat"><i></i>21 February &middot; the lock</div>
     <div class="art" data-bldg="locked" data-anim></div>
     <p data-say="alarm|Now there is something to see. Nine days too late to be useful."></p>
@@ -813,7 +842,7 @@ body.started .intro{display:none}
   </section>
 
   <!-- 4 -->
-  <section class="scene" data-stage="The cost">
+  <section class="scene step" data-stage="The cost">
     <div class="beat"><i></i>The cost</div>
     <div class="big">$2.3&ndash;2.45B</div>
     <div class="bigsub">UnitedHealth's own estimate of the 2024 impact</div>
@@ -834,7 +863,7 @@ body.started .intro{display:none}
   </section>
 
   <!-- 5 -->
-  <section class="scene" data-stage="Why this keeps happening">
+  <section class="scene step" data-stage="Why this keeps happening">
     <div class="beat"><i></i>Why this keeps happening</div>
     <p class="sit" data-say="That was not one unusually careless company. It is the ordinary shape of the thing.">Change Healthcare was not an unusually careless company. This is the ordinary shape of the thing, which is easier to believe with a number attached.</p>
     <div class="dec" data-k="s5">
@@ -858,7 +887,7 @@ body.started .intro{display:none}
   </section>
 
   <!-- 6 -->
-  <section class="scene" data-stage="Why this company">
+  <section class="scene step" data-stage="Why this company">
     <div class="beat"><i></i>Why this company</div>
     <p class="sit">Of all the places to go after, somebody picked the company in the middle rather than any of the hospitals, pharmacies or insurers at either end of it.</p>
     <div class="dec" data-k="s6">
@@ -878,7 +907,7 @@ body.started .intro{display:none}
   </section>
 
   <!-- settings -->
-  <section class="scene set" data-stage="Your settings">
+  <section class="scene step set" data-stage="Your settings">
     <div class="beat"><i></i>Your settings</div>
     <p class="sit">The breach ran through settings that were not turned on. These take a few minutes each, and the first one is the whole story in a single switch.</p>
 
@@ -973,7 +1002,7 @@ body.started .intro{display:none}
   </section>
 
   <!-- quiz -->
-  <section class="scene quiz" id="quiz" data-stage="Ten situations">
+  <section class="scene step quiz" id="quiz" data-stage="Ten situations">
     <div class="beat"><i></i>Ten situations</div>
     <p class="sit">Ten things that could happen to you this week. Pick the safest move in each. <b>Seven correct passes the module.</b></p>
     <div id="qbox"></div>
@@ -985,7 +1014,7 @@ body.started .intro{display:none}
   </section>
 
   <!-- recap -->
-  <section class="recap">
+  <section class="recap step">
     <h2>Three things worth keeping</h2>
     <p data-say="wink|Everything above comes down to these three. If you only keep one, keep the second."></p>
     <div class="rc"><i></i><p><b>A password is a single lock.</b> Once somebody else has a working one it opens the door and raises nothing, because from the inside a correct login looks exactly like the person it belongs to.</p></div>
@@ -1087,8 +1116,16 @@ body.started .intro{display:none}
     });
   }
 
+  var introSlotEl=document.getElementById("introowl");
+  var introSay=document.querySelector(".introsay"), introGo=document.getElementById("introgo");
+  /* she arrives rather than being found already sitting there */
+  setTimeout(function(){ if(introSlotEl) introSlotEl.classList.add("flyin"); },350);
+  setTimeout(function(){ if(introSay) introSay.classList.add("up"); },3400);
+  setTimeout(function(){ if(introGo) introGo.classList.add("up"); },3900);
   document.getElementById("introgo").addEventListener("click",function(){
-    document.getElementById("gate").scrollIntoView({behavior:"smooth",block:"start"});
+    document.getElementById("intro").style.display="none";
+    document.body.classList.add("begun");
+    window.scrollTo({top:0,behavior:"auto"});
   });
 
   /* ---- entrance ---- */
@@ -1107,7 +1144,10 @@ body.started .intro{display:none}
       if(!right) gVt.textContent="It is the third one";
       gPay.classList.add("show");
       document.body.classList.add("started");
-      setTimeout(function(){ buildTales(); land(); }, 700);
+      setTimeout(function(){
+        buildTales(); land();
+        if(window.__offerNext) window.__offerNext(null,gPay);
+      }, 700);
       xp+=20; xpEl.textContent=xp+" XP";
     });
   });
@@ -1282,7 +1322,12 @@ body.started .intro{display:none}
 
   /* she is on screen from the first moment, in her own introduction */
   var introSlot=document.getElementById("introowl");
-  if(introSlot) introSlot.appendChild(makeOwl("",0,true));
+  if(introSlot){
+    var ib=makeOwl("",0,true);
+    introSlot.appendChild(ib);
+    ib.classList.add("flying");
+    setTimeout(function(){ib.classList.remove("flying");},3450);
+  }
 
   var layer=document.createElement("div"); layer.className="owllayer";
   var bird=makeOwl("",0,true);
@@ -1352,7 +1397,8 @@ body.started .intro{display:none}
   wideAside.addEventListener("change",function(){shownTale=null; follow();});
 
   /* she goes where the reader is: the narration block nearest the top third */
-  function follow(){
+  function follow(){ return; }
+  function followOld(){
     if(!landed || !tales.length) return;
     /* measure the section, never the block: on a wide screen the inline blocks
        are display:none and a hidden element reports a zero rectangle, which
@@ -1381,10 +1427,18 @@ body.started .intro{display:none}
     asideBird.classList.add("flying");
     setTimeout(function(){asideBird.classList.remove("flying");},620);
   }
-  var followT=null;
-  window.addEventListener("scroll",function(){
-    clearTimeout(followT); followT=setTimeout(follow,90);
-  },{passive:true});
+  /* her passage is chosen by the step, so she has nothing to chase */
+  window.__tellStep=function(i){
+    var t=tales.filter(function(x){return x.closest(".scene")===steps[i];})[0];
+    if(t){ tell(t); moveTo(t); }
+    sway();
+  };
+  function tellStep(i){ if(window.__tellStep) window.__tellStep(i); }
+  function sway(){
+    [bird,asideBird].forEach(function(o){
+      o.classList.remove("sway"); void o.offsetWidth; o.classList.add("sway");
+    });
+  }
 
   function pose(p){
     [bird,asideBird].forEach(function(o){
@@ -1417,19 +1471,17 @@ body.started .intro{display:none}
     follow();
   }
 
-  /* ---- she holds the gate ----
-     The live course advances with a button at the end of each section. That
-     button is now her, in one fixed place, so there is one control for the
-     whole course instead of one per section. */
+  /* ---- one step at a time ----
+     Replaces the scroll and the gating with a sequence. The owl's passage is
+     chosen by index rather than by where the window happens to be, which is
+     what used to leave her behind. */
   var gateBtn=document.createElement("button");
   gateBtn.className="go-on"; gateBtn.type="button";
   gateBtn.innerHTML='<span>Go on then</span><i>&rarr;</i>';
-  gateBtn.hidden=false;
 
-  var gated=[].slice.call(document.querySelectorAll(".scene"));
-  var recap=document.querySelector(".recap");
-  if(recap) gated.push(recap);
-  var open=0, pending=false;
+  var steps=[].slice.call(document.querySelectorAll(".step"));
+  var at=0;
+  steps.forEach(function(el,j){ el.classList.toggle("on", j===0); });
 
   var PROMPTS=[
    "How long before anybody noticed",
@@ -1442,42 +1494,38 @@ body.started .intro{display:none}
    "Three things to take away"
   ];
 
-  function lockAll(){
-    gated.forEach(function(el,i){ if(i>0) el.classList.add("locked"); });
-  }
-  function openNext(){
-    pending=false;
+  function show(i){
+    if(i<0||i>=steps.length) return;
+    steps.forEach(function(el,j){ el.classList.toggle("on", j===i); });
+    at=i;
+    window.scrollTo({top:0,behavior:"auto"});
     if(gateBtn.parentNode) gateBtn.parentNode.removeChild(gateBtn);
-    if(gateBtn.parentNode) gateBtn.parentNode.removeChild(gateBtn);
-    open++;
-    var el=gated[open];
-    if(!el) return;
-    el.classList.remove("locked");
-    el.scrollIntoView({behavior:"smooth",block:"start"});
+    segEls.forEach(function(e,j){ if(j<=i-1) markSeg(e); });
+    if(cap) cap.textContent = steps[i].dataset.stage || "";
+    tellStep(i);
+    /* a step with nothing to answer, such as the settings, offers the way on
+       by itself rather than waiting for an answer that never comes */
+    if(window.__maybeOffer) window.__maybeOffer();
   }
-  gateBtn.addEventListener("click",openNext);
+  function nextStep(){ show(at+1); }
+  gateBtn.addEventListener("click",nextStep);
 
-  function offerNext(from,at){
-    if(pending || open>=gated.length-1) return;
-    if(from && gated.indexOf(from)!==open) return;
-    pending=true;
-    gateBtn.querySelector("span").textContent=PROMPTS[Math.min(open,PROMPTS.length-1)];
-    (at||from||gated[open]).insertAdjacentElement("afterend",gateBtn);
+  /* the button lands at the end of the step the reader has just finished */
+  function offerNext(from,anchorAt){
+    if(at>=steps.length-1) return;
+    if(gateBtn.parentNode) return;
+    gateBtn.querySelector("span").textContent=PROMPTS[Math.min(at-1,PROMPTS.length-1)]||"Go on then";
+    var host=anchorAt||steps[at];
+    host.insertAdjacentElement("afterend",gateBtn);
+    gateBtn.scrollIntoView({behavior:"smooth",block:"nearest"});
   }
   window.__offerNext=offerNext;
 
-  /* a section without a decision of its own is done once it has been read to
-     the end, so the bottom of it is the cue */
-  var endIO=new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      if(!e.isIntersecting) return;
-      var i=gated.indexOf(e.target);
-      if(i===open && !e.target.querySelector(".dec") && !e.target.classList.contains("quiz")) offerNext();
-    });
-  },{threshold:.01,rootMargin:"0px 0px -72% 0px"});
-  gated.forEach(function(el){ if(!el.querySelector(".dec")) endIO.observe(el); });
-  lockAll();
-
+  /* a step with nothing to answer offers the way on straight away */
+  window.__maybeOffer=function(){
+    var sc=steps[at];
+    if(sc && !sc.querySelector(".dec") && !sc.classList.contains("quiz")) setTimeout(function(){offerNext(null,sc);},700);
+  };
   /* ---- ten situations ---- */
   var QUIZ=[
    {q:"You are late at an airport and an email arrives: <em>your flight has been rebooked, open the link for your new boarding pass.</em> What do you do?",
