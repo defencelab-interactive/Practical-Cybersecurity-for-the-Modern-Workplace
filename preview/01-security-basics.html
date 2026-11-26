@@ -70,8 +70,8 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 .gate .ask{font-size:16.5px;font-weight:500;color:var(--tw);margin-bottom:16px}
 .cue{margin-top:30px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
  text-transform:uppercase;color:var(--tf);display:flex;align-items:center;gap:9px}
-.cue i{display:inline-block;animation:bob 1.8s ease-in-out infinite;font-style:normal;color:var(--ac)}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.cue i{display:inline-block;animation:nudge 1.8s ease-in-out infinite;font-style:normal;color:var(--ac)}
+@keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 .after{display:none}
 .after.show{display:block;animation:fade .45s ease}
 @keyframes fade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
@@ -142,8 +142,8 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 /* state A: he arrives and the door opens */
 .bldg.go .win{animation:lit .45s ease var(--d) forwards}
 @keyframes lit{to{opacity:var(--o)}}
-.bldg.go:not(.st-days):not(.st-locked) .fig{animation:arrive 3.2s cubic-bezier(.35,0,.4,1) 1s forwards}
-@keyframes arrive{
+.bldg.go:not(.st-days):not(.st-locked) .fig{animation:walkin 3.2s cubic-bezier(.35,0,.4,1) 1s forwards}
+@keyframes walkin{
   0%{transform:translate(110px,270px);opacity:0}
   10%{opacity:1}
   42%{transform:translate(200px,270px);opacity:1}
@@ -181,9 +181,17 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 
 .dcap{font-size:13.5px;color:var(--tf);max-width:50ch;margin-top:2px}
 
+/* once the step is answered the drawing has done its work and the record
+   under it is the thing to read, so the picture gives up the room */
+.art{transition:max-width .55s cubic-bezier(.3,.8,.3,1),margin .55s ease}
+.scene.told:not(.told-rec) .art{max-width:190px;margin-bottom:10px}
+.scene.told-rec .art{max-width:0;opacity:0;margin:0}
+.scene.told .counter{margin-bottom:8px}
+@media (prefers-reduced-motion:reduce){ .art{transition:none} }
+
 @media (prefers-reduced-motion:reduce){
   .bldg .win{opacity:var(--o)}
-  .bldg .fig{opacity:1;transform:translate(200px,270px)}
+  .bldg .fig{opacity:1;transform:translate(200px,270px);animation:none}
   .bldg .lock{fill:var(--ac)}
   .bldg .leaf.l{transform:translateX(-23px)} .bldg .leaf.r{transform:translateX(23px)}
   .bldg.st-locked .win{fill:var(--rd);opacity:.92}
@@ -522,7 +530,10 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
  border:9px solid transparent;border-top:0;border-bottom-color:var(--ln)}
 .owlaside .bub:after{top:-7.6px;border-bottom-color:#1b261f}
 .owlaside .who{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
- text-transform:uppercase;color:rgba(52,183,125,.8);margin-bottom:10px}
+ text-transform:uppercase;color:rgba(52,183,125,.8);margin-bottom:10px;
+ display:flex;align-items:center;gap:8px}
+.owlaside .who:before{content:"";flex:0 0 14px;height:1px;
+ background:rgba(52,183,125,.55)}
 .owlaside .bub{max-height:66vh;overflow:auto}
 .owlaside .bub p{font-size:14.5px;line-height:1.56;color:var(--tm)}
 .owlaside .bub p+p{margin-top:10px}
@@ -532,14 +543,33 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 .owlaside{opacity:0;transition:opacity .4s}
 .owlaside.in{opacity:1}
 
-@media (min-width:1440px){
-  .owlaside{display:block}
+@media (min-width:1240px){
+  .owlaside{display:block;position:static;transform:translateY(var(--owly,0px));
+   width:340px;flex:0 0 340px;padding:0;z-index:40;
+   transition:transform .5s cubic-bezier(.3,.8,.3,1),opacity .4s}
   .owltale{display:none}
   .owllayer{display:none}
-  main{max-width:680px;flex:0 1 680px}
-  .body-wrap{justify-content:flex-start;padding-left:5vw}
+  main{max-width:580px;flex:0 1 580px;padding:0 0 28px}
+  .body-wrap{justify-content:center;align-items:flex-start;gap:46px;padding-left:0}
+  .owlaside .bub{max-height:none}
+  .art{max-width:360px}
+  .rec{max-width:380px}
 }
-@media (min-width:1750px){ .owlaside{width:400px} .body-wrap{padding-left:8vw} }
+@media (min-width:1440px){
+  .owlaside{width:384px;flex-basis:384px}
+  main{max-width:630px;flex-basis:630px}
+  .body-wrap{gap:56px}
+  .art{max-width:420px}
+  .rec{max-width:420px}
+}
+/* a tall window: the pair sits in the middle of it rather than against the
+   top with a third of the screen empty underneath */
+@media (min-width:1240px) and (min-height:900px){
+  .shell{align-items:center}
+  main{padding-bottom:0}
+}
+@media (min-width:1750px){ .owlaside{width:412px;flex-basis:412px} .body-wrap{gap:72px} }
+@media (prefers-reduced-motion:reduce){ .owlaside{transition:opacity .4s} }
 
 /* ---------- she is not inside anything ----------
    One bird on a layer of her own, flying to whatever currently wants the
@@ -556,7 +586,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 /* room above the panel for her to stand on, where there is no side gutter */
 /* no side gutter: leave her room to perch on top of the block */
 @media (max-width:1099px){ .owltale{margin-top:48px} }
-@media (max-width:1439px){ .owlaside{display:none} }
+@media (max-width:1239px){ .owlaside{display:none} }
 
 /* ---------- she introduces herself ---------- */
 .intro{min-height:100svh;display:flex;flex-direction:column;justify-content:center;
@@ -606,15 +636,15 @@ body.started .intro{display:none}
 main{padding-top:26px}
 
 /* she is never still for long */
-.owlaside .owl,.introowl .owl{animation:bob 5.4s ease-in-out infinite}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.owlaside .owl,.introowl .owl{animation:hover 5.4s ease-in-out infinite}
+@keyframes hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 .owl.sway .head{animation:sway 2.6s ease-in-out}
 @keyframes sway{0%,100%{transform:rotate(0)}25%{transform:rotate(-7deg)}70%{transform:rotate(5deg)}}
 
 /* she arrives at the introduction, round the text and up to her perch */
 .introowl{opacity:0}
-.introowl.flyin{opacity:1;animation:arrive 3.4s cubic-bezier(.4,.1,.35,1) forwards}
-@keyframes arrive{
+.introowl.flyin{opacity:1;animation:flightin 3.4s cubic-bezier(.4,.1,.35,1) forwards}
+@keyframes flightin{
   0%  {transform:translate(-78vw,-30vh) scale(.42) rotate(14deg);opacity:0}
   8%  {opacity:1}
   26% {transform:translate(-16vw,6vh) scale(.72) rotate(9deg)}
@@ -626,6 +656,65 @@ main{padding-top:26px}
 }
 .introsay,.introgo{opacity:0;transition:opacity .5s}
 .introsay.up,.introgo.up{opacity:1}
+
+/* the shortest windows: a 1366 or 1536 laptop at 125 or 150 percent scaling
+   leaves roughly 680 to 730 usable pixels, which is where the checklist used
+   to run over. Nothing is removed, only closed up. */
+@media (min-width:1000px) and (max-height:790px){
+  main{padding-bottom:14px}
+  .scene{padding:10px 0 14px}
+  .beat{margin-bottom:8px}
+  .sit{font-size:16px;margin-bottom:12px}
+  .set .sit{font-size:15px;margin-bottom:10px;max-width:60ch}
+  .ck{margin:5px 0}
+  .ckh{padding:9px 13px}
+  .ckt{font-size:14px}
+  .art{max-width:280px}
+  .counter b{font-size:28px}
+  .big{font-size:clamp(34px,3vw,44px)}
+  .bigsub{margin-bottom:10px}
+  .opt{padding:9px 13px;font-size:14.5px}
+  .opts{gap:6px}
+  .q{font-size:15.5px;margin-bottom:9px}
+  .pay p{font-size:14.5px}
+  .rec{margin-top:13px}
+  .rr{padding:8px 15px}
+  .owlaside .bub{padding:14px 16px 15px}
+  .owlaside .bub p{font-size:14px}
+  .go-on{margin-top:12px;padding:12px 16px}
+  /* the ten situations carry the longest options and the longest answers in
+     the course, so they get their own squeeze */
+  .qitem{padding:12px 0}
+  .qitem .q{font-size:15px;margin-bottom:9px}
+  .qn{margin-bottom:8px}
+  .qfb{font-size:14px;padding:11px 14px;margin-top:9px}
+  .again{margin-top:10px;padding:9px 14px;font-size:14px}
+  .conf{margin-top:9px;padding:11px 14px}
+  .conf-q{font-size:14px;margin-bottom:8px}
+  .conf-b{font-size:13.5px;padding:7px 12px}
+  .scene.told:not(.told-rec) .art{max-width:130px}
+  .scene{padding:9px 0 12px}
+  .pay p{margin-top:8px;font-size:14.5px;line-height:1.54}
+  .pay{margin-top:10px}
+  .rec .rh{padding:9px 14px 8px}
+  .rr{padding:7px 14px}
+  .go-on{margin-top:10px}
+  .plain li{margin:5px 0}
+}
+
+@media (min-width:1000px) and (max-height:700px){
+  .scene{padding:8px 0 10px}
+  .set .sit{font-size:14.5px;margin-bottom:8px;line-height:1.5}
+  .ck{margin:4px 0}
+  .ckh{padding:8px 12px}
+  .ckt{font-size:13.5px}
+  .tg{font-size:12px}
+  .scene.told:not(.told-rec) .art{max-width:100px}
+  .pay p{font-size:14px;margin-top:7px;line-height:1.5}
+  .sit{margin-bottom:9px}
+  .vt{margin-bottom:6px}
+  .rr{padding:6px 14px;font-size:11.5px}
+}
 
 /* a shorter window gets a tighter step, so no step ever runs past the fold */
 @media (min-width:1000px) and (max-height:940px){
@@ -761,7 +850,7 @@ main{padding-top:26px}
       <div class="who">The owl</div>
       <p>I watch at night. Most nights nothing happens, which is the part people skip and the part I find interesting.</p>
       <p>What you are about to go through took <b>nine days</b>. For eight of them there was nothing at all to see.</p>
-      <p>The questions are the course's. The story is mine, and I will be over on the right.</p>
+      <p>You will be asked about your own passwords and your own accounts, which is your business and none of mine. The nine days are mine to tell, and I will be over on the right.</p>
     </div>
     <button class="introgo" id="introgo">Start <i>&rarr;</i></button>
   </div>
@@ -1052,14 +1141,11 @@ main{padding-top:26px}
     </div>
   </section>
 </main>
-</div>
-</div>
-
-
-
 <aside class="owlaside" id="owlaside">
-  <div class="bub"><div class="who">The owl</div><div class="body" id="aside-body"></div></div>
+  <div class="bub"><div class="who" id="aside-who">The owl</div><div class="body" id="aside-body"></div></div>
 </aside>
+</div>
+</div>
 
 <script>
 (function(){
@@ -1077,6 +1163,14 @@ main{padding-top:26px}
       vt.classList.add("miss"); vt.textContent="Not that one";
     }
     pay.classList.add("show");
+    var sc=dec.closest(".scene");
+    if(sc){
+      sc.classList.add("told");
+      /* where the payoff brings its own record, that record is the evidence
+         and the drawing was the scene-setting, so the drawing hands over the
+         room rather than the two of them competing for the same screen */
+      if(pay.querySelector(".rec")) sc.classList.add("told-rec");
+    }
     if(!seen[dec.dataset.k||"gate"]){seen[dec.dataset.k||"gate"]=true; xp+=20; xpEl.textContent=xp+" XP";}
   }
 
@@ -1147,6 +1241,7 @@ main{padding-top:26px}
     document.getElementById("intro").style.display="none";
     document.body.classList.add("begun");
     window.scrollTo({top:0,behavior:"auto"});
+    buildTales(); land();
   });
 
   /* ---- entrance ---- */
@@ -1166,7 +1261,8 @@ main{padding-top:26px}
       gPay.classList.add("show");
       document.body.classList.add("started");
       setTimeout(function(){
-        buildTales(); land();
+        if(!tales.length){ buildTales(); land(); }
+        if(window.__place) window.__place(0);
         if(window.__offerNext) window.__offerNext(null,gPay);
       }, 700);
       xp+=20; xpEl.textContent=xp+" XP";
@@ -1330,18 +1426,30 @@ main{padding-top:26px}
      accounts; she supplies the case the question came from, which keeps one
      context on each side instead of half a story on both. */
   var TALE={
-   0:["<b>Change Healthcare</b> moves the paperwork between a doctor, a pharmacy and whoever pays. About a third of American patient records go through it.",
-      "In February 2024 somebody outside had a working employee password for exactly that page, and it accepted it. To every system inside, he looked like a trusted employee getting on with the job."],
-   1:["<b>Nine days.</b> He read files, copied whole databases, learned where the valuable things were kept. Patience pays.",
-      "For everyone else it was an ordinary week. Emails answered, meetings joined, home at six."],
-   2:["<b>Then it all locked at once</b>, and a payment was demanded. Pharmacies across the country could not check what a patient's insurance covered, and people went home without their prescription.",
-      "Paying the $22 million was the chief executive's own decision, he told the Senate, and one of the hardest he had made."],
-   3:["The money bought back the systems. The copied files were already gone, taken days earlier.",
-      "<b>The year cost the company $2.3 to $2.45 billion</b> by its own accounting, and that is before the penalties and the lawsuits. All of it traces to a password that still worked and a page that asked for nothing else."],
-   4:["<b>Before you answer:</b> it is tempting to read our case as one unusually careless company. It is more useful to read it as the ordinary one."],
-   5:["<b>In our case</b> they did not go after a hospital. They went after the company every hospital depends on, and the people whose records those were never agreed to anything and never saw that login page."],
-   6:["<b>Everything in our story</b> ran through settings that were not switched on. These are the same ones, on your side."],
-   7:["Ten of these, and any of them could be your week. I will keep quiet."]
+   0:{w:"Why I am here",
+      p:["Answer this one without me. It is about your own login, and I have nothing useful to say about yours.",
+         "Then I will take you to the night I watched the same question go the other way."]},
+   1:{w:"The same page, February 2024",
+      p:["The page you are picturing is the one I want to tell you about. <b>Change Healthcare</b> moves the paperwork between a doctor, a pharmacy and whoever pays, and about a third of American patient records go through it.",
+         "Somebody outside had a working employee password for exactly that page, and it accepted it. To every system inside, he looked like a trusted employee getting on with the job."]},
+   2:{w:"How long it took here",
+      p:["Hold your answer against this one. <b>Nine days.</b> He read files, copied whole databases, learned where the valuable things were kept.",
+         "For everyone else it was an ordinary week. Emails answered, meetings joined, home at six."]},
+   3:{w:"What the payment bought",
+      p:["They faced your question for real. <b>It all locked at once</b>, and a payment was demanded. Pharmacies across the country could not check what a patient's insurance covered, and people went home without their prescription.",
+         "Paying the $22 million was the chief executive's own decision, he told the Senate, and one of the hardest he had made."]},
+   4:{w:"What the other three cost",
+      p:["Three of the four on your left were in place here, and all three act after the password. The money bought the systems back. The copied files had gone days earlier.",
+         "<b>The year cost the company $2.3 to $2.45 billion</b> by its own accounting, before penalties and lawsuits. All of it traces to a password that still worked and a page that asked for nothing else."]},
+   5:{w:"Before you pick a number",
+      p:["It is tempting to read our case as one unusually careless company. It is more useful to read it as the ordinary one."]},
+   6:{w:"Why they picked this one",
+      p:["<b>In our case</b> they did not go after a hospital. They went after the company every hospital depends on.",
+         "The people whose records those were never agreed to anything, and never saw that login page."]},
+   7:{w:"The same settings, your side",
+      p:["<b>Everything in our story</b> ran through settings that were not switched on. These are the same ones."]},
+   8:{w:"Ten of these",
+      p:["Any of them could be your week. I will keep quiet now."]}
   };
 
   /* she is on screen from the first moment, in her own introduction */
@@ -1363,23 +1471,53 @@ main{padding-top:26px}
   var asideBody=document.getElementById("aside-body");
   var asideBird=makeOwl("",0,true);
   aside.insertBefore(asideBird, aside.firstElementChild);
-  var wideAside=window.matchMedia("(min-width:1440px)");
+  var wideAside=window.matchMedia("(min-width:1240px)");
   var shownTale=null;
 
   var landed=false, perch=null, travelT=null;
   var gutter=window.matchMedia("(min-width:1100px)");
 
-  /* her narration, one block per section, placed under the beat */
+  /* her narration, one block per step. On a narrow screen it sits in the
+     column under the beat; on a wide one it is hidden and the same words go
+     into the panel beside her. */
   var tales=[];
   function buildTales(){
-    [].slice.call(document.querySelectorAll(".scene")).forEach(function(sc,i){
-      if(!TALE[i]) return;
+    [].slice.call(document.querySelectorAll(".step")).forEach(function(sc,i){
+      if(!TALE[i]){ tales.push(null); return; }
       var t=document.createElement("div"); t.className="owltale";
-      t.innerHTML='<div class="who">The owl</div>'+TALE[i].map(function(x){return "<p>"+x+"</p>";}).join("");
-      var beat=sc.querySelector(".beat");
-      if(beat) beat.insertAdjacentElement("afterend",t); else sc.insertBefore(t,sc.firstChild);
+      t.innerHTML='<div class="who">'+TALE[i].w+'</div>'+
+        TALE[i].p.map(function(x){return "<p>"+x+"</p>";}).join("");
+      var anchor=sc.querySelector(".beat")||sc.querySelector(".ask");
+      if(anchor) anchor.insertAdjacentElement("afterend",t); else sc.insertBefore(t,sc.firstChild);
       tales.push(t);
     });
+  }
+
+  /* ---- where she sits ----
+     Not one fixed height for the whole course. Each step says what she should
+     be level with, and she glides to it, so her first line starts where the
+     reader is already looking rather than halfway down an empty margin. */
+  function anchorOf(sc){
+    var sel=sc.dataset.at;
+    return (sel && sc.querySelector(sel)) || sc.querySelector(".q") ||
+           sc.querySelector(".ask") || sc.querySelector(".sit") ||
+           sc.querySelector(".big") || sc.querySelector(".ck") ||
+           sc.querySelector(".beat") || sc;
+  }
+  function place(i){
+    if(!wideAside.matches){ aside.style.removeProperty("--owly"); return; }
+    var sc=steps[i]; if(!sc) return;
+    var el=anchorOf(sc);
+    var wrap=document.querySelector(".body-wrap");
+    if(!el||!wrap) return;
+    var head=asideBird.getBoundingClientRect().height||92;
+    var want=el.getBoundingClientRect().top-wrap.getBoundingClientRect().top-(head-16);
+    var h=aside.getBoundingClientRect().height||260;
+    var top=wrap.getBoundingClientRect().top;
+    var room=window.innerHeight-top-h-16;
+    if(want>room) want=room;
+    if(want<0) want=0;
+    aside.style.setProperty("--owly",Math.round(want)+"px");
   }
 
   function target(){
@@ -1417,7 +1555,7 @@ main{padding-top:26px}
     park();
   }
   (function frame(){ if(landed && !wideAside.matches) park(); requestAnimationFrame(frame); })();
-  window.addEventListener("resize",function(){park(); shownTale=null; follow();});
+  window.addEventListener("resize",function(){park(); shownTale=null; follow(); place(window.__at?window.__at():0);});
   wideAside.addEventListener("change",function(){shownTale=null; follow();});
 
   /* she goes where the reader is: the narration block nearest the top third */
@@ -1444,6 +1582,9 @@ main{padding-top:26px}
   function tell(t){
     if(!wideAside.matches || t===shownTale || !t) return;
     shownTale=t;
+    var who=t.querySelector(".who");
+    var head=document.getElementById("aside-who");
+    if(who&&head) head.textContent=who.textContent;
     var html=t.innerHTML.replace(/<div class="who">[\s\S]*?<\/div>/,"");
     asideBody.innerHTML=html;
     asideBody.classList.remove("body-in"); void asideBody.offsetWidth;
@@ -1453,8 +1594,9 @@ main{padding-top:26px}
   }
   /* her passage is chosen by the step, so she has nothing to chase */
   window.__tellStep=function(i){
-    var t=tales.filter(function(x){return x.closest(".scene")===steps[i];})[0];
-    if(t){ tell(t); moveTo(t); }
+    var t=tales[i];
+    aside.classList.toggle("in", !!t);
+    if(t){ tell(t); moveTo(t); requestAnimationFrame(function(){place(i);}); }
     sway();
   };
   function tellStep(i){ if(window.__tellStep) window.__tellStep(i); }
@@ -1482,6 +1624,7 @@ main{padding-top:26px}
     });
   };
   window.__owlPose=pose;
+  window.__place=place;
 
   function land(){
     landed=true;
@@ -1491,7 +1634,7 @@ main{padding-top:26px}
     perch=perch||tales[0];
     park();
     setTimeout(function(){bird.classList.remove("flying");},2000);
-    if(tales[0]) tell(tales[0]);
+    if(tales[0]){ tell(tales[0]); requestAnimationFrame(function(){place(0);}); }
     follow();
   }
 
@@ -1505,6 +1648,7 @@ main{padding-top:26px}
 
   var steps=[].slice.call(document.querySelectorAll(".step"));
   var at=0;
+  window.__at=function(){return at;};
   steps.forEach(function(el,j){ el.classList.toggle("on", j===0); });
 
   var PROMPTS=[
@@ -1527,6 +1671,7 @@ main{padding-top:26px}
     segEls.forEach(function(e,j){ if(j<=i-1) markSeg(e); });
     if(cap) cap.textContent = steps[i].dataset.stage || "";
     tellStep(i);
+    setTimeout(function(){ if(window.__place) window.__place(i); },560);
     /* a step with nothing to answer, such as the settings, offers the way on
        by itself rather than waiting for an answer that never comes */
     if(window.__maybeOffer) window.__maybeOffer();
