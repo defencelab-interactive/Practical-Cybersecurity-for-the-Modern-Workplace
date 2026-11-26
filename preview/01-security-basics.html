@@ -488,11 +488,11 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
    reading column. There is one place to answer and one place to continue, and
    they are the same place. */
 /* ---------- what she tells you ----------
-   The long version of the story lives here rather than in the course text.
-   None of it is needed to answer anything: the spine of the page carries the
-   facts and the decisions, and she carries the context around them, so a
-   reader in a hurry can skip every one of these and lose nothing they are
-   tested on. */
+   The long version of the story is hers, and on a wide screen it is not in the
+   column at all: she sits off to one side and the text appears beside her,
+   changing as the reader moves from one part to the next. Nothing she says is
+   needed to answer anything, and nothing of hers sits between the reader and a
+   control. */
 .owltale{margin:14px 0 24px;max-width:600px;padding:2px 0 2px 20px;
  border-left:2px solid rgba(52,183,125,.4)}
 .owltale p{font-size:16px;line-height:1.62;color:var(--tm)}
@@ -500,7 +500,36 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 .owltale b{color:var(--tw);font-weight:500}
 .owltale .who{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
  text-transform:uppercase;color:rgba(52,183,125,.75);margin-bottom:9px}
-@media (min-width:1100px){ .owltale{margin-left:4px} }
+
+/* the aside: her, fixed, with the text of wherever the reader currently is */
+.owlaside{display:none;position:fixed;right:0;top:50%;transform:translateY(-50%);
+ width:360px;padding:0 30px 0 0;z-index:65;pointer-events:none}
+.owlaside .owl{width:84px;margin:0 0 -16px 18px;position:relative;z-index:2;
+ filter:drop-shadow(0 8px 22px rgba(0,0,0,.5))}
+.owlaside .bub{position:relative;background:#1b261f;border:1px solid var(--ln);
+ border-radius:16px;padding:18px 20px 19px;box-shadow:0 18px 44px rgba(0,0,0,.42);
+ pointer-events:auto}
+.owlaside .bub:before,.owlaside .bub:after{content:"";position:absolute;left:34px;top:-9px;
+ border:9px solid transparent;border-top:0;border-bottom-color:var(--ln)}
+.owlaside .bub:after{top:-7.6px;border-bottom-color:#1b261f}
+.owlaside .who{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
+ text-transform:uppercase;color:rgba(52,183,125,.8);margin-bottom:10px}
+.owlaside .bub p{font-size:14.5px;line-height:1.56;color:var(--tm)}
+.owlaside .bub p+p{margin-top:10px}
+.owlaside .bub b{color:var(--tw);font-weight:500}
+.owlaside .body-in{animation:asidein .42s ease}
+@keyframes asidein{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.owlaside{opacity:0;transition:opacity .4s}
+.owlaside.in{opacity:1}
+
+@media (min-width:1440px){
+  .owlaside{display:block}
+  .owltale{display:none}
+  .owllayer{display:none}
+  main{max-width:660px;flex:0 1 660px}
+  .body-wrap{justify-content:flex-start;padding-left:4vw}
+}
+@media (min-width:1750px){ .owlaside{width:400px} .body-wrap{padding-left:7vw} }
 
 /* ---------- she is not inside anything ----------
    One bird on a layer of her own, flying to whatever currently wants the
@@ -517,6 +546,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 /* room above the panel for her to stand on, where there is no side gutter */
 /* no side gutter: leave her room to perch on top of the block */
 @media (max-width:1099px){ .owltale{margin-top:48px} }
+@media (max-width:1439px){ .owlaside{display:none} }
 </style>
 </head><body>
 
@@ -895,6 +925,10 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 
 
 
+<aside class="owlaside" id="owlaside">
+  <div class="bub"><div class="who">The owl</div><div class="body" id="aside-body"></div></div>
+</aside>
+
 <script>
 (function(){
   var xp=0, seen={};
@@ -1159,6 +1193,14 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   layer.appendChild(bird);
   document.body.appendChild(layer);
 
+  /* the same bird again, in the aside, because the two never show together */
+  var aside=document.getElementById("owlaside");
+  var asideBody=document.getElementById("aside-body");
+  var asideBird=makeOwl("",0,true);
+  aside.insertBefore(asideBird, aside.firstElementChild);
+  var wideAside=window.matchMedia("(min-width:1440px)");
+  var shownTale=null;
+
   var landed=false, perch=null, travelT=null;
   var gutter=window.matchMedia("(min-width:1100px)");
 
@@ -1209,19 +1251,39 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
     },1300);
     park();
   }
-  (function frame(){ if(landed) park(); requestAnimationFrame(frame); })();
-  window.addEventListener("resize",park);
+  (function frame(){ if(landed && !wideAside.matches) park(); requestAnimationFrame(frame); })();
+  window.addEventListener("resize",function(){park(); shownTale=null; follow();});
+  wideAside.addEventListener("change",function(){shownTale=null; follow();});
 
   /* she goes where the reader is: the narration block nearest the top third */
   function follow(){
     if(!landed || !tales.length) return;
+    /* measure the section, never the block: on a wide screen the inline blocks
+       are display:none and a hidden element reports a zero rectangle, which
+       made every one of them look equally close and the first always win */
     var aim=tales[0], best=1e9, mark=window.innerHeight*0.34;
     tales.forEach(function(t){
-      if(t.closest(".scene").classList.contains("locked")) return;
-      var d=Math.abs(t.getBoundingClientRect().top-mark);
+      var sc=t.closest(".scene");
+      if(!sc || sc.classList.contains("locked")) return;
+      var r=sc.getBoundingClientRect();
+      var d=(r.top<=mark && r.bottom>=mark) ? 0 : Math.min(Math.abs(r.top-mark),Math.abs(r.bottom-mark));
       if(d<best){best=d;aim=t;}
     });
     moveTo(aim);
+    tell(aim);
+  }
+
+  /* her text is not in the column on a wide screen: it appears beside her and
+     changes as the reader moves from one part to the next, with no click */
+  function tell(t){
+    if(!wideAside.matches || t===shownTale || !t) return;
+    shownTale=t;
+    var html=t.innerHTML.replace(/<div class="who">[\s\S]*?<\/div>/,"");
+    asideBody.innerHTML=html;
+    asideBody.classList.remove("body-in"); void asideBody.offsetWidth;
+    asideBody.classList.add("body-in");
+    asideBird.classList.add("flying");
+    setTimeout(function(){asideBird.classList.remove("flying");},620);
   }
   var followT=null;
   window.addEventListener("scroll",function(){
@@ -1229,27 +1291,33 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   },{passive:true});
 
   function pose(p){
-    bird.classList.remove("look","alarm","wink","turn");
-    void bird.offsetWidth;
-    bird.classList.add(p||"look");
-    if(p==="turn"||p==="alarm") setTimeout(function(){bird.classList.remove(p);},p==="turn"?3000:1800);
+    [bird,asideBird].forEach(function(o){
+      o.classList.remove("look","alarm","wink","turn");
+      void o.offsetWidth;
+      o.classList.add(p||"look");
+      if(p==="turn"||p==="alarm") setTimeout(function(){o.classList.remove(p);},p==="turn"?3000:1800);
+    });
   }
   window.__owlReact=function(right){
     if(!landed) return;
-    bird.classList.remove("look","alarm","wink");
-    void bird.offsetWidth;
-    bird.classList.add(right?"wink":"alarm");
-    setTimeout(function(){bird.classList.remove("wink","alarm");},right?900:1600);
+    [bird,asideBird].forEach(function(o){
+      o.classList.remove("look","alarm","wink");
+      void o.offsetWidth;
+      o.classList.add(right?"wink":"alarm");
+      setTimeout(function(){o.classList.remove("wink","alarm");},right?900:1600);
+    });
   };
   window.__owlPose=pose;
 
   function land(){
     landed=true;
     layer.classList.add("in");
+    aside.classList.add("in");
     bird.classList.add("flying");
     perch=perch||tales[0];
     park();
     setTimeout(function(){bird.classList.remove("flying");},2000);
+    if(tales[0]) tell(tales[0]);
     follow();
   }
 
