@@ -20,7 +20,11 @@
 *{box-sizing:border-box;margin:0;padding:0}
 /* the background of the rest of the library: green at the top left, blue at the
    bottom right, over a dark green to slate ramp. Not a flat near-black. */
-body{color:var(--tw);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;
+/* the header sits above the stage in the flow, so the stage must ask for the
+   rest of the window and not for all of it, or every step is a header taller
+   than the screen */
+body{min-height:100vh;display:flex;flex-direction:column;
+ color:var(--tw);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;
  background:
   radial-gradient(80% 55% at 12% 4%,rgba(52,183,125,.30),transparent 52%),
   radial-gradient(90% 70% at 88% 78%,rgba(78,124,168,.20),transparent 58%),
@@ -29,7 +33,7 @@ body{color:var(--tw);font-family:var(--body);line-height:1.6;-webkit-font-smooth
  background-attachment:fixed}
 
 /* header hidden until the opening question is answered */
-.top{position:sticky;top:0;z-index:50;background:rgba(26,38,32,.82);
+.top{flex:none;position:sticky;top:0;z-index:50;background:rgba(26,38,32,.82);
  backdrop-filter:blur(10px);border-bottom:1px solid rgba(237,239,236,.08);
  opacity:0;transform:translateY(-100%);transition:opacity .5s,transform .5s}
 /* While hidden the header is taken out of the flow, so the entrance really gets
@@ -50,12 +54,11 @@ body.started .top{opacity:1;transform:none}
 .cap{margin-top:8px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
  text-transform:uppercase;color:var(--tf);min-height:1em}
 
-main{max-width:640px;margin:0 auto;padding:0 22px 90px}
+main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 
 /* ---------- the entrance ---------- */
-.gate{min-height:100svh;display:flex;flex-direction:column;justify-content:center;
- padding:40px 0 9vh}
-.gate.done{justify-content:center;padding-bottom:40px}
+.gate{display:flex;flex-direction:column;justify-content:flex-start;padding:4px 0 10px}
+
 .gate .tag{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
  color:var(--tf);margin-bottom:34px}
 .arrive{margin-bottom:20px}
@@ -256,19 +259,15 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   .how{padding-left:16px}
   .rec{max-width:100%}
   /* the entrance must fit one screen: all three answers above the fold */
-  .gate{padding:64px 0 4vh}
+  .gate{padding:6px 0 10px}
   .gate .tag{margin-bottom:20px}
-  .gate h1{font-size:clamp(26px,7.6vw,34px);margin-bottom:14px}
+  .gate h1{font-size:clamp(24px,6.6vw,30px);margin-bottom:12px}
   .gate .sub{font-size:15.5px;margin-bottom:22px}
   .gate .ask{margin-bottom:13px}
   .gate .opts{gap:7px}
   .gate .opt{padding:12px 14px;font-size:14.5px}
 }
-@media (max-width:560px) and (max-height:700px){
-  .gate h1{font-size:25px}
-  .gate .sub{font-size:14.5px;margin-bottom:16px}
-  .gate .opt{padding:10px 13px;font-size:14px}
-}
+
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 /* plain list inside a payoff */
@@ -409,19 +408,19 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
    On a wide screen she lives in a column of her own, which is where the live
    course already keeps its title block. On a narrow one there is no room for a
    column, so she goes back to the corner. */
-.shell{display:flex;align-items:flex-start}
+.shell{display:flex;align-items:flex-start;flex:1;min-height:0}
 .rail{display:none!important}
 @media (min-width:1000px){
-  .shell{min-height:100vh}
+  .shell{flex:1;min-height:0}
   /* everything right of the rail is centred, so a wide screen gives even
      margins instead of a column pinned left and a hole on the right */
   .body-wrap{flex:1;display:flex;justify-content:center;gap:44px;min-width:0}
-  main{max-width:740px;padding:0 44px 120px;margin:0;flex:0 1 740px}
+  main{max-width:740px;padding:0 44px 40px;margin:0;flex:0 1 740px}
   /* a wide screen can carry the drawing at something like its real size */
-  .art{max-width:580px}
+  .art{max-width:400px}
   .rec{max-width:440px}
   .days{width:330px}
-  .big{font-size:clamp(52px,5vw,76px)}
+  .big{font-size:clamp(44px,4vw,60px)}
   /* a screen that size can carry more type than a phone */
   .sit{font-size:18px}
   .q{font-size:17px}
@@ -439,9 +438,9 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 /* widest screens: the drawing gets closer to its real size, the measure does
    not, because prose past about seventy characters a line stops being easy */
 @media (min-width:1400px){
-  .art{max-width:700px}
-  .rec{max-width:480px}
-  .days{width:360px}
+  .art{max-width:430px}
+  .rec{max-width:400px}
+  .days{width:300px}
   .owltale{max-width:640px}
 }
 .rail .mark{font-family:var(--disp);font-weight:600;font-size:16px;margin-bottom:38px}
@@ -538,9 +537,9 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   .owltale{display:none}
   .owllayer{display:none}
   main{max-width:680px;flex:0 1 680px}
-  .body-wrap{justify-content:flex-start;padding-left:9vw}
+  .body-wrap{justify-content:flex-start;padding-left:5vw}
 }
-@media (min-width:1750px){ .owlaside{width:400px} .body-wrap{padding-left:13vw} }
+@media (min-width:1750px){ .owlaside{width:400px} .body-wrap{padding-left:8vw} }
 
 /* ---------- she is not inside anything ----------
    One bird on a layer of her own, flying to whatever currently wants the
@@ -604,7 +603,7 @@ body.started .intro{display:none}
 .step{display:none}
 .step.on{display:block;animation:stepin .46s cubic-bezier(.25,.8,.3,1)}
 @keyframes stepin{from{opacity:0;transform:translateX(42px)}to{opacity:1;transform:none}}
-main{padding-top:34px}
+main{padding-top:26px}
 
 /* she is never still for long */
 .owlaside .owl,.introowl .owl{animation:bob 5.4s ease-in-out infinite}
@@ -627,6 +626,31 @@ main{padding-top:34px}
 }
 .introsay,.introgo{opacity:0;transition:opacity .5s}
 .introsay.up,.introgo.up{opacity:1}
+
+/* a shorter window gets a tighter step, so no step ever runs past the fold */
+@media (min-width:1000px) and (max-height:940px){
+  main{padding-top:16px}
+  .scene{padding:16px 0 22px}
+  .art{max-width:330px}
+  .rec{max-width:360px}
+  .days{width:260px}
+  .sit{font-size:17px;margin-bottom:16px}
+  .opt{padding:11px 14px;font-size:15px}
+  .opts{gap:7px}
+  .q{font-size:16px;margin-bottom:11px}
+  .beat{margin-bottom:10px}
+  .ck{margin:7px 0}
+  .ckh{padding:11px 14px}
+  .ckt{font-size:14.5px}
+  .tonight{margin-top:13px;padding:13px 15px}
+  .tonight p{font-size:14px}
+  .big{font-size:clamp(38px,3.4vw,50px)}
+  .bigsub{margin-bottom:14px}
+  .rc{padding:12px 15px;margin-bottom:7px}
+  .rc p{font-size:14.5px}
+  .recap h2{font-size:20px;margin-bottom:14px}
+  .go-on{padding:10px 14px}
+}
 </style>
 </head><body>
 
@@ -778,18 +802,17 @@ main{padding-top:34px}
   <section class="scene step" data-stage="12 February &middot; the way in">
     <div class="beat"><i></i>12 February &middot; the way in</div>
     <div class="art" data-bldg data-anim data-owl="roof"></div>
-    <p class="sit"><b>Change Healthcare</b> moves the paperwork between your doctor, your pharmacy and whoever pays. About a third of American patient records go through it.</p>
-    <p class="sit">In February 2024 somebody outside had a working employee password for the page staff used from home.</p>
+    <p class="sit">Think about the page you use to log into work from home.</p>
     <div class="dec" data-k="s1">
-      <p class="q">One setting on that page would have made the stolen password useless. Which of these is it?</p>
+      <p class="q">If that page asks for nothing after your password, what is the practical effect?</p>
       <div class="opts">
-        <button class="opt"><span class="mk"></span>A longer and more complex password policy</button>
-        <button class="opt" data-ok="1"><span class="mk"></span>Multi-factor authentication, a second step after the password</button>
-        <button class="opt"><span class="mk"></span>Antivirus on every company laptop</button>
+        <button class="opt"><span class="mk"></span>Your own device is still recognised, so a stranger would be refused</button>
+        <button class="opt" data-ok="1"><span class="mk"></span>Anybody holding that password is you, as far as the page is concerned</button>
+        <button class="opt"><span class="mk"></span>IT is told about the new location and can check</button>
       </div>
       <div class="pay">
         <span class="vt">What the testimony says</span>
-        <p>A length rule changes what a password looks like, not what happens once somebody else is holding it. Antivirus guards the computer rather than the door. The company's chief executive told Congress what was missing in a single sentence.</p>
+        <p>Whose computer it came from makes no difference, and nobody is told. What closes that gap is a second step after the password, and it is a setting rather than somebody watching.</p>
         <div class="rec">
           <div class="rh">The login page &middot; what it asked for</div>
           <div class="rr"><span>username</span><span class="v">required</span></div>
@@ -806,7 +829,7 @@ main{padding-top:34px}
     <div class="beat"><i></i>Nine days &middot; unseen</div>
     <div class="counter" id="daycount"><b>1</b><span>day inside</span></div>
     <div class="art" data-bldg="days" data-anim></div>
-    <p class="sit" data-say="turn|Nine days. I looked everywhere, and I do mean everywhere, because my eyes do not move in my head and I have to turn the whole thing. <b>There was nothing to find.</b>">Nine days passed, and nobody noticed anything.</p>
+
     <div class="dec" data-k="s2" data-poll="1">
       <p class="q">Be honest. If somebody were signed in to your own accounts right now, how long before you noticed?</p>
       <div class="opts">
@@ -826,13 +849,13 @@ main{padding-top:34px}
     <div class="beat"><i></i>21 February &middot; the lock</div>
     <div class="art" data-bldg="locked" data-anim></div>
     <p data-say="alarm|Now there is something to see. Nine days too late to be useful."></p>
-    <p class="sit">Pharmacies could not check what a patient's insurance covered, and some people went home without their prescription. Paying the <span class="n">$22 million</span> was the chief executive's own decision, he told the Senate, and one of the hardest he had made.</p>
+    <p class="sit">Say it is your own files that are locked, and a payment is demanded.</p>
     <div class="dec" data-k="s3">
-      <p class="q">What does paying actually get back?</p>
+      <p class="q">What would paying actually get you back?</p>
       <div class="opts">
-        <button class="opt"><span class="mk"></span>The files, because the attackers delete their copy once they are paid</button>
-        <button class="opt" data-ok="1"><span class="mk"></span>The systems, while the copies they already took stay taken</button>
-        <button class="opt"><span class="mk"></span>Nothing, because copies of the systems would have restored everything anyway</button>
+        <button class="opt"><span class="mk"></span>The files, because they delete their copy once they are paid</button>
+        <button class="opt" data-ok="1"><span class="mk"></span>The use of them, while every copy already taken stays taken</button>
+        <button class="opt"><span class="mk"></span>Nothing, because spare copies would cover it either way</button>
       </div>
       <div class="pay">
         <span class="vt">Two different problems</span>
@@ -847,17 +870,16 @@ main{padding-top:34px}
     <div class="big">$2.3&ndash;2.45B</div>
     <div class="bigsub">UnitedHealth's own estimate of the 2024 impact</div>
     <div class="dec" data-k="s4">
-      <p class="q">Looking at the whole chain, which step would have closed this particular path?</p>
+      <p class="q">Of these four, which protects your own accounts at the moment a password is typed?</p>
       <div class="opts">
-        <button class="opt" data-ok="1"><span class="mk"></span>A second step on the page staff logged into from home</button>
-        <button class="opt"><span class="mk"></span>Better security equipment on the company network</button>
-        <button class="opt"><span class="mk"></span>Teaching staff to recognise the warning on screen</button>
-        <button class="opt"><span class="mk"></span>Keeping spare copies of everything more often</button>
+        <button class="opt" data-ok="1"><span class="mk"></span>A second step after your password</button>
+        <button class="opt"><span class="mk"></span>Better security equipment on the network</button>
+        <button class="opt"><span class="mk"></span>Learning to recognise the warning on screen</button>
+        <button class="opt"><span class="mk"></span>Keeping spare copies more often</button>
       </div>
       <div class="pay">
         <span class="vt">The point</span>
-        <p>The second step is the only one of the four acting at the place the chain actually turned, which was the moment somebody typed the password. The other three all come into play after that, which is why none of them was in a position to help. Being exact about what it buys: it closes this way in, not every way in.</p>
-        <p>The figure above is the company's own accounting of recovery and lost business for the year. It does not include the penalties or the lawsuits that followed.</p>
+        <p>The second step is the only one of the four acting at the moment the password is typed. The other three come into play after that, which is why none of them is in a position to help. It closes this way in, not every way in.</p>
       </div>
     </div>
   </section>
@@ -889,19 +911,18 @@ main{padding-top:34px}
   <!-- 6 -->
   <section class="scene step" data-stage="Why this company">
     <div class="beat"><i></i>Why this company</div>
-    <p class="sit">Of all the places to go after, somebody picked the company in the middle rather than any of the hospitals, pharmacies or insurers at either end of it.</p>
+    <p class="sit">Wherever you work, your employer is somebody else's supplier.</p>
     <div class="dec" data-k="s6">
-      <p class="q">Why would that be the better target?</p>
+      <p class="q">What does that make your own work login?</p>
       <div class="opts">
-        <button class="opt"><span class="mk"></span>Hospitals are better defended than payment companies</button>
-        <button class="opt" data-ok="1"><span class="mk"></span>One way in reaches everybody the company serves</button>
-        <button class="opt"><span class="mk"></span>Payment companies keep more money on hand</button>
+        <button class="opt"><span class="mk"></span>A matter for your employer alone</button>
+        <button class="opt" data-ok="1"><span class="mk"></span>One of the doors into everybody they serve</button>
+        <button class="opt"><span class="mk"></span>Covered already, since suppliers get audited</button>
       </div>
       <div class="pay">
         <span class="vt">One door, thousands of buildings</span>
-        <p>Attacking a hospital gets you a hospital. Attacking the company every hospital depends on gets you all of them, which is why 15 percent of the breaches in that report came through a supplier.</p>
-        <p>Nothing exotic opened the door either. Over the last ten years of the same report, 31 percent of breaches involved a stolen login, which makes it the most ordinary way in there is.</p>
-        <p>Wherever you work, your employer is somebody else's supplier, and your login is one of the doors into that.</p>
+        <p>Going after one company gets you one company. Going after the one everybody depends on gets you all of them, which is why 15 percent of breaches in that report came through a supplier.</p>
+        <p>Nothing exotic opens that door either. Over ten years of the same report, 31 percent of breaches involved a stolen login.</p>
       </div>
     </div>
   </section>
@@ -1305,17 +1326,20 @@ main{padding-top:34px}
   /* Short on purpose, and tied to the column: each one opens by picking up
      what the page has just said, so she reads as the same story rather than a
      second one running alongside. */
+  /* The whole story is hers now. The column asks the reader about their own
+     accounts; she supplies the case the question came from, which keeps one
+     context on each side instead of half a story on both. */
   var TALE={
-   0:["<b>In our case</b> it began quietly. Somewhere outside the company a working username and password were sitting in the wrong hands, and how they got there was never made public.",
-      "He typed them into that page, and it accepted them. To every system inside, he now looked like a trusted employee getting on with the job."],
-   1:["<b>What he did with those nine days:</b> moved through the network, read files, copied whole databases, learned where the valuable things were kept. Patience pays.",
+   0:["<b>Change Healthcare</b> moves the paperwork between a doctor, a pharmacy and whoever pays. About a third of American patient records go through it.",
+      "In February 2024 somebody outside had a working employee password for exactly that page, and it accepted it. To every system inside, he looked like a trusted employee getting on with the job."],
+   1:["<b>Nine days.</b> He read files, copied whole databases, learned where the valuable things were kept. Patience pays.",
       "For everyone else it was an ordinary week. Emails answered, meetings joined, home at six."],
-   2:["<b>The reason it reached that far</b> is the thing you read at the start. This company sits in the middle of so much of American healthcare that the damage could not stay inside it.",
-      "A single stolen login reached a pharmacy in another state."],
+   2:["<b>Then it all locked at once</b>, and a payment was demanded. Pharmacies across the country could not check what a patient's insurance covered, and people went home without their prescription.",
+      "Paying the $22 million was the chief executive's own decision, he told the Senate, and one of the hardest he had made."],
    3:["The money bought back the systems. The copied files were already gone, taken days earlier.",
-      "<b>Which is why the whole bill traces</b> to the two things you have just picked between: a password that still worked, and a page that asked for nothing else."],
-   4:["<b>Before you answer:</b> it is tempting to read our case as one careless company. It is more useful to read it as the ordinary one."],
-   5:["<b>In our case</b> the people whose records those were never agreed to anything, never saw that login page, and could not have done a thing about it."],
+      "<b>The year cost the company $2.3 to $2.45 billion</b> by its own accounting, and that is before the penalties and the lawsuits. All of it traces to a password that still worked and a page that asked for nothing else."],
+   4:["<b>Before you answer:</b> it is tempting to read our case as one unusually careless company. It is more useful to read it as the ordinary one."],
+   5:["<b>In our case</b> they did not go after a hospital. They went after the company every hospital depends on, and the people whose records those were never agreed to anything and never saw that login page."],
    6:["<b>Everything in our story</b> ran through settings that were not switched on. These are the same ones, on your side."],
    7:["Ten of these, and any of them could be your week. I will keep quiet."]
   };
