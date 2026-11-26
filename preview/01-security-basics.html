@@ -1,0 +1,1407 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Defence Lab &middot; How a Breach Unfolds</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Defence Lab course 1, scroll format.
+   Decision first, prose second. Every scene opens with a situation of one or two
+   sentences and a choice; the documented material appears only after the reader
+   has committed to an answer, so nothing is read without a reason to read it. */
+:root{
+  --ac:#34B77D; --acd:#2A9A66; --rd:#E0574F; --gd:#D9A94B;
+  --tw:#EDEFEC; --tm:rgba(237,239,236,.66); --tf:rgba(237,239,236,.36);
+  --bg:#18231D; --sf:rgba(255,255,255,.035); --sf2:#101a15; --ln:rgba(237,239,236,.13);
+  --disp:'Fraunces',Georgia,serif; --body:'DM Sans',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tw);font-family:var(--body);line-height:1.6;
+ -webkit-font-smoothing:antialiased}
+
+/* header hidden until the opening question is answered */
+.top{position:sticky;top:0;z-index:10;background:rgba(24,35,29,.92);
+ backdrop-filter:blur(10px);border-bottom:1px solid rgba(237,239,236,.08);
+ opacity:0;transform:translateY(-100%);transition:opacity .5s,transform .5s}
+/* While hidden the header is taken out of the flow, so the entrance really gets
+   the whole viewport and the third answer never falls below the fold. */
+body:not(.started) .top{position:fixed;top:0;left:0;right:0;pointer-events:none}
+body.started .top{opacity:1;transform:none}
+.top .in{max-width:640px;margin:0 auto;padding:12px 22px 10px}
+.brow{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:9px}
+.mark{font-family:var(--disp);font-weight:600;font-size:15px}
+.mark span{color:var(--ac)}
+.xp{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--gd);
+ border:1px solid rgba(217,169,75,.4);border-radius:30px;padding:3px 10px;
+ font-variant-numeric:tabular-nums;white-space:nowrap}
+.segs{display:flex;gap:4px}
+.seg{flex:1;height:3px;border-radius:2px;background:rgba(237,239,236,.14);transition:background .45s}
+.seg.on{background:var(--rd)}
+.seg.safe.on{background:var(--ac)}
+.cap{margin-top:8px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+ text-transform:uppercase;color:var(--tf);min-height:1em}
+
+main{max-width:640px;margin:0 auto;padding:0 22px 90px}
+
+/* ---------- the entrance ---------- */
+.gate{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+ padding:80px 0 9vh}
+.gate.done{justify-content:center;padding-bottom:40px}
+.gate .tag{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+ color:var(--tf);margin-bottom:34px}
+.arrive{margin-bottom:20px}
+.arrive .owl{width:62px}
+.gate .tag b{color:var(--ac);font-weight:400}
+.gate h1{font-family:var(--disp);font-weight:600;font-size:clamp(29px,6.4vw,42px);
+ line-height:1.08;letter-spacing:-.015em;margin-bottom:18px;text-wrap:balance}
+.gate .sub{font-size:16.5px;color:var(--tm);max-width:46ch;margin-bottom:30px}
+.gate .ask{font-size:16.5px;font-weight:500;color:var(--tw);margin-bottom:16px}
+.cue{margin-top:30px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+ text-transform:uppercase;color:var(--tf);display:flex;align-items:center;gap:9px}
+.cue i{display:inline-block;animation:bob 1.8s ease-in-out infinite;font-style:normal;color:var(--ac)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.after{display:none}
+.after.show{display:block;animation:fade .45s ease}
+@keyframes fade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+/* ---------- scenes ---------- */
+.scene{padding:46px 0;border-bottom:1px solid rgba(237,239,236,.09)}
+.scene:first-of-type{border-top:1px solid rgba(237,239,236,.09)}
+.beat{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+ color:var(--rd);margin-bottom:13px;display:flex;align-items:center;gap:8px}
+.beat i{width:6px;height:6px;border-radius:50%;background:var(--rd);flex:none}
+.sit{font-size:16.5px;color:var(--tw);max-width:52ch;margin-bottom:22px}
+.sit b{font-weight:500}
+.sit .n{font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums}
+
+/* decision */
+.q{font-size:15.5px;font-weight:500;color:var(--tw);margin-bottom:14px;max-width:52ch}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{appearance:none;text-align:left;width:100%;cursor:pointer;font:inherit;font-size:15px;
+ background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:14px 16px;
+ color:var(--tw);display:flex;align-items:flex-start;gap:11px;line-height:1.45;
+ transition:border-color .15s,background .15s}
+.opt:hover{border-color:rgba(237,239,236,.32)}
+.opt:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.opt .mk{width:17px;height:17px;border-radius:50%;border:1.5px solid rgba(237,239,236,.25);
+ flex:none;margin-top:1px;display:flex;align-items:center;justify-content:center;
+ font-size:9px;font-weight:700;color:#07120d;font-family:var(--body)}
+.done .opt{cursor:default}
+.done .opt:hover{border-color:var(--ln)}
+.opt.ok{border-color:rgba(52,183,125,.55);background:rgba(52,183,125,.09)}
+.opt.ok .mk{background:var(--ac);border-color:var(--ac)}
+.opt.no{border-color:rgba(224,87,79,.55);background:rgba(224,87,79,.08)}
+.opt.no .mk{background:var(--rd);border-color:var(--rd);color:#fff}
+.opt.pick{border-color:rgba(217,169,75,.55);background:rgba(217,169,75,.09)}
+.opt.pick .mk{background:var(--gd);border-color:var(--gd)}
+.opt.dim{opacity:.42}
+
+/* what the answer unlocks */
+.pay{margin-top:18px;display:none}
+.pay.show{display:block;animation:fade .4s ease}
+.pay p{font-size:15px;color:var(--tm);max-width:56ch}
+.pay p+p{margin-top:11px}
+.pay b{color:var(--tw);font-weight:500}
+.vt{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+ color:var(--ac);display:block;margin-bottom:9px}
+.vt.miss{color:var(--rd)}
+.vt.note{color:var(--gd)}
+
+/* ---------- the building ----------
+   The same drawing appears three times, in three states. It is a stand-in for an
+   office, not a picture of the company's actual premises, and nothing inside it
+   is a screen, a log or a record, so it makes no claim about what anyone saw. */
+.art{margin:2px 0 16px}
+.bldg{display:block;width:100%;max-width:400px;overflow:visible}
+.bldg .mass{fill:#0d1512;stroke:rgba(237,239,236,.19);stroke-width:1}
+.bldg .sign{fill:rgba(237,239,236,.07)}
+.bldg .signtext{fill:rgba(237,239,236,.62);font-family:var(--mono);font-size:10px;
+ letter-spacing:.7px;text-anchor:middle}
+.bldg .ground{stroke:rgba(237,239,236,.16);stroke-width:1}
+.bldg .canopy{stroke:rgba(237,239,236,.2);stroke-width:1.5}
+.bldg .doorway{fill:#06100c;stroke:rgba(237,239,236,.16);stroke-width:1}
+.bldg .leaf{fill:#16231d;stroke:rgba(237,239,236,.22);stroke-width:1;transition:opacity .5s}
+.bldg .lock{fill:rgba(237,239,236,.26)}
+.bldg .win{fill:var(--tw);opacity:0}
+.bldg .fig{fill:#46594E;opacity:0}
+
+/* state A: he arrives and the door opens */
+.bldg.go .win{animation:lit .45s ease var(--d) forwards}
+@keyframes lit{to{opacity:var(--o)}}
+.bldg.go:not(.st-days):not(.st-locked) .fig{animation:arrive 3.2s cubic-bezier(.35,0,.4,1) 1s forwards}
+@keyframes arrive{
+  0%{transform:translate(110px,270px);opacity:0}
+  10%{opacity:1}
+  42%{transform:translate(200px,270px);opacity:1}
+  78%{transform:translate(200px,270px);opacity:1}
+  100%{transform:translate(200px,270px);opacity:0}
+}
+.bldg.go .lock{animation:unlock .35s ease 2.5s forwards}
+@keyframes unlock{to{fill:var(--ac)}}
+.bldg.go .leaf.l{animation:openL .65s cubic-bezier(.3,.8,.3,1) 2.8s forwards}
+.bldg.go .leaf.r{animation:openR .65s cubic-bezier(.3,.8,.3,1) 2.8s forwards}
+@keyframes openL{to{transform:translateX(-23px);opacity:.3}}
+@keyframes openR{to{transform:translateX(23px);opacity:.3}}
+
+/* state B: nine days, and the drawing does not change */
+.bldg.st-days .win,.bldg.st-locked .win{opacity:var(--o)}
+.bldg.st-days .leaf{opacity:.3}
+.bldg.st-days .leaf.l{transform:translateX(-23px)}
+.bldg.st-days .leaf.r{transform:translateX(23px)}
+.bldg.st-days .lock{fill:var(--ac)}
+.counter{display:flex;align-items:baseline;gap:9px;margin-bottom:12px;
+ font-variant-numeric:tabular-nums}
+.counter b{font-family:var(--disp);font-weight:600;font-size:34px;color:var(--tw);
+ line-height:1;min-width:1.1em}
+.counter span{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+ text-transform:uppercase;color:var(--tf)}
+.counter.hit b{color:var(--rd)}
+
+/* state C: everything at once */
+.bldg.st-locked.go .win{animation:redden .3s ease var(--d) forwards}
+@keyframes redden{to{fill:var(--rd);opacity:.92}}
+.bldg.st-locked .leaf{opacity:.3}
+.bldg.st-locked .leaf.l{transform:translateX(-23px)}
+.bldg.st-locked .leaf.r{transform:translateX(23px)}
+.bldg.st-locked .lock{fill:rgba(237,239,236,.22)}
+
+.dcap{font-size:13.5px;color:var(--tf);max-width:50ch;margin-top:2px}
+
+@media (prefers-reduced-motion:reduce){
+  .bldg .win{opacity:var(--o)}
+  .bldg .fig{opacity:1;transform:translate(200px,270px)}
+  .bldg .lock{fill:var(--ac)}
+  .bldg .leaf.l{transform:translateX(-23px)} .bldg .leaf.r{transform:translateX(23px)}
+  .bldg.st-locked .win{fill:var(--rd);opacity:.92}
+}
+
+/* documented record panel */
+.rec{margin:20px 0 0;max-width:360px;background:var(--sf2);border:1px solid var(--ln);
+ border-radius:11px;overflow:hidden}
+.rec .rh{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+ color:var(--tf);padding:11px 15px 10px;border-bottom:1px solid var(--ln)}
+.rr{display:flex;align-items:center;justify-content:space-between;gap:14px;
+ padding:11px 15px;font-family:var(--mono);font-size:12px;color:var(--tm);
+ border-bottom:1px solid rgba(237,239,236,.07)}
+.rr:last-child{border-bottom:0}
+.rr .v{color:var(--ac)}
+.rr.off{background:rgba(224,87,79,.07)}
+.rr.off span{color:var(--tw)}
+.rr.off .v{color:var(--rd)}
+
+/* big number */
+.big{font-family:var(--disp);font-weight:600;font-size:clamp(44px,13vw,70px);line-height:1;
+ letter-spacing:-.025em;color:var(--rd);margin:0 0 8px;font-variant-numeric:tabular-nums}
+.bigsub{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+ color:var(--tf);margin-bottom:22px}
+
+/* settings */
+.set .beat{color:var(--ac)}
+.set .beat i{background:var(--ac)}
+.ck{background:var(--sf);border:1px solid var(--ln);border-radius:11px;margin:10px 0;overflow:hidden}
+.ck.on{border-color:rgba(52,183,125,.45)}
+.ckh{display:flex;align-items:flex-start;gap:12px;padding:14px 16px}
+.cb{appearance:none;margin:0;flex:none;width:21px;height:21px;border-radius:6px;
+ border:1.5px solid rgba(237,239,236,.25);background:var(--sf2);cursor:pointer;position:relative;margin-top:1px}
+.cb:checked{background:var(--ac);border-color:var(--ac)}
+.cb:checked::after{content:"\2713";position:absolute;inset:0;display:flex;align-items:center;
+ justify-content:center;color:#07120d;font-size:12px;font-weight:700}
+.cb:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.ckt{font-size:15px;font-weight:500;cursor:pointer;line-height:1.4}
+.tg{appearance:none;background:none;border:0;cursor:pointer;color:var(--tm);
+ font-family:var(--body);font-size:13.5px;padding:2px 0 0;margin-left:auto;flex:none;
+ display:inline-flex;align-items:center;gap:7px;text-decoration:underline;
+ text-decoration-color:rgba(237,239,236,.22);text-underline-offset:3px}
+.tg:hover{color:var(--tw);text-decoration-color:var(--ac)}
+.tg .cv{color:var(--ac);transition:transform .2s;display:inline-block}
+.tg[aria-expanded="true"] .cv{transform:rotate(90deg)}
+.how{padding:0 16px 16px 49px;font-size:14px;color:var(--tm)}
+.how p{margin-bottom:10px;max-width:50ch}
+.how ol{margin:0;padding-left:18px}
+.how li{margin:6px 0;max-width:48ch}
+.how .inf{margin-top:12px;padding-top:10px;border-top:1px dashed rgba(237,239,236,.14);
+ font-size:13px;color:var(--tf);max-width:50ch}
+
+/* recap */
+.recap{padding:46px 0 0}
+.recap h2{font-family:var(--disp);font-weight:600;font-size:22px;margin-bottom:20px}
+.rc{background:var(--sf);border:1px solid var(--ln);border-radius:11px;padding:16px 18px;
+ margin-bottom:9px;display:flex;gap:13px}
+.rc i{width:7px;height:7px;border-radius:2px;background:var(--ac);flex:none;margin-top:8px}
+.rc p{font-size:14.5px;color:var(--tm)}
+.rc b{color:var(--tw);font-weight:500}
+
+.src{margin-top:26px}
+.src .body{padding-top:12px;display:none}
+.src .body.show{display:block}
+.src p{font-size:13px;color:var(--tf);max-width:60ch;line-height:1.65}
+.src p+p{margin-top:10px}
+.src b{color:var(--tm);font-weight:500}
+.src .tg{margin-left:0}
+
+@media (max-width:560px){
+  .how{padding-left:16px}
+  .rec{max-width:100%}
+  /* the entrance must fit one screen: all three answers above the fold */
+  .gate{padding:64px 0 4vh}
+  .gate .tag{margin-bottom:20px}
+  .gate h1{font-size:clamp(26px,7.6vw,34px);margin-bottom:14px}
+  .gate .sub{font-size:15.5px;margin-bottom:22px}
+  .gate .ask{margin-bottom:13px}
+  .gate .opts{gap:7px}
+  .gate .opt{padding:12px 14px;font-size:14.5px}
+}
+@media (max-width:560px) and (max-height:700px){
+  .gate h1{font-size:25px}
+  .gate .sub{font-size:14.5px;margin-bottom:16px}
+  .gate .opt{padding:10px 13px;font-size:14px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* plain list inside a payoff */
+.pay ul.plain{list-style:none;margin:10px 0 0;display:grid;gap:9px}
+.pay ul.plain li{position:relative;padding-left:20px;font-size:15px;color:var(--tm);max-width:54ch}
+.pay ul.plain li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;
+ border-radius:2px;background:var(--rd)}
+
+/* the one thing to do tonight */
+.tonight{margin-top:22px;padding:17px 19px;border-radius:12px;
+ background:rgba(52,183,125,.07);border:1px solid rgba(52,183,125,.32)}
+.tl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+ color:var(--ac);margin-bottom:9px}
+.tonight p{font-size:15px;color:var(--tm);max-width:56ch}
+.tonight b{color:var(--tw);font-weight:500}
+
+/* ten situations */
+.qitem{padding:24px 0;border-bottom:1px solid rgba(237,239,236,.09)}
+.qitem:last-of-type{border-bottom:0}
+.qn{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+ color:var(--tf);margin-bottom:9px}
+.qitem .q{margin-bottom:13px}
+.qitem .says{margin:0 0 14px}
+.qitem .q em{font-style:italic;color:var(--tm)}
+.qfb{margin-top:13px;padding:14px 16px;border-radius:10px;font-size:14.5px;color:var(--tm);
+ background:var(--sf);border:1px solid var(--ln);border-left:2px solid var(--ac);max-width:58ch;
+ display:none}
+.qfb.show{display:block;animation:fade .35s ease}
+.qfb.miss{border-left-color:var(--rd)}
+.qfb .vt{color:var(--ac)}
+.qfb.miss .vt{color:var(--rd)}
+
+.result{margin-top:28px;padding:22px 24px;border-radius:13px;background:var(--sf);
+ border:1px solid var(--ln)}
+.result.pass{border-color:rgba(52,183,125,.45)}
+.result.fail{border-color:rgba(224,87,79,.45)}
+.rscore{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.rscore b{font-family:var(--disp);font-weight:600;font-size:42px;line-height:1;color:var(--tw);
+ font-variant-numeric:tabular-nums}
+.result.pass .rscore b{color:var(--ac)}
+.result.fail .rscore b{color:var(--rd)}
+.rscore span{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;
+ text-transform:uppercase;color:var(--tf)}
+.result p{font-size:15px;color:var(--tm);max-width:56ch}
+.again{appearance:none;margin-top:16px;cursor:pointer;font:inherit;font-size:14.5px;
+ background:none;color:var(--tw);border:1px solid var(--ln);border-radius:9px;padding:10px 16px}
+.again:hover{border-color:var(--ac);color:var(--ac)}
+.again.next{margin-top:14px}
+.again[hidden]{display:none}
+.again:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+
+/* ---------- the owl ----------
+   Her head turns because an owl's eyes are fixed in their sockets and cannot
+   move, so looking sideways means turning the whole head. That is the course's
+   point about having to actually look, and it is also why she is an owl. */
+.owl{display:block;overflow:visible}
+.owl .bodyp{fill:#33463D} .owl .wing{fill:#2B3C34} .owl .tuft{fill:#33463D}
+.owl .face,.owl .nape{fill:#48614F} .owl .lid{fill:#48614F}
+.owl .sclera{fill:#EDEFEC} .owl .iris{fill:var(--ac);transition:fill .3s}
+.owl .pupil{fill:#101A15} .owl .glint{fill:#EDEFEC;opacity:.9}
+.owl .beak{fill:var(--gd)}
+.owl .nape{opacity:0}
+.owl .head{transform-box:fill-box;transform-origin:50% 94%;transition:transform .5s cubic-bezier(.3,.9,.3,1)}
+.owl .fg{transform-box:fill-box;transform-origin:50% 50%}
+.owl .lid{transform-box:fill-box;transform-origin:50% 0%;transform:scaleY(0)}
+.owl.noperch .perch,.owl.noperch .foot{display:none}
+.owl .perch{stroke:rgba(237,239,236,.22);stroke-width:2;stroke-linecap:round}
+
+.owl.look .head{transform:rotate(-8deg)}
+.owl.alarm .iris{fill:var(--rd)}
+.owl.alarm .head{transform:rotate(4deg)}
+
+/* idle blink, the two lids a hair out of step so she looks alive and not mechanical */
+.owl.blink .eye.l .lid{animation:lidblink 6.5s ease-in-out infinite}
+.owl.blink .eye.r .lid{animation:lidblink 6.5s ease-in-out .06s infinite}
+@keyframes lidblink{0%,93%,100%{transform:scaleY(0)}95.4%,96.8%{transform:scaleY(1)}}
+
+/* one eye only, for the moment somebody gets an answer right */
+.owl.wink .eye.r .lid{animation:lidwink .6s ease-in-out both}
+.owl.wink .eye.l .lid{animation:none;transform:scaleY(0)}
+@keyframes lidwink{0%,100%{transform:scaleY(0)}35%,62%{transform:scaleY(1)}}
+
+/* the full turn: face edge-on, back of the head, and round again */
+.owl.turn .fg{animation:fgturn 2.9s cubic-bezier(.5,0,.3,1) both}
+.owl.turn .nape{animation:napeIn 2.9s linear both}
+.owl.turn .head{animation:headlean 2.9s cubic-bezier(.5,0,.3,1) both}
+@keyframes fgturn{0%{transform:scaleX(1)}21%{transform:scaleX(.03)}
+ 70%{transform:scaleX(.03)}100%{transform:scaleX(1)}}
+@keyframes napeIn{0%,16%{opacity:0}23%,68%{opacity:1}76%,100%{opacity:0}}
+@keyframes headlean{0%{transform:rotate(0)}21%{transform:rotate(-7deg)}
+ 48%{transform:rotate(-11deg)}70%{transform:rotate(-5deg)}100%{transform:rotate(0)}}
+
+/* her perched on the roof of the building */
+/* the art box is capped to the drawing itself, so the owl can be placed against
+   the roof in the drawing's own percentages rather than the column's */
+.art{position:relative;width:100%;max-width:400px}
+.perched{position:absolute;width:9.5%;left:47%;top:2.2%;transform:translateX(-50%);
+ opacity:0;transition:opacity .7s ease .5s}
+.art.anim .perched{opacity:1}
+
+/* her saying something */
+.says{display:flex;gap:14px;align-items:flex-start;margin:16px 0 4px;max-width:600px}
+.says .owl{width:56px;flex:none;margin-top:2px}
+.bub{position:relative;background:var(--sf);border:1px solid var(--ln);border-radius:14px;
+ padding:13px 16px;font-size:15.5px;color:var(--tw);max-width:46ch;line-height:1.5}
+.bub:before,.bub:after{content:"";position:absolute;left:-8px;top:18px;
+ border:8px solid transparent;border-left:0;border-right-color:var(--ln)}
+.bub:after{left:-6.6px;border-right-color:#1b261f}
+.bub b{font-weight:500}
+.says.warn .bub:before{border-right-color:rgba(224,87,79,.45)}
+@media (max-width:420px){.says{gap:11px}.says .owl{width:46px}.bub{font-size:15px;padding:12px 14px}}
+@media (prefers-reduced-motion:reduce){
+  .owl.turn .fg,.owl.turn .nape,.owl.turn .head,.owl.blink .lid{animation:none}
+  .perched{opacity:1;transition:none}
+}
+
+
+/* ---------- she flies in and lands ---------- */
+.owl .flywings{display:none}
+.owl .fw{fill:#2B3C34;stroke:#33463D;stroke-width:2;stroke-linejoin:round}
+.owl.flying .flywings{display:block}
+.owl.flying .wing{display:none}
+.owl .fw.l{transform-box:fill-box;transform-origin:92% 28%}
+.owl .fw.r{transform-box:fill-box;transform-origin:8% 28%}
+.owl.flying .fw.l{animation:flapL .34s ease-in-out infinite}
+.owl.flying .fw.r{animation:flapR .34s ease-in-out infinite}
+@keyframes flapL{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(24deg)}}
+@keyframes flapR{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-24deg)}}
+
+/* the corner she lives in. Bottom right, because every control on the page is
+   left aligned and she must never sit on top of something tappable. */
+.dock{position:fixed;right:16px;bottom:16px;z-index:40;display:flex;align-items:flex-end;
+ gap:11px;pointer-events:none;opacity:0}
+.dock.in{opacity:1}
+.dock .owl{width:62px;flex:none;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
+.dock.arriving .owl,.railowl.arriving .owl{animation:flyin 2.3s cubic-bezier(.3,.5,.3,1) both}
+@keyframes flyin{
+  0%{transform:translate(-62vw,-64vh) rotate(16deg) scale(.5);opacity:0}
+  9%{opacity:1}
+  42%{transform:translate(-33vw,-32vh) rotate(13deg) scale(.72)}
+  72%{transform:translate(-11vw,-9vh) rotate(9deg) scale(.92)}
+  89%{transform:translate(0,2.4vh) rotate(-5deg) scale(1.05)}
+  96%{transform:translate(0,-.7vh) rotate(2deg) scale(1)}
+  100%{transform:translate(0,0) rotate(0) scale(1);opacity:1}
+}
+.dock .say{display:none;order:-1;background:#1b261f;border:1px solid var(--ln);border-radius:14px;
+ padding:12px 15px;font-size:14.5px;line-height:1.48;color:var(--tw);max-width:290px;
+ box-shadow:0 10px 30px rgba(0,0,0,.4);position:relative;
+ opacity:0;transform:translateY(6px) scale(.97);transform-origin:100% 100%;
+ transition:opacity .3s,transform .3s;pointer-events:none}
+.dock .say.on{display:block;opacity:1;transform:none;pointer-events:auto}
+.dock .say:before,.dock .say:after{content:"";position:absolute;right:-8px;bottom:18px;
+ border:8px solid transparent;border-right:0;border-left-color:var(--ln)}
+.dock .say:after{right:-6.6px;border-left-color:#1b261f}
+.dock .say b{font-weight:500;color:#fff}
+@media (max-width:560px){
+  .dock{right:12px;bottom:12px}
+  .dock .owl{width:48px}
+  .dock .say{max-width:calc(100vw - 96px);font-size:14px;padding:11px 13px}
+}
+@media (prefers-reduced-motion:reduce){
+  .dock.arriving .owl{animation:none}
+  .owl.flying .fw.l,.owl.flying .fw.r{animation:none}
+}
+
+
+/* ---------- the rail ----------
+   On a wide screen she lives in a column of her own, which is where the live
+   course already keeps its title block. On a narrow one there is no room for a
+   column, so she goes back to the corner. */
+.shell{display:flex;align-items:flex-start}
+.rail{display:none}
+@media (min-width:1000px){
+  .top{display:none}
+  .shell{min-height:100vh}
+  .rail{display:flex;flex-direction:column;width:310px;flex:none;position:sticky;top:0;
+   height:100vh;padding:40px 30px 30px;border-right:1px solid rgba(237,239,236,.09);
+   background:linear-gradient(170deg,#16211B,#121B16)}
+  main{max-width:660px;padding:0 44px 120px;margin:0}
+  .dock{display:none}
+}
+.rail .mark{font-family:var(--disp);font-weight:600;font-size:16px;margin-bottom:38px}
+.rail .mark span{color:var(--ac)}
+.rail .rk{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+ color:var(--ac);margin-bottom:12px;line-height:1.6}
+.rail h2.rt{font-family:var(--disp);font-weight:600;font-size:30px;line-height:1.08;
+ margin-bottom:14px}
+.rail .rd{font-size:13.5px;line-height:1.55;color:var(--tm)}
+.rail .rsegs{display:flex;gap:4px;margin-top:22px}
+.rail .rxp{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--gd);margin-top:14px;
+ font-variant-numeric:tabular-nums}
+.railowl{margin-top:auto;padding-top:26px}
+.railowl .owl{width:76px;margin-bottom:12px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.4))}
+.railowl .say{background:#1b261f;border:1px solid var(--ln);border-radius:13px;padding:12px 14px;
+ font-size:14px;line-height:1.5;color:var(--tw);opacity:0;transform:translateY(5px);
+ transition:opacity .3s,transform .3s}
+.railowl .say.on{opacity:1;transform:none}
+.railowl .say b{font-weight:500}
+
+/* ---------- gating ---------- */
+.scene.locked{opacity:.17;filter:blur(1.6px);pointer-events:none;user-select:none;
+ transition:opacity .6s,filter .6s}
+.scene.locked *{animation-play-state:paused!important}
+.go-on{appearance:none;cursor:pointer;font:inherit;font-size:14.5px;width:100%;
+ background:rgba(52,183,125,.1);color:var(--tw);border:1px solid rgba(52,183,125,.5);
+ border-radius:10px;padding:11px 14px;margin-top:11px;text-align:left;
+ display:flex;align-items:center;justify-content:space-between;gap:10px}
+.go-on:hover{background:rgba(52,183,125,.18)}
+.go-on:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.go-on i{font-style:normal;color:var(--ac)}
+.go-on[hidden]{display:none}
+.dock .say .go-on{margin-top:10px}
+
+
+/* ---------- how sure were you ----------
+   Asked before the answer, not after. An error made confidently is the one
+   that gets corrected and stays corrected, and the reader only notices the gap
+   if they committed to it first. Same step and same wording as the rest of the
+   library, so it reads as one course and not two. */
+.conf{display:none;margin-top:14px;padding:14px 16px;border-radius:11px;
+ background:rgba(217,169,75,.07);border:1px solid rgba(217,169,75,.32);max-width:560px}
+.conf.show{display:block;animation:fade .3s ease}
+.conf-q{font-size:14.5px;color:var(--tw);margin-bottom:11px;font-weight:500}
+.conf-row{display:flex;gap:8px;flex-wrap:wrap}
+.conf-b{appearance:none;cursor:pointer;font:inherit;font-size:14px;
+ background:var(--sf);color:var(--tw);border:1px solid var(--ln);border-radius:9px;padding:9px 14px}
+.conf-b:hover{border-color:var(--gd);color:var(--gd)}
+.conf-b:focus-visible{outline:2px solid var(--gd);outline-offset:2px}
+.opt.picked{border-color:rgba(217,169,75,.6);background:rgba(217,169,75,.1)}
+.opt.picked .mk{background:var(--gd);border-color:var(--gd)}
+</style>
+</head><body>
+
+<header class="top"><div class="in">
+  <div class="brow">
+    <div class="mark">Defence<span>Lab</span></div>
+    <div class="xp" id="xp">20 XP</div>
+  </div>
+  <div class="segs" id="segs"></div>
+  <div class="cap" id="stagecap"></div>
+</div></header>
+
+<template id="owl-tpl">
+<svg class="owl" viewBox="0 0 200 206" role="img" aria-label="An owl">
+  <line class="perch" x1="46" y1="196" x2="154" y2="196"/>
+  <path class="foot" d="M80,176 l0,16 M74,192 l12,0" stroke="#D9A94B" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+  <path class="foot" d="M120,176 l0,16 M114,192 l12,0" stroke="#D9A94B" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+  <path class="bodyp" d="M100,18 C70,18 48,40 48,74 C48,94 44,106 44,126
+   C44,160 68,184 100,184 C132,184 156,160 156,126
+   C156,106 152,94 152,74 C152,40 130,18 100,18 Z"/>
+  <path class="wing" d="M50,86 C38,110 38,148 58,170 C66,146 62,110 50,86 Z"/>
+  <path class="wing" d="M150,86 C162,110 162,148 142,170 C134,146 138,110 150,86 Z"/>
+  <g class="flywings">
+    <path class="fw l" d="M58,84 C26,54 -16,54 -56,76 C-50,90 -36,100 -18,105 C2,111 30,113 50,108 C56,100 59,92 58,84 Z"/>
+    <path class="fw r" d="M142,84 C174,54 216,54 256,76 C250,90 236,100 218,105 C198,111 170,113 150,108 C144,100 141,92 142,84 Z"/>
+  </g>
+  <g>
+    <path d="M88,132 l6,7 6,-7 6,7 6,-7" stroke="#4A6358" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M82,148 l6,7 6,-7 6,7 6,-7 6,7 6,-7" stroke="#4A6358" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M88,164 l6,7 6,-7 6,7 6,-7" stroke="#4A6358" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g class="head">
+    <path class="tuft" d="M63,34 L48,9 L84,24 Z"/>
+    <path class="tuft" d="M137,34 L152,9 L116,24 Z"/>
+    <g class="fg">
+      <path class="face" d="M100,40 C88,26 62,26 56,50 C50,74 60,102 100,128
+       C140,102 150,74 144,50 C138,26 112,26 100,40 Z"/>
+      <g class="eye l">
+        <circle class="sclera" cx="78" cy="72" r="20"/>
+        <circle class="iris" cx="78" cy="72" r="13"/>
+        <circle class="pupil" cx="78" cy="72" r="6.2"/>
+        <circle class="glint" cx="81.5" cy="67.5" r="2.4"/>
+        <rect class="lid" x="57" y="51" width="42" height="42" rx="8"/>
+      </g>
+      <g class="eye r">
+        <circle class="sclera" cx="122" cy="72" r="20"/>
+        <circle class="iris" cx="122" cy="72" r="13"/>
+        <circle class="pupil" cx="122" cy="72" r="6.2"/>
+        <circle class="glint" cx="125.5" cy="67.5" r="2.4"/>
+        <rect class="lid" x="101" y="51" width="42" height="42" rx="8"/>
+      </g>
+      <path class="beak" d="M100,86 C104,86 108,89 108,94 C108,101 104,108 100,112
+       C96,108 92,101 92,94 C92,89 96,86 100,86 Z"/>
+    </g>
+    <path class="nape" d="M100,38 C86,24 58,24 53,50 C48,76 58,104 100,132
+     C142,104 152,76 147,50 C142,24 114,24 100,38 Z"/>
+  </g>
+</svg>
+</template>
+
+<template id="bldg-tpl">
+<svg class="bldg" viewBox="0 0 400 290" role="img">
+  <line class="ground" x1="18" y1="270.5" x2="382" y2="270.5"/>
+  <rect class="mass" x="62" y="140" width="58" height="130"/>
+  <rect class="mass" x="120" y="58" width="160" height="212"/>
+  <rect class="mass" x="280" y="158" width="52" height="112"/>
+  <rect class="mass" x="168" y="42" width="40" height="16"/>
+  <rect class="sign" x="126" y="61" width="148" height="18"/>
+  <text class="signtext" x="200" y="74">CHANGE HEALTHCARE</text>
+  <g class="wins"></g>
+  <line class="canopy" x1="162" y1="230.5" x2="238" y2="230.5"/>
+  <rect class="doorway" x="176" y="231" width="48" height="39"/>
+  <rect class="leaf l" x="176" y="231" width="24" height="39"/>
+  <rect class="leaf r" x="200" y="231" width="24" height="39"/>
+  <circle class="lock" cx="200" cy="250" r="3.2"/>
+  <g class="fig">
+    <circle cx="0" cy="-27" r="5.4"/>
+    <path d="M-6.4,-20 L6.4,-20 L5.1,-7.5 L-5.1,-7.5 Z"/>
+    <rect x="-4.6" y="-7.5" width="3.5" height="8"/>
+    <rect x="1.1" y="-7.5" width="3.5" height="8"/>
+  </g>
+</svg>
+</template>
+
+<div class="shell">
+<aside class="rail">
+  <div class="mark">Defence<span>Lab</span></div>
+  <div class="rk">Course &middot; General awareness</div>
+  <h2 class="rt">How a breach unfolds</h2>
+  <p class="rd">One working password, nine days nobody noticed, and the single setting that would have stopped it.</p>
+  <div class="rsegs" id="rsegs"></div>
+  <div class="rxp" id="rxp">0 XP</div>
+  <div class="railowl" id="railowl"><div class="say" id="rail-say"></div></div>
+</aside>
+<main>
+
+  <!-- ENTRANCE -->
+  <section class="gate" id="gate">
+    <div class="tag"><b>DefenceLab</b> &middot; before we start</div>
+    <h1>Think of your work password.</h1>
+    <p class="sub">A stranger types it, correctly, into the page you use to log into work from home.</p>
+    <p class="ask">What stops them getting in?</p>
+    <div class="opts" id="g-opts">
+      <button class="opt"><span class="mk"></span>It is not your computer, so the login is refused</button>
+      <button class="opt"><span class="mk"></span>Somebody in IT sees it and checks whether it is really you</button>
+      <button class="opt" data-ok="1"><span class="mk"></span>One setting, and only if it was switched on beforehand</button>
+    </div>
+    <div class="pay" id="g-pay">
+      <span class="vt" id="g-vt">Only the third</span>
+      <p>Nothing is watching a correct password arrive, because a correct password is exactly what the page is waiting for. Whose computer it came from makes no difference, and nobody gets told. The only thing that stops it is a second step after the password, which is a setting somebody has to switch on in advance rather than a person paying attention at the time.</p>
+      <p>A company that handles about <b>a third of American patient records</b> had that setting switched off. What follows is the nine days after someone used a password there, and the three settings that close the same door on your own accounts.</p>
+      <div class="cue"><i>&darr;</i> Keep going</div>
+    </div>
+  </section>
+
+  <!-- 1 -->
+  <section class="scene" data-stage="12 February &middot; the way in">
+    <div class="beat"><i></i>12 February &middot; the way in</div>
+    <div class="art" data-bldg data-anim data-owl="roof"></div>
+    <p class="sit"><b>Change Healthcare</b> moves the paperwork between your doctor, your pharmacy and whoever pays. About a third of American patient records go through it.</p>
+    <p class="sit">In February 2024 somebody outside had a working employee password for the page staff used from home.</p>
+    <div class="dec" data-k="s1">
+      <p class="q">One setting on that page would have made the stolen password useless. Which of these is it?</p>
+      <div class="opts">
+        <button class="opt"><span class="mk"></span>A longer and more complex password policy</button>
+        <button class="opt" data-ok="1"><span class="mk"></span>Multi-factor authentication, a second step after the password</button>
+        <button class="opt"><span class="mk"></span>Antivirus on every company laptop</button>
+      </div>
+      <div class="pay">
+        <span class="vt">What the testimony says</span>
+        <p>A length rule changes what a password looks like, not what happens once somebody else is holding it. Antivirus guards the computer rather than the door. The company's chief executive told Congress what was missing in a single sentence.</p>
+        <div class="rec">
+          <div class="rh">The login page &middot; what it asked for</div>
+          <div class="rr"><span>username</span><span class="v">required</span></div>
+          <div class="rr"><span>password</span><span class="v">required</span></div>
+          <div class="rr off"><span>second step</span><span class="v">not switched on</span></div>
+        </div>
+        <p data-say="That third row is the whole breach. There was nothing for anybody to miss, because the page asked for a password and got the right one."></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="scene" data-stage="Nine days &middot; unseen">
+    <div class="beat"><i></i>Nine days &middot; unseen</div>
+    <div class="counter" id="daycount"><b>1</b><span>day inside</span></div>
+    <div class="art" data-bldg="days" data-anim></div>
+    <p class="sit" data-say="turn|Nine days. I looked everywhere, and I do mean everywhere, because my eyes do not move in my head and I have to turn the whole thing. <b>There was nothing to find.</b>">Nine days passed, and nobody noticed anything.</p>
+    <div class="dec" data-k="s2" data-poll="1">
+      <p class="q">Be honest. If somebody were signed in to your own accounts right now, how long before you noticed?</p>
+      <div class="opts">
+        <button class="opt"><span class="mk"></span>Within a day</button>
+        <button class="opt"><span class="mk"></span>Eventually, from something that looked odd</button>
+        <button class="opt"><span class="mk"></span>Probably never</button>
+      </div>
+      <div class="pay">
+        <span class="vt note">What is actually the case</span>
+        <p>Almost nobody notices, because somebody signed in with the right password is not doing anything that looks wrong. Those nine days were an ordinary working week for everyone there, while he read files and worked out what the company had.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="scene" data-stage="21 February &middot; the lock">
+    <div class="beat"><i></i>21 February &middot; the lock</div>
+    <div class="art" data-bldg="locked" data-anim></div>
+    <p data-say="alarm|Now there is something to see. Nine days too late to be useful."></p>
+    <p class="sit">Pharmacies could not check what a patient's insurance covered, and some people went home without their prescription. Paying the <span class="n">$22 million</span> was the chief executive's own decision, he told the Senate, and one of the hardest he had made.</p>
+    <div class="dec" data-k="s3">
+      <p class="q">What does paying actually get back?</p>
+      <div class="opts">
+        <button class="opt"><span class="mk"></span>The files, because the attackers delete their copy once they are paid</button>
+        <button class="opt" data-ok="1"><span class="mk"></span>The systems, while the copies they already took stay taken</button>
+        <button class="opt"><span class="mk"></span>Nothing, because copies of the systems would have restored everything anyway</button>
+      </div>
+      <div class="pay">
+        <span class="vt">Two different problems</span>
+        <p>Locking the files and copying them are two different problems, and the money addresses only the first. The files were read and copied during the nine days before anything locked, and no payment makes a copy stop existing. Spare copies of everything behave the same way: they get the company running again and do nothing about what has already gone.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="scene" data-stage="The cost">
+    <div class="beat"><i></i>The cost</div>
+    <div class="big">$2.3&ndash;2.45B</div>
+    <div class="bigsub">UnitedHealth's own estimate of the 2024 impact</div>
+    <div class="dec" data-k="s4">
+      <p class="q">Looking at the whole chain, which step would have closed this particular path?</p>
+      <div class="opts">
+        <button class="opt" data-ok="1"><span class="mk"></span>A second step on the page staff logged into from home</button>
+        <button class="opt"><span class="mk"></span>Better security equipment on the company network</button>
+        <button class="opt"><span class="mk"></span>Teaching staff to recognise the warning on screen</button>
+        <button class="opt"><span class="mk"></span>Keeping spare copies of everything more often</button>
+      </div>
+      <div class="pay">
+        <span class="vt">The point</span>
+        <p>The second step is the only one of the four acting at the place the chain actually turned, which was the moment somebody typed the password. The other three all come into play after that, which is why none of them was in a position to help. Being exact about what it buys: it closes this way in, not every way in.</p>
+        <p>The figure above is the company's own accounting of recovery and lost business for the year. It does not include the penalties or the lawsuits that followed.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="scene" data-stage="Why this keeps happening">
+    <div class="beat"><i></i>Why this keeps happening</div>
+    <p class="sit" data-say="That was not one unusually careless company. It is the ordinary shape of the thing.">Change Healthcare was not an unusually careless company. This is the ordinary shape of the thing, which is easier to believe with a number attached.</p>
+    <div class="dec" data-k="s5">
+      <p class="q">Of all the breaches studied in Verizon's 2024 report, how many involved a person making a mistake or being tricked?</p>
+      <div class="opts">
+        <button class="opt"><span class="mk"></span>About one in ten</button>
+        <button class="opt"><span class="mk"></span>About a third</button>
+        <button class="opt" data-ok="1"><span class="mk"></span>About two in three</button>
+      </div>
+      <div class="pay">
+        <span class="vt">Sixty-eight percent</span>
+        <p>This is not a statement that people are careless. Software is good at stopping bad code and has no way to stop a reasonable-looking decision, so the decisions are where everything ends up. The same report puts the median time to fall for a phishing message at under a minute.</p>
+        <p>The gap is nearly always one of three ordinary things:</p>
+        <ul class="plain">
+          <li>Nobody ever told you what to look for.</li>
+          <li>The update got postponed again, and then again.</li>
+          <li>Somebody was good at talking to you, and the message arrived on a bad day.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="scene" data-stage="Why this company">
+    <div class="beat"><i></i>Why this company</div>
+    <p class="sit">Of all the places to go after, somebody picked the company in the middle rather than any of the hospitals, pharmacies or insurers at either end of it.</p>
+    <div class="dec" data-k="s6">
+      <p class="q">Why would that be the better target?</p>
+      <div class="opts">
+        <button class="opt"><span class="mk"></span>Hospitals are better defended than payment companies</button>
+        <button class="opt" data-ok="1"><span class="mk"></span>One way in reaches everybody the company serves</button>
+        <button class="opt"><span class="mk"></span>Payment companies keep more money on hand</button>
+      </div>
+      <div class="pay">
+        <span class="vt">One door, thousands of buildings</span>
+        <p>Attacking a hospital gets you a hospital. Attacking the company every hospital depends on gets you all of them, which is why 15 percent of the breaches in that report came through a supplier.</p>
+        <p>Nothing exotic opened the door either. Over the last ten years of the same report, 31 percent of breaches involved a stolen login, which makes it the most ordinary way in there is.</p>
+        <p>Wherever you work, your employer is somebody else's supplier, and your login is one of the doors into that.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- settings -->
+  <section class="scene set" data-stage="Your settings">
+    <div class="beat"><i></i>Your settings</div>
+    <p class="sit">The breach ran through settings that were not turned on. These take a few minutes each, and the first one is the whole story in a single switch.</p>
+
+    <div class="ck">
+      <div class="ckh">
+        <input type="checkbox" class="cb" id="c1">
+        <label class="ckt" for="c1">Turn on the second step for your email and your bank</label>
+        <button class="tg" aria-expanded="false" data-d="h1"><span class="cv">&rsaquo;</span> How</button>
+      </div>
+      <div class="how" id="h1" hidden>
+        <p>This is the setting that was missing in the story, and it is what makes a stolen password not enough on its own.</p>
+        <ol>
+          <li>Open the security settings of the account</li>
+          <li>Look for 2-Step Verification, Two-factor authentication or Multi-factor authentication, which are three names for the same thing</li>
+          <li>Turn it on. A code from an app on your phone is the safest, and a code by text message is a reasonable place to start</li>
+        </ol>
+        <div class="inf">Start with your main email address. Whoever controls that can reset the password of nearly everything else you own.</div>
+      </div>
+    </div>
+
+    <div class="ck">
+      <div class="ckh">
+        <input type="checkbox" class="cb" id="c2">
+        <label class="ckt" for="c2">Give your work password to nothing but work</label>
+        <button class="tg" aria-expanded="false" data-d="h2"><span class="cv">&rsaquo;</span> How</button>
+      </div>
+      <div class="how" id="h2" hidden>
+        <p>Nobody ever said how the password in this story was obtained, so reusing one is not the known cause here. It is still worth doing, because reusing a password is what turns one website's bad day into a problem for every other account that shares it.</p>
+        <ol>
+          <li>Give work email and banking passwords that exist nowhere else</li>
+          <li>Let a password manager generate and remember them, so you only have to know one</li>
+          <li>Change any password you have used in more than one place</li>
+        </ol>
+        <div class="inf">Many companies already provide a password manager, which is worth asking about before paying for one yourself.</div>
+      </div>
+    </div>
+
+    <div class="ck">
+      <div class="ckh">
+        <input type="checkbox" class="cb" id="c3">
+        <label class="ckt" for="c3">Let your phone and laptop update themselves</label>
+        <button class="tg" aria-expanded="false" data-d="h3"><span class="cv">&rsaquo;</span> How</button>
+      </div>
+      <div class="how" id="h3" hidden>
+        <p>Updates are mostly repairs to holes that are already public knowledge. Postponing one leaves a hole open that somebody has already published directions to.</p>
+        <ol>
+          <li>Find the software update screen in your settings and switch on whatever installs updates automatically</li>
+          <li>Do the same on your phone, where it is usually under system or general settings</li>
+          <li>If a device is old enough that it stopped receiving updates at all, it will not get safer from here</li>
+        </ol>
+        <div class="inf">The exact path moves with every version, so if the wording on your screen does not match, search your settings for the word update rather than hunting through menus.</div>
+      </div>
+    </div>
+
+    <div class="ck">
+      <div class="ckh">
+        <input type="checkbox" class="cb" id="c4">
+        <label class="ckt" for="c4">Read the address before you type a password into anything</label>
+        <button class="tg" aria-expanded="false" data-d="h4"><span class="cv">&rsaquo;</span> How</button>
+      </div>
+      <div class="how" id="h4" hidden>
+        <p>A page that wants your password is worth two seconds of looking at. The part that matters is the name immediately before the first single slash, and everything else on the page can be copied perfectly.</p>
+        <ol>
+          <li>Before typing a password, read the address and check that name is the one you meant</li>
+          <li>If a link arrived in a message, go to the site the way you normally would instead of following it</li>
+          <li>If the address is shortened, treat it as unreadable, because that is what it is</li>
+        </ol>
+        <div class="inf">This is the single habit the rest of this library keeps coming back to, and the one the practice exercises spend the most time on.</div>
+      </div>
+    </div>
+
+    <div class="ck">
+      <div class="ckh">
+        <input type="checkbox" class="cb" id="c5">
+        <label class="ckt" for="c5">Save your IT or security contact in your phone</label>
+        <button class="tg" aria-expanded="false" data-d="h5"><span class="cv">&rsaquo;</span> How</button>
+      </div>
+      <div class="how" id="h5" hidden>
+        <p>Most of the damage after a mistake happens in the hours somebody spends being embarrassed about it. A report in the first ten minutes is a different event from the same report three days later.</p>
+        <ol>
+          <li>Find the email address or number your IT or security team uses</li>
+          <li>Save it now, and note how to reach them outside working hours</li>
+        </ol>
+        <div class="inf">Nobody has ever been disciplined for reporting something that turned out to be nothing. The other way round happens all the time.</div>
+      </div>
+    </div>
+
+    <div class="tonight">
+      <div class="tl">Worth doing tonight</div>
+      <p>Put your email address into <b>haveibeenpwned.com</b>. It checks that address against the contents of breaches that are already public, and tells you which ones it turned up in. Anything it finds is a password that other people already have, so those are the ones to change first.</p>
+    </div>
+  </section>
+
+  <!-- quiz -->
+  <section class="scene quiz" id="quiz" data-stage="Ten situations">
+    <div class="beat"><i></i>Ten situations</div>
+    <p class="sit">Ten things that could happen to you this week. Pick the safest move in each. <b>Seven correct passes the module.</b></p>
+    <div id="qbox"></div>
+    <div class="result" id="qresult" hidden>
+      <div class="rscore"><b id="rnum">0</b><span>out of 10</span></div>
+      <p id="rtext"></p>
+      <button class="again" id="qagain">Start the ten again</button>
+    </div>
+  </section>
+
+  <!-- recap -->
+  <section class="recap">
+    <h2>Three things worth keeping</h2>
+    <p data-say="wink|Everything above comes down to these three. If you only keep one, keep the second."></p>
+    <div class="rc"><i></i><p><b>A password is a single lock.</b> Once somebody else has a working one it opens the door and raises nothing, because from the inside a correct login looks exactly like the person it belongs to.</p></div>
+    <div class="rc"><i></i><p><b>A second step is what breaks that.</b> It asks for something the password thief does not have, it takes a minute to switch on, and it was the setting missing here.</p></div>
+    <div class="rc"><i></i><p><b>Intruders are not in a hurry.</b> The damage came nine days after the way in was found, which is why what is already switched on matters more than how quickly anybody spots something.</p></div>
+
+    <div class="src">
+      <button class="tg" aria-expanded="false" data-d="srcbody"><span class="cv">&rsaquo;</span> Sources, and what is not sourced</button>
+      <div class="body" id="srcbody" hidden>
+        <p><b>Sourced.</b> Witty's written testimony to the House Energy and Commerce Subcommittee on Oversight and Investigations, 1 May 2024, for the compromised credentials, the Citrix portal, the absence of multi-factor authentication, 12 February as the date of first access and the ransomware nine days later. His evidence to the Senate Finance Committee the same day for the $22 million ransom and the decision to pay it. UnitedHealth's quarterly reporting for the $2.3 to $2.45 billion 2024 impact. The Senate Finance Committee chairman's opening statement for about a third of American patient records. Verizon's 2024 Data Breach Investigations Report for 68 percent of breaches involving a non-malicious human element, 15 percent involving a third party, 31 percent of breaches over ten years involving stolen credentials, and the median time to fall for a phishing message.</p>
+        <p><b>Worth knowing about one of those numbers.</b> Verizon changed how it counts the human element in the 2024 report, removing malicious insiders. The widely quoted 74 percent is the older formula from the 2023 report; on the new one the same year would have been 76 percent, and the current figure is 68 percent. They are not three different findings.</p>
+        <p><b>Not sourced.</b> How the credentials were obtained, which UnitedHealth has not disclosed. The building is a stand-in for an office and not a picture of the company's premises. The sign-in panel sets out what the page asked for, as described in testimony, and is not a picture of that page.</p>
+      </div>
+    </div>
+  </section>
+</main>
+</div>
+
+<div class="dock" id="dock" aria-live="polite">
+  <div class="say" id="dock-say"></div>
+</div>
+
+
+<script>
+(function(){
+  var xp=0, seen={};
+  var xpEl={set textContent(v){
+     var a=document.getElementById("xp"), b=document.getElementById("rxp");
+     if(a)a.textContent=v; if(b)b.textContent=v;
+   }, get textContent(){return (xp+" XP");}};
+
+  function reveal(dec, right, poll){
+    var opts=dec.querySelectorAll(".opt"), pay=dec.querySelector(".pay"), vt=pay.querySelector(".vt");
+    if(poll){
+      opts.forEach(function(o){if(!o.classList.contains("sel"))o.classList.add("dim");});
+    }else if(!right && vt){
+      vt.classList.add("miss"); vt.textContent="Not that one";
+    }
+    pay.classList.add("show");
+    if(!seen[dec.dataset.k||"gate"]){seen[dec.dataset.k||"gate"]=true; xp+=20; xpEl.textContent=xp+" XP";}
+  }
+
+  function wire(dec){
+    var poll=dec.dataset.poll==="1";
+    var opts=dec.querySelectorAll(".opt");
+    var conf=null;
+    if(!poll){
+      conf=confBlock(function(c){ settle(dec.__pick, c); });
+      dec.insertBefore(conf, dec.querySelector(".pay"));
+    }
+    function settle(opt,c){
+      var right=opt.dataset.ok==="1";
+      opts.forEach(function(o){
+        o.classList.remove("picked");
+        if(o.dataset.ok==="1"){o.classList.add("ok");o.querySelector(".mk").textContent="\u2713";}
+        else if(o===opt){o.classList.add("no");o.querySelector(".mk").textContent="\u2715";}
+        else{o.classList.add("dim");}
+      });
+      var pay=dec.querySelector(".pay"), vt=pay.querySelector(".vt");
+      if(c && CONF_LINE[c]){
+        var lead=document.createElement("p");
+        lead.innerHTML=CONF_LINE[c][right?"ok":"no"];
+        pay.insertBefore(lead, vt.nextSibling);
+      }
+      reveal(dec,right,false);
+      var sc=dec.closest(".scene");
+      if(sc){var i=scenes.indexOf(sc); if(i>=0) markSeg(segEls[i]);}
+      if(sc && window.__offerNext) setTimeout(function(){window.__offerNext(sc);},1400);
+      if(window.__owlReact) window.__owlReact(right);
+    }
+    opts.forEach(function(opt){
+      opt.addEventListener("click",function(){
+        if(dec.classList.contains("done")) return;
+        dec.classList.add("done");
+        var right=opt.dataset.ok==="1";
+        if(conf){
+          dec.__pick=opt;
+          opt.classList.add("picked"); opt.querySelector(".mk").textContent="\u2713";
+          conf.classList.add("show");
+          conf.scrollIntoView({behavior:"smooth",block:"nearest"});
+          return;
+        }
+        if(poll){
+          opt.classList.add("pick","sel"); opt.querySelector(".mk").textContent="✓";
+        }else{
+          opts.forEach(function(o){
+            if(o.dataset.ok==="1"){o.classList.add("ok");o.querySelector(".mk").textContent="✓";}
+            else if(o===opt){o.classList.add("no");o.querySelector(".mk").textContent="✕";}
+            else{o.classList.add("dim");}
+          });
+        }
+        reveal(dec,right,poll);
+        var sc=dec.closest(".scene");
+        if(sc){var i=scenes.indexOf(sc); if(i>=0) markSeg(segEls[i]);}
+        if(sc && window.__offerNext) setTimeout(function(){window.__offerNext(sc);},1400);
+      });
+    });
+  }
+
+  /* ---- entrance ---- */
+  var gate=document.getElementById("gate"), gOpts=gate.querySelectorAll("#g-opts .opt");
+  var gPay=document.getElementById("g-pay"), gVt=document.getElementById("g-vt");
+  gOpts.forEach(function(opt){
+    opt.addEventListener("click",function(){
+      if(gate.classList.contains("done")) return;
+      gate.classList.add("done");
+      var right=opt.dataset.ok==="1";
+      gOpts.forEach(function(o){
+        if(o.dataset.ok==="1"){o.classList.add("ok");o.querySelector(".mk").textContent="✓";}
+        else if(o===opt){o.classList.add("no");o.querySelector(".mk").textContent="✕";}
+        else{o.classList.add("dim");}
+      });
+      if(!right) gVt.textContent="It is the third one";
+      gPay.classList.add("show");
+      document.body.classList.add("started");
+      setTimeout(function(){
+        land();
+        setTimeout(function(){ says("I am going to be down here for the rest of this. I speak when there is something worth looking at."); }, 2400);
+      }, 700);
+      xp+=20; xpEl.textContent=xp+" XP";
+    });
+  });
+
+  /* ---- scenes ---- */
+  var scenes=[].slice.call(document.querySelectorAll(".scene"));
+  var segs=document.getElementById("segs"), cap=document.getElementById("stagecap");
+  var rsegs=document.getElementById("rsegs"), rxp=document.getElementById("rxp");
+  var segEls=scenes.map(function(s){
+    var d=document.createElement("div");
+    d.className="seg"+(s.classList.contains("set")?" safe":"");
+    segs.appendChild(d);
+    var d2=d.cloneNode(true); rsegs.appendChild(d2); d.__twin=d2;
+    return d;
+  });
+  /* the header bar and the rail bar are the same progress, drawn twice */
+  function markSeg(e){ if(!e) return; e.classList.add("on"); if(e.__twin) e.__twin.classList.add("on"); }
+  function fillTo(i){ segEls.forEach(function(e,j){ if(j<=i) markSeg(e); }); }
+  document.querySelectorAll(".dec").forEach(wire);
+
+  document.querySelectorAll(".tg").forEach(function(b){
+    b.addEventListener("click",function(){
+      var p=document.getElementById(b.dataset.d); if(!p) return;
+      var open=b.getAttribute("aria-expanded")==="true";
+      b.setAttribute("aria-expanded",String(!open));
+      if(p.classList.contains("body")) p.classList.toggle("show",!open);
+      p.hidden=open;
+    });
+  });
+
+  document.querySelectorAll(".cb").forEach(function(cb){
+    cb.addEventListener("change",function(){cb.closest(".ck").classList.toggle("on",cb.checked);});
+  });
+
+  /* ---- the building, drawn once and placed three times ---- */
+  var tpl=document.getElementById("bldg-tpl");
+  var NS="http://www.w3.org/2000/svg";
+  var GRID=[
+    {xs:[134,168,202,236], ys:[86,112,138,164,190,216], w:22, h:15},
+    {xs:[74,100],          ys:[158,184,210,236],        w:18, h:15},
+    {xs:[292,312],         ys:[176,202,228,250],        w:14, h:14}
+  ];
+  document.querySelectorAll("[data-bldg]").forEach(function(mount){
+    var svg=tpl.content.firstElementChild.cloneNode(true);
+    var state=mount.dataset.bldg;
+    if(state) svg.classList.add("st-"+state);
+    var wins=svg.querySelector(".wins"), i=0;
+    GRID.forEach(function(s){
+      s.ys.forEach(function(y){ s.xs.forEach(function(x){
+        var r=document.createElementNS(NS,"rect");
+        r.setAttribute("class","win");
+        r.setAttribute("x",x); r.setAttribute("y",y);
+        r.setAttribute("width",s.w); r.setAttribute("height",s.h);
+        /* a fixed pattern rather than random, so the lit windows look like an
+           office in the evening instead of a perfectly even grid */
+        r.style.setProperty("--d", (i*0.042).toFixed(3)+"s");
+        r.style.setProperty("--o", (0.30+((i*37)%8)/16).toFixed(2));
+        i++; wins.appendChild(r);
+      });});
+    });
+    mount.appendChild(svg);
+  });
+
+  /* the day counter beside the unchanging building */
+  function runCounter(el){
+    var n=el.querySelector("b"), lab=el.querySelector("span"), d=1;
+    var t=setInterval(function(){
+      d++; n.textContent=d;
+      if(d===9){
+        clearInterval(t); lab.textContent="days inside";
+        setTimeout(function(){el.classList.add("hit");},700);
+      }
+    },430);
+  }
+
+  /* artwork animates once, when it comes into view */
+  var aio=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var svg=e.target.querySelector(".bldg");
+      if(svg) svg.classList.add("go");
+      e.target.classList.add("anim");
+      aio.unobserve(e.target);
+      var c=e.target.previousElementSibling;
+      if(c && c.id==="daycount") runCounter(c);
+    });
+  },{threshold:.3});
+  document.querySelectorAll("[data-anim]").forEach(function(el){aio.observe(el);});
+
+  var cur=-1;
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var i=scenes.indexOf(e.target);
+      cap.textContent=e.target.dataset.stage;
+      if(i>cur){cur=i; fillTo(i);}
+    });
+  },{rootMargin:"-45% 0px -45% 0px"});
+  scenes.forEach(function(s){io.observe(s);});
+
+
+
+  /* ---- how sure were you ---- */
+  var CONF_LINE={
+    sure:   {ok:'<b>You were sure, and you were right.</b> ',
+             no:'<b>You were sure, and it was wrong, which is the useful kind.</b> An answer you held confidently is the one that actually gets replaced once you see why. '},
+    pretty: {ok:'<b>Fairly sure, and right.</b> ',
+             no:'<b>Fairly sure, and not quite.</b> '},
+    guess:  {ok:'<b>A guess that landed.</b> Worth reading why anyway, because next time it may not. ',
+             no:'<b>A guess, and not this one.</b> Guessing first is not a waste, it is what makes the answer stick. '}
+  };
+  function confBlock(onPick){
+    var box=document.createElement("div"); box.className="conf";
+    box.innerHTML='<div class="conf-q">Before the answer, how sure were you?</div><div class="conf-row"></div>';
+    var row=box.querySelector(".conf-row");
+    [["sure","Sure"],["pretty","Fairly sure"],["guess","Guessing"]].forEach(function(c){
+      var b=document.createElement("button"); b.className="conf-b"; b.type="button"; b.textContent=c[1];
+      b.addEventListener("click",function(){
+        if(box.dataset.done) return;
+        box.dataset.done="1"; box.classList.remove("show");
+        onPick(c[0]);
+      });
+      row.appendChild(b);
+    });
+    return box;
+  }
+
+  /* ---- the owl ----
+     One owl, in one corner, for the whole course. She arrives when the reader
+     has made their first decision, and after that she speaks four times. A
+     mascot on every block stops being noticed, which is a poor look on a
+     course about noticing. */
+  var owlTpl=document.getElementById("owl-tpl");
+  function makeOwl(cls,w,noperch){
+    var o=owlTpl.content.firstElementChild.cloneNode(true);
+    o.classList.add("blink");
+    if(noperch) o.classList.add("noperch");
+    if(cls) cls.split(" ").forEach(function(c){if(c)o.classList.add(c);});
+    if(w) o.style.width=w+"px";
+    return o;
+  }
+
+  /* perched on the roof, which is the one place she appears inside the page */
+  document.querySelectorAll('[data-owl="roof"]').forEach(function(m){
+    var o=makeOwl("",40,true); o.classList.add("perched"); m.appendChild(o);
+  });
+
+  var dock=document.getElementById("dock"), dockSay=document.getElementById("dock-say");
+  var railBox=document.getElementById("railowl"), railSay=document.getElementById("rail-say");
+  var dockOwl=makeOwl("",62,true);
+  var sayTimer=null, landed=false;
+
+  /* she is one bird. The rail on a wide screen, the corner on a narrow one. */
+  var wide=window.matchMedia("(min-width:1000px)");
+  function home(){ return wide.matches ? railBox : dock; }
+  function bubble(){ return wide.matches ? railSay : dockSay; }
+  function place(){
+    var h=home();
+    if(dockOwl.parentNode!==h) h.insertBefore(dockOwl, h.firstChild);
+    dockOwl.style.width = wide.matches ? "76px" : "62px";
+    if(landed && !wide.matches) dock.classList.add("in");
+    var other = wide.matches ? dockSay : railSay;
+    other.classList.remove("on");
+  }
+  place();
+  wide.addEventListener("change", function(){ place(); });
+
+  function land(){
+    if(landed) return; landed=true;
+    place();
+    dock.classList.add("in");
+    (wide.matches?railBox:dock).classList.add("arriving");
+    dockOwl.classList.add("flying");
+    /* wings fold at the moment she touches down, not before */
+    setTimeout(function(){ dockOwl.classList.remove("flying"); }, 2050);
+    setTimeout(function(){ dock.classList.remove("arriving"); railBox.classList.remove("arriving"); }, 2350);
+  }
+
+  window.__owlReact=function(right){
+    if(!landed) return;
+    dockOwl.classList.remove("look","alarm","wink");
+    void dockOwl.offsetWidth;
+    dockOwl.classList.add(right?"wink":"alarm");
+    setTimeout(function(){dockOwl.classList.remove("wink","alarm");},right?900:1600);
+  };
+
+  function says(text,how,withGate){
+    if(!landed) return;
+    var sayEl=bubble();
+    sayEl.classList.remove("on");
+    sayEl.innerHTML=text;
+    if(withGate) sayEl.appendChild(gateBtn);
+    /* the corner bubble is display:none when quiet, so that it never covers a
+       control. Two frames of grace so the fade still plays. */
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ sayEl.classList.add("on"); });
+    });
+    dockOwl.classList.remove("look","alarm","wink","turn");
+    void dockOwl.offsetWidth;
+    if(how) dockOwl.classList.add(how); else dockOwl.classList.add("look");
+    clearTimeout(sayTimer);
+    if(withGate) return;   /* a prompt stays until it is answered */
+    sayTimer=setTimeout(function(){
+      sayEl.classList.remove("on");
+      dockOwl.classList.remove("look","alarm","wink","turn");
+    }, Math.min(14000, 4200+text.length*42));
+  }
+
+  /* cues placed in the page decide when she has something to say */
+  var cueIO=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var raw=e.target.dataset.say, how="";
+      var bar=raw.indexOf("|");
+      if(bar>-1 && bar<8){ how=raw.slice(0,bar); raw=raw.slice(bar+1); }
+      if(!pending) says(raw,how);
+      cueIO.unobserve(e.target);
+    });
+  },{threshold:.9,rootMargin:"-25% 0px -25% 0px"});
+  document.querySelectorAll("[data-say]").forEach(function(c){cueIO.observe(c);});
+
+
+  /* ---- she holds the gate ----
+     The live course advances with a button at the end of each section. That
+     button is now her, in one fixed place, so there is one control for the
+     whole course instead of one per section. */
+  var gateBtn=document.createElement("button");
+  gateBtn.className="go-on"; gateBtn.type="button";
+  gateBtn.innerHTML='<span>Go on then</span><i>&rarr;</i>';
+
+  var gated=[].slice.call(document.querySelectorAll(".scene"));
+  var recap=document.querySelector(".recap");
+  if(recap) gated.push(recap);
+  var open=0, pending=false;
+
+  var PROMPTS=[
+   "He is inside. Want to know how long before anybody noticed?",
+   "Nine days of nothing. Ready for the day it stopped being nothing?",
+   "That is the damage. Shall we put a number on it?",
+   "Now the part that matters to you, rather than to them.",
+   "One more question before we get to your own settings.",
+   "That is the story. Here is what to do about it.",
+   "Settings done. Ten situations to see whether any of it stuck.",
+   "Finished. Three things to take away."
+  ];
+
+  function lockAll(){
+    gated.forEach(function(el,i){ if(i>0) el.classList.add("locked"); });
+  }
+  function openNext(){
+    pending=false;
+    bubble().classList.remove("on");
+    if(gateBtn.parentNode) gateBtn.parentNode.removeChild(gateBtn);
+    open++;
+    var el=gated[open];
+    if(!el) return;
+    el.classList.remove("locked");
+    el.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  gateBtn.addEventListener("click",openNext);
+
+  function offerNext(from){
+    if(window.__gdbg) console.log("[gate] from",from&&from.dataset.stage,"idx",gated.indexOf(from),"open",open,"pending",pending);
+    if(pending || open>=gated.length-1) return;
+    if(from && gated.indexOf(from)!==open) return;
+    pending=true;
+    clearTimeout(sayTimer);
+    says(PROMPTS[Math.min(open,PROMPTS.length-1)], "look", true);
+  }
+  window.__offerNext=offerNext;
+
+  /* a section without a decision of its own is done once it has been read to
+     the end, so the bottom of it is the cue */
+  var endIO=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var i=gated.indexOf(e.target);
+      if(i===open && !e.target.querySelector(".dec") && !e.target.classList.contains("quiz")) offerNext();
+    });
+  },{threshold:.01,rootMargin:"0px 0px -72% 0px"});
+  gated.forEach(function(el){ if(!el.querySelector(".dec")) endIO.observe(el); });
+  lockAll();
+
+  /* ---- ten situations ---- */
+  var QUIZ=[
+   {q:"You are late at an airport and an email arrives: <em>your flight has been rebooked, open the link for your new boarding pass.</em> What do you do?",
+    o:[["Open the link straight away so you do not miss the flight",0,"Being in a hurry is the condition the message was written for. Urgency is the oldest way of getting somebody past the part where they think."],
+       ["Reply and ask for the flight number and the gate",0,"Replying tells whoever sent it that the address is real and read by a person, which is worth money to them whatever else happens."],
+       ["Read where the link actually goes before touching it",1,"On a phone, press and hold rather than tap. If the message says the airline but the address is some other name entirely, you have your answer without having opened anything."],
+       ["Delete it and trust the departure boards",0,"Better than opening it, but you still do not know whether your flight moved. Open the airline's own app or type the airline's address yourself."]]},
+
+   {q:"You use the same password for a pizza delivery app and your main email. The pizza app gets breached. Why does that matter?",
+    o:[["They can follow you around using the delivery addresses",0,"Your address is unpleasant to lose, but it is not the thing that unlocks anything else."],
+       ["They will try that same email and password on banks and other sites",1,"This has a name, credential stuffing, and it is automated. Lists of leaked pairs get tried against thousands of sites at machine speed, so one shared password quietly joins all those accounts together."],
+       ["Your work computer gets infected next time you order",0,"A breach at a company you have an account with does not put anything on your machine. What leaks is the login."],
+       ["You get charged for pizzas you did not order",0,"Possible, and far less serious than somebody reaching the email address that can reset every other password you own."]]},
+
+   {q:"A notice says there is a system update available. You have something due in an hour. What is the safest choice?",
+    o:[["Dismiss it permanently so the machine stays fast",0,"Updates are mostly repairs to holes that are already public. Dismissing them for good leaves those open indefinitely."],
+       ["Restart and install it now, deadline or not",0,"Installing matters, but you do not have to wreck the hour to do it. There is a middle option that costs you nothing."],
+       ["Postpone it for an hour and install it the moment you are finished",1,"This is the realistic answer rather than the pious one. You keep the deadline and you close the hole the same day, which is what actually gets done in practice."],
+       ["Find the fix on some other website to save time",0,"Files offered elsewhere as shortcuts to an official update are one of the oldest ways of getting something installed on a machine deliberately."]]},
+
+   {q:"Somebody rings saying they are from support, that your laptop has a virus, and asks you to install a tool so they can take a look. What do you do?",
+    o:[["Install it, since a virus is urgent",0,"That tool hands them the machine. Internal IT teams generally already have what they need installed and rarely ring out of the blue about a virus."],
+       ["Ask for their employee number, then install it",0,"An employee number is a thing somebody can simply say. Asking a question the caller can answer does not verify anything."],
+       ["Give them the password so no install is needed",0,"Nobody legitimate needs your password. A real IT team can reset it without ever knowing what it was."],
+       ["Hang up and ring the official number yourself",1,"This takes the conversation out of their hands, which is the whole trick. Use a number you looked up, never one the caller gave you."]]},
+
+   {q:"You are in a cafe and need to check your bank. The only network is the cafe's open wi-fi.",
+    o:[["Log in quickly and sign out straight after",0,"Speed does not help. On an open network the risk is at the moment the data crosses it, not in how long you stay."],
+       ["Use your phone's own connection, or a VPN",1,"Your phone's hotspot is a network with only you on it. A VPN wraps your traffic so the people sharing the cafe network cannot read it."],
+       ["Check that the bank's site shows a security badge",0,"That tells you about the site, not about the network you reached it over."],
+       ["Switch the browser to private or incognito mode",0,"Private mode only stops your own device keeping a history. It changes nothing about who else can see the connection."]]},
+
+   {q:"You have the second step turned on. A login code arrives by text, and you are not logging in to anything.",
+    o:[["A glitch, ignore it",0,"Codes are not sent at random. One arriving unasked means somebody just entered your password correctly."],
+       ["Somebody has your password and the second step just stopped them",1,"Exactly what the second step is for, and also a warning you should act on. Change that password now, and anywhere else you used it."],
+       ["The message itself has done something to your phone",0,"A code arriving does nothing to your phone. It is a notification that your password is already in somebody else's hands."],
+       ["Your bank is testing you",0,"Banks do not send surprise codes as a test. Every code is a real attempt at a login."]]},
+
+   {q:"You clicked something and a file called <em>invoice.zip</em> has downloaded that you were not expecting.",
+    o:[["Open it to see whether it is a real bill",0,"Opening it is the step the whole thing was built to get you to take."],
+       ["Delete it and empty the bin",0,"Better than opening it, and it destroys what IT would use to work out what happened. It also does nothing if something already started when you clicked."],
+       ["Disconnect from the network, then tell IT",1,"Disconnecting cuts anything already running off from whoever is controlling it, and telling IT starts the part where somebody who knows what they are doing takes over."],
+       ["Run a scan while staying online",0,"Scanning is sensible and leaving the connection up while you do it is not, because it leaves the line open in both directions."]]},
+
+   {q:"You are setting up a password manager and it asks for one master password. Which is the better choice?",
+    o:[["Something short and complicated, so you cannot forget it",0,"Short loses regardless of how many symbols are in it, because guessing is done by machines rather than by people."],
+       ["Your birthday and the name of a childhood pet",0,"Both of those are frequently findable, and the tools that guess passwords try combinations of personal details first."],
+       ["Several unrelated words strung together, long enough to be awkward",1,"Length is what makes guessing expensive, and unrelated words give you length you can actually remember. The one requirement is that the words are not a quotation or a phrase somebody could predict."],
+       ["The same one you use for your work computer",0,"This password is in front of every other password you own, so it is the one that has to exist nowhere else."]]},
+
+   {q:"An urgent email from a senior person asks you to buy gift cards for a client and send over the codes. It says they are in a meeting and not to ring.",
+    o:[["The letterhead is wrong",0,"Worth noticing, and easy to copy. The request itself is the problem."],
+       ["It arrived after five",0,"Senior people email at all hours. The time of day proves nothing either way."],
+       ["It manufactures urgency and rules out the one thing that would check it",1,"The instruction not to ring is doing the real work, because it closes the only cheap way to find out. Gift card codes are also a way of moving money that cannot be reversed, which is why this request keeps coming up."],
+       ["It came to your personal address rather than your work one",0,"Suspicious, and not the giveaway. The giveaway is a payment request you cannot verify and cannot undo."]]},
+
+   {q:"A text says a parcel is being held and gives a shortened link. You are not sure whether you ordered anything.",
+    o:[["Open it, and if it looks like the real site it is fine",0,"Looking right is the cheapest part of the whole thing to get right."],
+       ["Press and hold to see the full address, or just go to the courier's site yourself",1,"A shortened link is unreadable by design, so read it or skip it. Typing the courier's address yourself answers the question with no link involved at all."],
+       ["Reply STOP to be taken off the list",0,"Replying anything confirms the number is live and read by a person, which gets you more of these, not fewer."],
+       ["Ring the number back to complain",0,"The number is either theirs or somebody else's that they borrowed, and either way the call is a second opportunity for them."]]}
+  ];
+
+  (function(){
+    var box=document.getElementById("qbox");
+    if(!box) return;
+    var res=document.getElementById("qresult"), rnum=document.getElementById("rnum");
+    var rtext=document.getElementById("rtext"), again=document.getElementById("qagain");
+    var score=0, at=0, order=[];
+
+    /* the correct answer sat in the same few positions every time, which is a
+       pattern worth nothing to the learner, so the options get shuffled per run */
+    function shuffle(){
+      order=QUIZ.map(function(item){
+        var ix=item.o.map(function(_,i){return i;});
+        for(var i=ix.length-1;i>0;i--){
+          var j=Math.floor(Math.random()*(i+1)); var t=ix[i]; ix[i]=ix[j]; ix[j]=t;
+        }
+        return ix;
+      });
+    }
+
+    /* one situation on screen at a time, so the end of the course does not turn
+       into forty answer options stacked on top of each other */
+    function draw(){
+      box.innerHTML="";
+      var item=QUIZ[at];
+      var sec=document.createElement("div"); sec.className="qitem";
+      var n=document.createElement("div"); n.className="qn";
+      n.textContent="Situation "+(at+1)+" of "+QUIZ.length+"  \u00b7  "+score+" right so far";
+      sec.appendChild(n);
+      var q=document.createElement("p"); q.className="q"; q.innerHTML=item.q; sec.appendChild(q);
+      var opts=document.createElement("div"); opts.className="opts";
+      var fb=document.createElement("div"); fb.className="qfb";
+      var settleQ=null;
+      var qconf=confBlock(function(c){ if(settleQ) settleQ(c); });
+      var nxt=document.createElement("button");
+      nxt.className="again next"; nxt.type="button";
+      nxt.textContent = (at===QUIZ.length-1) ? "See how you did" : "Next situation";
+      nxt.hidden=true;
+      nxt.addEventListener("click",function(){
+        at++;
+        if(at<QUIZ.length){ draw(); box.scrollIntoView({behavior:"smooth",block:"start"}); }
+        else finish();
+      });
+      order[at].forEach(function(oi){
+        var o=item.o[oi];
+        var btn=document.createElement("button"); btn.className="opt"; btn.type="button";
+        btn.innerHTML='<span class="mk"></span>'+o[0];
+        btn.addEventListener("click",function(){
+          if(sec.classList.contains("done")) return;
+          sec.classList.add("done");
+          btn.classList.add("picked"); btn.querySelector(".mk").textContent="\u2713";
+          qconf.classList.add("show");
+          qconf.scrollIntoView({behavior:"smooth",block:"nearest"});
+          settleQ=function(c){
+            opts.querySelectorAll(".opt").forEach(function(x,xi){
+              x.classList.remove("picked");
+              if(item.o[order[at][xi]][1]){x.classList.add("ok");x.querySelector(".mk").textContent="\u2713";}
+              else if(x===btn){x.classList.add("no");x.querySelector(".mk").textContent="\u2715";}
+              else{x.classList.add("dim");}
+            });
+            fb.className="qfb show"+(o[1]?"":" miss");
+            fb.innerHTML='<span class="vt">'+(o[1]?"Yes":"Not that one")+'</span>'
+              +((c&&CONF_LINE[c])?CONF_LINE[c][o[1]?"ok":"no"]:"")+o[2];
+            if(window.__owlReact) window.__owlReact(o[1]);
+            if(o[1]) score++;
+            nxt.hidden=false;
+          };
+        });
+        opts.appendChild(btn);
+      });
+      sec.appendChild(opts); sec.appendChild(qconf); sec.appendChild(fb); sec.appendChild(nxt);
+      box.appendChild(sec);
+    }
+
+    function finish(){
+      box.innerHTML="";
+      var pass=score>=7;
+      rnum.textContent=score;
+      res.classList.remove("pass","fail");
+      res.classList.add(pass?"pass":"fail");
+      rtext.textContent = pass
+        ? "That is a pass. The ones you got wrong are worth rereading, because the situations in this list are the ones that actually turn up."
+        : "Seven is the pass mark, so this one needs another go. The explanations are worth reading again before you start, particularly on the ones you missed.";
+      res.hidden=false;
+      xp+=pass?60:20; xpEl.textContent=xp+" XP";
+      if(window.__offerNext) setTimeout(window.__offerNext,900);
+      res.scrollIntoView({behavior:"smooth",block:"nearest"});
+    }
+
+    again.addEventListener("click",function(){
+      score=0; at=0; res.hidden=true; res.classList.remove("pass","fail");
+      shuffle(); draw();
+      document.getElementById("quiz").scrollIntoView({behavior:"smooth",block:"start"});
+    });
+    shuffle(); draw();
+  })();
+
+})();
+</script>
+</body></html>
