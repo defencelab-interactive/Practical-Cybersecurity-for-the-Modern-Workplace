@@ -431,7 +431,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   .art{max-width:700px}
   .rec{max-width:480px}
   .days{width:360px}
-  .owlpanel{max-width:680px}
+  .owltale{max-width:640px}
 }
 .rail .mark{font-family:var(--disp);font-weight:600;font-size:16px;margin-bottom:38px}
 .rail .mark span{color:var(--ac)}
@@ -455,7 +455,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 .scene.locked{opacity:.17;filter:blur(1.6px);pointer-events:none;user-select:none;
  transition:opacity .6s,filter .6s}
 .scene.locked *{animation-play-state:paused!important}
-.go-on{appearance:none;cursor:pointer;font:inherit;font-size:14.5px;width:100%;
+.go-on{appearance:none;cursor:pointer;font:inherit;font-size:15.5px;width:100%;max-width:600px;margin-bottom:6px;
  background:rgba(52,183,125,.1);color:var(--tw);border:1px solid rgba(52,183,125,.5);
  border-radius:10px;padding:11px 14px;margin-top:11px;text-align:left;
  display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -487,14 +487,20 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
    She slides in underneath whatever the reader just finished, inside the
    reading column. There is one place to answer and one place to continue, and
    they are the same place. */
-.owlpanel{display:none;margin:20px 0 6px;max-width:640px;
- background:rgba(52,183,125,.06);border:1px solid rgba(52,183,125,.3);
- border-radius:15px;padding:17px 19px}
-.owlpanel.on{display:block;animation:owlslide .42s cubic-bezier(.3,.9,.3,1)}
-@keyframes owlslide{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
-.owlpanel .txt{font-size:15.5px;line-height:1.5;color:var(--tw)}
-.owlpanel .txt b{font-weight:500}
-.owlpanel .go-on{margin-top:14px;width:100%;min-width:0}
+/* ---------- what she tells you ----------
+   The long version of the story lives here rather than in the course text.
+   None of it is needed to answer anything: the spine of the page carries the
+   facts and the decisions, and she carries the context around them, so a
+   reader in a hurry can skip every one of these and lose nothing they are
+   tested on. */
+.owltale{margin:14px 0 24px;max-width:600px;padding:2px 0 2px 20px;
+ border-left:2px solid rgba(52,183,125,.4)}
+.owltale p{font-size:16px;line-height:1.62;color:var(--tm)}
+.owltale p+p{margin-top:12px}
+.owltale b{color:var(--tw);font-weight:500}
+.owltale .who{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
+ text-transform:uppercase;color:rgba(52,183,125,.75);margin-bottom:9px}
+@media (min-width:1100px){ .owltale{margin-left:4px} }
 
 /* ---------- she is not inside anything ----------
    One bird on a layer of her own, flying to whatever currently wants the
@@ -509,7 +515,8 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 @media (max-width:1099px){ .owllayer .owl{width:64px} }
 @media (max-width:560px){ .owllayer .owl{width:54px} }
 /* room above the panel for her to stand on, where there is no side gutter */
-@media (max-width:1099px){ .owlpanel.on{margin-top:52px} }
+/* no side gutter: leave her room to perch on top of the block */
+@media (max-width:1099px){ .owltale{margin-top:48px} }
 </style>
 </head><body>
 
@@ -980,10 +987,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
       if(!right) gVt.textContent="It is the third one";
       gPay.classList.add("show");
       document.body.classList.add("started");
-      setTimeout(function(){
-        aimAt=gPay; land();
-        says("I turn up beside whatever you have just finished, and I stand next to the thing you need to press.","look",false,gPay);
-      }, 900);
+      setTimeout(function(){ buildTales(); land(); }, 900);
       xp+=20; xpEl.textContent=xp+" XP";
     });
   });
@@ -1131,71 +1135,105 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
     var o=makeOwl("",40,true); o.classList.add("perched"); m.appendChild(o);
   });
 
-  var panel=document.createElement("div");
-  panel.className="owlpanel";
-  var panelTxt=document.createElement("div"); panelTxt.className="txt";
-  panel.appendChild(panelTxt);
+  /* ---- she narrates ----
+     One bird on her own layer. She stands beside whatever the reader is
+     currently reading and moves when they move on, rather than staying put
+     where she last spoke. */
+  var TALE={
+   0:["It starts quietly. Somewhere outside the company there is a working username and password sitting in the wrong hands. How they got there was never made public, and the ordinary routes are ordinary: a password reused on a site that was breached later, a convincing fake login page, malware on a home machine copying what gets typed.",
+      "Nobody there did anything dramatic that day, and nobody knew anything had happened. He typed those details into the page staff use from home and it accepted them. No second code, no tap on a phone, no question about whether it was really him. <b>To every system inside, he now looks exactly like a trusted employee getting on with the job.</b>"],
+   1:["Now he takes his time. For nine days he moves carefully through the network, reading files, copying whole databases of patient records, learning how the systems connect and where the valuable things are kept. Patience pays: the longer he goes unnoticed, the more he can take and the more damage he can set up.",
+      "Meanwhile it is an ordinary week. People answer emails, join meetings, go home. Nobody sees the intruder reading over their shoulder."],
+   2:["When he is ready he pulls the trigger. It sweeps across the company and locks everything at once: files, systems, the tools that keep claims and prescriptions moving.",
+      "Because this one company sits in the middle of so much of American healthcare, the damage does not stay inside it. Pharmacies across the country suddenly cannot confirm what a patient's insurance will cover. Some people walk away from the counter without the medicine they came for. <b>A single stolen login has reached a pharmacy in another state.</b>"],
+   3:["The money buys back the systems. The copied data is already gone, taken days earlier. Then come the restoration costs, the emergency funding for providers who could not get paid, and months of disruption across the health system.",
+      "All of it traces to two things nine days earlier: a password that still worked, and a page that asked for nothing else."],
+   4:["It is tempting to read that as one careless company. It is more useful to read it as the ordinary case. The report the number below comes from has been published every year for two decades, and the shape of the answer barely moves."],
+   5:["There is a reason somebody chose the company in the middle rather than any one hospital. Everything passing through it belongs to somebody else, and the people whose records those are never agreed to anything, never saw the login page, and could not have done a thing about it."],
+   6:["The breach you have just walked through relied on settings that were not turned on. The same ones take a few minutes on your side."],
+   7:["Ten things that could happen to you this week. I will keep quiet for these."]
+  };
 
   var layer=document.createElement("div"); layer.className="owllayer";
   var bird=makeOwl("",0,true);
   layer.appendChild(bird);
   document.body.appendChild(layer);
 
-  var sayTimer=null, landed=false, aimAt=null, aimMode="panel", travelT=null;
+  var landed=false, perch=null, travelT=null;
   var gutter=window.matchMedia("(min-width:1100px)");
 
-  /* where she should be, given what she is pointing at */
+  /* her narration, one block per section, placed under the beat */
+  var tales=[];
+  function buildTales(){
+    [].slice.call(document.querySelectorAll(".scene")).forEach(function(sc,i){
+      if(!TALE[i]) return;
+      var t=document.createElement("div"); t.className="owltale";
+      t.innerHTML='<div class="who">The owl</div>'+TALE[i].map(function(x){return "<p>"+x+"</p>";}).join("");
+      var beat=sc.querySelector(".beat");
+      if(beat) beat.insertAdjacentElement("afterend",t); else sc.insertBefore(t,sc.firstChild);
+      tales.push(t);
+    });
+  }
+
   function target(){
-    if(!aimAt || !aimAt.isConnected) return null;
-    var r=aimAt.getBoundingClientRect();
-    /* an SVG element has no offsetWidth, so measure the box that is really drawn */
+    if(!perch || !perch.isConnected) return null;
+    var r=perch.getBoundingClientRect();
     var bb=bird.getBoundingClientRect();
     var w=bb.width||92, h=bb.height||95;
     if(gutter.matches){
       var col=document.querySelector("main").getBoundingClientRect();
-      var x=col.left-w-26;
-      if(x<8) x=col.left+8;
-      return {x:x, y:(aimMode==="button"? r.top+r.height/2-h/2 : r.top+4)};
+      var x=col.left-w-26; if(x<8) x=col.left+8;
+      var y=r.top+6;
+      /* keep her on screen while the block she belongs to is */
+      var lo=12, hi=window.innerHeight-h-12;
+      if(y<lo) y=lo; if(y>hi) y=hi;
+      return {x:x,y:y};
     }
-    /* no side gutter: she perches on the top edge of the panel rather than on
-       the button, which would put her on top of the words */
-    var box=panel.classList.contains("on")?panel.getBoundingClientRect():r;
-    var x=aimMode==="button"?Math.max(8,r.left+2):Math.max(8,box.left+6);
-    return {x:x, y:box.top-h+10};
+    var y2=r.top-h+6, lo2=8;
+    if(y2<lo2) y2=lo2;
+    if(y2>window.innerHeight-h-8) y2=window.innerHeight-h-8;
+    return {x:Math.max(8,r.left-4), y:y2};
   }
-
   function park(){
     var t=target(); if(!t) return;
     bird.style.transform="translate("+Math.round(t.x)+"px,"+Math.round(t.y)+"px)";
   }
-
-  /* a short flight whenever what she is pointing at changes */
-  function aim(el,mode){
-    var fresh = el!==aimAt;
-    aimAt=el; aimMode=mode||"panel";
+  function moveTo(el){
+    if(el===perch) return;
+    perch=el;
     if(!landed) return;
-    if(fresh){
-      layer.classList.add("travel");
-      bird.classList.add("flying");
-      clearTimeout(travelT);
-      travelT=setTimeout(function(){
-        bird.classList.remove("flying");
-        layer.classList.remove("travel");
-      },1300);
-    }
+    layer.classList.add("travel"); bird.classList.add("flying");
+    clearTimeout(travelT);
+    travelT=setTimeout(function(){
+      bird.classList.remove("flying"); layer.classList.remove("travel");
+    },1300);
     park();
   }
-
-  (function frame(){ if(landed && !layer.classList.contains("travel")) park(); requestAnimationFrame(frame); })();
-  window.addEventListener("scroll",function(){ if(landed&&layer.classList.contains("travel")) park(); },{passive:true});
+  (function frame(){ if(landed) park(); requestAnimationFrame(frame); })();
   window.addEventListener("resize",park);
+
+  /* she goes where the reader is: the narration block nearest the top third */
+  function follow(){
+    if(!landed || !tales.length) return;
+    var aim=tales[0], best=1e9, mark=window.innerHeight*0.34;
+    tales.forEach(function(t){
+      if(t.closest(".scene").classList.contains("locked")) return;
+      var d=Math.abs(t.getBoundingClientRect().top-mark);
+      if(d<best){best=d;aim=t;}
+    });
+    moveTo(aim);
+  }
+  var followT=null;
+  window.addEventListener("scroll",function(){
+    clearTimeout(followT); followT=setTimeout(follow,90);
+  },{passive:true});
 
   function pose(p){
     bird.classList.remove("look","alarm","wink","turn");
     void bird.offsetWidth;
     bird.classList.add(p||"look");
+    if(p==="turn"||p==="alarm") setTimeout(function(){bird.classList.remove(p);},p==="turn"?3000:1800);
   }
-
   window.__owlReact=function(right){
     if(!landed) return;
     bird.classList.remove("look","alarm","wink");
@@ -1203,35 +1241,16 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
     bird.classList.add(right?"wink":"alarm");
     setTimeout(function(){bird.classList.remove("wink","alarm");},right?900:1600);
   };
-
-  function say(text,p,withGate,anchor){
-    if(!anchor) return;
-    clearTimeout(sayTimer);
-    if(gateBtn.parentNode) gateBtn.parentNode.removeChild(gateBtn);
-    panelTxt.innerHTML=text;
-    if(withGate) panelTxt.appendChild(gateBtn);
-    panel.classList.remove("on");
-    anchor.insertAdjacentElement("afterend",panel);
-    void panel.offsetWidth;
-    panel.classList.add("on");
-    pose(p);
-    /* when there is something to press she goes and stands by it */
-    aim(withGate?gateBtn:panel, withGate?"button":"panel");
-    if(withGate) return;
-    sayTimer=setTimeout(function(){
-      panel.classList.remove("on");
-      bird.classList.remove("look","alarm","wink","turn");
-    },Math.min(13000,4200+text.length*42));
-  }
-  var says=say;
+  window.__owlPose=pose;
 
   function land(){
     landed=true;
     layer.classList.add("in");
     bird.classList.add("flying");
-    aimAt=aimAt||document.querySelector("main");
+    perch=perch||tales[0];
     park();
     setTimeout(function(){bird.classList.remove("flying");},2000);
+    follow();
   }
 
   /* ---- she holds the gate ----
@@ -1241,6 +1260,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   var gateBtn=document.createElement("button");
   gateBtn.className="go-on"; gateBtn.type="button";
   gateBtn.innerHTML='<span>Go on then</span><i>&rarr;</i>';
+  gateBtn.hidden=false;
 
   var gated=[].slice.call(document.querySelectorAll(".scene"));
   var recap=document.querySelector(".recap");
@@ -1248,14 +1268,14 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   var open=0, pending=false;
 
   var PROMPTS=[
-   "He is inside. Want to know how long before anybody noticed?",
-   "Nine days of nothing. Ready for the day it stopped being nothing?",
-   "That is the damage. Shall we put a number on it?",
-   "Now the part that matters to you, rather than to them.",
-   "One more question before we get to your own settings.",
-   "That is the story. Here is what to do about it.",
-   "Settings done. Ten situations to see whether any of it stuck.",
-   "Finished. Three things to take away."
+   "How long before anybody noticed",
+   "The day it stopped being nothing",
+   "Put a number on the damage",
+   "Why this keeps happening",
+   "Why they picked this company",
+   "What to do on your own accounts",
+   "Ten situations, to see what stuck",
+   "Three things to take away"
   ];
 
   function lockAll(){
@@ -1263,8 +1283,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   }
   function openNext(){
     pending=false;
-    panel.classList.remove("on");
-    aim(gated[Math.min(open+1,gated.length-1)],"panel");
+    if(gateBtn.parentNode) gateBtn.parentNode.removeChild(gateBtn);
     if(gateBtn.parentNode) gateBtn.parentNode.removeChild(gateBtn);
     open++;
     var el=gated[open];
@@ -1275,13 +1294,11 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   gateBtn.addEventListener("click",openNext);
 
   function offerNext(from,at){
-    if(window.__gdbg) console.log("[gate] from",from&&from.dataset.stage,"idx",gated.indexOf(from),"open",open,"pending",pending);
     if(pending || open>=gated.length-1) return;
     if(from && gated.indexOf(from)!==open) return;
-    var anchor=at||from||gated[open];
     pending=true;
-    clearTimeout(sayTimer);
-    says(PROMPTS[Math.min(open,PROMPTS.length-1)], "look", true, anchor);
+    gateBtn.querySelector("span").textContent=PROMPTS[Math.min(open,PROMPTS.length-1)];
+    (at||from||gated[open]).insertAdjacentElement("afterend",gateBtn);
   }
   window.__offerNext=offerNext;
 
