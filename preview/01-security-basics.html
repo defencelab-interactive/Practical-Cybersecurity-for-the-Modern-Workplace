@@ -111,7 +111,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
    office, not a picture of the company's actual premises, and nothing inside it
    is a screen, a log or a record, so it makes no claim about what anyone saw. */
 .art{margin:2px 0 16px}
-.bldg{display:block;width:100%;max-width:400px;overflow:visible}
+.bldg{display:block;width:100%;max-width:100%;overflow:visible}
 .bldg .mass{fill:#0d1512;stroke:rgba(237,239,236,.19);stroke-width:1}
 .bldg .sign{fill:rgba(237,239,236,.07)}
 .bldg .signtext{fill:rgba(237,239,236,.62);font-family:var(--mono);font-size:10px;
@@ -350,7 +350,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 /* her perched on the roof of the building */
 /* the art box is capped to the drawing itself, so the owl can be placed against
    the roof in the drawing's own percentages rather than the column's */
-.art{position:relative;width:100%;max-width:400px}
+.art{position:relative;width:100%;max-width:400px;margin-inline:auto}
 .perched{position:absolute;width:9.5%;left:47%;top:2.2%;transform:translateX(-50%);
  opacity:0;transition:opacity .7s ease .5s}
 .art.anim .perched{opacity:1}
@@ -384,37 +384,6 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 @keyframes flapL{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(24deg)}}
 @keyframes flapR{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-24deg)}}
 
-/* the corner she lives in. Bottom right, because every control on the page is
-   left aligned and she must never sit on top of something tappable. */
-.dock{position:fixed;right:16px;bottom:16px;z-index:40;display:flex;align-items:flex-end;
- gap:11px;pointer-events:none;opacity:0}
-.dock.in{opacity:1}
-.dock .owl{width:62px;flex:none;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
-.dock.arriving .owl,.railowl.arriving .owl,.owlmargin.arriving .owl{animation:flyin 2.3s cubic-bezier(.3,.5,.3,1) both}
-@keyframes flyin{
-  0%{transform:translate(-62vw,-64vh) rotate(16deg) scale(.5);opacity:0}
-  9%{opacity:1}
-  42%{transform:translate(-33vw,-32vh) rotate(13deg) scale(.72)}
-  72%{transform:translate(-11vw,-9vh) rotate(9deg) scale(.92)}
-  89%{transform:translate(0,2.4vh) rotate(-5deg) scale(1.05)}
-  96%{transform:translate(0,-.7vh) rotate(2deg) scale(1)}
-  100%{transform:translate(0,0) rotate(0) scale(1);opacity:1}
-}
-.dock .say{display:none;order:-1;background:#1b261f;border:1px solid var(--ln);border-radius:14px;
- padding:12px 15px;font-size:14.5px;line-height:1.48;color:var(--tw);max-width:290px;
- box-shadow:0 10px 30px rgba(0,0,0,.4);position:relative;
- opacity:0;transform:translateY(6px) scale(.97);transform-origin:100% 100%;
- transition:opacity .3s,transform .3s;pointer-events:none}
-.dock .say.on{display:block;opacity:1;transform:none;pointer-events:auto}
-.dock .say:before,.dock .say:after{content:"";position:absolute;right:-8px;bottom:18px;
- border:8px solid transparent;border-right:0;border-left-color:var(--ln)}
-.dock .say:after{right:-6.6px;border-left-color:#1b261f}
-.dock .say b{font-weight:500;color:#fff}
-@media (max-width:560px){
-  .dock{right:12px;bottom:12px}
-  .dock .owl{width:48px}
-  .dock .say{max-width:calc(100vw - 96px);font-size:14px;padding:11px 13px}
-}
 @media (prefers-reduced-motion:reduce){
   .dock.arriving .owl{animation:none}
   .owl.flying .fw.l,.owl.flying .fw.r{animation:none}
@@ -436,7 +405,12 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   /* everything right of the rail is centred, so a wide screen gives even
      margins instead of a column pinned left and a hole on the right */
   .body-wrap{flex:1;display:flex;justify-content:center;gap:44px;min-width:0}
-  main{max-width:700px;padding:0 44px 120px;margin:0;flex:0 1 700px}
+  main{max-width:740px;padding:0 44px 120px;margin:0;flex:0 1 740px}
+  /* a wide screen can carry the drawing at something like its real size */
+  .art{max-width:580px}
+  .rec{max-width:440px}
+  .days{width:330px}
+  .big{font-size:clamp(52px,5vw,76px)}
   /* a screen that size can carry more type than a phone */
   .sit{font-size:18px}
   .q{font-size:17px}
@@ -451,20 +425,13 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   .conf-q{font-size:15.5px}
   .conf-b{font-size:15px}
 }
-.owlmargin{display:none}
-/* she moves out of the far corner and into the margin beside the text, so the
-   thing you read and the thing you click are not at opposite ends of a screen */
+/* widest screens: the drawing gets closer to its real size, the measure does
+   not, because prose past about seventy characters a line stops being easy */
 @media (min-width:1400px){
-  .owlmargin{display:flex;flex-direction:column;justify-content:center;
-   width:270px;flex:none;position:sticky;top:0;height:100vh;padding:0 0 60px}
-  .owlmargin .owl{width:78px;margin-bottom:13px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.4))}
-  .owlmargin .say{background:#1b261f;border:1px solid var(--ln);border-radius:13px;
-   padding:13px 15px;font-size:14.5px;line-height:1.5;color:var(--tw);
-   opacity:0;transform:translateY(5px);transition:opacity .3s,transform .3s}
-  .owlmargin .say.on{opacity:1;transform:none}
-  .owlmargin{opacity:0;transition:opacity .35s}
-  .owlmargin.in{opacity:1}
-  .dock{display:none}
+  .art{max-width:700px}
+  .rec{max-width:480px}
+  .days{width:360px}
+  .owlpanel{max-width:680px}
 }
 .rail .mark{font-family:var(--disp);font-weight:600;font-size:16px;margin-bottom:38px}
 .rail .mark span{color:var(--ac)}
@@ -515,6 +482,20 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 .conf-b:focus-visible{outline:2px solid var(--gd);outline-offset:2px}
 .opt.picked{border-color:rgba(217,169,75,.6);background:rgba(217,169,75,.1)}
 .opt.picked .mk{background:var(--gd);border-color:var(--gd)}
+
+/* ---------- her panel ----------
+   She slides in underneath whatever the reader just finished, inside the
+   reading column. There is one place to answer and one place to continue, and
+   they are the same place. */
+.owlpanel{display:none;margin:20px 0 6px;gap:15px;align-items:flex-start;max-width:640px;
+ background:rgba(52,183,125,.06);border:1px solid rgba(52,183,125,.3);
+ border-radius:15px;padding:17px 19px}
+.owlpanel.on{display:flex;animation:owlslide .42s cubic-bezier(.3,.9,.3,1)}
+@keyframes owlslide{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+.owlpanel .owl{width:54px;flex:none;margin-top:1px}
+.owlpanel .txt{font-size:15.5px;line-height:1.5;color:var(--tw);flex:1;min-width:0}
+.owlpanel .txt b{font-weight:500}
+.owlpanel .go-on{margin-top:13px;width:auto;min-width:220px}
 </style>
 </head><body>
 
@@ -888,13 +869,9 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
     </div>
   </section>
 </main>
-<aside class="owlmargin" id="owlmargin"><div class="say" id="margin-say"></div></aside>
 </div>
 </div>
 
-<div class="dock" id="dock" aria-live="polite">
-  <div class="say" id="dock-say"></div>
-</div>
 
 
 <script>
@@ -941,7 +918,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
       reveal(dec,right,false);
       var sc=dec.closest(".scene");
       if(sc){var i=scenes.indexOf(sc); if(i>=0) markSeg(segEls[i]);}
-      if(sc && window.__offerNext) setTimeout(function(){window.__offerNext(sc);},1400);
+      if(sc && window.__offerNext) setTimeout(function(){window.__offerNext(sc,dec);},1400);
       if(window.__owlReact) window.__owlReact(right);
     }
     opts.forEach(function(opt){
@@ -968,7 +945,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
         reveal(dec,right,poll);
         var sc=dec.closest(".scene");
         if(sc){var i=scenes.indexOf(sc); if(i>=0) markSeg(segEls[i]);}
-        if(sc && window.__offerNext) setTimeout(function(){window.__offerNext(sc);},1400);
+        if(sc && window.__offerNext) setTimeout(function(){window.__offerNext(sc,dec);},1400);
       });
     });
   }
@@ -991,8 +968,8 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
       document.body.classList.add("started");
       setTimeout(function(){
         land();
-        setTimeout(function(){ says("I am going to be down here for the rest of this. I speak when there is something worth looking at."); }, 2400);
-      }, 700);
+        says("I turn up under whatever you have just finished, which is also where the button to carry on lives. One place, not two.","look",false,gPay);
+      }, 900);
       xp+=20; xpEl.textContent=xp+" XP";
     });
   });
@@ -1140,82 +1117,48 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
     var o=makeOwl("",40,true); o.classList.add("perched"); m.appendChild(o);
   });
 
-  var dock=document.getElementById("dock"), dockSay=document.getElementById("dock-say");
-  var railBox=document.getElementById("railowl"), railSay=document.getElementById("rail-say");
-  var marginBox=document.getElementById("owlmargin"), marginSay=document.getElementById("margin-say");
-  var dockOwl=makeOwl("",62,true);
+  var panel=document.createElement("div");
+  panel.className="owlpanel";
+  var panelTxt=document.createElement("div"); panelTxt.className="txt";
+  var panelOwl=makeOwl("",54,true);
+  panel.appendChild(panelOwl); panel.appendChild(panelTxt);
   var sayTimer=null, landed=false;
 
-  /* she is one bird. The rail on a wide screen, the corner on a narrow one. */
-  var wide=window.matchMedia("(min-width:1000px)");
-  var roomy=window.matchMedia("(min-width:1400px)");
-  function home(){ return roomy.matches ? marginBox : dock; }
-  function bubble(){ return roomy.matches ? marginSay : dockSay; }
-  function place(){
-    var h=home();
-    if(dockOwl.parentNode!==h) h.insertBefore(dockOwl, h.firstChild);
-    dockOwl.style.width = wide.matches ? "76px" : "62px";
-    if(landed) home().classList.add("in");
-    [marginSay,railSay,dockSay].forEach(function(b){ if(b!==bubble()) b.classList.remove("on"); });
-    [marginBox,railBox,dock].forEach(function(h){ if(h!==home()) h.classList.remove("in","arriving"); });
-  }
-  place();
-  wide.addEventListener("change", place);
-  roomy.addEventListener("change", place);
-
-  function land(){
-    if(landed) return; landed=true;
-    place();
-    home().classList.add("in","arriving");
-    dockOwl.classList.add("flying");
-    /* wings fold at the moment she touches down, not before */
-    setTimeout(function(){ dockOwl.classList.remove("flying"); }, 2050);
-    setTimeout(function(){ [dock,railBox,marginBox].forEach(function(h){h.classList.remove("arriving");}); }, 2350);
+  function pose(p){
+    panelOwl.classList.remove("look","alarm","wink","turn");
+    void panelOwl.offsetWidth;
+    panelOwl.classList.add(p||"look");
   }
 
   window.__owlReact=function(right){
     if(!landed) return;
-    dockOwl.classList.remove("look","alarm","wink");
-    void dockOwl.offsetWidth;
-    dockOwl.classList.add(right?"wink":"alarm");
-    setTimeout(function(){dockOwl.classList.remove("wink","alarm");},right?900:1600);
+    panelOwl.classList.remove("look","alarm","wink");
+    void panelOwl.offsetWidth;
+    panelOwl.classList.add(right?"wink":"alarm");
+    setTimeout(function(){panelOwl.classList.remove("wink","alarm");},right?900:1600);
   };
 
-  function says(text,how,withGate){
-    if(!landed) return;
-    var sayEl=bubble();
-    sayEl.classList.remove("on");
-    sayEl.innerHTML=text;
-    if(withGate) sayEl.appendChild(gateBtn);
-    /* the corner bubble is display:none when quiet, so that it never covers a
-       control. Two frames of grace so the fade still plays. */
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){ sayEl.classList.add("on"); });
-    });
-    dockOwl.classList.remove("look","alarm","wink","turn");
-    void dockOwl.offsetWidth;
-    if(how) dockOwl.classList.add(how); else dockOwl.classList.add("look");
+  /* the panel is one element that moves to sit under whatever was just done */
+  function say(text,p,withGate,anchor){
+    if(!anchor) return;
     clearTimeout(sayTimer);
-    if(withGate) return;   /* a prompt stays until it is answered */
+    if(gateBtn.parentNode) gateBtn.parentNode.removeChild(gateBtn);
+    panelTxt.innerHTML=text;
+    if(withGate) panelTxt.appendChild(gateBtn);
+    panel.classList.remove("on");
+    anchor.insertAdjacentElement("afterend",panel);
+    void panel.offsetWidth;
+    panel.classList.add("on");
+    pose(p);
+    if(withGate) return;
     sayTimer=setTimeout(function(){
-      sayEl.classList.remove("on");
-      dockOwl.classList.remove("look","alarm","wink","turn");
-    }, Math.min(14000, 4200+text.length*42));
+      panel.classList.remove("on");
+      panelOwl.classList.remove("look","alarm","wink","turn");
+    },Math.min(13000,4200+text.length*42));
   }
+  var says=say;
 
-  /* cues placed in the page decide when she has something to say */
-  var cueIO=new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      if(!e.isIntersecting) return;
-      var raw=e.target.dataset.say, how="";
-      var bar=raw.indexOf("|");
-      if(bar>-1 && bar<8){ how=raw.slice(0,bar); raw=raw.slice(bar+1); }
-      if(!pending) says(raw,how);
-      cueIO.unobserve(e.target);
-    });
-  },{threshold:.9,rootMargin:"-25% 0px -25% 0px"});
-  document.querySelectorAll("[data-say]").forEach(function(c){cueIO.observe(c);});
-
+  function land(){ landed=true; }
 
   /* ---- she holds the gate ----
      The live course advances with a button at the end of each section. That
@@ -1246,7 +1189,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   }
   function openNext(){
     pending=false;
-    bubble().classList.remove("on");
+    panel.classList.remove("on");
     if(gateBtn.parentNode) gateBtn.parentNode.removeChild(gateBtn);
     open++;
     var el=gated[open];
@@ -1256,13 +1199,14 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   }
   gateBtn.addEventListener("click",openNext);
 
-  function offerNext(from){
+  function offerNext(from,at){
     if(window.__gdbg) console.log("[gate] from",from&&from.dataset.stage,"idx",gated.indexOf(from),"open",open,"pending",pending);
     if(pending || open>=gated.length-1) return;
     if(from && gated.indexOf(from)!==open) return;
+    var anchor=at||from||gated[open];
     pending=true;
     clearTimeout(sayTimer);
-    says(PROMPTS[Math.min(open,PROMPTS.length-1)], "look", true);
+    says(PROMPTS[Math.min(open,PROMPTS.length-1)], "look", true, anchor);
   }
   window.__offerNext=offerNext;
 
@@ -1425,7 +1369,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
         : "Seven is the pass mark, so this one needs another go. The explanations are worth reading again before you start, particularly on the ones you missed.";
       res.hidden=false;
       xp+=pass?60:20; xpEl.textContent=xp+" XP";
-      if(window.__offerNext) setTimeout(window.__offerNext,900);
+      if(window.__offerNext) setTimeout(function(){window.__offerNext(null,res);},900);
       res.scrollIntoView({behavior:"smooth",block:"nearest"});
     }
 
