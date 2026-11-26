@@ -10,23 +10,33 @@
 :root{
   --ac:#34B77D; --acd:#2A9A66; --rd:#E0574F; --gd:#D9A94B;
   --tw:#EDEFEC; --tm:rgba(237,239,236,.66); --tf:rgba(237,239,236,.36);
-  --bg:#18231D; --sf:rgba(255,255,255,.035); --sf2:#101a15; --ln:rgba(237,239,236,.13);
+  --bg:#1a2620; --sf:rgba(255,255,255,.05); --sf2:#121d17; --ln:rgba(237,239,236,.15);
+  /* paper, for everything the reader clicks, as in the rest of the library */
+  --paper:#FCFCFB; --ink:#1A1A1A; --ink-m:#55605A; --ink-f:#8A938E; --line:#E4E7E3;
+  --gr:#2EAD6B; --gl:rgba(46,173,107,.14); --rl:rgba(224,87,79,.12); --blue:#4E7CA8;
   --disp:'Fraunces',Georgia,serif; --body:'DM Sans',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
   color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--tw);font-family:var(--body);line-height:1.6;
- -webkit-font-smoothing:antialiased}
+/* the background of the rest of the library: green at the top left, blue at the
+   bottom right, over a dark green to slate ramp. Not a flat near-black. */
+body{color:var(--tw);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;
+ background:
+  radial-gradient(80% 55% at 12% 4%,rgba(52,183,125,.30),transparent 52%),
+  radial-gradient(90% 70% at 88% 78%,rgba(78,124,168,.20),transparent 58%),
+  radial-gradient(60% 45% at 60% 32%,rgba(255,255,255,.09),transparent 60%),
+  linear-gradient(165deg,#1c2a22,#1a2430 58%,#182430);
+ background-attachment:fixed}
 
 /* header hidden until the opening question is answered */
-.top{position:sticky;top:0;z-index:10;background:rgba(24,35,29,.92);
+.top{position:sticky;top:0;z-index:50;background:rgba(26,38,32,.82);
  backdrop-filter:blur(10px);border-bottom:1px solid rgba(237,239,236,.08);
  opacity:0;transform:translateY(-100%);transition:opacity .5s,transform .5s}
 /* While hidden the header is taken out of the flow, so the entrance really gets
    the whole viewport and the third answer never falls below the fold. */
 body:not(.started) .top{position:fixed;top:0;left:0;right:0;pointer-events:none}
 body.started .top{opacity:1;transform:none}
-.top .in{max-width:640px;margin:0 auto;padding:12px 22px 10px}
+.top .in{max-width:1180px;margin:0 auto;padding:13px 30px 11px}
 .brow{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:9px}
 .mark{font-family:var(--disp);font-weight:600;font-size:15px}
 .mark span{color:var(--ac)}
@@ -77,23 +87,23 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 .q{font-size:15.5px;font-weight:500;color:var(--tw);margin-bottom:14px;max-width:52ch}
 .opts{display:flex;flex-direction:column;gap:8px}
 .opt{appearance:none;text-align:left;width:100%;cursor:pointer;font:inherit;font-size:15px;
- background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:14px 16px;
- color:var(--tw);display:flex;align-items:flex-start;gap:11px;line-height:1.45;
- transition:border-color .15s,background .15s}
-.opt:hover{border-color:rgba(237,239,236,.32)}
+ background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:14px 16px;
+ color:var(--ink);display:flex;align-items:flex-start;gap:11px;line-height:1.45;
+ transition:border-color .16s,background .16s,box-shadow .16s}
+.opt:hover{border-color:var(--acd);box-shadow:0 2px 10px rgba(0,0,0,.14)}
 .opt:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
-.opt .mk{width:17px;height:17px;border-radius:50%;border:1.5px solid rgba(237,239,236,.25);
+.opt .mk{width:17px;height:17px;border-radius:50%;border:1.5px solid #CBD2CD;
  flex:none;margin-top:1px;display:flex;align-items:center;justify-content:center;
  font-size:9px;font-weight:700;color:#07120d;font-family:var(--body)}
 .done .opt{cursor:default}
 .done .opt:hover{border-color:var(--ln)}
-.opt.ok{border-color:rgba(52,183,125,.55);background:rgba(52,183,125,.09)}
+.opt.ok{border-color:var(--gr);background:var(--gl)}
 .opt.ok .mk{background:var(--ac);border-color:var(--ac)}
-.opt.no{border-color:rgba(224,87,79,.55);background:rgba(224,87,79,.08)}
+.opt.no{border-color:var(--rd);background:var(--rl)}
 .opt.no .mk{background:var(--rd);border-color:var(--rd);color:#fff}
-.opt.pick{border-color:rgba(217,169,75,.55);background:rgba(217,169,75,.09)}
+.opt.pick{border-color:var(--gd);background:rgba(217,169,75,.14)}
 .opt.pick .mk{background:var(--gd);border-color:var(--gd)}
-.opt.dim{opacity:.42}
+.opt.dim{opacity:.5}
 
 /* what the answer unlocks */
 .pay{margin-top:18px;display:none}
@@ -197,34 +207,36 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 /* settings */
 .set .beat{color:var(--ac)}
 .set .beat i{background:var(--ac)}
-.ck{background:var(--sf);border:1px solid var(--ln);border-radius:11px;margin:10px 0;overflow:hidden}
-.ck.on{border-color:rgba(52,183,125,.45)}
+.ck{background:var(--paper);border:1px solid var(--line);border-radius:12px;margin:10px 0;
+ overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.16)}
+.ck.on{border-color:var(--gr)}
 .ckh{display:flex;align-items:flex-start;gap:12px;padding:14px 16px}
 .cb{appearance:none;margin:0;flex:none;width:21px;height:21px;border-radius:6px;
- border:1.5px solid rgba(237,239,236,.25);background:var(--sf2);cursor:pointer;position:relative;margin-top:1px}
+ border:1.5px solid #CBD2CD;background:#fff;cursor:pointer;position:relative;margin-top:1px}
 .cb:checked{background:var(--ac);border-color:var(--ac)}
 .cb:checked::after{content:"\2713";position:absolute;inset:0;display:flex;align-items:center;
- justify-content:center;color:#07120d;font-size:12px;font-weight:700}
+ justify-content:center;color:#fff;font-size:12px;font-weight:700}
+.cb:checked{background:var(--gr);border-color:var(--gr)}
 .cb:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
-.ckt{font-size:15px;font-weight:500;cursor:pointer;line-height:1.4}
-.tg{appearance:none;background:none;border:0;cursor:pointer;color:var(--tm);
+.ckt{font-size:15px;font-weight:500;cursor:pointer;line-height:1.4;color:var(--ink)}
+.tg{appearance:none;background:none;border:0;cursor:pointer;color:var(--ink-m);
  font-family:var(--body);font-size:13.5px;padding:2px 0 0;margin-left:auto;flex:none;
  display:inline-flex;align-items:center;gap:7px;text-decoration:underline;
  text-decoration-color:rgba(237,239,236,.22);text-underline-offset:3px}
-.tg:hover{color:var(--tw);text-decoration-color:var(--ac)}
-.tg .cv{color:var(--ac);transition:transform .2s;display:inline-block}
+.tg:hover{color:var(--ink);text-decoration-color:var(--acd)}
+.tg .cv{color:var(--acd);transition:transform .2s;display:inline-block}
 .tg[aria-expanded="true"] .cv{transform:rotate(90deg)}
-.how{padding:0 16px 16px 49px;font-size:14px;color:var(--tm)}
+.how{padding:0 16px 16px 49px;font-size:14px;color:var(--ink-m)}
 .how p{margin-bottom:10px;max-width:50ch}
 .how ol{margin:0;padding-left:18px}
 .how li{margin:6px 0;max-width:48ch}
-.how .inf{margin-top:12px;padding-top:10px;border-top:1px dashed rgba(237,239,236,.14);
- font-size:13px;color:var(--tf);max-width:50ch}
+.how .inf{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);
+ font-size:13px;color:var(--ink-f);max-width:50ch}
 
 /* recap */
 .recap{padding:46px 0 0}
 .recap h2{font-family:var(--disp);font-weight:600;font-size:22px;margin-bottom:20px}
-.rc{background:var(--sf);border:1px solid var(--ln);border-radius:11px;padding:16px 18px;
+.rc{background:rgba(0,0,0,.2);border:1px solid var(--ln);border-radius:11px;padding:16px 18px;
  margin-bottom:9px;display:flex;gap:13px}
 .rc i{width:7px;height:7px;border-radius:2px;background:var(--ac);flex:none;margin-top:8px}
 .rc p{font-size:14.5px;color:var(--tm)}
@@ -265,7 +277,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 
 /* the one thing to do tonight */
 .tonight{margin-top:22px;padding:17px 19px;border-radius:12px;
- background:rgba(52,183,125,.07);border:1px solid rgba(52,183,125,.32)}
+ background:rgba(52,183,125,.12);border:1px solid rgba(52,183,125,.42)}
 .tl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
  color:var(--ac);margin-bottom:9px}
 .tonight p{font-size:15px;color:var(--tm);max-width:56ch}
@@ -280,14 +292,14 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 .qitem .says{margin:0 0 14px}
 .qitem .q em{font-style:italic;color:var(--tm)}
 .qfb{margin-top:13px;padding:14px 16px;border-radius:10px;font-size:14.5px;color:var(--tm);
- background:var(--sf);border:1px solid var(--ln);border-left:2px solid var(--ac);max-width:58ch;
+ background:rgba(0,0,0,.2);border:1px solid var(--ln);border-left:2px solid var(--ac);max-width:58ch;
  display:none}
 .qfb.show{display:block;animation:fade .35s ease}
 .qfb.miss{border-left-color:var(--rd)}
 .qfb .vt{color:var(--ac)}
 .qfb.miss .vt{color:var(--rd)}
 
-.result{margin-top:28px;padding:22px 24px;border-radius:13px;background:var(--sf);
+.result{margin-top:28px;padding:22px 24px;border-radius:13px;background:rgba(0,0,0,.2);
  border:1px solid var(--ln)}
 .result.pass{border-color:rgba(52,183,125,.45)}
 .result.fail{border-color:rgba(224,87,79,.45)}
@@ -300,7 +312,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
  text-transform:uppercase;color:var(--tf)}
 .result p{font-size:15px;color:var(--tm);max-width:56ch}
 .again{appearance:none;margin-top:16px;cursor:pointer;font:inherit;font-size:14.5px;
- background:none;color:var(--tw);border:1px solid var(--ln);border-radius:9px;padding:10px 16px}
+ background:rgba(255,255,255,.06);color:var(--tw);border:1px solid var(--ln);border-radius:9px;padding:10px 16px}
 .again:hover{border-color:var(--ac);color:var(--ac)}
 .again.next{margin-top:14px}
 .again[hidden]{display:none}
@@ -395,13 +407,9 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
    course already keeps its title block. On a narrow one there is no room for a
    column, so she goes back to the corner. */
 .shell{display:flex;align-items:flex-start}
-.rail{display:none}
+.rail{display:none!important}
 @media (min-width:1000px){
-  .top{display:none}
   .shell{min-height:100vh}
-  .rail{display:flex;flex-direction:column;width:310px;flex:none;position:sticky;top:0;
-   height:100vh;padding:40px 30px 30px;border-right:1px solid rgba(237,239,236,.09);
-   background:linear-gradient(170deg,#16211B,#121B16)}
   /* everything right of the rail is centred, so a wide screen gives even
      margins instead of a column pinned left and a hole on the right */
   .body-wrap{flex:1;display:flex;justify-content:center;gap:44px;min-width:0}
@@ -456,10 +464,10 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
  transition:opacity .6s,filter .6s}
 .scene.locked *{animation-play-state:paused!important}
 .go-on{appearance:none;cursor:pointer;font:inherit;font-size:15.5px;width:100%;max-width:600px;margin-bottom:6px;
- background:rgba(52,183,125,.1);color:var(--tw);border:1px solid rgba(52,183,125,.5);
+ background:rgba(52,183,125,.16);color:var(--tw);border:1px solid rgba(52,183,125,.6);
  border-radius:10px;padding:11px 14px;margin-top:11px;text-align:left;
  display:flex;align-items:center;justify-content:space-between;gap:10px}
-.go-on:hover{background:rgba(52,183,125,.18)}
+.go-on:hover{background:rgba(52,183,125,.26)}
 .go-on:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
 .go-on i{font-style:normal;color:var(--ac)}
 .go-on[hidden]{display:none}
@@ -471,16 +479,17 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
    that gets corrected and stays corrected, and the reader only notices the gap
    if they committed to it first. Same step and same wording as the rest of the
    library, so it reads as one course and not two. */
-.conf{display:none;margin-top:14px;padding:14px 16px;border-radius:11px;
- background:rgba(217,169,75,.07);border:1px solid rgba(217,169,75,.32);max-width:560px}
+.conf{display:none;margin-top:14px;padding:15px 17px;border-radius:12px;
+ background:var(--paper);border:1px solid var(--line);max-width:560px;
+ box-shadow:0 10px 26px rgba(0,0,0,.2)}
 .conf.show{display:block;animation:fade .3s ease}
-.conf-q{font-size:14.5px;color:var(--tw);margin-bottom:11px;font-weight:500}
+.conf-q{font-size:14.5px;color:var(--ink);margin-bottom:11px;font-weight:500}
 .conf-row{display:flex;gap:8px;flex-wrap:wrap}
 .conf-b{appearance:none;cursor:pointer;font:inherit;font-size:14px;
- background:var(--sf);color:var(--tw);border:1px solid var(--ln);border-radius:9px;padding:9px 14px}
-.conf-b:hover{border-color:var(--gd);color:var(--gd)}
+ background:#fff;color:var(--ink);border:1.5px solid var(--line);border-radius:9px;padding:9px 14px}
+.conf-b:hover{border-color:var(--acd);box-shadow:0 2px 10px rgba(0,0,0,.14)}
 .conf-b:focus-visible{outline:2px solid var(--gd);outline-offset:2px}
-.opt.picked{border-color:rgba(217,169,75,.6);background:rgba(217,169,75,.1)}
+.opt.picked{border-color:var(--gd);background:rgba(217,169,75,.16)}
 .opt.picked .mk{background:var(--gd);border-color:var(--gd)}
 
 /* ---------- her panel ----------
@@ -526,10 +535,10 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   .owlaside{display:block}
   .owltale{display:none}
   .owllayer{display:none}
-  main{max-width:660px;flex:0 1 660px}
-  .body-wrap{justify-content:flex-start;padding-left:4vw}
+  main{max-width:680px;flex:0 1 680px}
+  .body-wrap{justify-content:flex-start;padding-left:9vw}
 }
-@media (min-width:1750px){ .owlaside{width:400px} .body-wrap{padding-left:7vw} }
+@media (min-width:1750px){ .owlaside{width:400px} .body-wrap{padding-left:13vw} }
 
 /* ---------- she is not inside anything ----------
    One bird on a layer of her own, flying to whatever currently wants the
@@ -556,7 +565,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
     <div class="xp" id="xp">20 XP</div>
   </div>
   <div class="segs" id="segs"></div>
-  <div class="cap" id="stagecap"></div>
+  <div class="cap" id="stagecap" hidden></div>
 </div></header>
 
 <template id="owl-tpl">
@@ -657,8 +666,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
     </div>
     <div class="pay" id="g-pay">
       <span class="vt" id="g-vt">Only the third</span>
-      <p>Nothing is watching a correct password arrive, because a correct password is exactly what the page is waiting for. Whose computer it came from makes no difference, and nobody gets told. The only thing that stops it is a second step after the password, which is a setting somebody has to switch on in advance rather than a person paying attention at the time.</p>
-      <p>A company that handles about <b>a third of American patient records</b> had that setting switched off. What follows is the nine days after someone used a password there, and the three settings that close the same door on your own accounts.</p>
+      <p>Nothing is watching a correct password arrive. It is exactly what the page is waiting for, and nobody gets told.</p>
       <div class="cue"><i>&darr;</i> Keep going</div>
     </div>
   </section>
@@ -1174,7 +1182,8 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
      currently reading and moves when they move on, rather than staying put
      where she last spoke. */
   var TALE={
-   0:["It starts quietly. Somewhere outside the company there is a working username and password sitting in the wrong hands. How they got there was never made public, and the ordinary routes are ordinary: a password reused on a site that was breached later, a convincing fake login page, malware on a home machine copying what gets typed.",
+   0:["Picture it, then. The only thing that stops a correct password is a second step after it, and that is a setting somebody has to switch on in advance, not a person paying attention at the time. <b>It happened in a real company</b>, one that handles about a third of American patient records, with that setting switched off.",
+      "It starts quietly. Somewhere outside the company there is a working username and password sitting in the wrong hands. How they got there was never made public, and the ordinary routes are ordinary: a password reused on a site that was breached later, a convincing fake login page, malware on a home machine copying what gets typed.",
       "Nobody there did anything dramatic that day, and nobody knew anything had happened. He typed those details into the page staff use from home and it accepted them. No second code, no tap on a phone, no question about whether it was really him. <b>To every system inside, he now looks exactly like a trusted employee getting on with the job.</b>"],
    1:["Now he takes his time. For nine days he moves carefully through the network, reading files, copying whole databases of patient records, learning how the systems connect and where the valuable things are kept. Patience pays: the longer he goes unnoticed, the more he can take and the more damage he can set up.",
       "Meanwhile it is an ordinary week. People answer emails, join meetings, go home. Nobody sees the intruder reading over their shoulder."],
