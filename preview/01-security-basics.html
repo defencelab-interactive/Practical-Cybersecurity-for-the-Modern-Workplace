@@ -390,7 +390,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
  gap:11px;pointer-events:none;opacity:0}
 .dock.in{opacity:1}
 .dock .owl{width:62px;flex:none;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
-.dock.arriving .owl,.railowl.arriving .owl{animation:flyin 2.3s cubic-bezier(.3,.5,.3,1) both}
+.dock.arriving .owl,.railowl.arriving .owl,.owlmargin.arriving .owl{animation:flyin 2.3s cubic-bezier(.3,.5,.3,1) both}
 @keyframes flyin{
   0%{transform:translate(-62vw,-64vh) rotate(16deg) scale(.5);opacity:0}
   9%{opacity:1}
@@ -433,7 +433,37 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   .rail{display:flex;flex-direction:column;width:310px;flex:none;position:sticky;top:0;
    height:100vh;padding:40px 30px 30px;border-right:1px solid rgba(237,239,236,.09);
    background:linear-gradient(170deg,#16211B,#121B16)}
-  main{max-width:660px;padding:0 44px 120px;margin:0}
+  /* everything right of the rail is centred, so a wide screen gives even
+     margins instead of a column pinned left and a hole on the right */
+  .body-wrap{flex:1;display:flex;justify-content:center;gap:44px;min-width:0}
+  main{max-width:700px;padding:0 44px 120px;margin:0;flex:0 1 700px}
+  /* a screen that size can carry more type than a phone */
+  .sit{font-size:18px}
+  .q{font-size:17px}
+  .opt{font-size:16px}
+  .pay p{font-size:16px}
+  .dcap{font-size:14.5px}
+  .qitem .q{font-size:17px}
+  .qfb{font-size:15.5px}
+  .ckt{font-size:16px}
+  .how{font-size:15px}
+  .rc p{font-size:15.5px}
+  .conf-q{font-size:15.5px}
+  .conf-b{font-size:15px}
+}
+.owlmargin{display:none}
+/* she moves out of the far corner and into the margin beside the text, so the
+   thing you read and the thing you click are not at opposite ends of a screen */
+@media (min-width:1400px){
+  .owlmargin{display:flex;flex-direction:column;justify-content:center;
+   width:270px;flex:none;position:sticky;top:0;height:100vh;padding:0 0 60px}
+  .owlmargin .owl{width:78px;margin-bottom:13px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.4))}
+  .owlmargin .say{background:#1b261f;border:1px solid var(--ln);border-radius:13px;
+   padding:13px 15px;font-size:14.5px;line-height:1.5;color:var(--tw);
+   opacity:0;transform:translateY(5px);transition:opacity .3s,transform .3s}
+  .owlmargin .say.on{opacity:1;transform:none}
+  .owlmargin{opacity:0;transition:opacity .35s}
+  .owlmargin.in{opacity:1}
   .dock{display:none}
 }
 .rail .mark{font-family:var(--disp);font-weight:600;font-size:16px;margin-bottom:38px}
@@ -446,8 +476,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 .rail .rsegs{display:flex;gap:4px;margin-top:22px}
 .rail .rxp{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--gd);margin-top:14px;
  font-variant-numeric:tabular-nums}
-.railowl{margin-top:auto;padding-top:26px;opacity:0;transition:opacity .35s}
-.railowl.in{opacity:1}
+.railowl{display:none}
 .railowl .owl{width:76px;margin-bottom:12px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.4))}
 .railowl .say{background:#1b261f;border:1px solid var(--ln);border-radius:13px;padding:12px 14px;
  font-size:14px;line-height:1.5;color:var(--tw);opacity:0;transform:translateY(5px);
@@ -580,6 +609,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   <div class="rxp" id="rxp">0 XP</div>
   <div class="railowl" id="railowl"><div class="say" id="rail-say"></div></div>
 </aside>
+<div class="body-wrap">
 <main>
 
   <!-- ENTRANCE -->
@@ -858,6 +888,8 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
     </div>
   </section>
 </main>
+<aside class="owlmargin" id="owlmargin"><div class="say" id="margin-say"></div></aside>
+</div>
 </div>
 
 <div class="dock" id="dock" aria-live="polite">
@@ -1110,32 +1142,35 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 
   var dock=document.getElementById("dock"), dockSay=document.getElementById("dock-say");
   var railBox=document.getElementById("railowl"), railSay=document.getElementById("rail-say");
+  var marginBox=document.getElementById("owlmargin"), marginSay=document.getElementById("margin-say");
   var dockOwl=makeOwl("",62,true);
   var sayTimer=null, landed=false;
 
   /* she is one bird. The rail on a wide screen, the corner on a narrow one. */
   var wide=window.matchMedia("(min-width:1000px)");
-  function home(){ return wide.matches ? railBox : dock; }
-  function bubble(){ return wide.matches ? railSay : dockSay; }
+  var roomy=window.matchMedia("(min-width:1400px)");
+  function home(){ return roomy.matches ? marginBox : dock; }
+  function bubble(){ return roomy.matches ? marginSay : dockSay; }
   function place(){
     var h=home();
     if(dockOwl.parentNode!==h) h.insertBefore(dockOwl, h.firstChild);
     dockOwl.style.width = wide.matches ? "76px" : "62px";
     if(landed) home().classList.add("in");
-    var other = wide.matches ? dockSay : railSay;
-    other.classList.remove("on");
+    [marginSay,railSay,dockSay].forEach(function(b){ if(b!==bubble()) b.classList.remove("on"); });
+    [marginBox,railBox,dock].forEach(function(h){ if(h!==home()) h.classList.remove("in","arriving"); });
   }
   place();
-  wide.addEventListener("change", function(){ place(); });
+  wide.addEventListener("change", place);
+  roomy.addEventListener("change", place);
 
   function land(){
     if(landed) return; landed=true;
     place();
-    (wide.matches?railBox:dock).classList.add("in","arriving");
+    home().classList.add("in","arriving");
     dockOwl.classList.add("flying");
     /* wings fold at the moment she touches down, not before */
     setTimeout(function(){ dockOwl.classList.remove("flying"); }, 2050);
-    setTimeout(function(){ dock.classList.remove("arriving"); railBox.classList.remove("arriving"); }, 2350);
+    setTimeout(function(){ [dock,railBox,marginBox].forEach(function(h){h.classList.remove("arriving");}); }, 2350);
   }
 
   window.__owlReact=function(right){
