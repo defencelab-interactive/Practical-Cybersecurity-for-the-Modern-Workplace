@@ -53,8 +53,8 @@ body.started .top{opacity:1;transform:none}
 main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 
 /* ---------- the entrance ---------- */
-.gate{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
- padding:80px 0 9vh}
+.gate{min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+ padding:40px 0 9vh}
 .gate.done{justify-content:center;padding-bottom:40px}
 .gate .tag{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
  color:var(--tf);margin-bottom:34px}
@@ -97,13 +97,15 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
  font-size:9px;font-weight:700;color:#07120d;font-family:var(--body)}
 .done .opt{cursor:default}
 .done .opt:hover{border-color:var(--ln)}
-.opt.ok{border-color:var(--gr);background:var(--gl)}
+/* an opaque tint, because a translucent one on a paper card lets the dark
+   page through and the card stops being paper */
+.opt.ok{border-color:var(--gr);background:#E2F4EA}
 .opt.ok .mk{background:var(--ac);border-color:var(--ac)}
-.opt.no{border-color:var(--rd);background:var(--rl)}
+.opt.no{border-color:var(--rd);background:#FBEBEA}
 .opt.no .mk{background:var(--rd);border-color:var(--rd);color:#fff}
-.opt.pick{border-color:var(--gd);background:rgba(217,169,75,.14)}
+.opt.pick{border-color:var(--gd);background:#F9F1E2}
 .opt.pick .mk{background:var(--gd);border-color:var(--gd)}
-.opt.dim{opacity:.5}
+.opt.dim{background:#F2F4F2;color:#98A09A;border-color:#E9ECE9;box-shadow:none}
 
 /* what the answer unlocks */
 .pay{margin-top:18px;display:none}
@@ -489,7 +491,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
  background:#fff;color:var(--ink);border:1.5px solid var(--line);border-radius:9px;padding:9px 14px}
 .conf-b:hover{border-color:var(--acd);box-shadow:0 2px 10px rgba(0,0,0,.14)}
 .conf-b:focus-visible{outline:2px solid var(--gd);outline-offset:2px}
-.opt.picked{border-color:var(--gd);background:rgba(217,169,75,.16)}
+.opt.picked{border-color:var(--gd);background:#F9F1E2}
 .opt.picked .mk{background:var(--gd);border-color:var(--gd)}
 
 /* ---------- her panel ----------
@@ -523,6 +525,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 .owlaside .bub:after{top:-7.6px;border-bottom-color:#1b261f}
 .owlaside .who{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
  text-transform:uppercase;color:rgba(52,183,125,.8);margin-bottom:10px}
+.owlaside .bub{max-height:66vh;overflow:auto}
 .owlaside .bub p{font-size:14.5px;line-height:1.56;color:var(--tm)}
 .owlaside .bub p+p{margin-top:10px}
 .owlaside .bub b{color:var(--tw);font-weight:500}
@@ -556,6 +559,28 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 /* no side gutter: leave her room to perch on top of the block */
 @media (max-width:1099px){ .owltale{margin-top:48px} }
 @media (max-width:1439px){ .owlaside{display:none} }
+
+/* ---------- she introduces herself ---------- */
+.intro{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:70px 0}
+.introwrap{max-width:560px}
+.introowl .owl{width:132px;margin-bottom:22px;filter:drop-shadow(0 12px 30px rgba(0,0,0,.45))}
+.introsay{background:#1b261f;border:1px solid var(--ln);border-radius:16px;padding:22px 24px;
+ box-shadow:0 18px 44px rgba(0,0,0,.4);position:relative}
+.introsay:before,.introsay:after{content:"";position:absolute;left:38px;top:-9px;
+ border:9px solid transparent;border-top:0;border-bottom-color:var(--ln)}
+.introsay:after{top:-7.6px;border-bottom-color:#1b261f}
+.introsay .who{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+ color:rgba(52,183,125,.8);margin-bottom:11px}
+.introsay p{font-size:16px;line-height:1.56;color:var(--tm)}
+.introsay p+p{margin-top:11px}
+.introsay b{color:var(--tw);font-weight:500}
+.introgo{appearance:none;cursor:pointer;font:inherit;font-size:16px;margin-top:20px;
+ background:rgba(52,183,125,.16);color:var(--tw);border:1px solid rgba(52,183,125,.6);
+ border-radius:11px;padding:13px 24px;display:inline-flex;align-items:center;gap:10px}
+.introgo:hover{background:rgba(52,183,125,.26)}
+.introgo:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.introgo i{font-style:normal;color:var(--ac)}
+body.started .intro{display:none}
 </style>
 </head><body>
 
@@ -652,6 +677,20 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
 </aside>
 <div class="body-wrap">
 <main>
+
+  <!-- SHE INTRODUCES HERSELF -->
+  <section class="intro" id="intro">
+    <div class="introwrap">
+      <div class="introowl" id="introowl"></div>
+      <div class="introsay">
+        <div class="who">The owl</div>
+        <p>Hello. I am the owl, and I will be off to one side for the whole of this.</p>
+        <p><b>My job is the context.</b> The course gives you the facts and the questions. I give you the story around them: who, why, and what it felt like from the inside.</p>
+        <p>Nothing I say is needed to answer anything. If you are in a hurry, skip me entirely and you will still pass.</p>
+      </div>
+      <button class="introgo" id="introgo">Start <i>&rarr;</i></button>
+    </div>
+  </section>
 
   <!-- ENTRANCE -->
   <section class="gate" id="gate">
@@ -1013,6 +1052,10 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
     });
   }
 
+  document.getElementById("introgo").addEventListener("click",function(){
+    document.getElementById("gate").scrollIntoView({behavior:"smooth",block:"start"});
+  });
+
   /* ---- entrance ---- */
   var gate=document.getElementById("gate"), gOpts=gate.querySelectorAll("#g-opts .opt");
   var gPay=document.getElementById("g-pay"), gVt=document.getElementById("g-vt");
@@ -1029,7 +1072,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
       if(!right) gVt.textContent="It is the third one";
       gPay.classList.add("show");
       document.body.classList.add("started");
-      setTimeout(function(){ buildTales(); land(); }, 900);
+      setTimeout(function(){ buildTales(); land(); }, 700);
       xp+=20; xpEl.textContent=xp+" XP";
     });
   });
@@ -1181,21 +1224,27 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
      One bird on her own layer. She stands beside whatever the reader is
      currently reading and moves when they move on, rather than staying put
      where she last spoke. */
+  /* Short on purpose. She is the aside, not the course: one or two sentences a
+     stop, because a wall of optional text in the corner is a wall nobody
+     reads. */
   var TALE={
-   0:["Picture it, then. The only thing that stops a correct password is a second step after it, and that is a setting somebody has to switch on in advance, not a person paying attention at the time. <b>It happened in a real company</b>, one that handles about a third of American patient records, with that setting switched off.",
-      "It starts quietly. Somewhere outside the company there is a working username and password sitting in the wrong hands. How they got there was never made public, and the ordinary routes are ordinary: a password reused on a site that was breached later, a convincing fake login page, malware on a home machine copying what gets typed.",
-      "Nobody there did anything dramatic that day, and nobody knew anything had happened. He typed those details into the page staff use from home and it accepted them. No second code, no tap on a phone, no question about whether it was really him. <b>To every system inside, he now looks exactly like a trusted employee getting on with the job.</b>"],
-   1:["Now he takes his time. For nine days he moves carefully through the network, reading files, copying whole databases of patient records, learning how the systems connect and where the valuable things are kept. Patience pays: the longer he goes unnoticed, the more he can take and the more damage he can set up.",
-      "Meanwhile it is an ordinary week. People answer emails, join meetings, go home. Nobody sees the intruder reading over their shoulder."],
-   2:["When he is ready he pulls the trigger. It sweeps across the company and locks everything at once: files, systems, the tools that keep claims and prescriptions moving.",
-      "Because this one company sits in the middle of so much of American healthcare, the damage does not stay inside it. Pharmacies across the country suddenly cannot confirm what a patient's insurance will cover. Some people walk away from the counter without the medicine they came for. <b>A single stolen login has reached a pharmacy in another state.</b>"],
-   3:["The money buys back the systems. The copied data is already gone, taken days earlier. Then come the restoration costs, the emergency funding for providers who could not get paid, and months of disruption across the health system.",
-      "All of it traces to two things nine days earlier: a password that still worked, and a page that asked for nothing else."],
-   4:["It is tempting to read that as one careless company. It is more useful to read it as the ordinary case. The report the number below comes from has been published every year for two decades, and the shape of the answer barely moves."],
-   5:["There is a reason somebody chose the company in the middle rather than any one hospital. Everything passing through it belongs to somebody else, and the people whose records those are never agreed to anything, never saw the login page, and could not have done a thing about it."],
-   6:["The breach you have just walked through relied on settings that were not turned on. The same ones take a few minutes on your side."],
+   0:["It starts quietly. Somewhere outside the company there is a working username and password in the wrong hands. How they got there was never made public.",
+      "He typed them into the page staff use from home, and it accepted them. <b>To every system inside, he now looks like a trusted employee getting on with the job.</b>"],
+   1:["For nine days he moves through the network, reading files and copying databases, learning where the valuable things are kept. Patience pays.",
+      "Meanwhile it is an ordinary week. People answer emails, join meetings, go home."],
+   2:["This company sits in the middle of so much of American healthcare that the damage cannot stay inside it.",
+      "Pharmacies cannot confirm what a patient's insurance covers. <b>A single stolen login has reached a pharmacy in another state.</b>"],
+   3:["The money buys back the systems. The copied files are already gone, taken days earlier.",
+      "All of it traces to two things: a password that still worked, and a page that asked for nothing else."],
+   4:["It is tempting to read that as one careless company. It is more useful to read it as the ordinary case."],
+   5:["The people whose records those were never agreed to anything, never saw the login page, and could not have done a thing about it."],
+   6:["Everything you have just read relied on settings that were not switched on. These take a few minutes."],
    7:["Ten things that could happen to you this week. I will keep quiet for these."]
   };
+
+  /* she is on screen from the first moment, in her own introduction */
+  var introSlot=document.getElementById("introowl");
+  if(introSlot) introSlot.appendChild(makeOwl("",0,true));
 
   var layer=document.createElement("div"); layer.className="owllayer";
   var bird=makeOwl("",0,true);
