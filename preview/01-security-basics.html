@@ -487,15 +487,29 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
    She slides in underneath whatever the reader just finished, inside the
    reading column. There is one place to answer and one place to continue, and
    they are the same place. */
-.owlpanel{display:none;margin:20px 0 6px;gap:15px;align-items:flex-start;max-width:640px;
+.owlpanel{display:none;margin:20px 0 6px;max-width:640px;
  background:rgba(52,183,125,.06);border:1px solid rgba(52,183,125,.3);
  border-radius:15px;padding:17px 19px}
-.owlpanel.on{display:flex;animation:owlslide .42s cubic-bezier(.3,.9,.3,1)}
+.owlpanel.on{display:block;animation:owlslide .42s cubic-bezier(.3,.9,.3,1)}
 @keyframes owlslide{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
-.owlpanel .owl{width:54px;flex:none;margin-top:1px}
-.owlpanel .txt{font-size:15.5px;line-height:1.5;color:var(--tw);flex:1;min-width:0}
+.owlpanel .txt{font-size:15.5px;line-height:1.5;color:var(--tw)}
 .owlpanel .txt b{font-weight:500}
-.owlpanel .go-on{margin-top:13px;width:auto;min-width:220px}
+.owlpanel .go-on{margin-top:14px;width:100%;min-width:0}
+
+/* ---------- she is not inside anything ----------
+   One bird on a layer of her own, flying to whatever currently wants the
+   reader's hand. She is never a hit target herself: the layer takes no
+   pointer events, so she can sit over a button without blocking it. */
+.owllayer{position:fixed;left:0;top:0;width:0;height:0;z-index:70;pointer-events:none}
+.owllayer .owl{width:92px;position:absolute;left:0;top:0;
+ filter:drop-shadow(0 10px 26px rgba(0,0,0,.5));opacity:0;
+ transition:opacity .4s}
+.owllayer.in .owl{opacity:1}
+.owllayer.travel .owl{transition:transform 1.25s cubic-bezier(.34,.02,.26,1),opacity .4s}
+@media (max-width:1099px){ .owllayer .owl{width:64px} }
+@media (max-width:560px){ .owllayer .owl{width:54px} }
+/* room above the panel for her to stand on, where there is no side gutter */
+@media (max-width:1099px){ .owlpanel.on{margin-top:52px} }
 </style>
 </head><body>
 
@@ -967,8 +981,8 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
       gPay.classList.add("show");
       document.body.classList.add("started");
       setTimeout(function(){
-        land();
-        says("I turn up under whatever you have just finished, which is also where the button to carry on lives. One place, not two.","look",false,gPay);
+        aimAt=gPay; land();
+        says("I turn up beside whatever you have just finished, and I stand next to the thing you need to press.","look",false,gPay);
       }, 900);
       xp+=20; xpEl.textContent=xp+" XP";
     });
@@ -1120,25 +1134,76 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   var panel=document.createElement("div");
   panel.className="owlpanel";
   var panelTxt=document.createElement("div"); panelTxt.className="txt";
-  var panelOwl=makeOwl("",54,true);
-  panel.appendChild(panelOwl); panel.appendChild(panelTxt);
-  var sayTimer=null, landed=false;
+  panel.appendChild(panelTxt);
+
+  var layer=document.createElement("div"); layer.className="owllayer";
+  var bird=makeOwl("",0,true);
+  layer.appendChild(bird);
+  document.body.appendChild(layer);
+
+  var sayTimer=null, landed=false, aimAt=null, aimMode="panel", travelT=null;
+  var gutter=window.matchMedia("(min-width:1100px)");
+
+  /* where she should be, given what she is pointing at */
+  function target(){
+    if(!aimAt || !aimAt.isConnected) return null;
+    var r=aimAt.getBoundingClientRect();
+    /* an SVG element has no offsetWidth, so measure the box that is really drawn */
+    var bb=bird.getBoundingClientRect();
+    var w=bb.width||92, h=bb.height||95;
+    if(gutter.matches){
+      var col=document.querySelector("main").getBoundingClientRect();
+      var x=col.left-w-26;
+      if(x<8) x=col.left+8;
+      return {x:x, y:(aimMode==="button"? r.top+r.height/2-h/2 : r.top+4)};
+    }
+    /* no side gutter: she perches on the top edge of the panel rather than on
+       the button, which would put her on top of the words */
+    var box=panel.classList.contains("on")?panel.getBoundingClientRect():r;
+    var x=aimMode==="button"?Math.max(8,r.left+2):Math.max(8,box.left+6);
+    return {x:x, y:box.top-h+10};
+  }
+
+  function park(){
+    var t=target(); if(!t) return;
+    bird.style.transform="translate("+Math.round(t.x)+"px,"+Math.round(t.y)+"px)";
+  }
+
+  /* a short flight whenever what she is pointing at changes */
+  function aim(el,mode){
+    var fresh = el!==aimAt;
+    aimAt=el; aimMode=mode||"panel";
+    if(!landed) return;
+    if(fresh){
+      layer.classList.add("travel");
+      bird.classList.add("flying");
+      clearTimeout(travelT);
+      travelT=setTimeout(function(){
+        bird.classList.remove("flying");
+        layer.classList.remove("travel");
+      },1300);
+    }
+    park();
+  }
+
+  (function frame(){ if(landed && !layer.classList.contains("travel")) park(); requestAnimationFrame(frame); })();
+  window.addEventListener("scroll",function(){ if(landed&&layer.classList.contains("travel")) park(); },{passive:true});
+  window.addEventListener("resize",park);
 
   function pose(p){
-    panelOwl.classList.remove("look","alarm","wink","turn");
-    void panelOwl.offsetWidth;
-    panelOwl.classList.add(p||"look");
+    bird.classList.remove("look","alarm","wink","turn");
+    void bird.offsetWidth;
+    bird.classList.add(p||"look");
   }
 
   window.__owlReact=function(right){
     if(!landed) return;
-    panelOwl.classList.remove("look","alarm","wink");
-    void panelOwl.offsetWidth;
-    panelOwl.classList.add(right?"wink":"alarm");
-    setTimeout(function(){panelOwl.classList.remove("wink","alarm");},right?900:1600);
+    bird.classList.remove("look","alarm","wink");
+    void bird.offsetWidth;
+    bird.classList.add(right?"wink":"alarm");
+    setTimeout(function(){bird.classList.remove("wink","alarm");},right?900:1600);
   };
 
-  /* the panel is one element that moves to sit under whatever was just done */
   function say(text,p,withGate,anchor){
     if(!anchor) return;
     clearTimeout(sayTimer);
@@ -1150,15 +1215,24 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
     void panel.offsetWidth;
     panel.classList.add("on");
     pose(p);
+    /* when there is something to press she goes and stands by it */
+    aim(withGate?gateBtn:panel, withGate?"button":"panel");
     if(withGate) return;
     sayTimer=setTimeout(function(){
       panel.classList.remove("on");
-      panelOwl.classList.remove("look","alarm","wink","turn");
+      bird.classList.remove("look","alarm","wink","turn");
     },Math.min(13000,4200+text.length*42));
   }
   var says=say;
 
-  function land(){ landed=true; }
+  function land(){
+    landed=true;
+    layer.classList.add("in");
+    bird.classList.add("flying");
+    aimAt=aimAt||document.querySelector("main");
+    park();
+    setTimeout(function(){bird.classList.remove("flying");},2000);
+  }
 
   /* ---- she holds the gate ----
      The live course advances with a button at the end of each section. That
@@ -1190,6 +1264,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 90px}
   function openNext(){
     pending=false;
     panel.classList.remove("on");
+    aim(gated[Math.min(open+1,gated.length-1)],"panel");
     if(gateBtn.parentNode) gateBtn.parentNode.removeChild(gateBtn);
     open++;
     var el=gated[open];
