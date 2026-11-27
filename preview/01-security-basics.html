@@ -11,6 +11,8 @@
   --ac:#34B77D; --acd:#2A9A66; --rd:#E0574F; --gd:#D9A94B;
   /* her surface, a shade deeper and cooler than the page it sits on */
   --night:#0F1A20;
+  /* her card: a lit panel inside the dark, not part of it */
+  --lit:#17242C; --tn:rgba(237,239,236,.82);
   /* the light on the reader's side, changed by the step they are on */
   --mood:rgba(237,239,236,.07);
   --tw:#EDEFEC; --tm:rgba(237,239,236,.66); --tf:rgba(237,239,236,.36);
@@ -558,7 +560,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
    control. */
 .owltale{margin:14px 0 24px;max-width:600px;padding:2px 0 2px 20px;
  border-left:2px solid rgba(52,183,125,.4)}
-.owltale p{font-size:16px;line-height:1.62;color:var(--tm)}
+.owltale p{font-size:16px;line-height:1.62;color:var(--tn)}
 .owltale p+p{margin-top:12px}
 .owltale b{color:var(--tw);font-weight:500}
 .owltale .who{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
@@ -569,20 +571,23 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
  width:360px;padding:0 30px 0 0;z-index:65;pointer-events:none}
 .owlaside .owl{width:84px;margin:0 0 -16px 18px;position:relative;z-index:2;
  filter:drop-shadow(0 8px 22px rgba(0,0,0,.5))}
-.owlaside .bub{position:relative;background:var(--night);border:1px solid rgba(237,239,236,.2);
- border-radius:16px;padding:18px 20px 19px;box-shadow:0 18px 44px rgba(0,0,0,.42);
+.owlaside .bub{position:relative;background:var(--lit);border:1px solid rgba(237,239,236,.17);
+ border-radius:16px;padding:19px 21px 20px;
+ box-shadow:0 20px 50px rgba(0,0,0,.55), 0 0 70px rgba(52,183,125,.05),
+  inset 0 1px 0 rgba(237,239,236,.05);
  pointer-events:auto}
 .owlaside .bub:before,.owlaside .bub:after{content:"";position:absolute;left:34px;top:-9px;
  border:9px solid transparent;border-top:0;border-bottom-color:var(--ln)}
-.owlaside .bub:after{top:-7.6px;border-bottom-color:var(--night)}
+.owlaside .bub:after{top:-7.6px;border-bottom-color:var(--lit)}
 .owlaside .who{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
  text-transform:uppercase;color:rgba(52,183,125,.8);margin-bottom:10px;
  display:flex;align-items:center;gap:8px}
 .owlaside .who:before{content:"";flex:0 0 14px;height:1px;
  background:rgba(52,183,125,.55)}
 .owlaside .bub{max-height:66vh;overflow:auto}
-.owlaside .bub p{font-size:14.5px;line-height:1.56;color:var(--tm)}
-.owlaside .bub p+p{margin-top:10px}
+.owlaside .bub p{font-size:16px;line-height:1.62;color:var(--tn);
+ letter-spacing:.002em}
+.owlaside .bub p+p{margin-top:12px}
 .owlaside .bub b{color:var(--tw);font-weight:500}
 .owlaside .body-in{animation:asidein .42s ease}
 /* the rest of what she has to say, if it is wanted */
@@ -801,7 +806,7 @@ main{padding-top:26px}
      takes its own scroll rather than giving one to the page */
   .owlaside .bub{padding:14px 16px 15px;max-height:76vh;overflow:auto;
    scrollbar-width:thin;scrollbar-color:rgba(237,239,236,.2) transparent}
-  .owlaside .bub p{font-size:14px}
+  .owlaside .bub p{font-size:15px;line-height:1.56}
   .go-on{margin-top:9px;padding:10px 15px;font-size:15px}
   /* the ten situations carry the longest options and the longest answers in
      the course, so they get their own squeeze */
@@ -1421,8 +1426,9 @@ main{padding-top:26px}
     var n=el.querySelector("b"), lab=el.querySelector("span"), d=1;
     var t=setInterval(function(){
       d++; n.textContent=d;
+      lab.textContent = d===1 ? "day inside" : "days inside";
       if(d===9){
-        clearInterval(t); lab.textContent="days inside";
+        clearInterval(t);
         setTimeout(function(){el.classList.add("hit");},700);
       }
     },430);
