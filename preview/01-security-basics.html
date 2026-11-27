@@ -143,6 +143,9 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
    the flow until then, to keep the third answer above the fold; measured at
    six sizes with it in place, the gate's last option lands 63px lower and
    the step is no taller than before, so the trick is no longer paid for. */
+/* while the entrance is up the header is lifted out of the flow, or its
+   hidden 63px would sit above the entrance and push it off centre */
+body:not(.begun) .top{position:fixed;top:0;left:0;right:0;pointer-events:none}
 body.begun .top{opacity:1;transform:none}
 .top .in{max-width:1180px;margin:0 auto;padding:13px 30px 11px}
 .brow{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:9px}
@@ -2074,19 +2077,24 @@ main{padding-top:26px}
      context on each side instead of half a story on both. */
   var TALE={
    0:{w:"Why I am here",
+      c:["So what will you do?"],
       p:["Answer this one without me. It is about your own login, and I have nothing useful to say about yours.",
          "Then I will take you to the night I watched the same question go the other way."]},
    1:{w:"The same page, February 2024",
+      c:["What happened to it?"],
       p:["The page you are picturing is the one I want to tell you about. First the company it belonged to. <b>Change Healthcare</b> moves the paperwork between a doctor, a pharmacy and whoever pays, and about a third of American patient records go through it.",
          "Somebody outside had a working employee password for exactly that page, and it accepted it. To every system inside, he looked like a trusted employee getting on with the job."]},
    2:{w:"How long it took here",
+      c:["And nobody noticed?"],
       p:["Hold your answer against this one. <b>Nine days.</b> He read files, copied whole databases, learned where the valuable things were kept.",
          "For everyone else it was an ordinary week. Emails answered, meetings joined, home at six."]},
    3:{w:"What the payment bought",
+      c:["Did they pay?","What did the year cost?"],
       p:["They faced your question for real. <b>It all locked at once</b>, and a payment was demanded. Pharmacies across the country could not check what a patient's insurance covered, and people went home without their prescription.",
          "Paying the $22 million was the chief executive's own decision, he told the Senate, and one of the hardest he had made. It bought the systems back. The copied files had gone days earlier.",
          "<b>The year cost the company $2.3 to $2.45 billion</b> by its own accounting, before the penalties and the lawsuits. All of it traces to a password that still worked and a page that asked for nothing else."]},
    4:{w:"Why they picked this one",
+      c:["Who ended up in it?","Was somebody careless?"],
       p:["<b>In our case</b> they did not go after a hospital. They went after the company every hospital depends on.",
          "The people whose records those were never agreed to anything, and never saw that login page.",
          "And nobody there was being careless. Usually it is one of three ordinary things: nobody ever told you what to look for, the update got postponed again and then again, or somebody was good at talking to you and the message arrived on a bad day."]},
@@ -2287,7 +2295,10 @@ main{padding-top:26px}
     if(sayIdx>=sayParts.length) { layoutSay(); return; }
     sayOn=document.createElement("button");
     sayOn.type="button"; sayOn.className="spkon";
-    sayOn.innerHTML=(sayIdx===1 ? "Ask me for more details" : "Go on")+' <i>&rarr;</i>';
+    /* each step says what pressing it actually asks her */
+    var lab=(pendingTale && pendingTale.c && pendingTale.c[sayIdx-1]) ||
+            (sayIdx===1 ? "Ask me for more details" : "Go on");
+    sayOn.innerHTML=lab+' <i>&rarr;</i>';
     sayOn.addEventListener("click",function(){
       if(sayOn){ sayOn.remove(); sayOn=null; }
       /* she walks a little way along the branch, then says the next part
