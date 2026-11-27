@@ -157,6 +157,7 @@ body.begun .top{opacity:1;transform:none}
  text-transform:uppercase;color:rgba(237,239,236,.45);text-decoration:none;
  display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
  transition:color .25s}
+.tn[hidden]{display:none}
 .tn:hover{color:var(--tw)}
 .tn:focus-visible{outline:2px solid var(--ac);outline-offset:3px;border-radius:4px}
 .tn i{font-style:normal;font-size:12px;line-height:1}
@@ -1369,8 +1370,8 @@ main{padding-top:26px}
     <div class="bleft">
       <div class="mark">Defence<span>Lab</span></div>
       <nav class="tnav" aria-label="Course navigation">
-        <button type="button" class="tn" id="navback"><i>&larr;</i><span>Back</span></button>
-        <a class="tn" id="navhome" href="../index.html"><span>All courses</span></a>
+        <button type="button" class="tn" id="navback" hidden><i>&larr;</i><span>Back</span></button>
+        <button type="button" class="tn" id="navhome"><span>Intro</span></button>
       </nav>
     </div>
     <div class="xp" id="xp">0 XP</div>
@@ -2605,6 +2606,11 @@ main{padding-top:26px}
     if(gateBtn.parentNode) gateBtn.parentNode.removeChild(gateBtn);
     segEls.forEach(function(e,j){ if(j<=i-1) markSeg(e); });
     if(cap) cap.textContent = steps[i].dataset.stage || "";
+    /* nothing sits behind the first page but the entrance, and Intro is
+       already the way there, so Back appears once there is a step to go
+       back to */
+    var nb=document.getElementById("navback");
+    if(nb) nb.hidden = (i<1);
     /* the light on the reader's side follows the step: cold at the login page,
        almost nothing through the nine days when nothing looked wrong, red at
        the lock, green where there is something to go and do */
@@ -2627,9 +2633,9 @@ main{padding-top:26px}
     if(qres && !qres.hidden) offerNext(null,qres);
   }
   function nextStep(){ show(at+1); }
-  /* Back never dies: from the first step it returns to the entrance. */
-  function backStep(){
-    if(at>0){ show(at-1); return; }
+  /* the course's own front page. It does not throw anything away: coming
+     back from it lands on the step that was left. */
+  function toIntro(){
     var intro=document.getElementById("intro");
     if(!intro) return;
     intro.style.display="";
@@ -2637,7 +2643,9 @@ main{padding-top:26px}
     window.scrollTo({top:0,behavior:"auto"});
   }
   var navBack=document.getElementById("navback");
-  if(navBack) navBack.addEventListener("click",backStep);
+  if(navBack) navBack.addEventListener("click",function(){ if(at>0) show(at-1); });
+  var navHome=document.getElementById("navhome");
+  if(navHome) navHome.addEventListener("click",toIntro);
   var restart=document.getElementById("restart");
   if(restart) restart.addEventListener("click",function(){ location.reload(); });
   gateBtn.addEventListener("click",nextStep);
