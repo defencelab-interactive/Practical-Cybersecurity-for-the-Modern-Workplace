@@ -9,6 +9,10 @@
    has committed to an answer, so nothing is read without a reason to read it. */
 :root{
   --ac:#34B77D; --acd:#2A9A66; --rd:#E0574F; --gd:#D9A94B;
+  /* her surface, a shade deeper and cooler than the page it sits on */
+  --night:#0F1A20;
+  /* the light on the reader's side, changed by the step they are on */
+  --mood:rgba(237,239,236,.07);
   --tw:#EDEFEC; --tm:rgba(237,239,236,.66); --tf:rgba(237,239,236,.36);
   --bg:#1a2620; --sf:rgba(255,255,255,.05); --sf2:#121d17; --ln:rgba(237,239,236,.15);
   /* paper, for everything the reader clicks, as in the rest of the library */
@@ -31,6 +35,41 @@ body{min-height:100vh;display:flex;flex-direction:column;
   radial-gradient(60% 45% at 60% 32%,rgba(255,255,255,.09),transparent 60%),
   linear-gradient(165deg,#1c2a22,#1a2430 58%,#182430);
  background-attachment:fixed}
+
+/* the reader's side takes the colour of the step they are on. A tint, not a
+   statement: it says what kind of moment this is, it does not claim a fact. */
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+ background:
+  radial-gradient(64% 84% at 24% 42%,var(--mood),transparent 64%),
+  linear-gradient(97deg,rgba(237,239,236,.07) 0%,rgba(237,239,236,.042) 26%,
+   rgba(237,239,236,.012) 42%,transparent 52%);
+ transition:background 1s ease}
+/* and the right of the screen goes to night, which is where she watches from */
+body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+ background:linear-gradient(97deg,
+  rgba(4,8,13,0) 0%, rgba(4,8,13,0) 47%,
+  rgba(4,8,13,.44) 57%, rgba(3,6,10,.74) 68%, rgba(2,5,9,.86) 100%)}
+@media (max-width:1239px){ body::after{background:none} }
+@media (prefers-reduced-motion:reduce){ body::before{transition:none} }
+
+/* the night sky carries over from the entrance, faintly */
+.nsky{position:fixed;inset:0;z-index:0;pointer-events:none;display:none}
+@media (min-width:1240px){ .nsky{display:block} }
+/* where the day ends. A hairline in the gutter, so the two sides read as two
+   sides rather than as one gradient that happens to get darker. */
+.nsky:before{content:"";position:absolute;left:var(--seam,56%);top:0;bottom:0;width:1px;
+ background:linear-gradient(to bottom,transparent 5%,rgba(237,239,236,.14) 24%,
+  rgba(237,239,236,.14) 76%,transparent 95%)}
+.nsky i{position:absolute;width:3px;height:3px;border-radius:50%;background:#EDEFEC;
+ opacity:.3;animation:twinkle 6s ease-in-out infinite}
+.nsky i:nth-child(1){right:7%;top:16%;opacity:.26;animation-delay:.6s}
+.nsky i:nth-child(2){right:16%;top:31%;width:2px;height:2px;opacity:.2;animation-delay:2.4s}
+.nsky i:nth-child(3){right:4%;top:52%;width:2px;height:2px;opacity:.17;animation-delay:4.1s}
+.nsky i:nth-child(4){right:21%;top:72%;opacity:.22;animation-delay:1.5s}
+.nsky i:nth-child(5){right:11%;top:85%;width:2px;height:2px;opacity:.15;animation-delay:3.3s}
+
+/* everything the reader reads sits above both layers */
+.top,.shell,.intro{position:relative;z-index:1}
 
 /* header hidden until the opening question is answered */
 .top{flex:none;position:sticky;top:0;z-index:50;background:rgba(26,38,32,.82);
@@ -390,7 +429,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
  padding:13px 16px;font-size:15.5px;color:var(--tw);max-width:46ch;line-height:1.5}
 .bub:before,.bub:after{content:"";position:absolute;left:-8px;top:18px;
  border:8px solid transparent;border-left:0;border-right-color:var(--ln)}
-.bub:after{left:-6.6px;border-right-color:#1b261f}
+.bub:after{left:-6.6px;border-right-color:var(--night)}
 .bub b{font-weight:500}
 .says.warn .bub:before{border-right-color:rgba(224,87,79,.45)}
 @media (max-width:420px){.says{gap:11px}.says .owl{width:46px}.bub{font-size:15px;padding:12px 14px}}
@@ -470,7 +509,7 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
  font-variant-numeric:tabular-nums}
 .railowl{display:none}
 .railowl .owl{width:76px;margin-bottom:12px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.4))}
-.railowl .say{background:#1b261f;border:1px solid var(--ln);border-radius:13px;padding:12px 14px;
+.railowl .say{background:var(--night);border:1px solid var(--ln);border-radius:13px;padding:12px 14px;
  font-size:14px;line-height:1.5;color:var(--tw);opacity:0;transform:translateY(5px);
  transition:opacity .3s,transform .3s}
 .railowl .say.on{opacity:1;transform:none}
@@ -530,12 +569,12 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
  width:360px;padding:0 30px 0 0;z-index:65;pointer-events:none}
 .owlaside .owl{width:84px;margin:0 0 -16px 18px;position:relative;z-index:2;
  filter:drop-shadow(0 8px 22px rgba(0,0,0,.5))}
-.owlaside .bub{position:relative;background:#1b261f;border:1px solid var(--ln);
+.owlaside .bub{position:relative;background:var(--night);border:1px solid rgba(237,239,236,.2);
  border-radius:16px;padding:18px 20px 19px;box-shadow:0 18px 44px rgba(0,0,0,.42);
  pointer-events:auto}
 .owlaside .bub:before,.owlaside .bub:after{content:"";position:absolute;left:34px;top:-9px;
  border:9px solid transparent;border-top:0;border-bottom-color:var(--ln)}
-.owlaside .bub:after{top:-7.6px;border-bottom-color:#1b261f}
+.owlaside .bub:after{top:-7.6px;border-bottom-color:var(--night)}
 .owlaside .who{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
  text-transform:uppercase;color:rgba(52,183,125,.8);margin-bottom:10px;
  display:flex;align-items:center;gap:8px}
@@ -623,12 +662,12 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 @keyframes twinkle{0%,100%{opacity:.18}50%{opacity:.6}}
 .introowl{position:relative;z-index:2}
 .introowl .owl{width:132px;filter:drop-shadow(0 12px 30px rgba(0,0,0,.5))}
-.introsay{background:#1b261f;border:1px solid var(--ln);border-radius:16px;padding:22px 24px;
+.introsay{background:var(--night);border:1px solid var(--ln);border-radius:16px;padding:22px 24px;
  box-shadow:0 18px 44px rgba(0,0,0,.4);position:relative}
 .introsay{width:100%}
 .introsay:before,.introsay:after{content:"";position:absolute;left:50%;margin-left:-9px;top:-9px;
  border:9px solid transparent;border-top:0;border-bottom-color:var(--ln)}
-.introsay:after{top:-7.6px;border-bottom-color:#1b261f}
+.introsay:after{top:-7.6px;border-bottom-color:var(--night)}
 .introsay .who{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;
  color:rgba(52,183,125,.8);margin-bottom:11px}
 .introsay p{font-size:16px;line-height:1.56;color:var(--tm)}
@@ -931,6 +970,8 @@ main{padding-top:26px}
   </div>
 </section>
 
+<div class="nsky" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
 <div class="shell">
 <aside class="rail">
   <div class="mark">Defence<span>Lab</span></div>
@@ -945,7 +986,7 @@ main{padding-top:26px}
 <main>
 
   <!-- ENTRANCE -->
-  <section class="gate step" id="gate">
+  <section class="gate step" id="gate" data-mood="rgba(237,239,236,.08)">
     <div class="tag"><b>DefenceLab</b> &middot; before we start</div>
     <h1>Think of your work password.</h1>
     <p class="sub">A stranger types it, correctly, into the page you use to log into work from home.</p>
@@ -963,7 +1004,7 @@ main{padding-top:26px}
   </section>
 
   <!-- 1 -->
-  <section class="scene step" data-stage="12 February &middot; the way in">
+  <section class="scene step" data-stage="12 February &middot; the way in" data-mood="rgba(78,124,168,.17)">
     <div class="beat"><i></i>12 February &middot; the way in</div>
     <div class="art" data-bldg data-anim data-owl="roof"></div>
     <p class="sit">Think about the last time you logged into work from home.</p>
@@ -991,7 +1032,7 @@ main{padding-top:26px}
   </section>
 
   <!-- 2 -->
-  <section class="scene step" data-stage="Nine days &middot; unseen">
+  <section class="scene step" data-stage="Nine days &middot; unseen" data-mood="rgba(237,239,236,.045)">
     <div class="beat"><i></i>Nine days &middot; unseen</div>
     <div class="counter" id="daycount"><b>1</b><span>day inside</span></div>
     <div class="art" data-bldg="days" data-anim></div>
@@ -1011,7 +1052,7 @@ main{padding-top:26px}
   </section>
 
   <!-- 3 -->
-  <section class="scene step" data-stage="21 February &middot; the lock">
+  <section class="scene step" data-stage="21 February &middot; the lock" data-mood="rgba(224,87,79,.16)">
     <div class="beat"><i></i>21 February &middot; the lock</div>
     <div class="art" data-bldg="locked" data-anim></div>
     <p data-say="alarm|Now there is something to see. Nine days too late to be useful."></p>
@@ -1031,7 +1072,7 @@ main{padding-top:26px}
   </section>
 
   <!-- 6 -->
-  <section class="scene step" data-stage="Why this company">
+  <section class="scene step" data-stage="Why this company" data-mood="rgba(78,124,168,.13)">
     <div class="beat"><i></i>Why this company</div>
     <p class="sit">Wherever you work, somebody is relying on it. Patients, customers, students, or another company that has your employer as its supplier.</p>
     <div class="dec" data-k="s6">
@@ -1050,7 +1091,7 @@ main{padding-top:26px}
   </section>
 
   <!-- settings -->
-  <section class="scene step set" data-stage="Your settings">
+  <section class="scene step set" data-stage="Your settings" data-mood="rgba(52,183,125,.17)">
     <div class="beat"><i></i>Your settings</div>
     <div class="dec" data-k="s4">
       <p class="q">Before the list, one question. Of the accounts you own, which one does the most damage in somebody else's hands?</p>
@@ -1162,7 +1203,7 @@ main{padding-top:26px}
   </section>
 
   <!-- quiz -->
-  <section class="scene step quiz" id="quiz" data-stage="Five situations">
+  <section class="scene step quiz" id="quiz" data-stage="Five situations" data-mood="rgba(237,239,236,.07)">
     <div class="beat"><i></i>Five situations</div>
     <p class="sit">Five things that could happen to you this week, and each one turns on something you have just read. Pick the safest move in each.</p>
     <div id="qbox"></div>
@@ -1174,7 +1215,7 @@ main{padding-top:26px}
   </section>
 
   <!-- recap -->
-  <section class="recap step">
+  <section class="recap step" data-mood="rgba(52,183,125,.14)">
     <h2>Three things worth keeping</h2>
     <p data-say="wink|Everything above comes down to these three. If you only keep one, keep the second."></p>
     <div class="rc"><i></i><p><b>A password is a single lock.</b> Once somebody else has a working one it opens the door and raises nothing, because from the inside a correct login looks exactly like the person it belongs to.</p></div>
@@ -1562,6 +1603,10 @@ main{padding-top:26px}
     if(want>room) want=room;
     if(want<0) want=0;
     aside.style.setProperty("--owly",Math.round(want)+"px");
+    var m=document.querySelector("main").getBoundingClientRect();
+    var ab=aside.getBoundingClientRect();
+    if(ab.width) document.body.style.setProperty("--seam",
+      Math.round((m.right+ab.left)/2)+"px");
   }
 
   function target(){
@@ -1733,6 +1778,11 @@ main{padding-top:26px}
     if(gateBtn.parentNode) gateBtn.parentNode.removeChild(gateBtn);
     segEls.forEach(function(e,j){ if(j<=i-1) markSeg(e); });
     if(cap) cap.textContent = steps[i].dataset.stage || "";
+    /* the light on the reader's side follows the step: cold at the login page,
+       almost nothing through the nine days when nothing looked wrong, red at
+       the lock, green where there is something to go and do */
+    document.body.style.setProperty("--mood",
+      steps[i].dataset.mood || "rgba(237,239,236,.07)");
     tellStep(i);
     setTimeout(function(){ if(window.__place) window.__place(i); },560);
     /* a step with nothing to answer, such as the settings, offers the way on
