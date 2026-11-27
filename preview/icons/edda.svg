@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -6 200 200" width="512" height="512"><rect x="0" y="-6" width="200" height="200" rx="44" fill="#0F1A20"/><style>
+ .bodyp{fill:#33463D} .wing{fill:#2B3C34} .tuft{fill:#33463D}
+ .face,.nape{fill:#48614F} .lid{display:none}
+ .sclera{fill:#EDEFEC} .iris{fill:#34B77D} .pupil{fill:#101A15}
+ .glint{fill:#EDEFEC;opacity:.9} .beak{fill:#D9A94B}
+ .nape{opacity:0} .perch,.foot,.flywings{display:none}
+</style>
+  <line class="perch" x1="46" y1="196" x2="154" y2="196"/>
+  <path class="foot" d="M80,176 l0,16 M74,192 l12,0" stroke="#D9A94B" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+  <path class="foot" d="M120,176 l0,16 M114,192 l12,0" stroke="#D9A94B" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+  <path class="bodyp" d="M100,18 C70,18 48,40 48,74 C48,94 44,106 44,126
+   C44,160 68,184 100,184 C132,184 156,160 156,126
+   C156,106 152,94 152,74 C152,40 130,18 100,18 Z"/>
+  <path class="wing" d="M50,86 C38,110 38,148 58,170 C66,146 62,110 50,86 Z"/>
+  <path class="wing" d="M150,86 C162,110 162,148 142,170 C134,146 138,110 150,86 Z"/>
+  <g class="flywings">
+    <path class="fw l" d="M58,84 C26,54 -16,54 -56,76 C-50,90 -36,100 -18,105 C2,111 30,113 50,108 C56,100 59,92 58,84 Z"/>
+    <path class="fw r" d="M142,84 C174,54 216,54 256,76 C250,90 236,100 218,105 C198,111 170,113 150,108 C144,100 141,92 142,84 Z"/>
+  </g>
+  <g>
+    <path d="M88,132 l6,7 6,-7 6,7 6,-7" stroke="#4A6358" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M82,148 l6,7 6,-7 6,7 6,-7 6,7 6,-7" stroke="#4A6358" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M88,164 l6,7 6,-7 6,7 6,-7" stroke="#4A6358" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g class="head">
+    <path class="tuft" d="M63,34 L48,9 L84,24 Z"/>
+    <path class="tuft" d="M137,34 L152,9 L116,24 Z"/>
+    <g class="fg">
+      <path class="face" d="M100,40 C88,26 62,26 56,50 C50,74 60,102 100,128
+       C140,102 150,74 144,50 C138,26 112,26 100,40 Z"/>
+      <g class="eye l">
+        <circle class="sclera" cx="78" cy="72" r="20"/>
+        <circle class="iris" cx="78" cy="72" r="13"/>
+        <circle class="pupil" cx="78" cy="72" r="6.2"/>
+        <circle class="glint" cx="81.5" cy="67.5" r="2.4"/>
+        <rect class="lid" x="57" y="51" width="42" height="42" rx="8"/>
+      </g>
+      <g class="eye r">
+        <circle class="sclera" cx="122" cy="72" r="20"/>
+        <circle class="iris" cx="122" cy="72" r="13"/>
+        <circle class="pupil" cx="122" cy="72" r="6.2"/>
+        <circle class="glint" cx="125.5" cy="67.5" r="2.4"/>
+        <rect class="lid" x="101" y="51" width="42" height="42" rx="8"/>
+      </g>
+      <path class="beak" d="M100,86 C104,86 108,89 108,94 C108,101 104,108 100,112
+       C96,108 92,101 92,94 C92,89 96,86 100,86 Z"/>
+    </g>
+    <path class="nape" d="M100,38 C86,24 58,24 53,50 C48,76 58,104 100,132
+     C142,104 152,76 147,50 C142,24 114,24 100,38 Z"/>
+  </g>
+</svg>
