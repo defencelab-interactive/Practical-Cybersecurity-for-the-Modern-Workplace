@@ -181,6 +181,13 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 
 .dcap{font-size:13.5px;color:var(--tf);max-width:50ch;margin-top:2px}
 
+/* the settings step asks one question and the list is the answer to it, so
+   the options stand down once it is answered and the list takes their place */
+.set .cklist,.set .tonight{display:none}
+.set.told .cklist,.set.told .tonight{display:block;animation:fade .5s ease}
+.set.told .dec .q,.set.told .dec .opts,.set.told .dec .conf{display:none}
+.set .cklist .sit{margin-top:20px}
+
 /* once the step is answered the drawing has done its work and the record
    under it is the thing to read, so the picture gives up the room */
 .art{transition:max-width .55s cubic-bezier(.3,.8,.3,1),margin .55s ease}
@@ -693,62 +700,9 @@ main{padding-top:26px}
 /* the shortest windows: a 1366 or 1536 laptop at 125 or 150 percent scaling
    leaves roughly 680 to 730 usable pixels, which is where the checklist used
    to run over. Nothing is removed, only closed up. */
-@media (min-width:1000px) and (max-height:790px){
-  main{padding-bottom:14px}
-  .scene{padding:10px 0 14px}
-  .beat{margin-bottom:8px}
-  .sit{font-size:16px;margin-bottom:12px}
-  .set .sit{font-size:15px;margin-bottom:10px;max-width:60ch}
-  .ck{margin:5px 0}
-  .ckh{padding:9px 13px}
-  .ckt{font-size:14px}
-  .art{max-width:280px}
-  .counter b{font-size:28px}
-  .big{font-size:clamp(34px,3vw,44px)}
-  .bigsub{margin-bottom:10px}
-  .opt{padding:9px 13px;font-size:14.5px}
-  .opts{gap:6px}
-  .q{font-size:15.5px;margin-bottom:9px}
-  .pay p{font-size:14.5px}
-  .rec{margin-top:13px}
-  .rr{padding:8px 15px}
-  .owlaside .bub{padding:14px 16px 15px}
-  .owlaside .bub p{font-size:14px}
-  .go-on{margin-top:12px;padding:12px 16px}
-  /* the ten situations carry the longest options and the longest answers in
-     the course, so they get their own squeeze */
-  .qitem{padding:12px 0}
-  .qitem .q{font-size:15px;margin-bottom:9px}
-  .qn{margin-bottom:8px}
-  .qfb{font-size:14px;padding:11px 14px;margin-top:9px}
-  .again{margin-top:10px;padding:9px 14px;font-size:14px}
-  .conf{margin-top:9px;padding:11px 14px}
-  .conf-q{font-size:14px;margin-bottom:8px}
-  .conf-b{font-size:13.5px;padding:7px 12px}
-  .scene.told:not(.told-rec) .art{max-width:130px}
-  .scene{padding:9px 0 12px}
-  .pay p{margin-top:8px;font-size:14.5px;line-height:1.54}
-  .pay{margin-top:10px}
-  .rec .rh{padding:9px 14px 8px}
-  .rr{padding:7px 14px}
-  .dcap{font-size:12.5px;margin-top:6px;line-height:1.45}
-  .go-on{margin-top:10px}
-  .plain li{margin:5px 0}
-}
 
-@media (min-width:1000px) and (max-height:700px){
-  .scene{padding:8px 0 10px}
-  .set .sit{font-size:14.5px;margin-bottom:8px;line-height:1.5}
-  .ck{margin:4px 0}
-  .ckh{padding:8px 12px}
-  .ckt{font-size:13.5px}
-  .tg{font-size:12px}
-  .scene.told:not(.told-rec) .art{max-width:100px}
-  .pay p{font-size:14px;margin-top:7px;line-height:1.5}
-  .sit{margin-bottom:9px}
-  .vt{margin-bottom:6px}
-  .rr{padding:6px 14px;font-size:11.5px}
-}
+
+
 
 /* a shorter window gets a tighter step, so no step ever runs past the fold */
 @media (min-width:1000px) and (max-height:940px){
@@ -776,6 +730,81 @@ main{padding-top:26px}
   .rc p{font-size:14.5px}
   .recap h2{font-size:20px;margin-bottom:14px}
   .go-on{padding:10px 14px}
+}
+
+@media (min-width:1000px) and (max-height:790px){
+  main{padding-bottom:14px}
+  .scene{padding:10px 0 14px}
+  .beat{margin-bottom:8px}
+  .sit{font-size:16px;margin-bottom:12px}
+  .set .sit{font-size:15px;margin-bottom:10px;max-width:60ch}
+  .ck{margin:5px 0}
+  .ckh{padding:9px 13px}
+  .ckt{font-size:14px}
+  .art{max-width:280px}
+  .counter b{font-size:28px}
+  .big{font-size:clamp(34px,3vw,44px)}
+  .bigsub{margin-bottom:10px}
+  .opt{padding:8px 13px;font-size:14.5px;line-height:1.4}
+  .opts{gap:5px}
+  .ck{margin:4px 0}
+  .ckh{padding:8px 12px}
+  .ckt{font-size:13.5px}
+  .set .sit{font-size:14.5px;margin-bottom:8px}
+  .tonight{margin-top:10px;padding:11px 14px}
+  .tonight p{font-size:13.5px}
+  .q{font-size:15.5px;margin-bottom:9px}
+  .pay p{font-size:14.5px}
+  .rec{margin-top:13px}
+  .rr{padding:8px 15px}
+  /* on a short window her panel can outgrow the screen once the rest of what
+     she has to say is asked for, and the panel sets the page height, so it
+     takes its own scroll rather than giving one to the page */
+  .owlaside .bub{padding:14px 16px 15px;max-height:76vh;overflow:auto;
+   scrollbar-width:thin;scrollbar-color:rgba(237,239,236,.2) transparent}
+  .owlaside .bub p{font-size:14px}
+  .go-on{margin-top:9px;padding:10px 15px;font-size:15px}
+  /* the ten situations carry the longest options and the longest answers in
+     the course, so they get their own squeeze */
+  .qitem{padding:12px 0}
+  .qitem .q{font-size:15px;margin-bottom:9px}
+  .qn{margin-bottom:8px}
+  .qfb{font-size:14px;padding:11px 14px;margin-top:9px}
+  .again{margin-top:10px;padding:9px 14px;font-size:14px}
+  .conf{margin-top:9px;padding:11px 14px}
+  .conf-q{font-size:14px;margin-bottom:8px}
+  .conf-b{font-size:13.5px;padding:7px 12px}
+  .scene.told:not(.told-rec) .art{max-width:130px}
+  .scene{padding:9px 0 12px}
+  .pay p{margin-top:8px;font-size:14.5px;line-height:1.54}
+  .pay{margin-top:10px}
+  .rec .rh{padding:9px 14px 8px}
+  .rr{padding:7px 14px}
+  .dcap{font-size:12.5px;margin-top:6px;line-height:1.45}
+  .go-on{margin-top:10px}
+  .plain li{margin:5px 0}
+}
+
+@media (min-width:1000px) and (max-height:700px){
+  .scene{padding:6px 0 8px}
+  .beat{margin-bottom:6px}
+  .sit{font-size:15px;margin-bottom:8px;line-height:1.48}
+  .set .sit{font-size:14px;margin-bottom:7px;line-height:1.45}
+  .q{font-size:15px;margin-bottom:8px}
+  .opt{padding:7px 12px;font-size:14px;line-height:1.38}
+  .opts{gap:4px}
+  .ck{margin:3px 0}
+  .ckh{padding:7px 12px}
+  .ckt{font-size:13px}
+  .tg{font-size:12px}
+  .tonight{margin-top:9px;padding:10px 13px}
+  .tonight p{font-size:13px}
+  .go-on{margin-top:8px;padding:9px 14px;font-size:14.5px}
+  .scene.told:not(.told-rec) .art{max-width:100px}
+  .pay p{font-size:14px;margin-top:7px;line-height:1.5}
+  .sit{margin-bottom:9px}
+  .vt{margin-bottom:6px}
+  .rr{padding:6px 14px;font-size:11.5px}
 }
 </style>
 </head><body>
@@ -1001,51 +1030,6 @@ main{padding-top:26px}
     </div>
   </section>
 
-  <!-- 4 -->
-  <section class="scene step" data-stage="The cost">
-    <div class="beat"><i></i>The cost</div>
-    <div class="big">$2.3&ndash;2.45B</div>
-    <div class="bigsub">UnitedHealth's own estimate of the 2024 impact</div>
-    <p class="sit">That bill landed on a company. Yours would land on your own accounts.</p>
-    <div class="dec" data-k="s4">
-      <p class="q">Of the accounts you personally own, which one does the most damage in somebody else's hands?</p>
-      <div class="opts">
-        <button class="opt"><span class="mk"></span>My work login</button>
-        <button class="opt" data-ok="1"><span class="mk"></span>My personal email</button>
-        <button class="opt"><span class="mk"></span>My bank</button>
-        <button class="opt"><span class="mk"></span>Whichever social account I use most</button>
-      </div>
-      <div class="pay">
-        <span class="vt">Your personal email</span>
-        <p>The bank is the one that feels worst, and it is the one your email can reset. So can the social account, the shopping account and often the work one. Whoever reads your email can ask every other site to send a reset link there, and then read it. That is why the checklist two steps from here starts with your email.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5 -->
-  <section class="scene step" data-stage="Why this keeps happening">
-    <div class="beat"><i></i>Why this keeps happening</div>
-    <p class="sit" data-say="Everybody has one of those. That is the point.">Think of the last message that nearly got you. The parcel that was not yours, the invoice from a supplier whose name you half recognised, the password reset you had not asked for.</p>
-    <div class="dec" data-k="s5">
-      <p class="q">Out of every three breaches, how many start that way, with a person tricked or making a mistake, rather than with broken software?</p>
-      <div class="opts">
-        <button class="opt"><span class="mk"></span>About one in ten of them</button>
-        <button class="opt"><span class="mk"></span>About one in three</button>
-        <button class="opt" data-ok="1"><span class="mk"></span>About two in three</button>
-      </div>
-      <div class="pay">
-        <span class="vt">Sixty-eight percent</span>
-        <p>This is not a statement that people are careless. Software is good at stopping bad code and has no way to stop a reasonable-looking decision, so the decisions are where everything ends up. The same report puts the median time to fall for a phishing message at under a minute.</p>
-        <p>The gap is nearly always one of three ordinary things:</p>
-        <ul class="plain">
-          <li>Nobody ever told you what to look for.</li>
-          <li>The update got postponed again, and then again.</li>
-          <li>Somebody was good at talking to you, and the message arrived on a bad day.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
   <!-- 6 -->
   <section class="scene step" data-stage="Why this company">
     <div class="beat"><i></i>Why this company</div>
@@ -1059,8 +1043,8 @@ main{padding-top:26px}
       </div>
       <div class="pay">
         <span class="vt">One door, thousands of buildings</span>
-        <p>Going after one company gets you one company. Going after the one everybody depends on gets you all of them, which is why 15 percent of breaches in that report came through a supplier.</p>
-        <p>Nothing exotic opens that door either. Over ten years of the same report, 31 percent of breaches involved a stolen login.</p>
+        <p>Going after one company gets you one company. Going after the one everybody depends on gets you all of them, which is why 15 percent of breaches in Verizon's 2024 report came through a supplier. Nothing exotic opens that door: over ten years of the same report, 31 percent involved a stolen login.</p>
+        <p>And it is almost never a lapse of attention. Two breaches in three start with a person making a decision that looked reasonable at the time, because software is good at stopping bad code and has no way to stop a reasonable-looking choice.</p>
       </div>
     </div>
   </section>
@@ -1068,7 +1052,22 @@ main{padding-top:26px}
   <!-- settings -->
   <section class="scene step set" data-stage="Your settings">
     <div class="beat"><i></i>Your settings</div>
-    <p class="sit">The breach ran through settings that were not turned on. These take a few minutes each, and the first one is the whole story in a single switch.</p>
+    <div class="dec" data-k="s4">
+      <p class="q">Before the list, one question. Of the accounts you own, which one does the most damage in somebody else's hands?</p>
+      <div class="opts">
+        <button class="opt"><span class="mk"></span>My work login</button>
+        <button class="opt" data-ok="1"><span class="mk"></span>My personal email</button>
+        <button class="opt"><span class="mk"></span>My bank</button>
+        <button class="opt"><span class="mk"></span>Whichever social account I use most</button>
+      </div>
+      <div class="pay">
+        <span class="vt">Your personal email</span>
+        <p>The bank is the one that feels worst, and it is the one your email can reset. So can the social account, the shopping account and often the work one. Whoever reads your email can ask every other site to send a reset link there, and then read it.</p>
+      </div>
+    </div>
+
+    <div class="cklist">
+    <p class="sit">So the list starts there. Each of these takes a few minutes.</p>
 
     <div class="ck">
       <div class="ckh">
@@ -1152,6 +1151,8 @@ main{padding-top:26px}
         </ol>
         <div class="inf">Nobody has ever been disciplined for reporting something that turned out to be nothing. The other way round happens all the time.</div>
       </div>
+    </div>
+
     </div>
 
     <div class="tonight">
@@ -1240,7 +1241,8 @@ main{padding-top:26px}
       reveal(dec,right,false);
       var sc=dec.closest(".scene");
       if(sc){var i=scenes.indexOf(sc); if(i>=0) markSeg(segEls[i]);}
-      if(sc && window.__offerNext) setTimeout(function(){window.__offerNext(sc,dec);},1400);
+      if(sc && window.__offerNext) setTimeout(function(){
+        window.__offerNext(sc, sc.querySelector(".tonight") || dec);},1400);
       if(window.__owlReact) window.__owlReact(right);
     }
     opts.forEach(function(opt){
@@ -1267,7 +1269,8 @@ main{padding-top:26px}
         reveal(dec,right,poll);
         var sc=dec.closest(".scene");
         if(sc){var i=scenes.indexOf(sc); if(i>=0) markSeg(segEls[i]);}
-        if(sc && window.__offerNext) setTimeout(function(){window.__offerNext(sc,dec);},1400);
+        if(sc && window.__offerNext) setTimeout(function(){
+        window.__offerNext(sc, sc.querySelector(".tonight") || dec);},1400);
       });
     });
   }
@@ -1481,18 +1484,15 @@ main{padding-top:26px}
          "For everyone else it was an ordinary week. Emails answered, meetings joined, home at six."]},
    3:{w:"What the payment bought",
       p:["They faced your question for real. <b>It all locked at once</b>, and a payment was demanded. Pharmacies across the country could not check what a patient's insurance covered, and people went home without their prescription.",
-         "Paying the $22 million was the chief executive's own decision, he told the Senate, and one of the hardest he had made."]},
-   4:{w:"What one account came to",
-      p:["One account, in our case, and this is what it came to. The money bought the systems back. The copied files had gone days earlier.",
-         "<b>The year cost the company $2.3 to $2.45 billion</b> by its own accounting, before penalties and lawsuits. All of it traces to a password that still worked and a page that asked for nothing else."]},
-   5:{w:"Before you pick a number",
-      p:["It is tempting to read our case as one unusually careless company. It is more useful to read it as the ordinary one."]},
-   6:{w:"Why they picked this one",
+         "Paying the $22 million was the chief executive's own decision, he told the Senate, and one of the hardest he had made. It bought the systems back. The copied files had gone days earlier.",
+         "<b>The year cost the company $2.3 to $2.45 billion</b> by its own accounting, before the penalties and the lawsuits. All of it traces to a password that still worked and a page that asked for nothing else."]},
+   4:{w:"Why they picked this one",
       p:["<b>In our case</b> they did not go after a hospital. They went after the company every hospital depends on.",
-         "The people whose records those were never agreed to anything, and never saw that login page."]},
-   7:{w:"The same settings, your side",
+         "The people whose records those were never agreed to anything, and never saw that login page.",
+         "And nobody there was being careless. Usually it is one of three ordinary things: nobody ever told you what to look for, the update got postponed again and then again, or somebody was good at talking to you and the message arrived on a bad day."]},
+   5:{w:"The same settings, your side",
       p:["<b>Everything in our story</b> ran through settings that were not switched on. These are the same ones."]},
-   8:{w:"Ten of these",
+   6:{w:"Ten of these",
       p:["Any of them could be your week. I will keep quiet now."]}
   };
 
@@ -1716,10 +1716,9 @@ main{padding-top:26px}
   steps.forEach(function(el,j){ el.classList.toggle("on", j===0); });
 
   var PROMPTS=[
+   "The night it started",
    "How long before anybody noticed",
    "The day it stopped being nothing",
-   "Put a number on the damage",
-   "Why this keeps happening",
    "Why they picked this company",
    "What to do on your own accounts",
    "Ten situations, to see what stuck",
@@ -1747,7 +1746,7 @@ main{padding-top:26px}
   function offerNext(from,anchorAt){
     if(at>=steps.length-1) return;
     if(gateBtn.parentNode) return;
-    gateBtn.querySelector("span").textContent=PROMPTS[Math.min(at-1,PROMPTS.length-1)]||"Go on then";
+    gateBtn.querySelector("span").textContent=PROMPTS[Math.min(at,PROMPTS.length-1)]||"Go on then";
     var host=anchorAt||steps[at];
     host.insertAdjacentElement("afterend",gateBtn);
     gateBtn.scrollIntoView({behavior:"smooth",block:"nearest"});
