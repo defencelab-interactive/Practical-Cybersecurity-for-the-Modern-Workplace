@@ -138,12 +138,28 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
  padding-top:env(safe-area-inset-top);background:rgba(26,38,32,.82);
  backdrop-filter:blur(10px);border-bottom:1px solid rgba(237,239,236,.08);
  opacity:0;transform:translateY(-100%);transition:opacity .5s,transform .5s}
-/* While hidden the header is taken out of the flow, so the entrance really gets
-   the whole viewport and the third answer never falls below the fold. */
-body:not(.started) .top{position:fixed;top:0;left:0;right:0;pointer-events:none}
-body.started .top{opacity:1;transform:none}
+/* The header carries the way back, so it is there from the first screen of
+   the course rather than from the first answer. It used to be lifted out of
+   the flow until then, to keep the third answer above the fold; measured at
+   six sizes with it in place, the gate's last option lands 63px lower and
+   the step is no taller than before, so the trick is no longer paid for. */
+body.begun .top{opacity:1;transform:none}
 .top .in{max-width:1180px;margin:0 auto;padding:13px 30px 11px}
 .brow{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:9px}
+/* The way back and the way out live up here with the wordmark, the progress
+   and the score, and not in the reading column. The column keeps its rule:
+   one thing to answer, then one way on, and nothing beside it. */
+.bleft{display:flex;align-items:center;gap:13px;min-width:0}
+.tnav{display:flex;align-items:center;gap:11px;
+ padding-left:13px;border-left:1px solid rgba(237,239,236,.14)}
+.tn{appearance:none;background:none;border:0;padding:4px 1px;cursor:pointer;
+ font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.13em;
+ text-transform:uppercase;color:rgba(237,239,236,.45);text-decoration:none;
+ display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+ transition:color .25s}
+.tn:hover{color:var(--tw)}
+.tn:focus-visible{outline:2px solid var(--ac);outline-offset:3px;border-radius:4px}
+.tn i{font-style:normal;font-size:12px;line-height:1}
 .mark{font-family:var(--disp);font-weight:600;font-size:15px}
 .mark span{color:var(--ac)}
 .xp{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--gd);
@@ -440,6 +456,8 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px;
 .rscore span{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;
  text-transform:uppercase;color:var(--tf)}
 .result p{font-size:15px;color:var(--tm);max-width:56ch}
+.redo{margin-top:30px;padding-top:22px;border-top:1px solid rgba(237,239,236,.1)}
+.redot{font-size:13px;line-height:1.55;color:rgba(237,239,236,.45);margin-top:10px;max-width:520px}
 .again{appearance:none;margin-top:16px;cursor:pointer;font:inherit;font-size:14.5px;
  background:rgba(255,255,255,.06);color:var(--tw);border:1px solid var(--ln);border-radius:9px;padding:10px 16px}
 .again:hover{border-color:var(--ac);color:var(--ac)}
@@ -826,7 +844,14 @@ html{overflow-x:clip}
    there while the question is still the reader's to answer, and wakes when it
    is done. What she says opens over the step and closes again, so answering a
    question never makes the step taller than the screen it is on. */
-@media (max-width:719px){ .owltale,.owltale.on{display:none} }
+@media (max-width:719px){
+  .owltale,.owltale.on{display:none}
+  .bleft{gap:10px}
+  .tnav{gap:9px;padding-left:10px}
+  #navback span{display:none}
+  #navhome span{font-size:9.5px}
+}
+html.bigtouch #navback span{display:none}
 html.bigtouch .owltale,html.bigtouch .owltale.on{display:none}
 /* nothing a finger needs ends underneath her: room at the foot of the page,
    and the button that carries the reader on stops short of her corner when it
@@ -1341,8 +1366,14 @@ main{padding-top:26px}
 
 <header class="top"><div class="in">
   <div class="brow">
-    <div class="mark">Defence<span>Lab</span></div>
-    <div class="xp" id="xp">20 XP</div>
+    <div class="bleft">
+      <div class="mark">Defence<span>Lab</span></div>
+      <nav class="tnav" aria-label="Course navigation">
+        <button type="button" class="tn" id="navback"><i>&larr;</i><span>Back</span></button>
+        <a class="tn" id="navhome" href="../index.html"><span>All courses</span></a>
+      </nav>
+    </div>
+    <div class="xp" id="xp">0 XP</div>
   </div>
   <div class="segs" id="segs"></div>
   <div class="cap" id="stagecap" hidden></div>
@@ -1714,6 +1745,10 @@ main{padding-top:26px}
     <div class="rc"><i></i><p><b>A second step is what breaks that.</b> It asks for something the password thief does not have, it takes a minute to switch on, and it was the setting missing here.</p></div>
     <div class="rc"><i></i><p><b>Intruders are not in a hurry.</b> The damage came nine days after the way in was found, which is why what is already switched on matters more than how quickly anybody spots something.</p></div>
 
+    <div class="redo">
+      <button type="button" class="again" id="restart">Start again from the top</button>
+      <p class="redot">Your XP goes back to zero and every question opens again. Nothing here is kept anyway, so leaving the page does the same thing.</p>
+    </div>
   </section>
 </main>
 <aside class="owlaside" id="owlaside" aria-live="polite">
@@ -1849,7 +1884,7 @@ main{padding-top:26px}
     document.getElementById("intro").style.display="none";
     document.body.classList.add("begun");
     window.scrollTo({top:0,behavior:"auto"});
-    buildTales(); land();
+    if(!tales.length){ buildTales(); land(); }
   });
 
   /* ---- entrance ---- */
@@ -2580,8 +2615,31 @@ main{padding-top:26px}
     /* a step with nothing to answer, such as the settings, offers the way on
        by itself rather than waiting for an answer that never comes */
     if(window.__maybeOffer) window.__maybeOffer();
+    /* a step answered earlier keeps its answer, so it has to be handed its
+       way on again or going back would be a dead end */
+    var done=steps[i].querySelector(".dec.done");
+    if(done) offerNext(steps[i],
+      steps[i].querySelector(".owltale") || steps[i].querySelector(".tonight") || done);
+    else if(steps[i].id==="gate" && steps[i].classList.contains("done"))
+      offerNext(null, steps[i].querySelector(".owltale") ||
+                      document.getElementById("g-pay") || steps[i]);
+    var qres=steps[i].querySelector("#qresult");
+    if(qres && !qres.hidden) offerNext(null,qres);
   }
   function nextStep(){ show(at+1); }
+  /* Back never dies: from the first step it returns to the entrance. */
+  function backStep(){
+    if(at>0){ show(at-1); return; }
+    var intro=document.getElementById("intro");
+    if(!intro) return;
+    intro.style.display="";
+    document.body.classList.remove("begun","started");
+    window.scrollTo({top:0,behavior:"auto"});
+  }
+  var navBack=document.getElementById("navback");
+  if(navBack) navBack.addEventListener("click",backStep);
+  var restart=document.getElementById("restart");
+  if(restart) restart.addEventListener("click",function(){ location.reload(); });
   gateBtn.addEventListener("click",nextStep);
 
   /* the button lands at the end of the step the reader has just finished */
