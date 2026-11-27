@@ -223,6 +223,8 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 .bldg.st-locked .lock{fill:rgba(237,239,236,.22)}
 
 .dcap{font-size:13.5px;color:var(--tf);max-width:50ch;margin-top:2px}
+.onlywide{display:none}
+@media (min-width:1240px){ .onlywide{display:inline} }
 .turns{font-size:14.5px;color:var(--tf);max-width:56ch;margin-top:13px;
  padding-left:13px;border-left:2px solid rgba(52,183,125,.4)}
 
@@ -569,13 +571,23 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
    changing as the reader moves from one part to the next. Nothing she says is
    needed to answer anything, and nothing of hers sits between the reader and a
    control. */
-.owltale{margin:14px 0 24px;max-width:600px;padding:2px 0 2px 20px;
- border-left:2px solid rgba(52,183,125,.4)}
-.owltale p{font-size:16px;line-height:1.62;color:var(--tn)}
-.owltale p+p{margin-top:12px}
-.owltale b{color:var(--tw);font-weight:500}
+.owltale{display:none;margin:26px 0 2px;max-width:620px;
+ padding:20px 0 2px;border-top:1px solid rgba(237,239,236,.1)}
+.owltale.on{display:block;animation:asidein .5s ease}
+.otop{display:flex;align-items:center;gap:13px;margin-bottom:13px}
+.otop .owl{width:64px;flex:none}
 .owltale .who{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
- text-transform:uppercase;color:rgba(52,183,125,.75);margin-bottom:9px}
+ text-transform:uppercase;color:rgba(52,183,125,.85);margin:0}
+.obody .spk{position:static;width:auto!important;
+ opacity:0;transform:translateY(6px);transition:opacity .45s,transform .45s}
+.obody .spk.in{opacity:1;transform:none}
+.obody .spk+.spk{margin-top:14px}
+.obody .spk .dots,.obody .spk .who{display:none}
+.obody .spk p{font-size:16px;line-height:1.62;color:var(--tn);text-shadow:none}
+.obody .spk b{color:var(--tw);font-weight:500}
+.obody .spkon{position:static;margin-top:15px}
+.obody .spkon:after{display:none}
+.obody .spkon{border-bottom:1px solid rgba(52,183,125,.4)}
 
 /* ---------- her half of the screen ----------
    Not a column of the course. A layer over the night, with a branch coming up
@@ -690,7 +702,8 @@ html{overflow-x:clip}
 @keyframes asidein{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 
 @media (min-width:1240px){
-  .owltale{display:none}
+  /* on a wide screen her words go to the night, never into the column */
+  .owltale,.owltale.on{display:none}
   .owllayer{display:none}
   /* the reading column is centred in the daylight half, not in the window */
   main{max-width:520px;flex:0 1 520px;padding:0 0 28px}
@@ -727,7 +740,7 @@ html{overflow-x:clip}
    One bird on a layer of her own, flying to whatever currently wants the
    reader's hand. She is never a hit target herself: the layer takes no
    pointer events, so she can sit over a button without blocking it. */
-.owllayer{position:fixed;left:0;top:0;width:0;height:0;z-index:70;pointer-events:none}
+.owllayer{display:none;position:fixed;left:0;top:0;width:0;height:0;z-index:70;pointer-events:none}
 .owllayer .owl{width:92px;position:absolute;left:0;top:0;
  filter:drop-shadow(0 10px 26px rgba(0,0,0,.5));opacity:0;
  transition:opacity .4s}
@@ -1065,12 +1078,12 @@ main{padding-top:26px}
     </div>
     <div class="intromap">
       <div class="im">
-        <div class="imk">On the left</div>
-        <p>The questions, and they are about you. Your own password, your own accounts, your own working week.</p>
+        <div class="imk"><span class="onlywide">On the left: </span>the questions</div>
+        <p>They are about you. Your own password, your own accounts, your own working week.</p>
       </div>
       <div class="im">
-        <div class="imk">On the right</div>
-        <p>Me, with the case those questions came from. A real company, real dates, and what it actually cost. None of it is invented, and the people in it were doing their jobs.</p>
+        <div class="imk"><span class="onlywide">On the right: </span>me</div>
+        <p>With the case those questions came from. A real company, real dates, and what it actually cost. None of it is invented, and the people in it were doing their jobs.</p>
       </div>
     </div>
     <button class="introgo" id="introgo">Start <i>&rarr;</i></button>
@@ -1106,7 +1119,7 @@ main{padding-top:26px}
     <div class="pay" id="g-pay">
       <span class="vt" id="g-vt">The second step</span>
       <p>Nothing is watching a correct password arrive. It is exactly what the page is waiting for, and nobody gets told.</p>
-      <p class="turns">From here on, the question on the left is yours to answer. Edda stays quiet until you have, then tells you what happened in the real case.</p>
+      <p class="turns">From here on, the question<span class="onlywide"> on the left</span> is yours to answer. Edda stays quiet until you have, then tells you what happened in the real case.</p>
       <div class="cue"><i>&darr;</i> Keep going</div>
     </div>
   </section>
@@ -1417,7 +1430,8 @@ main{padding-top:26px}
       var sc=dec.closest(".scene");
       if(sc){var i=scenes.indexOf(sc); if(i>=0) markSeg(segEls[i]);}
       if(sc && window.__offerNext) setTimeout(function(){
-        window.__offerNext(sc, sc.querySelector(".tonight") || dec);},1400);
+        window.__offerNext(sc,
+          sc.querySelector(".owltale") || sc.querySelector(".tonight") || dec);},1400);
       if(window.__owlReact) window.__owlReact(right);
     }
     opts.forEach(function(opt){
@@ -1445,7 +1459,8 @@ main{padding-top:26px}
         var sc=dec.closest(".scene");
         if(sc){var i=scenes.indexOf(sc); if(i>=0) markSeg(segEls[i]);}
         if(sc && window.__offerNext) setTimeout(function(){
-        window.__offerNext(sc, sc.querySelector(".tonight") || dec);},1400);
+        window.__offerNext(sc,
+          sc.querySelector(".owltale") || sc.querySelector(".tonight") || dec);},1400);
       });
     });
   }
@@ -1486,7 +1501,8 @@ main{padding-top:26px}
         if(!tales.length){ buildTales(); land(); }
         if(window.__eddaWake) window.__eddaWake();
         if(window.__place) window.__place(0);
-        if(window.__offerNext) window.__offerNext(null,gPay);
+        if(window.__offerNext) window.__offerNext(null,
+          document.getElementById("gate").querySelector(".owltale") || gPay);
       }, 700);
       xp+=20; xpEl.textContent=xp+" XP";
     });
@@ -1706,10 +1722,15 @@ main{padding-top:26px}
     [].slice.call(document.querySelectorAll(".step")).forEach(function(sc,i){
       if(!TALE[i]){ tales.push(null); return; }
       var t=document.createElement("div"); t.className="owltale";
-      t.innerHTML='<div class="who">'+TALE[i].w+'</div>'+
-        TALE[i].p.map(function(x){return "<p>"+x+"</p>";}).join("");
-      var anchor=sc.querySelector(".beat")||sc.querySelector(".ask");
-      if(anchor) anchor.insertAdjacentElement("afterend",t); else sc.insertBefore(t,sc.firstChild);
+      var top=document.createElement("div"); top.className="otop";
+      top.appendChild(makeOwl("",0,true));
+      var who=document.createElement("div"); who.className="who";
+      who.textContent=TALE[i].w; top.appendChild(who);
+      var body=document.createElement("div"); body.className="obody";
+      t.appendChild(top); t.appendChild(body);
+      /* at the end of the step, under the answer, never between the question
+         and the things the reader has to choose between */
+      sc.appendChild(t);
       tales.push(t);
     });
   }
@@ -1834,7 +1855,12 @@ main{padding-top:26px}
     el.className="spk";
     el.innerHTML=(n===0 ? '<div class="who">'+sayWho+'</div>' : '')+
       '<p>'+part+'</p><div class="dots"><i></i><i></i><i></i></div>';
-    sayBox.appendChild(el);
+    sayHost().appendChild(el);
+    if(!wideAside.matches){
+      sayEls.push(el);
+      requestAnimationFrame(function(){ el.classList.add("in"); });
+      return;
+    }
     var pref=el.offsetWidth;
     /* she uses the far side as well whenever it can carry a readable line */
     var g=walkGeom();
@@ -1859,6 +1885,10 @@ main{padding-top:26px}
       if(sayOn){ sayOn.remove(); sayOn=null; }
       /* she walks a little way along the branch, then says the next part
          from where she has got to */
+      if(!wideAside.matches){
+        addSay(sayIdx); sayIdx++; sayControl();
+        return;
+      }
       walkStep++;
       perchTo(WALK[Math.min(walkStep,WALK.length-1)]);
       setTimeout(function(){
@@ -1867,7 +1897,7 @@ main{padding-top:26px}
         sayControl();
       },1000);
     });
-    sayBox.appendChild(sayOn);
+    sayHost().appendChild(sayOn);
     layoutSay();
     requestAnimationFrame(function(){ if(sayOn) sayOn.classList.add("in"); });
   }
@@ -1946,9 +1976,15 @@ main{padding-top:26px}
      changes as the reader moves from one part to the next, with no click */
   /* she is handed the step's passage but does not say any of it until the
      reader has answered. Until then she sleeps. */
+  function sayHost(){
+    if(wideAside.matches) return sayBox;
+    return (shownTale && shownTale.querySelector(".obody")) || sayBox;
+  }
   function tell(t){
-    if(!wideAside.matches || t===shownTale || !t) return;
+    if(t===shownTale || !t) return;
     shownTale=t;
+    tales.forEach(function(x){ if(x){ x.classList.remove("on");
+      var ob=x.querySelector(".obody"); if(ob) ob.innerHTML=""; } });
     var idx=tales.indexOf(t);
     var tale=TALE[idx]; if(!tale) return;
     pendingTale=tale; awake=false;
@@ -1960,6 +1996,7 @@ main{padding-top:26px}
 
   function doze(){
     awake=false;
+    if(shownTale) shownTale.classList.remove("on");
     aside.classList.add("waiting");
     asideBird.classList.remove("look","alarm","wink","turn");
     asideBird.classList.add("dozing");
@@ -1977,6 +2014,7 @@ main{padding-top:26px}
     awake=true;
     aside.classList.remove("waiting");
     asideBird.classList.remove("dozing");
+    if(shownTale) shownTale.classList.add("on");
     walkStep=0; perchTo(WALK[0],true);
     pose("turn");
     setTimeout(function(){ peer(""); },1500);
@@ -1988,7 +2026,7 @@ main{padding-top:26px}
       addSay(0); sayIdx=1; sayControl();
     },420);
   }
-  window.__eddaWake=function(){ if(wideAside.matches) wake(); };
+  window.__eddaWake=function(){ wake(); };
   /* her passage is chosen by the step, so she has nothing to chase */
   window.__tellStep=function(i){
     var t=tales[i];
