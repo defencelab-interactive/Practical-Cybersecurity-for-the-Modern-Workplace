@@ -1162,14 +1162,14 @@ main{padding-top:26px}
   </section>
 
   <!-- quiz -->
-  <section class="scene step quiz" id="quiz" data-stage="Ten situations">
-    <div class="beat"><i></i>Ten situations</div>
-    <p class="sit">Ten things that could happen to you this week. Pick the safest move in each. <b>Seven correct passes the module.</b></p>
+  <section class="scene step quiz" id="quiz" data-stage="Five situations">
+    <div class="beat"><i></i>Five situations</div>
+    <p class="sit">Five things that could happen to you this week, and each one turns on something you have just read. Pick the safest move in each.</p>
     <div id="qbox"></div>
     <div class="result" id="qresult" hidden>
-      <div class="rscore"><b id="rnum">0</b><span>out of 10</span></div>
+      <div class="rscore"><b id="rnum">0</b><span>out of 5</span></div>
       <p id="rtext"></p>
-      <button class="again" id="qagain">Start the ten again</button>
+      <button class="again" id="qagain">Start the five again</button>
     </div>
   </section>
 
@@ -1492,7 +1492,7 @@ main{padding-top:26px}
          "And nobody there was being careless. Usually it is one of three ordinary things: nobody ever told you what to look for, the update got postponed again and then again, or somebody was good at talking to you and the message arrived on a bad day."]},
    5:{w:"The same settings, your side",
       p:["<b>Everything in our story</b> ran through settings that were not switched on. These are the same ones."]},
-   6:{w:"Ten of these",
+   6:{w:"Five of these",
       p:["Any of them could be your week. I will keep quiet now."]}
   };
 
@@ -1721,7 +1721,7 @@ main{padding-top:26px}
    "The day it stopped being nothing",
    "Why they picked this company",
    "What to do on your own accounts",
-   "Ten situations, to see what stuck",
+   "Five situations, to see what stuck",
    "Three things to take away"
   ];
 
@@ -1760,11 +1760,11 @@ main{padding-top:26px}
   };
   /* ---- ten situations ---- */
   var QUIZ=[
-   {q:"You are late at an airport and an email arrives: <em>your flight has been rebooked, open the link for your new boarding pass.</em> What do you do?",
-    o:[["Open the link straight away so you do not miss the flight",0,"Being in a hurry is the condition the message was written for. Urgency is the oldest way of getting somebody past the part where they think."],
-       ["Reply and ask for the flight number and the gate",0,"Replying tells whoever sent it that the address is real and read by a person, which is worth money to them whatever else happens."],
-       ["Read where the link actually goes before touching it",1,"On a phone, press and hold rather than tap. If the message says the airline but the address is some other name entirely, you have your answer without having opened anything."],
-       ["Delete it and trust the departure boards",0,"Better than opening it, but you still do not know whether your flight moved. Open the airline's own app or type the airline's address yourself."]]},
+   {q:"You have the second step turned on. A login code arrives by text, and you are not logging in to anything.",
+    o:[["A glitch, ignore it",0,"Codes are not sent at random. One arriving unasked means somebody just entered your password correctly."],
+       ["Somebody has your password and the second step just stopped them",1,"Exactly what the second step is for, and also a warning you should act on. Change that password now, and anywhere else you used it."],
+       ["The message itself has done something to your phone",0,"A code arriving does nothing to your phone. It is a notification that your password is already in somebody else's hands."],
+       ["Your bank is testing you",0,"Banks do not send surprise codes as a test. Every code is a real attempt at a login."]]},
 
    {q:"You use the same password for a pizza delivery app and your main email. The pizza app gets breached. Why does that matter?",
     o:[["They can follow you around using the delivery addresses",0,"Your address is unpleasant to lose, but it is not the thing that unlocks anything else."],
@@ -1778,47 +1778,17 @@ main{padding-top:26px}
        ["Postpone it for an hour and install it the moment you are finished",1,"This is the realistic answer rather than the pious one. You keep the deadline and you close the hole the same day, which is what actually gets done in practice."],
        ["Find the fix on some other website to save time",0,"Files offered elsewhere as shortcuts to an official update are one of the oldest ways of getting something installed on a machine deliberately."]]},
 
-   {q:"Somebody rings saying they are from support, that your laptop has a virus, and asks you to install a tool so they can take a look. What do you do?",
-    o:[["Install it, since a virus is urgent",0,"That tool hands them the machine. Internal IT teams generally already have what they need installed and rarely ring out of the blue about a virus."],
-       ["Ask for their employee number, then install it",0,"An employee number is a thing somebody can simply say. Asking a question the caller can answer does not verify anything."],
-       ["Give them the password so no install is needed",0,"Nobody legitimate needs your password. A real IT team can reset it without ever knowing what it was."],
-       ["Hang up and ring the official number yourself",1,"This takes the conversation out of their hands, which is the whole trick. Use a number you looked up, never one the caller gave you."]]},
-
-   {q:"You are in a cafe and need to check your bank. The only network is the cafe's open wi-fi.",
-    o:[["Log in quickly and sign out straight after",0,"Speed does not help. On an open network the risk is at the moment the data crosses it, not in how long you stay."],
-       ["Use your phone's own connection, or a VPN",1,"Your phone's hotspot is a network with only you on it. A VPN wraps your traffic so the people sharing the cafe network cannot read it."],
-       ["Check that the bank's site shows a security badge",0,"That tells you about the site, not about the network you reached it over."],
-       ["Switch the browser to private or incognito mode",0,"Private mode only stops your own device keeping a history. It changes nothing about who else can see the connection."]]},
-
-   {q:"You have the second step turned on. A login code arrives by text, and you are not logging in to anything.",
-    o:[["A glitch, ignore it",0,"Codes are not sent at random. One arriving unasked means somebody just entered your password correctly."],
-       ["Somebody has your password and the second step just stopped them",1,"Exactly what the second step is for, and also a warning you should act on. Change that password now, and anywhere else you used it."],
-       ["The message itself has done something to your phone",0,"A code arriving does nothing to your phone. It is a notification that your password is already in somebody else's hands."],
-       ["Your bank is testing you",0,"Banks do not send surprise codes as a test. Every code is a real attempt at a login."]]},
-
-   {q:"You clicked something and a file called <em>invoice.zip</em> has downloaded that you were not expecting.",
-    o:[["Open it to see whether it is a real bill",0,"Opening it is the step the whole thing was built to get you to take."],
-       ["Delete it and empty the bin",0,"Better than opening it, and it destroys what IT would use to work out what happened. It also does nothing if something already started when you clicked."],
-       ["Disconnect from the network, then tell IT",1,"Disconnecting cuts anything already running off from whoever is controlling it, and telling IT starts the part where somebody who knows what they are doing takes over."],
-       ["Run a scan while staying online",0,"Scanning is sensible and leaving the connection up while you do it is not, because it leaves the line open in both directions."]]},
-
-   {q:"You are setting up a password manager and it asks for one master password. Which is the better choice?",
-    o:[["Something short and complicated, so you cannot forget it",0,"Short loses regardless of how many symbols are in it, because guessing is done by machines rather than by people."],
-       ["Your birthday and the name of a childhood pet",0,"Both of those are frequently findable, and the tools that guess passwords try combinations of personal details first."],
-       ["Several unrelated words strung together, long enough to be awkward",1,"Length is what makes guessing expensive, and unrelated words give you length you can actually remember. The one requirement is that the words are not a quotation or a phrase somebody could predict."],
-       ["The same one you use for your work computer",0,"This password is in front of every other password you own, so it is the one that has to exist nowhere else."]]},
-
-   {q:"An urgent email from a senior person asks you to buy gift cards for a client and send over the codes. It says they are in a meeting and not to ring.",
-    o:[["The letterhead is wrong",0,"Worth noticing, and easy to copy. The request itself is the problem."],
-       ["It arrived after five",0,"Senior people email at all hours. The time of day proves nothing either way."],
-       ["It manufactures urgency and rules out the one thing that would check it",1,"The instruction not to ring is doing the real work, because it closes the only cheap way to find out. Gift card codes are also a way of moving money that cannot be reversed, which is why this request keeps coming up."],
-       ["It came to your personal address rather than your work one",0,"Suspicious, and not the giveaway. The giveaway is a payment request you cannot verify and cannot undo."]]},
-
    {q:"A text says a parcel is being held and gives a shortened link. You are not sure whether you ordered anything.",
     o:[["Open it, and if it looks like the real site it is fine",0,"Looking right is the cheapest part of the whole thing to get right."],
        ["Press and hold to see the full address, or just go to the courier's site yourself",1,"A shortened link is unreadable by design, so read it or skip it. Typing the courier's address yourself answers the question with no link involved at all."],
        ["Reply STOP to be taken off the list",0,"Replying anything confirms the number is live and read by a person, which gets you more of these, not fewer."],
-       ["Ring the number back to complain",0,"The number is either theirs or somebody else's that they borrowed, and either way the call is a second opportunity for them."]]}
+       ["Ring the number back to complain",0,"The number is either theirs or somebody else's that they borrowed, and either way the call is a second opportunity for them."]]},
+
+   {q:"You clicked something and a file called <em>invoice.zip</em> has downloaded that you were not expecting.",
+    o:[["Open it to see whether it is a real bill",0,"Opening it is the step the whole thing was built to get you to take."],
+       ["Delete it and empty the bin",0,"Better than opening it, and it destroys what IT would use to work out what happened. It also does nothing if something already started when you clicked."],
+       ["Disconnect from the network, then tell IT",1,"Disconnecting cuts anything already running off from whoever is controlling it, and telling IT starts the part where somebody who knows what they are doing takes over. This is the checklist item about having their number already."],
+       ["Run a scan while staying online",0,"Scanning is sensible and leaving the connection up while you do it is not, because it leaves the line open in both directions."]]}
   ];
 
   (function(){
@@ -1896,15 +1866,15 @@ main{padding-top:26px}
 
     function finish(){
       box.innerHTML="";
-      var pass=score>=7;
+      var clear=score>=4;
       rnum.textContent=score;
       res.classList.remove("pass","fail");
-      res.classList.add(pass?"pass":"fail");
-      rtext.textContent = pass
-        ? "That is a pass. The ones you got wrong are worth rereading, because the situations in this list are the ones that actually turn up."
-        : "Seven is the pass mark, so this one needs another go. The explanations are worth reading again before you start, particularly on the ones you missed.";
+      res.classList.add(clear?"pass":"fail");
+      rtext.textContent = clear
+        ? "Every one of those turned on something in this module, so that is the material doing its job. Your organisation's own test is the one that counts for the record."
+        : "Each of these turns on something earlier in the module, so the ones you missed point at the part worth rereading. Nothing here goes on your record.";
       res.hidden=false;
-      xp+=pass?60:20; xpEl.textContent=xp+" XP";
+      xp+=20+score*8; xpEl.textContent=xp+" XP";
       if(window.__offerNext) setTimeout(function(){window.__offerNext(null,res);},900);
       res.scrollIntoView({behavior:"smooth",block:"nearest"});
     }
