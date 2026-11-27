@@ -966,36 +966,62 @@ body.started .intro{display:none}
   .introgo{margin-top:15px}
 }
 /* ---------- the entrance on a real screen ----------
-   The intro was set to one width and one size whatever it was opened on, so
-   on a desktop it sat as a small card in the middle of an empty page. These
-   two tiers spend the room that is actually there. Both ask for the height as
-   well as the width, because the entrance is centred and never scrolls: a
-   wide but short window keeps the smaller setting rather than losing its
-   edges. */
+   It used to be one width and one type size whatever it was opened on, so on
+   a desktop it sat as a small card in the middle of an empty page. The
+   measure and the type now follow the width of the window, which is where
+   the spare room actually is on a laptop: a wider block carries the same
+   words in fewer lines, so larger type costs almost nothing in height.
+   Spacing, the bird and the moon are separate, and wait for a tall window,
+   because those are the parts that would push the button off the bottom. */
+@media (min-width:1240px){
+  .introwrap{max-width:760px}
+  .introsay .who{font-size:11px}
+  .introsay p{font-size:18px;line-height:1.55}
+  .intromap .imk{font-size:10.5px}
+  .intromap .im p{font-size:15.5px;line-height:1.55}
+  .introgo{font-size:17.5px}
+}
+@media (min-width:1500px) and (min-height:700px){
+  .introwrap{max-width:860px}
+  .introsay p{font-size:19.5px}
+  .intromap .im p{font-size:16.5px}
+  .introgo{font-size:18.5px}
+}
+/* a tall window, and only then, gets the spacing, the bird and the moon */
 @media (min-width:1240px) and (min-height:820px){
-  .introwrap{max-width:700px}
+  .introsay{padding:26px 30px;border-radius:18px}
+  .introsay .who{margin-bottom:12px}
+  .introsay p+p{margin-top:14px}
+  .intromap{gap:26px;margin-top:24px}
+  .intromap .im{padding-left:17px}
+  .introgo{padding:15px 28px;margin-top:26px;border-radius:12px}
   .introowl .owl{width:200px}
   .moon{width:410px;height:410px;top:-140px}
-  .introsay{padding:26px 30px;border-radius:18px}
-  .introsay .who{font-size:11px;margin-bottom:13px}
-  .introsay p{font-size:18.5px;line-height:1.58}
-  .introsay p+p{margin-top:13px}
-  .intromap{gap:26px;margin-top:22px}
-  .intromap .im{padding-left:17px}
-  .intromap .imk{font-size:10.5px;margin-bottom:8px}
-  .intromap .im p{font-size:15.5px}
-  .introgo{font-size:17.5px;padding:15px 28px;margin-top:24px;border-radius:12px}
+}
+/* a window this short has never had room for the entrance as drawn. Spend
+   all the width there is, shrink the bird and close the gaps, so what is
+   lost off the bottom is as little as possible. */
+@media (min-width:1240px) and (max-height:600px){
+  .introwrap{max-width:920px}
+  .introsay{padding:15px 20px}
+  .introsay .who{margin-bottom:8px}
+  .introsay p{font-size:16px;line-height:1.46}
+  .introsay p+p{margin-top:8px}
+  .intromap{margin-top:12px;gap:18px}
+  .intromap .im p{font-size:14px;line-height:1.46}
+  .introgo{font-size:16px;margin-top:13px;padding:11px 20px}
+  .introowl .owl{width:108px}
+  .moon{width:196px;height:196px;top:-64px}
+  .introsky{margin-bottom:9px}
 }
 @media (min-width:1500px) and (min-height:960px){
-  .introwrap{max-width:820px}
+  .introwrap{max-width:900px}
   .introowl .owl{width:224px}
   .moon{width:460px;height:460px;top:-156px}
   .introsay{padding:30px 36px}
   .introsay p{font-size:21px}
-  .introsay p+p{margin-top:15px}
-  .intromap{gap:30px;margin-top:26px}
-  .intromap .im p{font-size:17px}
-  .introgo{font-size:19px;padding:17px 32px;margin-top:28px}
+  .intromap .im p{font-size:17.5px}
+  .introgo{font-size:19.5px;padding:17px 32px}
 }
 body:not(.begun){overflow:hidden}
 body:not(.begun) .nsky{display:none}
