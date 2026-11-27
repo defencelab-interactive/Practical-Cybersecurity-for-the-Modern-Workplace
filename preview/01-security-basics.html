@@ -965,6 +965,38 @@ body.started .intro{display:none}
   .intromap .im p{font-size:13.5px}
   .introgo{margin-top:15px}
 }
+/* ---------- the entrance on a real screen ----------
+   The intro was set to one width and one size whatever it was opened on, so
+   on a desktop it sat as a small card in the middle of an empty page. These
+   two tiers spend the room that is actually there. Both ask for the height as
+   well as the width, because the entrance is centred and never scrolls: a
+   wide but short window keeps the smaller setting rather than losing its
+   edges. */
+@media (min-width:1240px) and (min-height:820px){
+  .introwrap{max-width:700px}
+  .introowl .owl{width:200px}
+  .moon{width:410px;height:410px;top:-140px}
+  .introsay{padding:26px 30px;border-radius:18px}
+  .introsay .who{font-size:11px;margin-bottom:13px}
+  .introsay p{font-size:18.5px;line-height:1.58}
+  .introsay p+p{margin-top:13px}
+  .intromap{gap:26px;margin-top:22px}
+  .intromap .im{padding-left:17px}
+  .intromap .imk{font-size:10.5px;margin-bottom:8px}
+  .intromap .im p{font-size:15.5px}
+  .introgo{font-size:17.5px;padding:15px 28px;margin-top:24px;border-radius:12px}
+}
+@media (min-width:1500px) and (min-height:960px){
+  .introwrap{max-width:820px}
+  .introowl .owl{width:224px}
+  .moon{width:460px;height:460px;top:-156px}
+  .introsay{padding:30px 36px}
+  .introsay p{font-size:21px}
+  .introsay p+p{margin-top:15px}
+  .intromap{gap:30px;margin-top:26px}
+  .intromap .im p{font-size:17px}
+  .introgo{font-size:19px;padding:17px 32px;margin-top:28px}
+}
 body:not(.begun){overflow:hidden}
 body:not(.begun) .nsky{display:none}
 body:not(.begun) .shell{display:none}
