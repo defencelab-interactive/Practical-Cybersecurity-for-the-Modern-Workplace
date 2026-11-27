@@ -819,6 +819,81 @@ html{overflow-x:clip}
 @media (max-width:1099px){ .owltale{margin-top:48px} }
 @media (max-width:1239px){ .owlaside{display:none} .nsky:before{display:none} }
 
+/* ---------- her on a phone ----------
+   A phone has no side to sit on and no room to carry her story underneath the
+   question: together they ran half a screen past the fold. So on a phone she
+   perches in the corner of the screen instead of in the column. She is asleep
+   there while the question is still the reader's to answer, and wakes when it
+   is done. What she says opens over the step and closes again, so answering a
+   question never makes the step taller than the screen it is on. */
+@media (max-width:719px){ .owltale,.owltale.on{display:none} }
+html.bigtouch .owltale,html.bigtouch .owltale.on{display:none}
+/* nothing a finger needs ends underneath her: room at the foot of the page,
+   and the button that carries the reader on stops short of her corner when it
+   scrolls itself into view */
+@media (max-width:719px){
+  main{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+  .go-on,.conf,.next{scroll-margin-bottom:calc(84px + env(safe-area-inset-bottom))}
+}
+html.bigtouch main{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+html.bigtouch .go-on,html.bigtouch .conf,html.bigtouch .next{
+  scroll-margin-bottom:calc(84px + env(safe-area-inset-bottom))}
+
+/* once the question is answered, the answers nobody chose have done their
+   work. On a phone they fold down to a line each, which is what gives the
+   explanation underneath room on the same screen. They stay legible and
+   stay there; this is not a phone-sized question with phone-sized type. */
+@media (max-width:719px){
+  .opt.dim{font-size:13.5px;line-height:1.4;padding:9px 13px;
+   transition:padding .35s,font-size .35s}
+  .opt.dim .mk{width:0;height:0;margin:0;border:0;opacity:0}
+  .opt.dim{gap:0}
+}
+html.bigtouch .opt.dim{font-size:13.5px;line-height:1.4;padding:9px 13px;gap:0}
+html.bigtouch .opt.dim .mk{width:0;height:0;margin:0;border:0;opacity:0}
+
+.eperch{display:none}
+.eperch.live{display:flex;position:fixed;z-index:60;right:13px;
+ bottom:calc(13px + env(safe-area-inset-bottom));
+ align-items:center;gap:8px;appearance:none;cursor:pointer;font:inherit;
+ border:1px solid rgba(237,239,236,.09);border-radius:999px;
+ padding:6px 14px 6px 7px;background:rgba(13,22,28,.92);
+ box-shadow:0 8px 26px rgba(0,0,0,.45);
+ opacity:.52;transition:opacity .6s,box-shadow .4s}
+.eperch .owl{width:38px;flex:none}
+.ecue{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+ text-transform:uppercase;color:rgba(237,239,236,.45);white-space:nowrap}
+.eperch.awake{opacity:1;border-color:rgba(52,183,125,.42);
+ animation:stirs 2.4s ease 2}
+.eperch.awake .ecue{color:var(--ac)}
+@keyframes stirs{0%,100%{box-shadow:0 8px 26px rgba(0,0,0,.45)}
+ 50%{box-shadow:0 8px 26px rgba(0,0,0,.45),0 0 0 7px rgba(52,183,125,.1)}}
+
+.esheet{display:none}
+.esheet.live{display:flex;position:fixed;inset:0;z-index:70;
+ align-items:flex-end;background:rgba(5,10,14,0);transition:background .38s}
+.esheet.up{background:rgba(5,10,14,.6)}
+.esheet-card{width:100%;max-height:84vh;max-height:84dvh;overflow:auto;
+ -webkit-overflow-scrolling:touch;
+ padding:17px 20px calc(24px + env(safe-area-inset-bottom));
+ background:linear-gradient(180deg,#15232B,#0D161C);
+ border-top:1px solid rgba(52,183,125,.3);border-radius:19px 19px 0 0;
+ transform:translateY(100%);transition:transform .42s cubic-bezier(.2,.75,.3,1)}
+.esheet.up .esheet-card{transform:none}
+.esheet-h{display:flex;align-items:center;gap:11px;margin-bottom:15px}
+.esheet-n{flex:none;display:block;width:34px;line-height:0}
+.esheet-n .owl{width:34px}
+.esheet-w{flex:1 1 auto}
+.esheet-w{font-family:var(--mono);font-size:10px;letter-spacing:.15em;
+ text-transform:uppercase;color:rgba(52,183,125,.85)}
+.esheet-x{appearance:none;border:0;background:none;cursor:pointer;
+ font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+ text-transform:uppercase;color:rgba(237,239,236,.45);padding:7px 0 7px 10px}
+@media (prefers-reduced-motion:reduce){
+  .eperch.awake{animation:none}
+  .esheet-card{transition:none}
+}
+
 /* ---------- she introduces herself ---------- */
 .intro{min-height:100svh;display:flex;flex-direction:column;justify-content:center;
  align-items:center;padding:70px 0}
@@ -2202,13 +2277,75 @@ main{padding-top:26px}
      changes as the reader moves from one part to the next, with no click */
   /* she is handed the step's passage but does not say any of it until the
      reader has answered. Until then she sleeps. */
+  /* ---- the phone ----
+     She is not in the column there. She sits in the corner of the screen and
+     what she says opens over the step, so the step keeps the height it had
+     before the question was answered. */
+  var phoneMQ=window.matchMedia("(max-width:719px)");
+  function isPhone(){
+    return phoneMQ.matches ||
+           document.documentElement.classList.contains("bigtouch");
+  }
+  var perchEl=null, perchBird=null, sheetEl=null, sheetBody=null, sheetWho=null;
+  function buildPhone(){
+    if(perchEl) return;
+    perchEl=document.createElement("button");
+    perchEl.type="button"; perchEl.className="eperch";
+    perchEl.setAttribute("aria-expanded","false");
+    perchBird=makeOwl("",0,true);
+    perchEl.appendChild(perchBird);
+    var cue=document.createElement("span");
+    cue.className="ecue"; cue.textContent="Edda";
+    perchEl.appendChild(cue);
+    perchEl.addEventListener("click",openSheet);
+    document.body.appendChild(perchEl);
+
+    sheetEl=document.createElement("div");
+    sheetEl.className="esheet";
+    sheetEl.innerHTML='<div class="esheet-card">'+
+      '<div class="esheet-h"><span class="esheet-n"></span>'+
+      '<span class="esheet-w"></span>'+
+      '<button type="button" class="esheet-x">Close</button></div>'+
+      '<div class="obody esheet-b"></div></div>';
+    sheetEl.addEventListener("click",function(e){
+      if(e.target===sheetEl || e.target.className==="esheet-x") closeSheet();
+    });
+    document.body.appendChild(sheetEl);
+    sheetBody=sheetEl.querySelector(".esheet-b");
+    sheetWho=sheetEl.querySelector(".esheet-w");
+    /* the words are hers, so she is at the head of them */
+    sheetEl.querySelector(".esheet-n").appendChild(makeOwl("",0,true));
+  }
+  function openSheet(){
+    if(!sheetEl || !awake) return;
+    sheetEl.classList.add("live");
+    requestAnimationFrame(function(){ sheetEl.classList.add("up"); });
+    perchEl.setAttribute("aria-expanded","true");
+    /* the first tap is what starts her talking */
+    if(!sayParts.length && pendingTale) startSaying();
+  }
+  function closeSheet(){
+    if(!sheetEl) return;
+    sheetEl.classList.remove("up");
+    if(perchEl) perchEl.setAttribute("aria-expanded","false");
+    setTimeout(function(){
+      if(sheetEl && !sheetEl.classList.contains("up")) sheetEl.classList.remove("live");
+    },420);
+  }
+  function phoneOff(){
+    if(perchEl) perchEl.classList.remove("live");
+    if(sheetEl) sheetEl.classList.remove("live","up");
+  }
+
   function sayHost(){
     if(wideAside.matches) return sayBox;
+    if(isPhone()) return sheetBody || sayBox;
     return (shownTale && shownTale.querySelector(".obody")) || sayBox;
   }
   function tell(t){
     if(t===shownTale || !t) return;
     shownTale=t;
+    if(sheetEl){ closeSheet(); if(sheetBody) sheetBody.innerHTML=""; }
     tales.forEach(function(x){ if(x){ x.classList.remove("on");
       var ob=x.querySelector(".obody"); if(ob) ob.innerHTML=""; } });
     var idx=tales.indexOf(t);
@@ -2226,6 +2363,15 @@ main{padding-top:26px}
     aside.classList.add("waiting");
     asideBird.classList.remove("look","alarm","wink","turn");
     asideBird.classList.add("dozing");
+    if(!isPhone()){ phoneOff(); return; }
+    /* on a phone she is visibly asleep in the corner, and tapping her does
+       nothing until the question has been answered */
+    buildPhone();
+    perchEl.classList.add("live");
+    perchEl.classList.remove("awake");
+    perchEl.disabled=true;
+    perchBird.classList.add("dozing");
+    if(sheetBody) sheetBody.innerHTML="";
   }
 
   function peer(dir){
@@ -2245,8 +2391,23 @@ main{padding-top:26px}
     pose("turn");
     setTimeout(function(){ peer(""); },1500);
     sayWho=pendingTale.w;
+    if(isPhone()){
+      buildPhone();
+      sheetWho.textContent=pendingTale.w;
+      sheetBody.innerHTML="";
+      sayParts=[]; sayEls=[]; sayOn=null; sayIdx=0;
+      perchEl.classList.add("live","awake");
+      perchEl.disabled=false;
+      perchBird.classList.remove("dozing");
+      return;
+    }
+    phoneOff();
+    startSaying();
+  }
+  function startSaying(){
     sayParts=pendingTale.p.slice();
-    sayBox.innerHTML=""; sayEls=[]; sayOn=null; sayIdx=0;
+    if(!isPhone()){ sayBox.innerHTML=""; }
+    sayEls=[]; sayOn=null; sayIdx=0;
     setTimeout(function(){
       if(!awake) return;
       addSay(0); sayIdx=1; sayControl();
