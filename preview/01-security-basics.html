@@ -10,23 +10,50 @@
 <link rel="apple-touch-icon" href="icons/edda-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/edda-192.png">
 <script>
-/* Some in-app browsers ignore width=device-width and lay the page out at
-   desktop width on a phone, which renders the whole course at about half the
-   size it should be. The giveaway is a touch screen with no hover that
-   reports a wide viewport at close to one device pixel per CSS pixel: a real
-   tablet runs at two or more. Where that is what we have, ask for a phone's
-   worth of width and let the browser scale it up to fill the screen.
-   A mouse reports hover, so nothing here can reach the desktop version. */
+/* Some in-app browsers lay the page out at desktop width on a phone and
+   ignore width=device-width, including when the page rewrites it. Ask once,
+   and if the answer is no, fall back to sizing everything as a share of the
+   screen through the bigtouch class.
+
+   What settles it is the panel, which the browser does not get to invent:
+   a phone's short side is around 1080 to 1200 real pixels and a tablet's is
+   1536 or more. A mouse never reports a coarse pointer, so the desktop
+   version cannot be reached from here however wide the window. */
 (function(){
   if(!window.matchMedia) return;
   try{
     var coarse=matchMedia("(pointer:coarse)").matches;
-    var nohover=matchMedia("(hover:none)").matches;
     var dpr=window.devicePixelRatio||1;
     var w=window.innerWidth||0;
-    if(coarse&&nohover&&w>700&&dpr<1.6){
+    var shortSide=Math.min(screen.width||0,screen.height||0)*dpr;
+    /* and the panel has to be taller than it is wide, which a phone is and a
+       touch monitor is not */
+    var portrait = (screen.height||0) > (screen.width||0);
+    var lying = coarse && portrait && w>560 && shortSide>0 && shortSide<=1340;
+    if(lying){
       var mv=document.querySelector('meta[name="viewport"]');
       if(mv) mv.setAttribute("content","width=430,viewport-fit=cover");
+      /* if the browser took it, innerWidth drops and nothing more is needed */
+      setTimeout(function(){
+        if((window.innerWidth||0)>560) document.documentElement.classList.add("bigtouch");
+      },60);
+    }
+    if(/[?&]d=1\b/.test(location.search)){
+      window.addEventListener("DOMContentLoaded",function(){
+        var d=document.createElement("div");
+        d.setAttribute("style","position:fixed;left:0;right:0;bottom:0;z-index:9999;"+
+          "background:#000;color:#6FD6A4;font:12px/1.5 monospace;padding:8px 10px;"+
+          "white-space:pre-wrap;word-break:break-all");
+        d.textContent=
+          "innerWidth "+window.innerWidth+"  dpr "+dpr+
+          "\nscreen "+screen.width+"x"+screen.height+"  short*dpr "+Math.round(shortSide)+
+          "\ncoarse "+coarse+"  hover:none "+matchMedia("(hover:none)").matches+
+          "\nres<=1.5dppx "+matchMedia("(max-resolution:1.5dppx)").matches+
+          "  portrait "+matchMedia("(max-aspect-ratio:3/4)").matches+
+          "\nlying "+lying+"  bigtouch "+document.documentElement.classList.contains("bigtouch")+
+          "\nopt "+getComputedStyle(document.querySelector(".opt")||document.body).fontSize;
+        document.body.appendChild(d);
+      });
     }
   }catch(e){}
 })();
@@ -987,6 +1014,71 @@ main{padding-top:26px}
   .intromap .im p{font-size:clamp(13.5px,3.5vw,38px)}
   .introgo{font-size:clamp(16px,4.1vw,45px);padding:clamp(13px,3.3vw,36px) clamp(22px,5.6vw,62px)}
 }
+
+/* The same sizes again, for the case the media query above cannot see.
+   A browser that lies about its viewport may also report a resolution
+   that matches a desktop, and then no media query can tell what it is.
+   The script measures the actual panel instead: a phone's short side is
+   around 1080 to 1200 real pixels, a tablet's is 1536 or more, and that
+   is a thing CSS has no way to ask about. */
+  html.bigtouch main{padding-left:clamp(22px,5.6vw,62px);padding-right:clamp(22px,5.6vw,62px)}
+  html.bigtouch .mark{font-size:clamp(15px,3.9vw,43px)}
+  html.bigtouch .xp{font-size:clamp(11px,2.8vw,31px);padding:clamp(5px,1.4vw,15px) clamp(10px,2.6vw,29px)}
+  html.bigtouch .top{padding-top:calc(env(safe-area-inset-top) + clamp(0px,1.4vw,15px));
+   padding-bottom:clamp(10px,2.6vw,29px);background:rgba(22,33,28,.96)}
+  html.bigtouch .beat{font-size:clamp(10.5px,2.7vw,30px);margin-bottom:clamp(14px,3.6vw,40px)}
+  html.bigtouch .gate h1{font-size:clamp(29px,7.9vw,87px)}
+  html.bigtouch .gate .sub,html.bigtouch .sub{font-size:clamp(15px,3.9vw,43px)}
+  html.bigtouch .gate .ask,html.bigtouch .ask{font-size:clamp(16.5px,4.2vw,46px);margin-bottom:clamp(16px,4.1vw,45px)}
+  html.bigtouch .gate .tag{font-size:clamp(10px,2.6vw,29px)}
+  html.bigtouch .sit{font-size:clamp(16.5px,4.2vw,46px);margin-bottom:clamp(22px,5.6vw,62px)}
+  html.bigtouch .q{font-size:clamp(15.5px,4vw,44px);margin-bottom:clamp(14px,3.6vw,40px)}
+  html.bigtouch .opt{font-size:clamp(15px,3.9vw,43px);
+   padding:clamp(13px,3.3vw,36px) clamp(15px,3.8vw,42px);
+   border-radius:clamp(11px,2.8vw,31px)}
+  html.bigtouch .opts{gap:clamp(8px,2vw,22px)}
+  html.bigtouch .opt .mk{width:clamp(17px,4.3vw,47px);height:clamp(17px,4.3vw,47px);
+   font-size:clamp(10px,2.6vw,29px);margin-right:clamp(11px,2.8vw,31px)}
+  html.bigtouch .vt{font-size:clamp(10px,2.6vw,29px)}
+  html.bigtouch .pay p{font-size:clamp(15px,3.9vw,43px)}
+  html.bigtouch .dcap{font-size:clamp(13.5px,3.5vw,38px)}
+  html.bigtouch .turns{font-size:clamp(14.5px,3.7vw,41px)}
+  html.bigtouch .cue{font-size:clamp(10px,2.6vw,29px)}
+  html.bigtouch .counter b{font-size:clamp(34px,8.7vw,96px)}
+  html.bigtouch .big{font-size:clamp(44px,13vw,143px)}
+  html.bigtouch .bigsub{font-size:clamp(14px,3.6vw,40px)}
+  html.bigtouch .rh{font-size:clamp(10px,2.6vw,29px)}
+  html.bigtouch .rr{font-size:clamp(11.5px,2.95vw,32px);padding:clamp(9px,2.3vw,25px) clamp(15px,3.8vw,42px)}
+  html.bigtouch .ckh{padding:clamp(11px,2.8vw,31px) clamp(14px,3.6vw,40px)}
+  html.bigtouch .ckt{font-size:clamp(15px,3.9vw,43px)}
+  html.bigtouch .tg{font-size:clamp(13px,3.3vw,36px)}
+  html.bigtouch .how{font-size:clamp(14px,3.6vw,40px);padding-left:clamp(49px,12.5vw,138px)}
+  html.bigtouch .tl{font-size:clamp(10px,2.6vw,29px)}
+  html.bigtouch .tonight p{font-size:clamp(15px,3.9vw,43px)}
+  html.bigtouch .qn{font-size:clamp(10px,2.6vw,29px)}
+  html.bigtouch .qitem .q{font-size:clamp(15.5px,4vw,44px)}
+  html.bigtouch .qfb{font-size:clamp(14.5px,3.7vw,41px);padding:clamp(14px,3.6vw,40px) clamp(16px,4.1vw,45px)}
+  html.bigtouch .again,html.bigtouch .next{font-size:clamp(14.5px,3.7vw,41px);padding:clamp(10px,2.6vw,29px) clamp(16px,4.1vw,45px)}
+  html.bigtouch .conf{padding:clamp(14px,3.6vw,40px) clamp(16px,4.1vw,45px)}
+  html.bigtouch .conf-q{font-size:clamp(14.5px,3.7vw,41px)}
+  html.bigtouch .conf-b{font-size:clamp(14px,3.6vw,40px);padding:clamp(8px,2vw,22px) clamp(14px,3.6vw,40px)}
+  html.bigtouch .rscore b{font-size:clamp(40px,10vw,110px)}
+  html.bigtouch .rtext{font-size:clamp(15px,3.9vw,43px)}
+  html.bigtouch .go-on{font-size:clamp(15.5px,4vw,44px);padding:clamp(15px,3.8vw,42px) clamp(18px,4.6vw,51px);
+   max-width:none;border-radius:clamp(12px,3vw,33px)}
+  html.bigtouch .owltale{margin-top:clamp(26px,6.6vw,73px);padding-top:clamp(20px,5.1vw,56px)}
+  html.bigtouch .otop{gap:clamp(13px,3.3vw,36px);margin-bottom:clamp(13px,3.3vw,36px)}
+  html.bigtouch .otop .owl{width:clamp(64px,16.3vw,179px)}
+  html.bigtouch .owltale .who{font-size:clamp(9.5px,2.45vw,27px)}
+  html.bigtouch .obody .spk p{font-size:clamp(16px,4.1vw,45px)}
+  html.bigtouch .obody .spkon{font-size:clamp(13px,3.35vw,37px)}
+  html.bigtouch .introwrap{max-width:none;padding:0 clamp(22px,5.6vw,62px)}
+  html.bigtouch .introowl .owl{width:clamp(140px,36vw,396px)}
+  html.bigtouch .moon{width:clamp(250px,64vw,704px);height:clamp(250px,64vw,704px)}
+  html.bigtouch .introsay p{font-size:clamp(15px,3.9vw,43px)}
+  html.bigtouch .intromap .imk{font-size:clamp(9.5px,2.45vw,27px)}
+  html.bigtouch .intromap .im p{font-size:clamp(13.5px,3.5vw,38px)}
+  html.bigtouch .introgo{font-size:clamp(16px,4.1vw,45px);padding:clamp(13px,3.3vw,36px) clamp(22px,5.6vw,62px)}
 
 /* a shorter window gets a tighter step, so no step ever runs past the fold */
 @media (min-width:1000px) and (max-height:940px){
