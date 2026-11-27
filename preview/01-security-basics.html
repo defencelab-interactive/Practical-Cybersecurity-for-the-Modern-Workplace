@@ -223,6 +223,8 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 .bldg.st-locked .lock{fill:rgba(237,239,236,.22)}
 
 .dcap{font-size:13.5px;color:var(--tf);max-width:50ch;margin-top:2px}
+.turns{font-size:14.5px;color:var(--tf);max-width:56ch;margin-top:13px;
+ padding-left:13px;border-left:2px solid rgba(52,183,125,.4)}
 
 /* the settings step asks one question and the list is the answer to it, so
    the options stand down once it is answered and the list takes their place */
@@ -578,9 +580,15 @@ html{overflow-x:clip}
 @media (min-width:1240px){
   .owlaside{display:block;position:fixed;top:0;bottom:0;right:0;
    left:calc(100% - var(--nightw));z-index:40;pointer-events:none;
-   opacity:0;transition:opacity .5s}
+   opacity:0;transition:opacity .7s}
   .owlaside.in{opacity:1}
+  /* while the question is the reader's to answer, she is asleep on her
+     branch and her half of the screen stays quiet */
+  .owlaside.waiting{opacity:.46}
 }
+.owl.dozing .lid{animation:none!important;transform:scaleY(1)}
+.owl.dozing .glint{opacity:0}
+.owl .lid,.owl .glint{transition:opacity .4s}
 
 /* the branch: one limb, thinning as it goes, out of the bottom right corner */
 .branchwrap{position:absolute;right:-5%;bottom:-8%;width:100%;
@@ -664,8 +672,6 @@ html{overflow-x:clip}
 .askmore:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
 .askmore i{font-style:normal}
 @keyframes asidein{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
-.owlaside{opacity:0;transition:opacity .4s}
-.owlaside.in{opacity:1}
 
 @media (min-width:1240px){
   .owltale{display:none}
@@ -891,6 +897,10 @@ main{padding-top:26px}
   .scene.told:not(.told-rec) .art{max-width:130px}
   .scene{padding:9px 0 12px}
   .pay p{margin-top:8px;font-size:14.5px;line-height:1.54}
+  .turns{font-size:13px;margin-top:9px;line-height:1.46}
+  .gate h1{margin-bottom:12px}
+  .gate .sub{margin-bottom:18px}
+  .gate .ask{margin-bottom:11px}
   .pay{margin-top:10px}
   .rec .rh{padding:9px 14px 8px}
   .rr{padding:7px 14px}
@@ -914,6 +924,11 @@ main{padding-top:26px}
   .tonight{margin-top:9px;padding:10px 13px}
   .tonight p{font-size:13px}
   .go-on{margin-top:8px;padding:9px 14px;font-size:14.5px}
+  .turns{font-size:12.5px;margin-top:8px;padding-left:11px}
+  .gate h1{font-size:clamp(30px,3vw,40px);margin-bottom:10px}
+  .gate .sub{font-size:15px;margin-bottom:14px}
+  .gate .ask{font-size:15.5px;margin-bottom:9px}
+  .cue{margin-top:14px}
   .scene.told:not(.told-rec) .art{max-width:100px}
   .pay p{font-size:14px;margin-top:7px;line-height:1.5}
   .sit{margin-bottom:9px}
@@ -1074,6 +1089,7 @@ main{padding-top:26px}
     <div class="pay" id="g-pay">
       <span class="vt" id="g-vt">The second step</span>
       <p>Nothing is watching a correct password arrive. It is exactly what the page is waiting for, and nobody gets told.</p>
+      <p class="turns">From here the question on the left is yours alone. Answer it and Edda wakes, with the night the same question came from.</p>
       <div class="cue"><i>&darr;</i> Keep going</div>
     </div>
   </section>
@@ -1346,6 +1362,7 @@ main{padding-top:26px}
       vt.classList.add("miss"); vt.textContent="Not that one";
     }
     pay.classList.add("show");
+    if(window.__eddaWake) setTimeout(window.__eddaWake,520);
     var sc=dec.closest(".scene");
     if(sc){
       sc.classList.add("told");
@@ -1450,6 +1467,7 @@ main{padding-top:26px}
       document.body.classList.add("started");
       setTimeout(function(){
         if(!tales.length){ buildTales(); land(); }
+        if(window.__eddaWake) window.__eddaWake();
         if(window.__place) window.__place(0);
         if(window.__offerNext) window.__offerNext(null,gPay);
       }, 700);
@@ -1696,6 +1714,7 @@ main{padding-top:26px}
      side of her, so the speech gathers around the bird rather than filling a
      panel beside the course. */
   var sayIdx=0, sayParts=[], sayEls=[], sayOn=null, sayTop=0;
+  var pendingTale=null, awake=false;
 
   function layoutSay(){
     if(!wideAside.matches) return;
@@ -1857,19 +1876,42 @@ main{padding-top:26px}
 
   /* her text is not in the column on a wide screen: it appears beside her and
      changes as the reader moves from one part to the next, with no click */
+  /* she is handed the step's passage but does not say any of it until the
+     reader has answered. Until then she sleeps. */
   function tell(t){
     if(!wideAside.matches || t===shownTale || !t) return;
     shownTale=t;
     var idx=tales.indexOf(t);
     var tale=TALE[idx]; if(!tale) return;
-    sayWho=tale.w;
-    sayParts=tale.p.slice();
-    sayBox.innerHTML=""; sayEls=[]; sayOn=null; sayIdx=0;
-    addSay(0); sayIdx=1;
-    sayControl();
-    asideBird.classList.add("flying");
-    setTimeout(function(){asideBird.classList.remove("flying");},620);
+    pendingTale=tale; awake=false;
+    sayBox.innerHTML=""; sayEls=[]; sayOn=null; sayIdx=0; sayParts=[];
+    var hasQuestion = steps[idx] && steps[idx].querySelector(".dec") &&
+                      !steps[idx].classList.contains("told");
+    if(hasQuestion) doze(); else wake();
   }
+
+  function doze(){
+    awake=false;
+    aside.classList.add("waiting");
+    asideBird.classList.remove("look","alarm","wink","turn");
+    asideBird.classList.add("dozing");
+  }
+
+  function wake(){
+    if(awake || !pendingTale) return;
+    awake=true;
+    aside.classList.remove("waiting");
+    asideBird.classList.remove("dozing");
+    pose("turn");
+    sayWho=pendingTale.w;
+    sayParts=pendingTale.p.slice();
+    sayBox.innerHTML=""; sayEls=[]; sayOn=null; sayIdx=0;
+    setTimeout(function(){
+      if(!awake) return;
+      addSay(0); sayIdx=1; sayControl();
+    },420);
+  }
+  window.__eddaWake=function(){ if(wideAside.matches) wake(); };
   /* her passage is chosen by the step, so she has nothing to chase */
   window.__tellStep=function(i){
     var t=tales[i];
