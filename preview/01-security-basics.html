@@ -566,19 +566,30 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 .owltale .who{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
  text-transform:uppercase;color:rgba(52,183,125,.75);margin-bottom:9px}
 
-/* the aside: her, fixed, with the text of wherever the reader currently is */
+/* the aside: the bubble, then her on her branch */
 .owlaside{display:none;position:fixed;right:0;top:50%;transform:translateY(-50%);
  width:360px;padding:0 30px 0 0;z-index:65;pointer-events:none}
-.owlaside .owl{width:84px;margin:0 0 -16px 18px;position:relative;z-index:2;
- filter:drop-shadow(0 8px 22px rgba(0,0,0,.5))}
-.owlaside .bub{position:relative;background:var(--lit);border:1px solid rgba(237,239,236,.17);
+.roost{position:relative;flex:none;width:84px;align-self:flex-start;margin-top:4px;z-index:2}
+.owlaside .owl{width:84px;margin:0;position:relative;z-index:2;
+ filter:drop-shadow(0 10px 26px rgba(0,0,0,.6))}
+/* the branch she is on carries on past the edge of the screen */
+.branch{position:absolute;left:-18px;top:36px;width:1100px;height:120px;
+ z-index:1;pointer-events:none;overflow:visible}
+.branch .limb{fill:#1B2A23}
+.branch .lime{fill:none;stroke:rgba(237,239,236,.15);stroke-width:1.2;
+ stroke-linecap:round}
+.branch .twig{fill:none;stroke:#1B2A23;stroke-width:4;stroke-linecap:round}
+.branch .leaf{fill:#20352B;stroke:rgba(237,239,236,.1);stroke-width:1}
+html{overflow-x:clip}
+.shell{overflow-x:clip}
+.owlaside .bub{position:relative;z-index:3;background:var(--lit);border:1px solid rgba(237,239,236,.17);
  border-radius:16px;padding:19px 21px 20px;
  box-shadow:0 20px 50px rgba(0,0,0,.55), 0 0 70px rgba(52,183,125,.05),
   inset 0 1px 0 rgba(237,239,236,.05);
  pointer-events:auto}
-.owlaside .bub:before,.owlaside .bub:after{content:"";position:absolute;left:34px;top:-9px;
- border:9px solid transparent;border-top:0;border-bottom-color:var(--ln)}
-.owlaside .bub:after{top:-7.6px;border-bottom-color:var(--lit)}
+.owlaside .bub:before,.owlaside .bub:after{content:"";position:absolute;right:-10px;top:42px;
+ border:10px solid transparent;border-right:0;border-left-color:rgba(237,239,236,.17)}
+.owlaside .bub:after{right:-8.6px;border-left-color:var(--lit)}
 .owlaside .who{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
  text-transform:uppercase;color:rgba(52,183,125,.8);margin-bottom:10px;
  display:flex;align-items:center;gap:8px}
@@ -604,23 +615,28 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 .owlaside.in{opacity:1}
 
 @media (min-width:1240px){
-  .owlaside{display:block;position:static;transform:translateY(var(--owly,0px));
-   width:340px;flex:0 0 340px;padding:0;z-index:40;
+  .owlaside{display:flex;align-items:flex-start;gap:12px;
+   position:static;transform:translateY(var(--owly,0px));
+   width:396px;flex:0 0 396px;padding:0;z-index:40;
    transition:transform .5s cubic-bezier(.3,.8,.3,1),opacity .4s}
+  .owlaside .bub{flex:1 1 auto;min-width:0;max-height:none}
+  .roost{width:72px} .owlaside .owl{width:72px}
+  .branch{top:30px;left:-16px}
   .owltale{display:none}
   .owllayer{display:none}
-  main{max-width:580px;flex:0 1 580px;padding:0 0 28px}
-  .body-wrap{justify-content:center;align-items:flex-start;gap:46px;padding-left:0}
-  .owlaside .bub{max-height:none}
-  .art{max-width:360px}
-  .rec{max-width:380px}
+  main{max-width:548px;flex:0 1 548px;padding:0 0 28px}
+  .body-wrap{justify-content:center;align-items:flex-start;gap:40px;padding-left:0}
+  .art{max-width:340px}
+  .rec{max-width:360px}
 }
 @media (min-width:1440px){
-  .owlaside{width:384px;flex-basis:384px}
-  main{max-width:630px;flex-basis:630px}
-  .body-wrap{gap:56px}
-  .art{max-width:420px}
-  .rec{max-width:420px}
+  .owlaside{width:452px;flex-basis:452px;gap:14px}
+  .roost{width:84px} .owlaside .owl{width:84px}
+  .branch{top:36px;left:-18px}
+  main{max-width:600px;flex-basis:600px}
+  .body-wrap{gap:50px}
+  .art{max-width:400px}
+  .rec{max-width:400px}
 }
 /* a tall window: the pair sits in the middle of it rather than against the
    top with a third of the screen empty underneath */
@@ -628,7 +644,12 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
   .shell{align-items:center}
   main{padding-bottom:0}
 }
-@media (min-width:1750px){ .owlaside{width:412px;flex-basis:412px} .body-wrap{gap:72px} }
+@media (min-width:1750px){
+  .owlaside{width:486px;flex-basis:486px;gap:16px}
+  .roost{width:92px} .owlaside .owl{width:92px}
+  .branch{top:40px;left:-20px}
+  .body-wrap{gap:64px}
+}
 @media (prefers-reduced-motion:reduce){ .owlaside{transition:opacity .4s} }
 
 /* ---------- she is not inside anything ----------
@@ -1231,6 +1252,18 @@ main{padding-top:26px}
 </main>
 <aside class="owlaside" id="owlaside">
   <div class="bub"><div class="who" id="aside-who">Edda</div><div class="body" id="aside-body"></div></div>
+  <div class="roost" id="roost">
+    <svg class="branch" viewBox="0 -40 1100 120" aria-hidden="true">
+      <path class="limb" d="M-54,14 C-14,11 60,9 180,8 C420,6 700,4 1100,2
+       L1100,30 C700,26 420,24 180,20 C60,19 -14,17 -54,14 Z"/>
+      <path class="lime" d="M-54,14 C-14,11 60,9 180,8 C420,6 700,4 1100,2"/>
+      <path class="twig" d="M118,13 C150,-5 192,-15 228,-17"/>
+      <ellipse class="leaf" cx="240" cy="-19" rx="16" ry="7" transform="rotate(-16 240 -19)"/>
+      <ellipse class="leaf" cx="208" cy="-7" rx="12" ry="5.5" transform="rotate(-12 208 -7)"/>
+      <path class="twig" d="M306,22 C332,40 364,50 396,52"/>
+      <ellipse class="leaf" cx="408" cy="54" rx="14" ry="6.5" transform="rotate(13 408 54)"/>
+    </svg>
+  </div>
 </aside>
 </div>
 </div>
@@ -1561,7 +1594,7 @@ main{padding-top:26px}
   var aside=document.getElementById("owlaside");
   var asideBody=document.getElementById("aside-body");
   var asideBird=makeOwl("",0,true);
-  aside.insertBefore(asideBird, aside.firstElementChild);
+  (document.getElementById("roost")||aside).appendChild(asideBird);
   var wideAside=window.matchMedia("(min-width:1240px)");
   var shownTale=null;
 
@@ -1601,8 +1634,7 @@ main{padding-top:26px}
     var el=anchorOf(sc);
     var wrap=document.querySelector(".body-wrap");
     if(!el||!wrap) return;
-    var head=asideBird.getBoundingClientRect().height||92;
-    var want=el.getBoundingClientRect().top-wrap.getBoundingClientRect().top-(head-16);
+    var want=el.getBoundingClientRect().top-wrap.getBoundingClientRect().top-6;
     var h=aside.getBoundingClientRect().height||260;
     var top=wrap.getBoundingClientRect().top;
     var room=window.innerHeight-top-h-16;
