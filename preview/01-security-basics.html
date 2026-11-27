@@ -618,6 +618,14 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 .introsay p{font-size:16px;line-height:1.56;color:var(--tm)}
 .introsay p+p{margin-top:11px}
 .introsay b{color:var(--tw);font-weight:500}
+.intromap{display:grid;grid-template-columns:1fr 1fr;gap:18px;width:100%;margin-top:18px;
+ text-align:left}
+.intromap .im{padding-left:14px;border-left:2px solid rgba(52,183,125,.35)}
+.intromap .imk{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
+ text-transform:uppercase;color:rgba(52,183,125,.8);margin-bottom:7px}
+.intromap .im p{font-size:14px;line-height:1.56;color:var(--tm)}
+@media (max-width:620px){ .intromap{grid-template-columns:1fr;gap:14px} }
+
 .introgo{appearance:none;cursor:pointer;font:inherit;font-size:16px;margin:20px auto 0;
  background:rgba(52,183,125,.16);color:var(--tw);border:1px solid rgba(52,183,125,.6);
  border-radius:11px;padding:13px 24px;display:inline-flex;align-items:center;gap:10px}
@@ -625,6 +633,22 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 .introgo:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
 .introgo i{font-style:normal;color:var(--ac)}
 body.started .intro{display:none}
+/* a short window still gets the whole entrance without a scrollbar */
+@media (max-height:760px){
+  .intro{padding:34px 0}
+  .introwrap{max-width:600px}
+  .introsky{margin-bottom:16px}
+  .introowl .owl{width:104px}
+  .moon{width:250px;height:250px;top:-84px}
+  .introsay{padding:17px 20px}
+  .introsay p{font-size:15px}
+  .introsay p+p{margin-top:9px}
+  .intromap{margin-top:14px;gap:16px}
+  .intromap .im p{font-size:13.5px}
+  .introgo{margin-top:15px}
+}
+body:not(.begun){overflow:hidden}
+body:not(.begun) .shell{display:none}
 
 /* ---------- one step at a time ----------
    The course advances by the button rather than by scrolling, so a question and
@@ -654,8 +678,8 @@ main{padding-top:26px}
   88% {transform:translate(-3vw,-4vh) scale(1.04) rotate(3deg)}
   100%{transform:translate(0,0) scale(1) rotate(0);opacity:1}
 }
-.introsay,.introgo{opacity:0;transition:opacity .5s}
-.introsay.up,.introgo.up{opacity:1}
+.introsay,.introgo,.intromap{opacity:0;transition:opacity .5s}
+.introsay.up,.introgo.up,.intromap.up{opacity:1}
 
 /* the shortest windows: a 1366 or 1536 laptop at 125 or 150 percent scaling
    leaves roughly 680 to 730 usable pixels, which is where the checklist used
@@ -698,6 +722,7 @@ main{padding-top:26px}
   .pay{margin-top:10px}
   .rec .rh{padding:9px 14px 8px}
   .rr{padding:7px 14px}
+  .dcap{font-size:12.5px;margin-top:6px;line-height:1.45}
   .go-on{margin-top:10px}
   .plain li{margin:5px 0}
 }
@@ -850,7 +875,16 @@ main{padding-top:26px}
       <div class="who">The owl</div>
       <p>I watch at night. Most nights nothing happens, which is the part people skip and the part I find interesting.</p>
       <p>What you are about to go through took <b>nine days</b>. For eight of them there was nothing at all to see.</p>
-      <p>You will be asked about your own passwords and your own accounts, which is your business and none of mine. The nine days are mine to tell, and I will be over on the right.</p>
+    </div>
+    <div class="intromap">
+      <div class="im">
+        <div class="imk">On the left</div>
+        <p>The questions, and they are about you. Your own password, your own accounts, your own working week.</p>
+      </div>
+      <div class="im">
+        <div class="imk">On the right</div>
+        <p>Me, with the case those questions came from. A real company, real dates, and what it actually cost. None of it is invented, and the people in it were doing their jobs.</p>
+      </div>
     </div>
     <button class="introgo" id="introgo">Start <i>&rarr;</i></button>
   </div>
@@ -908,6 +942,7 @@ main{padding-top:26px}
           <div class="rr"><span>password</span><span class="v">required</span></div>
           <div class="rr off"><span>second step</span><span class="v">not switched on</span></div>
         </div>
+        <p class="dcap">What the page asked for, as set out in testimony. Not a picture of it.</p>
         <p data-say="That third row is the whole breach. There was nothing for anybody to miss, because the page asked for a password and got the right one."></p>
       </div>
     </div>
@@ -1131,14 +1166,6 @@ main{padding-top:26px}
     <div class="rc"><i></i><p><b>A second step is what breaks that.</b> It asks for something the password thief does not have, it takes a minute to switch on, and it was the setting missing here.</p></div>
     <div class="rc"><i></i><p><b>Intruders are not in a hurry.</b> The damage came nine days after the way in was found, which is why what is already switched on matters more than how quickly anybody spots something.</p></div>
 
-    <div class="src">
-      <button class="tg" aria-expanded="false" data-d="srcbody"><span class="cv">&rsaquo;</span> Sources, and what is not sourced</button>
-      <div class="body" id="srcbody" hidden>
-        <p><b>Sourced.</b> Witty's written testimony to the House Energy and Commerce Subcommittee on Oversight and Investigations, 1 May 2024, for the compromised credentials, the Citrix portal, the absence of multi-factor authentication, 12 February as the date of first access and the ransomware nine days later. His evidence to the Senate Finance Committee the same day for the $22 million ransom and the decision to pay it. UnitedHealth's quarterly reporting for the $2.3 to $2.45 billion 2024 impact. The Senate Finance Committee chairman's opening statement for about a third of American patient records. Verizon's 2024 Data Breach Investigations Report for 68 percent of breaches involving a non-malicious human element, 15 percent involving a third party, 31 percent of breaches over ten years involving stolen credentials, and the median time to fall for a phishing message.</p>
-        <p><b>Worth knowing about one of those numbers.</b> Verizon changed how it counts the human element in the 2024 report, removing malicious insiders. The widely quoted 74 percent is the older formula from the 2023 report; on the new one the same year would have been 76 percent, and the current figure is 68 percent. They are not three different findings.</p>
-        <p><b>Not sourced.</b> How the credentials were obtained, which UnitedHealth has not disclosed. The building is a stand-in for an office and not a picture of the company's premises. The sign-in panel sets out what the page asked for, as described in testimony, and is not a picture of that page.</p>
-      </div>
-    </div>
   </section>
 </main>
 <aside class="owlaside" id="owlaside">
@@ -1236,7 +1263,10 @@ main{padding-top:26px}
   /* she arrives rather than being found already sitting there */
   setTimeout(function(){ if(introSlotEl) introSlotEl.classList.add("flyin"); },350);
   setTimeout(function(){ if(introSay) introSay.classList.add("up"); },3400);
-  setTimeout(function(){ if(introGo) introGo.classList.add("up"); },3900);
+  setTimeout(function(){
+    var m=document.querySelector(".intromap"); if(m) m.classList.add("up");
+  },3750);
+  setTimeout(function(){ if(introGo) introGo.classList.add("up"); },4100);
   document.getElementById("introgo").addEventListener("click",function(){
     document.getElementById("intro").style.display="none";
     document.body.classList.add("begun");
@@ -1430,7 +1460,7 @@ main{padding-top:26px}
       p:["Answer this one without me. It is about your own login, and I have nothing useful to say about yours.",
          "Then I will take you to the night I watched the same question go the other way."]},
    1:{w:"The same page, February 2024",
-      p:["The page you are picturing is the one I want to tell you about. <b>Change Healthcare</b> moves the paperwork between a doctor, a pharmacy and whoever pays, and about a third of American patient records go through it.",
+      p:["The page you are picturing is the one I want to tell you about. First the company it belonged to. <b>Change Healthcare</b> moves the paperwork between a doctor, a pharmacy and whoever pays, and about a third of American patient records go through it.",
          "Somebody outside had a working employee password for exactly that page, and it accepted it. To every system inside, he looked like a trusted employee getting on with the job."]},
    2:{w:"How long it took here",
       p:["Hold your answer against this one. <b>Nine days.</b> He read files, copied whole databases, learned where the valuable things were kept.",
