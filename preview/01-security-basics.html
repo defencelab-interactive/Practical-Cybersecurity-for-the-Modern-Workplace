@@ -539,6 +539,15 @@ main{max-width:640px;margin:0 auto;padding:0 22px 40px}
 .owlaside .bub p+p{margin-top:10px}
 .owlaside .bub b{color:var(--tw);font-weight:500}
 .owlaside .body-in{animation:asidein .42s ease}
+/* the rest of what she has to say, if it is wanted */
+.askmore{appearance:none;cursor:pointer;font:inherit;font-size:13px;
+ margin-top:12px;padding:8px 13px;border-radius:9px;
+ background:rgba(52,183,125,.1);border:1px solid rgba(52,183,125,.34);
+ color:rgba(52,183,125,.95);display:inline-flex;align-items:center;gap:7px;
+ transition:background .2s,border-color .2s}
+.askmore:hover{background:rgba(52,183,125,.2);border-color:rgba(52,183,125,.6)}
+.askmore:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.askmore i{font-style:normal}
 @keyframes asidein{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 .owlaside{opacity:0;transition:opacity .4s}
 .owlaside.in{opacity:1}
@@ -749,8 +758,11 @@ main{padding-top:26px}
   .rec{max-width:360px}
   .days{width:260px}
   .sit{font-size:17px;margin-bottom:16px}
-  .opt{padding:11px 14px;font-size:15px}
-  .opts{gap:7px}
+  .opt{padding:10px 14px;font-size:15px}
+  .opts{gap:6px}
+  .sit{margin-bottom:14px}
+  .pay p{margin-top:9px}
+  .rr{padding:9px 15px}
   .q{font-size:16px;margin-bottom:11px}
   .beat{margin-bottom:10px}
   .ck{margin:7px 0}
@@ -912,10 +924,10 @@ main{padding-top:26px}
     <div class="opts" id="g-opts">
       <button class="opt"><span class="mk"></span>It is not your computer, so the login is refused</button>
       <button class="opt"><span class="mk"></span>Somebody in IT sees it and checks whether it is really you</button>
-      <button class="opt" data-ok="1"><span class="mk"></span>One setting, and only if it was switched on beforehand</button>
+      <button class="opt" data-ok="1"><span class="mk"></span>A second step after the password, if somebody switched it on first</button>
     </div>
     <div class="pay" id="g-pay">
-      <span class="vt" id="g-vt">Only the third</span>
+      <span class="vt" id="g-vt">The second step</span>
       <p>Nothing is watching a correct password arrive. It is exactly what the page is waiting for, and nobody gets told.</p>
       <div class="cue"><i>&darr;</i> Keep going</div>
     </div>
@@ -925,17 +937,18 @@ main{padding-top:26px}
   <section class="scene step" data-stage="12 February &middot; the way in">
     <div class="beat"><i></i>12 February &middot; the way in</div>
     <div class="art" data-bldg data-anim data-owl="roof"></div>
-    <p class="sit">Think about the page you use to log into work from home.</p>
-    <div class="dec" data-k="s1">
-      <p class="q">If that page asks for nothing after your password, what is the practical effect?</p>
+    <p class="sit">Think about the last time you logged into work from home.</p>
+    <div class="dec" data-k="s1" data-poll="1">
+      <p class="q">What did that page ask you for?</p>
       <div class="opts">
-        <button class="opt"><span class="mk"></span>Your own device is still recognised, so a stranger would be refused</button>
-        <button class="opt" data-ok="1"><span class="mk"></span>Anybody holding that password is you, as far as the page is concerned</button>
-        <button class="opt"><span class="mk"></span>IT is told about the new location and can check</button>
+        <button class="opt"><span class="mk"></span>My username and password, and then I was in</button>
+        <button class="opt"><span class="mk"></span>A password, then a code or a tap on my phone</button>
+        <button class="opt"><span class="mk"></span>A password, then my fingerprint or my face</button>
+        <button class="opt"><span class="mk"></span>I could not tell you</button>
       </div>
       <div class="pay">
-        <span class="vt">What the testimony says</span>
-        <p>Whose computer it came from makes no difference, and nobody is told. What closes that gap is a second step after the password, and it is a setting rather than somebody watching.</p>
+        <span class="vt note">What each of those means</span>
+        <p>Straight in after the password means a correct password is the whole door, and whose computer it came from makes no difference. A code, a tap or a fingerprint is the second step: something a password thief does not have, and the thing to watch for next time if you could not say.</p>
         <div class="rec">
           <div class="rh">The login page &middot; what it asked for</div>
           <div class="rr"><span>username</span><span class="v">required</span></div>
@@ -973,13 +986,13 @@ main{padding-top:26px}
     <div class="beat"><i></i>21 February &middot; the lock</div>
     <div class="art" data-bldg="locked" data-anim></div>
     <p data-say="alarm|Now there is something to see. Nine days too late to be useful."></p>
-    <p class="sit">Say it is your own files that are locked, and a payment is demanded.</p>
+    <p class="sit">Say it is your own laptop. Your documents, your photos, the work you have not finished, all of it locked, and a message asking for money to unlock it.</p>
     <div class="dec" data-k="s3">
-      <p class="q">What would paying actually get you back?</p>
+      <p class="q">What does paying actually get you?</p>
       <div class="opts">
-        <button class="opt"><span class="mk"></span>The files, because they delete their copy once they are paid</button>
-        <button class="opt" data-ok="1"><span class="mk"></span>The use of them, while every copy already taken stays taken</button>
-        <button class="opt"><span class="mk"></span>Nothing, because spare copies would cover it either way</button>
+        <button class="opt"><span class="mk"></span>Your files back, and they delete the copy they took</button>
+        <button class="opt" data-ok="1"><span class="mk"></span>You can open your files again. Everything already copied stays copied.</button>
+        <button class="opt"><span class="mk"></span>Nothing worth having, because a spare copy would cover it</button>
       </div>
       <div class="pay">
         <span class="vt">Two different problems</span>
@@ -993,17 +1006,18 @@ main{padding-top:26px}
     <div class="beat"><i></i>The cost</div>
     <div class="big">$2.3&ndash;2.45B</div>
     <div class="bigsub">UnitedHealth's own estimate of the 2024 impact</div>
+    <p class="sit">That bill landed on a company. Yours would land on your own accounts.</p>
     <div class="dec" data-k="s4">
-      <p class="q">Of these four, which protects your own accounts at the moment a password is typed?</p>
+      <p class="q">Of the accounts you personally own, which one does the most damage in somebody else's hands?</p>
       <div class="opts">
-        <button class="opt" data-ok="1"><span class="mk"></span>A second step after your password</button>
-        <button class="opt"><span class="mk"></span>Better security equipment on the network</button>
-        <button class="opt"><span class="mk"></span>Learning to recognise the warning on screen</button>
-        <button class="opt"><span class="mk"></span>Keeping spare copies more often</button>
+        <button class="opt"><span class="mk"></span>My work login</button>
+        <button class="opt" data-ok="1"><span class="mk"></span>My personal email</button>
+        <button class="opt"><span class="mk"></span>My bank</button>
+        <button class="opt"><span class="mk"></span>Whichever social account I use most</button>
       </div>
       <div class="pay">
-        <span class="vt">The point</span>
-        <p>The second step is the only one of the four acting at the moment the password is typed. The other three come into play after that, which is why none of them is in a position to help. It closes this way in, not every way in.</p>
+        <span class="vt">Your personal email</span>
+        <p>The bank is the one that feels worst, and it is the one your email can reset. So can the social account, the shopping account and often the work one. Whoever reads your email can ask every other site to send a reset link there, and then read it. That is why the checklist two steps from here starts with your email.</p>
       </div>
     </div>
   </section>
@@ -1011,12 +1025,12 @@ main{padding-top:26px}
   <!-- 5 -->
   <section class="scene step" data-stage="Why this keeps happening">
     <div class="beat"><i></i>Why this keeps happening</div>
-    <p class="sit" data-say="That was not one unusually careless company. It is the ordinary shape of the thing.">Change Healthcare was not an unusually careless company. This is the ordinary shape of the thing, which is easier to believe with a number attached.</p>
+    <p class="sit" data-say="Everybody has one of those. That is the point.">Think of the last message that nearly got you. The parcel that was not yours, the invoice from a supplier whose name you half recognised, the password reset you had not asked for.</p>
     <div class="dec" data-k="s5">
-      <p class="q">Of all the breaches studied in Verizon's 2024 report, how many involved a person making a mistake or being tricked?</p>
+      <p class="q">Out of every three breaches, how many start that way, with a person tricked or making a mistake, rather than with broken software?</p>
       <div class="opts">
-        <button class="opt"><span class="mk"></span>About one in ten</button>
-        <button class="opt"><span class="mk"></span>About a third</button>
+        <button class="opt"><span class="mk"></span>About one in ten of them</button>
+        <button class="opt"><span class="mk"></span>About one in three</button>
         <button class="opt" data-ok="1"><span class="mk"></span>About two in three</button>
       </div>
       <div class="pay">
@@ -1035,13 +1049,13 @@ main{padding-top:26px}
   <!-- 6 -->
   <section class="scene step" data-stage="Why this company">
     <div class="beat"><i></i>Why this company</div>
-    <p class="sit">Wherever you work, your employer is somebody else's supplier.</p>
+    <p class="sit">Wherever you work, somebody is relying on it. Patients, customers, students, or another company that has your employer as its supplier.</p>
     <div class="dec" data-k="s6">
-      <p class="q">What does that make your own work login?</p>
+      <p class="q">If somebody signed in as you tomorrow morning, how far would it reach?</p>
       <div class="opts">
-        <button class="opt"><span class="mk"></span>A matter for your employer alone</button>
-        <button class="opt" data-ok="1"><span class="mk"></span>One of the doors into everybody they serve</button>
-        <button class="opt"><span class="mk"></span>Covered already, since suppliers get audited</button>
+        <button class="opt"><span class="mk"></span>My employer, and that is where it stops</button>
+        <button class="opt" data-ok="1"><span class="mk"></span>My employer, and everybody who relies on them</button>
+        <button class="opt"><span class="mk"></span>Not far, because suppliers get audited for this</button>
       </div>
       <div class="pay">
         <span class="vt">One door, thousands of buildings</span>
@@ -1287,7 +1301,7 @@ main{padding-top:26px}
         else if(o===opt){o.classList.add("no");o.querySelector(".mk").textContent="✕";}
         else{o.classList.add("dim");}
       });
-      if(!right) gVt.textContent="It is the third one";
+      if(!right) gVt.textContent="It is the second step";
       gPay.classList.add("show");
       document.body.classList.add("started");
       setTimeout(function(){
@@ -1468,8 +1482,8 @@ main{padding-top:26px}
    3:{w:"What the payment bought",
       p:["They faced your question for real. <b>It all locked at once</b>, and a payment was demanded. Pharmacies across the country could not check what a patient's insurance covered, and people went home without their prescription.",
          "Paying the $22 million was the chief executive's own decision, he told the Senate, and one of the hardest he had made."]},
-   4:{w:"What the other three cost",
-      p:["Three of the four on your left were in place here, and all three act after the password. The money bought the systems back. The copied files had gone days earlier.",
+   4:{w:"What one account came to",
+      p:["One account, in our case, and this is what it came to. The money bought the systems back. The copied files had gone days earlier.",
          "<b>The year cost the company $2.3 to $2.45 billion</b> by its own accounting, before penalties and lawsuits. All of it traces to a password that still worked and a page that asked for nothing else."]},
    5:{w:"Before you pick a number",
       p:["It is tempting to read our case as one unusually careless company. It is more useful to read it as the ordinary one."]},
@@ -1609,6 +1623,7 @@ main{padding-top:26px}
 
   /* her text is not in the column on a wide screen: it appears beside her and
      changes as the reader moves from one part to the next, with no click */
+  var FULL_UNTIL=2;   /* the gate and the first two steps say everything */
   function tell(t){
     if(!wideAside.matches || t===shownTale || !t) return;
     shownTale=t;
@@ -1617,6 +1632,25 @@ main{padding-top:26px}
     if(who&&head) head.textContent=who.textContent;
     var html=t.innerHTML.replace(/<div class="who">[\s\S]*?<\/div>/,"");
     asideBody.innerHTML=html;
+    var idx=tales.indexOf(t);
+    var ps=[].slice.call(asideBody.querySelectorAll("p"));
+    if(idx>FULL_UNTIL && ps.length>1){
+      var more=document.createElement("div");
+      more.className="asidemore"; more.hidden=true;
+      ps.slice(1).forEach(function(p){ more.appendChild(p); });
+      asideBody.appendChild(more);
+      var ask=document.createElement("button");
+      ask.type="button"; ask.className="askmore";
+      ask.innerHTML='Ask me for more details <i>&rarr;</i>';
+      ask.addEventListener("click",function(){
+        more.hidden=false;
+        more.classList.add("body-in");
+        ask.remove();
+        pose("wink"); sway();
+        if(window.__place) window.__place(window.__at?window.__at():0);
+      });
+      asideBody.appendChild(ask);
+    }
     asideBody.classList.remove("body-in"); void asideBody.offsetWidth;
     asideBody.classList.add("body-in");
     asideBird.classList.add("flying");
