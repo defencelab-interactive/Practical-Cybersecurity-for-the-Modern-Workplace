@@ -832,12 +832,12 @@ html.bigtouch .owltale,html.bigtouch .owltale.on{display:none}
    and the button that carries the reader on stops short of her corner when it
    scrolls itself into view */
 @media (max-width:719px){
-  main{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
-  .go-on,.conf,.next{scroll-margin-bottom:calc(84px + env(safe-area-inset-bottom))}
+  main{padding-bottom:calc(112px + env(safe-area-inset-bottom))}
+  .go-on,.conf,.next{scroll-margin-bottom:calc(120px + env(safe-area-inset-bottom))}
 }
-html.bigtouch main{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+html.bigtouch main{padding-bottom:calc(112px + env(safe-area-inset-bottom))}
 html.bigtouch .go-on,html.bigtouch .conf,html.bigtouch .next{
-  scroll-margin-bottom:calc(84px + env(safe-area-inset-bottom))}
+  scroll-margin-bottom:calc(120px + env(safe-area-inset-bottom))}
 
 /* once the question is answered, the answers nobody chose have done their
    work. On a phone they fold down to a line each, which is what gives the
@@ -852,22 +852,34 @@ html.bigtouch .go-on,html.bigtouch .conf,html.bigtouch .next{
 html.bigtouch .opt.dim{font-size:13.5px;line-height:1.4;padding:9px 13px;gap:0}
 html.bigtouch .opt.dim .mk{width:0;height:0;margin:0;border:0;opacity:0}
 
+/* a bird on a branch at the edge of the screen, not an icon in a pill. The
+   branch comes in from the right the way the big one does, she stands on it,
+   and nothing is drawn around her. */
 .eperch{display:none}
-.eperch.live{display:flex;position:fixed;z-index:60;right:13px;
- bottom:calc(13px + env(safe-area-inset-bottom));
- align-items:center;gap:8px;appearance:none;cursor:pointer;font:inherit;
- border:1px solid rgba(237,239,236,.09);border-radius:999px;
- padding:6px 14px 6px 7px;background:rgba(13,22,28,.92);
- box-shadow:0 8px 26px rgba(0,0,0,.45);
- opacity:.52;transition:opacity .6s,box-shadow .4s}
-.eperch .owl{width:38px;flex:none}
-.ecue{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
- text-transform:uppercase;color:rgba(237,239,236,.45);white-space:nowrap}
-.eperch.awake{opacity:1;border-color:rgba(52,183,125,.42);
- animation:stirs 2.4s ease 2}
+.eperch.live{display:block;position:fixed;z-index:60;right:0;
+ bottom:calc(2px + env(safe-area-inset-bottom));
+ width:200px;height:110px;appearance:none;border:0;background:none;padding:0;
+ cursor:pointer;font:inherit;opacity:.74;transition:opacity .6s}
+.estick{position:absolute;right:0;bottom:8px;width:146px;height:88px;
+ display:block;overflow:visible}
+.eperch .elimb{fill:none;stroke:#1C2B23;stroke-linecap:round}
+.eperch .ebark{fill:none;stroke:rgba(237,239,236,.08);stroke-linecap:round}
+.eperch .etwig{fill:none;stroke:#192720;stroke-linecap:round}
+.eperch .eneedle{fill:none;stroke:rgba(237,239,236,.1);stroke-width:1.1;
+ stroke-linecap:round}
+.ebird{position:absolute;right:41px;bottom:51px;width:58px;display:block;
+ line-height:0;filter:drop-shadow(0 1px 18px rgba(4,9,13,.95))}
+.ebird .owl{width:100%;display:block}
+/* the label stands beside her head, not off in the corner on its own */
+.ecue{position:absolute;right:108px;bottom:70px;font-family:var(--mono);
+ font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+ color:rgba(237,239,236,.38);white-space:nowrap;transition:color .5s}
+.eperch.awake{opacity:1}
 .eperch.awake .ecue{color:var(--ac)}
-@keyframes stirs{0%,100%{box-shadow:0 8px 26px rgba(0,0,0,.45)}
- 50%{box-shadow:0 8px 26px rgba(0,0,0,.45),0 0 0 7px rgba(52,183,125,.1)}}
+.eperch.awake .ebird{animation:stirs 2.6s ease 2}
+@keyframes stirs{0%,100%{transform:none}
+ 35%{transform:translateY(-3px) rotate(-2deg)}
+ 70%{transform:translateY(0) rotate(1.5deg)}}
 
 .esheet{display:none}
 .esheet.live{display:flex;position:fixed;inset:0;z-index:70;
@@ -890,7 +902,7 @@ html.bigtouch .opt.dim .mk{width:0;height:0;margin:0;border:0;opacity:0}
  font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
  text-transform:uppercase;color:rgba(237,239,236,.45);padding:7px 0 7px 10px}
 @media (prefers-reduced-motion:reduce){
-  .eperch.awake{animation:none}
+  .eperch.awake .ebird{animation:none}
   .esheet-card{transition:none}
 }
 
@@ -2292,11 +2304,18 @@ main{padding-top:26px}
     perchEl=document.createElement("button");
     perchEl.type="button"; perchEl.className="eperch";
     perchEl.setAttribute("aria-expanded","false");
+    perchEl.innerHTML=
+      '<svg class="estick" viewBox="0 0 130 78" aria-hidden="true">'+
+      '<path class="elimb" d="M146,70 C116,60 90,49 64,34" stroke-width="17"/>'+
+      '<path class="elimb" d="M66,35 C54,30 44,27 33,25" stroke-width="9"/>'+
+      '<path class="ebark" d="M143,64 C114,55 88,44 62,30" stroke-width="1.6"/>'+
+      '<path class="etwig" d="M64,34 C58,24 53,17 45,12" stroke-width="3"/>'+
+      '<path class="eneedle" d="M45,12 l-9,-4 M45,12 l-3,-9 M45,12 l8,-7'+
+      ' M33,25 l-8,-3 M33,25 l-4,-8"/>'+
+      '</svg><span class="ebird"></span><span class="ecue">Edda</span>';
     perchBird=makeOwl("",0,true);
-    perchEl.appendChild(perchBird);
-    var cue=document.createElement("span");
-    cue.className="ecue"; cue.textContent="Edda";
-    perchEl.appendChild(cue);
+    perchEl.querySelector(".ebird").appendChild(perchBird);
+    var cue=perchEl.querySelector(".ecue");
     perchEl.addEventListener("click",openSheet);
     document.body.appendChild(perchEl);
 
@@ -2369,6 +2388,7 @@ main{padding-top:26px}
     buildPhone();
     perchEl.classList.add("live");
     perchEl.classList.remove("awake");
+    perchEl.querySelector(".ecue").textContent="Edda";
     perchEl.disabled=true;
     perchBird.classList.add("dozing");
     if(sheetBody) sheetBody.innerHTML="";
@@ -2397,6 +2417,7 @@ main{padding-top:26px}
       sheetBody.innerHTML="";
       sayParts=[]; sayEls=[]; sayOn=null; sayIdx=0;
       perchEl.classList.add("live","awake");
+      perchEl.querySelector(".ecue").textContent="Ask Edda";
       perchEl.disabled=false;
       perchBird.classList.remove("dozing");
       return;
