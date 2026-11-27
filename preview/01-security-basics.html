@@ -583,7 +583,7 @@ html{overflow-x:clip}
 }
 
 /* the branch: one limb, thinning as it goes, out of the bottom right corner */
-.branchwrap{position:absolute;right:-7%;bottom:-9%;width:112%;
+.branchwrap{position:absolute;right:-5%;bottom:-8%;width:100%;
  aspect-ratio:760/620;pointer-events:none}
 .branch{width:100%;height:100%;display:block;overflow:visible}
 .branch .limb{fill:none;stroke:#141D19;stroke-linecap:round}
@@ -690,7 +690,7 @@ html{overflow-x:clip}
 @media (min-width:1600px){ .roost{width:112px} .spk{width:300px} }
 @media (min-width:1900px){
   main{max-width:620px;flex-basis:620px}
-  .roost{width:122px} .spk{width:312px} .spk p{font-size:16.5px}
+  .roost{width:122px} .spk{width:306px} .spk p{font-size:16.5px}
 }
 /* a tall window: the pair sits in the middle of it rather than against the
    top with a third of the screen empty underneath */
@@ -1305,7 +1305,7 @@ main{padding-top:26px}
       <path class="limb" d="M790,648 C730,606 672,562 616,514" stroke-width="27"/>
       <path class="limb" d="M620,518 C564,470 508,426 456,392" stroke-width="21"/>
       <path class="limb" d="M460,395 C412,362 370,340 330,324" stroke-width="15"/>
-      <path class="limb" d="M332,325 C300,312 272,304 244,300" stroke-width="10"/>
+      <path class="limb" d="M332,325 C320,318 308,313 296,310" stroke-width="11"/>
       <path class="bark" d="M784,634 C724,592 666,548 612,500" stroke-width="2.4"/>
       <path class="bark" d="M616,504 C562,458 508,416 458,384" stroke-width="1.9"/>
       <path class="bark" d="M462,387 C414,356 372,334 334,318" stroke-width="1.4"/>
@@ -1313,14 +1313,12 @@ main{padding-top:26px}
       <path class="twig" d="M286,240 C278,226 268,217 254,210" stroke-width="3.5"/>
       <path class="twig" d="M456,392 C468,356 474,326 468,298" stroke-width="5"/>
       <path class="twig" d="M468,298 C464,282 457,270 446,260" stroke-width="3.2"/>
-      <path class="twig" d="M262,302 C240,288 218,281 196,279" stroke-width="4"/>
       <path class="twig" d="M602,502 C634,488 664,482 696,484" stroke-width="4.5"/>
       <path class="twig" d="M368,348 C356,376 349,400 351,424" stroke-width="3.8"/>
       <g class="needle">
         <path d="M254,210 l-12,-10 M254,210 l-3,-15 M254,210 l10,-12 M254,210 l14,-4"/>
         <path d="M286,240 l-14,-5 M286,240 l-8,-13 M286,240 l5,-14"/>
         <path d="M446,260 l-12,-8 M446,260 l-4,-14 M446,260 l9,-11"/>
-        <path d="M196,279 l-11,-8 M196,279 l-5,-13 M196,279 l-13,2"/>
         <path d="M696,484 l9,-11 M696,484 l13,-3 M696,484 l6,11"/>
         <path d="M351,424 l-11,9 M351,424 l-2,14 M351,424 l11,7"/>
       </g>
@@ -1699,29 +1697,27 @@ main{padding-top:26px}
      panel beside the course. */
   var sayIdx=0, sayParts=[], sayEls=[], sayOn=null, sayTop=0;
 
-  function sideRoom(){
-    /* two sides only when the night is wide enough to hold the words twice */
-    var z=aside.getBoundingClientRect();
-    var r=asideBird.getBoundingClientRect();
-    var w=(sayEls[0]||{offsetWidth:300}).offsetWidth||300;
-    return (r.left-z.left) > (w+56) && (z.right-r.right) > (w+56);
-  }
-
   function layoutSay(){
     if(!wideAside.matches) return;
     var z=aside.getBoundingClientRect();
     var r=asideBird.getBoundingClientRect();
-    var cx=r.left+r.width/2-z.left, two=sideRoom();
+    var cx=r.left+r.width/2-z.left;
     var gapX=32;
-    /* what will actually fit each side of her, so nothing crosses the seam */
-    var roomL=(r.left-z.left)-gapX-10, roomR=(z.right-r.right)-gapX-10;
+    /* what will fit each side of her, with a hand's breadth of dark kept
+       between the seam and her words so her side never crowds the column */
+    var edge=42;
+    var roomL=(r.left-z.left)-gapX-edge, roomR=(z.right-r.right)-gapX-12;
+    /* she speaks to both sides only where both sides carry the same measure,
+       otherwise her lines would come out two different widths */
+    var two=Math.min(roomL,roomR)>=230;
+    var pref0=(sayEls[0]&&parseFloat(sayEls[0].dataset.pref))||300;
+    var common=Math.max(186,Math.min(pref0, two?Math.min(roomL,roomR):roomL));
     var y=sayTop, gapY=20;
     sayEls.forEach(function(el,n){
       el.classList.remove("l","r");
       var right=(two && n%2===1);
       el.classList.add(right ? "r" : "l");
-      var pref=parseFloat(el.dataset.pref)||300;
-      var w=Math.max(186,Math.min(pref, right?roomR:roomL));
+      var w=common;
       el.style.width=Math.round(w)+"px";
       if(right) el.style.left=Math.round(cx+r.width/2+gapX)+"px";
       else el.style.left=Math.round(cx-r.width/2-gapX-w)+"px";
