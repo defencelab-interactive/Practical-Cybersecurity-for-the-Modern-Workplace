@@ -9,6 +9,28 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/edda-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/edda-192.png">
+<script>
+/* Some in-app browsers ignore width=device-width and lay the page out at
+   desktop width on a phone, which renders the whole course at about half the
+   size it should be. The giveaway is a touch screen with no hover that
+   reports a wide viewport at close to one device pixel per CSS pixel: a real
+   tablet runs at two or more. Where that is what we have, ask for a phone's
+   worth of width and let the browser scale it up to fill the screen.
+   A mouse reports hover, so nothing here can reach the desktop version. */
+(function(){
+  if(!window.matchMedia) return;
+  try{
+    var coarse=matchMedia("(pointer:coarse)").matches;
+    var nohover=matchMedia("(hover:none)").matches;
+    var dpr=window.devicePixelRatio||1;
+    var w=window.innerWidth||0;
+    if(coarse&&nohover&&w>700&&dpr<1.6){
+      var mv=document.querySelector('meta[name="viewport"]');
+      if(mv) mv.setAttribute("content","width=430,viewport-fit=cover");
+    }
+  }catch(e){}
+})();
+</script>
 <title>Defence Lab &middot; How a Breach Unfolds</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
